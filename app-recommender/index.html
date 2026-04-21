@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App Recommender — North American RV Europe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f2ec;--surface:#fff;--surface2:#f0ede6;--border:#ddd9d0;--text:#1a1915;--text2:#6b6860;--text3:#9c9890;--blue:#1a5fa8;--blue-bg:#e8f0fa;--green:#1a7a4a;--green-bg:#e4f5ec;--amber:#8a5a00;--amber-bg:#fdf0d5;--red:#a02020;--red-bg:#fde8e8;--radius:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+.page-header{background:var(--text);color:#fff;padding:2.5rem 2rem 2rem;text-align:center}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:1rem}
+.back-link:hover{color:#fff;text-decoration:none}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:400;color:#fff;margin-bottom:.5rem}
+.page-header .sub{font-size:.9rem;color:rgba(255,255,255,0.6);max-width:540px;margin:0 auto}
+.lang-toggle{display:inline-flex;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.2);margin-top:1rem}
+.lang-btn{background:none;border:none;color:rgba(255,255,255,.6);padding:5px 14px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer}
+.lang-btn.active{background:rgba(255,255,255,.2);color:#fff;font-weight:500}
+.main{max-width:860px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1.5rem}
+.card-header{padding:1rem 1.5rem;border-bottom:0.5px solid var(--border);background:var(--surface2);display:flex;align-items:center;gap:10px}
+.card-header h2{font-family:'DM Serif Display',serif;font-size:1.05rem;font-weight:400}
+.card-body{padding:1.5rem}
+.needs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-bottom:1rem}
+.need-btn{padding:12px 14px;border:0.5px solid var(--border);border-radius:9px;background:var(--surface);cursor:pointer;font-family:'DM Sans',sans-serif;text-align:left;transition:all .15s}
+.need-btn:hover{border-color:var(--blue);background:var(--blue-bg)}
+.need-btn.selected{border:1.5px solid var(--blue);background:var(--blue-bg)}
+.need-icon{font-size:20px;margin-bottom:4px}
+.need-label{font-size:13px;font-weight:500;color:var(--text)}
+.need-btn.selected .need-label{color:var(--blue)}
+.need-sub{font-size:11px;color:var(--text2);margin-top:2px}
+.find-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 28px;border-radius:8px;font-size:15px;font-weight:500;border:none;background:var(--text);color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;justify-content:center;margin-top:.5rem}
+.find-btn:hover{background:#333}
+.results{display:none}
+.results.visible{display:block}
+.cat-section{margin-bottom:1.5rem}
+.cat-title{font-family:'DM Serif Display',serif;font-size:1rem;font-weight:400;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.app-card{background:var(--surface);border:0.5px solid var(--border);border-radius:9px;padding:14px 16px;margin-bottom:8px;display:flex;gap:14px;align-items:flex-start}
+.app-card.essential{border-left:3px solid var(--green)}
+.app-card.recommended{border-left:3px solid var(--blue)}
+.app-card.optional{border-left:3px solid var(--border)}
+.app-icon{font-size:26px;flex-shrink:0;margin-top:2px}
+.app-content{flex:1}
+.app-name{font-size:14px;font-weight:500;margin-bottom:2px}
+.app-desc{font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:6px}
+.app-meta{display:flex;gap:6px;flex-wrap:wrap}
+.app-tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:500}
+.tag-essential{background:var(--green-bg);color:var(--green)}
+.tag-recommended{background:var(--blue-bg);color:var(--blue)}
+.tag-optional{background:var(--surface2);color:var(--text3);border:0.5px solid var(--border)}
+.tag-free{background:#f0faf0;color:var(--green);border:0.5px solid var(--green)}
+.tag-paid{background:#fff8e8;color:var(--amber);border:0.5px solid var(--amber)}
+.tag-freemium{background:#e8f0fa;color:var(--blue);border:0.5px solid var(--blue)}
+.app-link{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;background:var(--blue-bg);color:var(--blue);font-size:12px;font-weight:500;text-decoration:none;margin-top:6px}
+.app-link:hover{background:#c5daf5}
+.essential-box{background:var(--green-bg);border:1px solid var(--green);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.5rem}
+.essential-box h3{font-size:14px;font-weight:500;color:var(--green);margin-bottom:8px}
+.essential-box ul{list-style:none;display:flex;flex-direction:column;gap:4px}
+.essential-box li{font-size:13px;color:var(--green)}
+.disclaimer{font-size:11px;color:var(--text3);margin-top:1.5rem;line-height:1.5;padding:12px 16px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface)}
+@media(max-width:600px){.needs-grid{grid-template-columns:1fr 1fr}}
+
+.tool-nav{position:sticky;top:0;z-index:100;background:rgba(26,25,21,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.1);padding:0 1rem}
+.tool-nav-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.tool-nav-inner::-webkit-scrollbar{display:none}
+.tool-nav-inner a{display:flex;flex-direction:column;align-items:center;padding:8px 10px;color:rgba(255,255,255,0.55);text-decoration:none;font-size:9px;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;gap:3px;flex-shrink:0}
+.tool-nav-inner a:hover{color:#fff;text-decoration:none}
+.tool-nav-inner a.active{color:#fff;border-bottom-color:#fff}
+.tool-nav-inner .nav-icon{font-size:16px;line-height:1}
+</style>
+</head>
+<body><nav class="tool-nav">
+  <div class="tool-nav-inner">
+    <a href="https://jev-rv.github.io/" id="nav-home"><span class="nav-icon">🏠</span>Home</a>
+    <a href="https://jev-rv.github.io/schengen-rv-simulator/" id="nav-schengen"><span class="nav-icon">🗓️</span>Schengen</a>
+    <a href="https://jev-rv.github.io/budget-simulator/" id="nav-budget"><span class="nav-icon">💶</span>Budget</a>
+    <a href="https://jev-rv.github.io/rv-option-selector/" id="nav-options"><span class="nav-icon">🚐</span>Options</a>
+    <a href="https://jev-rv.github.io/port-selector/" id="nav-port"><span class="nav-icon">⚠️</span>Port</a>
+    <a href="https://jev-rv.github.io/pre-departure-checklist/" id="nav-checklist"><span class="nav-icon">✅</span>Checklist</a>
+    <a href="https://jev-rv.github.io/toll-calculator/" id="nav-tolls"><span class="nav-icon">🛣️</span>Tolls</a>
+    <a href="https://jev-rv.github.io/rhythm-planner/" id="nav-rhythm"><span class="nav-icon">🚐</span>Rhythm</a>
+    <a href="https://jev-rv.github.io/safety-map/" id="nav-safety"><span class="nav-icon">🗺️</span>Safety</a>
+    <a href="https://jev-rv.github.io/app-recommender/" id="nav-apps"><span class="nav-icon">📱</span>Apps</a>
+    <a href="https://jev-rv.github.io/pet-travel-checker/" id="nav-pets"><span class="nav-icon">🐾</span>Pets</a>
+    <a href="https://jev-rv.github.io/getting-started/" id="nav-start"><span class="nav-icon">&#129302;</span>AI&nbsp;Agents</a>
+  </div>
+</nav>
+<header class="page-header">
+  <a class="back-link" href="https://jev-rv.github.io/">&#8592; Back to all tools</a>
+  <h1 id="h-title">App Recommender</h1>
+  <p class="sub" id="h-sub">Tell us what you need &mdash; get a personalized app list for your North American RV trip in Europe.</p>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</header>
+<main class="main">
+<div class="card">
+  <div class="card-header"><span>&#10067;</span><h2 id="needs-title">What do you need help with?</h2></div>
+  <div class="card-body">
+    <div class="needs-grid" id="needsGrid"></div>
+    <button class="find-btn" onclick="findApps()" id="find-btn">Find my apps &#8594;</button>
+  </div>
+</div>
+<div class="results" id="results">
+  <div class="essential-box" id="essentialBox"></div>
+  <div id="appResults"></div>
+</div>
+<div class="disclaimer">
+  <strong>Source:</strong> Guide 9 &mdash; Tools, Apps &amp; Daily Life on the Road in Europe (J.-E. Vandenbroucke, 2026). App availability and pricing may change &mdash; always verify on App Store / Google Play before departure.<br><br>
+  &copy; 2026 Jack-Eric Vandenbroucke &middot; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+</div>
+</main>
+<script>
+const NEEDS = [
+  {id:'nav', icon:'&#128506;&#65039;', en:'RV Navigation', fr:'Navigation VR', sub_en:'Height/weight aware GPS', sub_fr:'GPS hauteur/poids'},
+  {id:'overnight', icon:'&#127981;', en:'Overnight spots', fr:'Spots de nuit', sub_en:'Aires, stellplatz, wild', sub_fr:'Aires, stellplatz, sauvage'},
+  {id:'dump', icon:'&#128422;', en:'Water & dump stations', fr:'Eau & vidange', sub_en:'Service points', sub_fr:'Points de service'},
+  {id:'lpg', icon:'&#128293;', en:'LPG / Propane', fr:'GPL / Propane', sub_en:'Find gas stations', sub_fr:'Trouver stations gaz'},
+  {id:'weather', icon:'&#127784;&#65039;', en:'Weather', fr:'Meteo', sub_en:'Forecast for moves', sub_fr:'Previsions pour mouvements'},
+  {id:'lez', icon:'&#128683;', en:'LEZ / ZTL zones', fr:'Zones LEZ / ZTL', sub_en:'Avoid restricted zones', sub_fr:'Eviter zones restreintes'},
+  {id:'communication', icon:'&#128241;', en:'Connectivity', fr:'Connectivite', sub_en:'SIM, eSIM, data roaming', sub_fr:'SIM, eSIM, donnees'},
+  {id:'translation', icon:'&#127760;', en:'Translation', fr:'Traduction', sub_en:'Languages on the road', sub_fr:'Langues en route'},
+  {id:'payments', icon:'&#128179;', en:'Payments & tolls', fr:'Paiements & peages', sub_en:'Cashless Europe tips', sub_fr:'Conseils Europe sans especes'},
+  {id:'security', icon:'&#128274;', en:'Security & tracking', fr:'Securite & tracking', sub_en:'RV monitoring', sub_fr:'Surveillance VR'},
+  {id:'community', icon:'&#128101;', en:'Community & forums', fr:'Communaute & forums', sub_en:'LTV groups & vanlife', sub_fr:'Groupes LTV & vanlife'},
+  {id:'ai', icon:'&#129302;', en:'AI travel assistants', fr:'Assistants IA', sub_en:'Planning & decisions', sub_fr:'Planification & decisions'},
+];
+
+const APPS = {
+  nav: {
+    icon:'&#128506;&#65039;',
+    en:'RV-Aware Navigation',fr:'Navigation adaptee VR',
+    apps:[
+      {name:'TomTom GO Camper', icon:'&#128506;&#65039;', priority:'essential',
+       en:'Best dedicated RV GPS for Europe. Automatically avoids roads with weight, height, width restrictions. Critical for North American RVs over 3.5t in European village roads, tunnels, and mountain passes. Paid subscription.',
+       fr:'Meilleur GPS VR dedie pour l\'Europe. Evite automatiquement les routes avec restrictions poids, hauteur, largeur. Critique pour les VR nord-americains de plus de 3,5t.', cost:'paid',
+       ios:'https://apps.apple.com/app/tomtom-go-navigation/id661034241', android:'https://play.google.com/store/apps/details?id=com.tomtom.gplay.navapp'},
+      {name:'Garmin RV / Camper GPS', icon:'&#128506;&#65039;', priority:'essential',
+       en:'Hardware GPS unit (RV 895/1095) or Garmin Drive app with truck/camper mode. Essential for dimension-aware routing. Google Maps and Apple Maps do NOT consider RV height/weight.',
+       fr:'GPS materiel (RV 895/1095) ou app Garmin Drive avec mode camping-car. Indispensable. Google Maps et Apple Maps NE tiennent PAS compte de la hauteur/poids.', cost:'paid',
+       url:'https://www.garmin.com/en-US/c/camping-rv/'},
+      {name:'Sygic Truck & RV Navigation', icon:'&#128506;&#65039;', priority:'recommended',
+       en:'Good alternative to TomTom. Truck/RV profile with height, weight, and width settings. Works offline. Popular in the motorhome community.',
+       fr:'Bonne alternative a TomTom. Profil camion/VR avec hauteur, poids et largeur. Fonctionne hors ligne.', cost:'freemium',
+       ios:'https://apps.apple.com/app/sygic-truck-gps-navigation/id585193965', android:'https://play.google.com/store/apps/details?id=com.sygic.truck'},
+    ]
+  },
+  overnight: {
+    icon:'&#127981;',
+    en:'Overnight Spots',fr:'Spots de nuit',
+    apps:[
+      {name:'Park4Night', icon:'&#127981;', priority:'essential',
+       en:'Most popular app for finding aires, stellplatz, wild spots, and campgrounds in Europe. Community reviews, photos, filters. Works offline. Essential for every night on the road.',
+       fr:'Application la plus populaire pour trouver des aires, stellplatz, spots sauvages et campings en Europe. Avis communautaires, photos, filtres. Fonctionne hors ligne. Indispensable.',
+       cost:'freemium', url:'https://park4night.com'},
+      {name:'Camperstop / Campercontact', icon:'&#9978;&#65039;', priority:'recommended',
+       en:'Strong alternative or complement to Park4Night. Particularly good for stellplatz (German-style aires). Many exclusive listings.',
+       fr:'Solide alternative ou complement a Park4Night. Particulierement bon pour les stellplatz. Nombreuses annonces exclusives.', cost:'freemium',
+       url:'https://www.campercontact.com'},
+      {name:'Google Maps + Street View', icon:'&#127760;', priority:'recommended',
+       en:'Not for navigation (use RV GPS instead), but perfect for checking access routes, road width, slope, and tight entrances before committing.',
+       fr:'Pas pour la navigation (utilisez GPS VR), mais parfait pour verifier les acces, la largeur des routes et les entrees etroites avant de s\'engager.', cost:'free', url:'https://maps.google.com'},
+    ]
+  },
+  dump: {
+    icon:'&#128422;',
+    en:'Water & Dump Stations',fr:'Eau & Vidange',
+    apps:[
+      {name:'Park4Night (Service filter)', icon:'&#128422;', priority:'essential',
+       en:'Filter for "Service" in Park4Night to find dump + fresh water fill stations. Most official aires and stellplatz include a service point (usually EUR 2-5 per use). French supermarkets (Intermarche, Leclerc, Carrefour) often have free service points.',
+       fr:'Filtrez "Service" dans Park4Night pour trouver les stations de vidange + remplissage eau. La plupart des aires officielles incluent un point de service (generalement 2-5 EUR).', cost:'freemium', url:'https://park4night.com'},
+      {name:'Camperstop', icon:'&#9978;&#65039;', priority:'recommended',
+       en:'Good secondary source for service point locations, especially in Germany and Austria.',
+       fr:'Bonne source secondaire pour les points de service, surtout en Allemagne et Autriche.', cost:'freemium', url:'https://www.campercontact.com'},
+    ]
+  },
+  lpg: {
+    icon:'&#128293;',
+    en:'LPG / Propane',fr:'GPL / Propane',
+    apps:[
+      {name:'myLPG.eu', icon:'&#128293;', priority:'essential',
+       en:'48,000+ LPG stations across 70+ European countries. Filters for motorhomes, 24/7 availability, connector types (DISH, Bayonet, Euronozzle), and prices. The only reliable LPG app for European RV travel.',
+       fr:'48 000+ stations GPL dans plus de 70 pays europeens. Filtres pour camping-cars, disponibilite 24h/7j, types de connecteurs et prix. La seule application GPL fiable pour le voyage VR en Europe.', cost:'free', url:'https://www.mylpg.eu'},
+    ]
+  },
+  weather: {
+    icon:'&#127784;&#65039;',
+    en:'Weather',fr:'Meteo',
+    apps:[
+      {name:'Windy.com', icon:'&#127784;&#65039;', priority:'essential',
+       en:'Best weather visualization for RV travelers. Shows wind, rain, cloud layers at a glance. Critical for mountain passes, coastal routes, and deciding when to move.',
+       fr:'Meilleure visualisation meteo pour voyageurs VR. Montre vent, pluie, nuages en un coup d\'oeil. Critique pour les cols, routes cotieres et decisions de mouvement.', cost:'free', url:'https://www.windy.com'},
+      {name:'Meteoblue', icon:'&#9729;&#65039;', priority:'recommended',
+       en:'Excellent hourly forecasts. Very accurate for mountain areas. Used by pilots and outdoor professionals in Europe.',
+       fr:'Excellentes previsions horaires. Tres precise pour les zones montagneuses. Utilise par les pilotes et professionnels de plein air en Europe.', cost:'free', url:'https://www.meteoblue.com'},
+      {name:'Weather Pro / AccuWeather', icon:'&#127773;', priority:'optional',
+       en:'Good backup weather app. AccuWeather has good European coverage.',
+       fr:'Bonne application meteo de secours. AccuWeather a une bonne couverture europeenne.', cost:'freemium', url:'https://www.accuweather.com'},
+    ]
+  },
+  lez: {
+    icon:'&#128683;',
+    en:'LEZ / ZTL Zones',fr:'Zones LEZ / ZTL',
+    apps:[
+      {name:'urbanaccessregulations.eu', icon:'&#128683;', priority:'essential',
+       en:'Official EU database of all urban access restrictions including LEZ, ULEZ, ZTL, and Umweltzone. Check before entering any major European city.',
+       fr:'Base de donnees officielle de l\'UE de toutes les restrictions d\'acces urbain incluant LEZ, ULEZ, ZTL et Umweltzone. Verifiez avant d\'entrer dans toute grande ville europeenne.', cost:'free', url:'https://urbanaccessregulations.eu'},
+      {name:'ZTL Italia (app)', icon:'&#127470;&#127481;', priority:'recommended',
+       en:'Italy-specific ZTL zone app. Italy has ZTL in almost every historic city center. Essential if your route includes Italian cities.',
+       fr:'Application specifique aux zones ZTL en Italie. L\'Italie a des ZTL dans presque chaque centre-ville historique. Indispensable si votre itineraire inclut des villes italiennes.', cost:'free', url:'https://ztl-italia.info'},
+    ]
+  },
+  communication: {
+    icon:'&#128241;',
+    en:'Connectivity',fr:'Connectivite',
+    apps:[
+      {name:'Airalo (eSIM)', icon:'&#128241;', priority:'essential',
+       en:'Best eSIM marketplace for European travel. Buy a regional European eSIM before departure. Covers 30+ countries. Much cheaper than roaming. Works alongside your Canadian/US SIM.',
+       fr:'Meilleur marche eSIM pour le voyage europeen. Achetez un eSIM europeen regional avant le depart. Couvre 30+ pays. Beaucoup moins cher que le roaming.', cost:'paid', url:'https://www.airalo.com'},
+      {name:'Speedtest by Ookla', icon:'&#128246;', priority:'optional',
+       en:'Test your campsite or aire WiFi speed before deciding to stream or upload. Quickly identifies whether the WiFi is usable.',
+       fr:'Testez la vitesse WiFi du camping ou de l\'aire avant de decider de streamer. Identifie rapidement si le WiFi est utilisable.', cost:'free', url:'https://www.speedtest.net'},
+    ]
+  },
+  translation: {
+    icon:'&#127760;',
+    en:'Translation',fr:'Traduction',
+    apps:[
+      {name:'Google Translate', icon:'&#127760;', priority:'essential',
+       en:'Camera translation (point at signs, menus, documents). Offline language packs available. Download French, German, Italian, Spanish, Portuguese, Serbian, Romanian before departure.',
+       fr:'Traduction par camera (pointer vers les panneaux, menus, documents). Packs de langue hors ligne disponibles. Telechargez les packs avant le depart.', cost:'free', url:'https://translate.google.com'},
+      {name:'DeepL Translate', icon:'&#128172;', priority:'recommended',
+       en:'Best quality text translation. Particularly good for German and Eastern European languages. Excellent for understanding campsite rules or official documents.',
+       fr:'Meilleure qualite de traduction de texte. Particulierement bon pour l\'allemand et les langues d\'Europe de l\'Est. Excellent pour comprendre les regles des campings.', cost:'freemium', url:'https://www.deepl.com'},
+    ]
+  },
+  payments: {
+    icon:'&#128179;',
+    en:'Payments & Tolls',fr:'Paiements & Peages',
+    apps:[
+      {name:'Revolut / Wise', icon:'&#128179;', priority:'essential',
+       en:'Multi-currency card with no foreign transaction fees. Essential for Europe. Instantly converts currency at interbank rates. Works everywhere. Get the card before departure.',
+       fr:'Carte multi-devises sans frais de transaction etrangers. Indispensable pour l\'Europe. Convertit instantanement les devises au taux interbancaire. Obtenez la carte avant le depart.', cost:'freemium', url:'https://www.revolut.com'},
+      {name:'Portugal Tolls app', icon:'&#127477;&#127481;', priority:'optional',
+       en:'For Portugal electronic tolls without a transponder. Pay within 5 days of travel. Required on some Portuguese motorways.',
+       fr:'Pour les peages electroniques portugais sans transpondeur. Payer dans les 5 jours. Requis sur certaines autoroutes portugaises.', cost:'free', url:'https://www.portugaltolls.com'},
+    ]
+  },
+  security: {
+    icon:'&#128274;',
+    en:'Security & Tracking',fr:'Securite & Tracking',
+    apps:[
+      {name:'Apple Find My (AirTag)', icon:'&#128279;', priority:'essential',
+       en:'Best low-cost tracking for RV in Europe. AirTag relayed by any iPhone nearby via iCloud. No SIM, no subscription. Excellent coverage in Western Europe where iPhone density is high. Place inside vehicle.',
+       fr:'Meilleur suivi bas cout pour VR en Europe. AirTag relaye par tout iPhone proche via iCloud. Pas de SIM, pas d\'abonnement. Excellente couverture en Europe de l\'Ouest.', cost:'paid', url:'https://www.apple.com/airtag/'},
+      {name:'Mercedes me Connect', icon:'&#127950;', priority:'essential',
+       en:'Already installed on 2025 LTV Unity FX. Factory 4G LTE with real-time GPS, geofence alerts, alarm notifications, and stolen vehicle assistance. Verify subscription covers Europe before departure.',
+       fr:'Deja installe sur le LTV Unity FX 2025. 4G LTE avec GPS temps reel, alertes geofence, notifications alarme. Verifiez que l\'abonnement couvre l\'Europe avant le depart.', cost:'subscription', url:'https://www.mercedes-benz.com/en/mercedes-me/'},
+      {name:'112 Emergency app', icon:'&#128680;', priority:'essential',
+       en:'European emergency number (equivalent to 911). Works throughout Europe on any network. Download the official app for your destination countries.',
+       fr:'Numero d\'urgence europeen (equivalent au 911). Fonctionne partout en Europe sur tout reseau. Telechargez l\'application officielle pour vos pays de destination.', cost:'free', url:'https://www.112.eu'},
+    ]
+  },
+  community: {
+    icon:'&#128101;',
+    en:'Community & Forums',fr:'Communaute & Forums',
+    apps:[
+      {name:'Facebook: LTV Owners Group', icon:'&#128101;', priority:'essential',
+       en:'Main community for Leisure Travel Vans owners in North America. Ask questions, share experiences, find convoy partners. Active and helpful.',
+       fr:'Principale communaute pour les proprietaires de Leisure Travel Vans en Amerique du Nord. Posez des questions, partagez des experiences, trouvez des partenaires de convoi.', cost:'free', url:'https://www.facebook.com/groups/leisuretravelvans/'},
+      {name:'Facebook: LTV Solo Women Travelers', icon:'&#128105;', priority:'recommended',
+       en:'Specialized group for solo women traveling in LTVs. Very active and supportive community.',
+       fr:'Groupe specialise pour les femmes voyageant seules en LTV. Communaute tres active et solidaire.', cost:'free', url:'https://www.facebook.com/groups/380736413599153/'},
+      {name:'Facebook: VR Europe', icon:'&#127758;', priority:'recommended',
+       en:'North American RV travelers in Europe. Share trip reports, questions, route ideas, and find travel companions.',
+       fr:'Voyageurs VR nord-americains en Europe. Partagez rapports de voyage, questions, idees d\'itineraires et trouvez des compagnons de voyage.', cost:'free', url:'https://www.facebook.com/'},
+    ]
+  },
+  ai: {
+    icon:'&#129302;',
+    en:'AI Travel Assistants',fr:'Assistants IA voyage',
+    apps:[
+      {name:'Concierge VR Europe (ChatGPT)', icon:'&#129302;', priority:'essential',
+       en:'Specialized AI assistant built specifically for North American RV travel in Europe. Provides concept itineraries, Schengen calendar, weather + driving time estimates, and hotel+RV hybrid nights. Access via ChatGPT. NOT a replacement for Park4Night or RV GPS.',
+       fr:'Assistant IA specialise specifiquement pour le voyage VR nord-americain en Europe. Itineraires conceptuels, calendrier Schengen, estimations meteo + temps de conduite. Accessible via ChatGPT.', cost:'freemium', url:'https://chat.openai.com'},
+      {name:'Claude.ai', icon:'&#129302;', priority:'recommended',
+       en:'General AI assistant. Excellent for planning, research, writing, and problem-solving on the road. Good knowledge of European regulations.',
+       fr:'Assistant IA general. Excellent pour la planification, la recherche et la resolution de problemes en route.', cost:'freemium', url:'https://claude.ai'},
+      {name:'RV Tech Sentinel (ChatGPT)', icon:'&#129302;', priority:'recommended',
+       en:'Specialized AI for diagnosing LTV Unity FX technical issues on the road. Covers Firefly, Xanbus, Oasis, electrical, propane, and water systems. Use when something seems wrong with the RV.',
+       fr:'IA specialisee pour diagnostiquer les problemes techniques du LTV Unity FX en route. Couvre Firefly, Xanbus, Oasis, electrique, propane et eau.', cost:'freemium', url:'https://chat.openai.com'},
+    ]
+  },
+};
+
+const ESSENTIAL_ALWAYS = {
+  en: ['Park4Night — overnight spots', 'TomTom GO Camper or Garmin — RV GPS', 'myLPG.eu — propane stations', 'Google Translate — camera translation', '112 app — European emergency number'],
+  fr: ['Park4Night — spots de nuit', 'TomTom GO Camper ou Garmin — GPS VR', 'myLPG.eu — stations propane', 'Google Translate — traduction camera', 'App 112 — numero urgence europeen'],
+};
+
+let lang='en', selectedNeeds=new Set(['nav','overnight','lpg']);
+
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  const isFr=l==='fr';
+  document.getElementById('h-title').textContent=isFr?'Recommandateur d\'applications':'App Recommender';
+  document.getElementById('h-sub').textContent=isFr?'Dites-nous ce dont vous avez besoin — obtenez une liste d\'applications personnalisee pour votre voyage VR nord-americain en Europe.':'Tell us what you need — get a personalized app list for your North American RV trip in Europe.';
+  document.getElementById('needs-title').textContent=isFr?'De quoi avez-vous besoin?':'What do you need help with?';
+  document.getElementById('find-btn').textContent=isFr?'Trouver mes applications →':'Find my apps →';
+  renderNeeds();
+  if(document.getElementById('results').classList.contains('visible')) findApps();
+}
+
+function renderNeeds(){
+  document.getElementById('needsGrid').innerHTML=NEEDS.map(n=>`
+    <button class="need-btn ${selectedNeeds.has(n.id)?'selected':''}" onclick="toggleNeed('${n.id}')">
+      <div class="need-icon">${n.icon}</div>
+      <div class="need-label">${lang==='fr'?n.fr:n.en}</div>
+      <div class="need-sub">${lang==='fr'?n.sub_fr:n.sub_en}</div>
+    </button>
+  `).join('');
+}
+
+function toggleNeed(id){
+  if(selectedNeeds.has(id)) selectedNeeds.delete(id);
+  else selectedNeeds.add(id);
+  renderNeeds();
+}
+
+function costTag(cost, isFr){
+  if(cost==='free') return `<span class="app-tag tag-free">${isFr?'Gratuit':'Free'}</span>`;
+  if(cost==='paid') return `<span class="app-tag tag-paid">${isFr?'Payant':'Paid'}</span>`;
+  if(cost==='subscription') return `<span class="app-tag tag-paid">${isFr?'Abonnement':'Subscription'}</span>`;
+  return `<span class="app-tag tag-freemium">Freemium</span>`;
+}
+
+function priorityTag(p, isFr){
+  if(p==='essential') return `<span class="app-tag tag-essential">${isFr?'Essentiel':'Essential'}</span>`;
+  if(p==='recommended') return `<span class="app-tag tag-recommended">${isFr?'Recommande':'Recommended'}</span>`;
+  return `<span class="app-tag tag-optional">${isFr?'Optionnel':'Optional'}</span>`;
+}
+
+function findApps(){
+  const isFr=lang==='fr';
+  if(selectedNeeds.size===0){
+    alert(isFr?'Selectionnez au moins un besoin.':'Please select at least one need.');
+    return;
+  }
+  const res=document.getElementById('results');
+  res.classList.add('visible');
+
+  // Essential box
+  const ess=ESSENTIAL_ALWAYS[lang];
+  document.getElementById('essentialBox').innerHTML=`
+    <h3>&#9989; ${isFr?'Applications indispensables pour tout voyage VR en Europe':'Essential apps for every RV trip in Europe'}</h3>
+    <ul>${ess.map(e=>`<li>&#10003; ${e}</li>`).join('')}</ul>
+  `;
+
+  // App results by category
+  let html='';
+  for(const needId of selectedNeeds){
+    const catData=APPS[needId];
+    if(!catData) continue;
+    const catName=isFr?catData.fr:catData.en;
+    const need=NEEDS.find(n=>n.id===needId);
+    html+=`<div class="cat-section">
+      <div class="cat-title">${need.icon} ${catName}</div>
+      ${catData.apps.map(app=>{
+        const desc=isFr?app.fr:app.en;
+        const link=app.url?`<a class="app-link" href="${app.url}" target="_blank">&#8594; ${isFr?'En savoir plus':'Learn more'}</a>`:
+          (app.ios||app.android?`${app.ios?`<a class="app-link" href="${app.ios}" target="_blank">App Store</a>`:''}${app.android?`<a class="app-link" href="${app.android}" target="_blank">Play Store</a>`:''}`:``);
+        return `<div class="app-card ${app.priority}">
+          <div class="app-icon">${app.icon}</div>
+          <div class="app-content">
+            <div class="app-name">${app.name}</div>
+            <div class="app-desc">${desc}</div>
+            <div class="app-meta">
+              ${priorityTag(app.priority,isFr)}
+              ${costTag(app.cost,isFr)}
+            </div>
+            ${link}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+  document.getElementById('appResults').innerHTML=html;
+  res.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+renderNeeds();
+</script>
+
+<script>document.getElementById("nav-apps").classList.add("active");</script>
+</body>
+</html>
