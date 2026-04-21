@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Europe Safety Map — North American RV Travel </title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f2ec;--surface:#fff;--surface2:#f0ede6;--border:#ddd9d0;--text:#1a1915;--text2:#6b6860;--text3:#9c9890;--blue:#1a5fa8;--blue-bg:#e8f0fa;--green:#1a7a4a;--green-bg:#e4f5ec;--amber:#8a5a00;--amber-bg:#fdf0d5;--red:#a02020;--red-bg:#fde8e8;--radius:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
+a{color:var(--blue)}
+.page-header{background:var(--text);color:#fff;padding:2.5rem 2rem 2rem;text-align:center}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:1rem}
+.back-link:hover{color:#fff;text-decoration:none}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:400;color:#fff;margin-bottom:.5rem}
+.page-header .sub{font-size:.9rem;color:rgba(255,255,255,0.6);max-width:540px;margin:0 auto}
+.lang-toggle{display:inline-flex;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.2);margin-top:1rem}
+.lang-btn{background:none;border:none;color:rgba(255,255,255,.6);padding:5px 14px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer}
+.lang-btn.active{background:rgba(255,255,255,.2);color:#fff;font-weight:500}
+.main{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1.5rem}
+.card-header{padding:1rem 1.5rem;border-bottom:0.5px solid var(--border);background:var(--surface2);display:flex;align-items:center;gap:10px}
+.card-header h2{font-family:'DM Serif Display',serif;font-size:1.05rem;font-weight:400}
+.card-body{padding:1.25rem 1.5rem}
+.region-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem}
+.region-card{border-radius:10px;padding:1.25rem;border:0.5px solid var(--border);cursor:pointer;transition:all .15s;background:var(--surface)}
+.region-card:hover{transform:translateY(-2px);border-color:#aaa}
+.region-card.selected{border:2px solid var(--blue);background:var(--blue-bg)}
+.region-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.region-flag{font-size:20px}
+.region-name{font-size:14px;font-weight:500}
+.region-score{margin-left:auto;font-size:13px;font-weight:500}
+.score-safe{color:var(--green)}
+.score-mod{color:var(--amber)}
+.score-caut{color:var(--red)}
+.score-bars{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
+.score-row{display:flex;align-items:center;gap:8px;font-size:11px}
+.score-lbl{color:var(--text2);min-width:80px}
+.score-bar{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px}
+.region-tags{display:flex;gap:5px;flex-wrap:wrap}
+.rtag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:500}
+.rtag-ok{background:var(--green-bg);color:var(--green)}
+.rtag-warn{background:var(--amber-bg);color:var(--amber)}
+.rtag-caut{background:var(--red-bg);color:var(--red)}
+.detail-panel{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem;display:none}
+.detail-panel.visible{display:block}
+.detail-title{font-family:'DM Serif Display',serif;font-size:1.2rem;margin-bottom:1rem}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.detail-item h4{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.detail-item p{font-size:13px;color:var(--text);line-height:1.5}
+.avoid-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.avoid-list li{font-size:13px;padding:6px 10px;background:var(--red-bg);border-radius:6px;color:var(--red)}
+.tips-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.tips-list li{font-size:13px;padding:6px 10px;background:var(--green-bg);border-radius:6px;color:var(--green)}
+.hotspots-section{margin-top:1rem}
+.hotspot-item{padding:8px 12px;border-radius:6px;font-size:12px;margin-bottom:6px;line-height:1.4}
+.hs-bad{background:var(--red-bg);color:var(--red)}
+.hs-warn{background:var(--amber-bg);color:var(--amber)}
+table.safety-table{width:100%;border-collapse:collapse;font-size:13px}
+.safety-table th{text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--border);font-size:11px;font-weight:500;text-transform:uppercase;color:var(--text2)}
+.safety-table td{padding:8px 10px;border-bottom:0.5px solid var(--border)}
+.safety-table tr:last-child td{border-bottom:none}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500}
+.b-safe{background:var(--green-bg);color:var(--green)}
+.b-mod{background:var(--amber-bg);color:var(--amber)}
+.b-caut{background:var(--red-bg);color:var(--red)}
+.disclaimer{font-size:11px;color:var(--text3);margin-top:1.5rem;line-height:1.5;padding:12px 16px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface)}
+@media(max-width:600px){.region-grid{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}}
+
+.tool-nav{position:sticky;top:0;z-index:100;background:rgba(26,25,21,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.1);padding:0 1rem}
+.tool-nav-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.tool-nav-inner::-webkit-scrollbar{display:none}
+.tool-nav-inner a{display:flex;flex-direction:column;align-items:center;padding:8px 10px;color:rgba(255,255,255,0.55);text-decoration:none;font-size:9px;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;gap:3px;flex-shrink:0}
+.tool-nav-inner a:hover{color:#fff;text-decoration:none}
+.tool-nav-inner a.active{color:#fff;border-bottom-color:#fff}
+.tool-nav-inner .nav-icon{font-size:16px;line-height:1}
+</style>
+</head>
+<body><nav class="tool-nav">
+  <div class="tool-nav-inner">
+    <a href="https://jev-rv.github.io/" id="nav-home"><span class="nav-icon">🏠</span>Home</a>
+    <a href="https://jev-rv.github.io/schengen-rv-simulator/" id="nav-schengen"><span class="nav-icon">🗓️</span>Schengen</a>
+    <a href="https://jev-rv.github.io/budget-simulator/" id="nav-budget"><span class="nav-icon">💶</span>Budget</a>
+    <a href="https://jev-rv.github.io/rv-option-selector/" id="nav-options"><span class="nav-icon">🚐</span>Options</a>
+    <a href="https://jev-rv.github.io/port-selector/" id="nav-port"><span class="nav-icon">⚠️</span>Port</a>
+    <a href="https://jev-rv.github.io/pre-departure-checklist/" id="nav-checklist"><span class="nav-icon">✅</span>Checklist</a>
+    <a href="https://jev-rv.github.io/toll-calculator/" id="nav-tolls"><span class="nav-icon">🛣️</span>Tolls</a>
+    <a href="https://jev-rv.github.io/rhythm-planner/" id="nav-rhythm"><span class="nav-icon">🚐</span>Rhythm</a>
+    <a href="https://jev-rv.github.io/safety-map/" id="nav-safety"><span class="nav-icon">🗺️</span>Safety</a>
+    <a href="https://jev-rv.github.io/app-recommender/" id="nav-apps"><span class="nav-icon">📱</span>Apps</a>
+    <a href="https://jev-rv.github.io/pet-travel-checker/" id="nav-pets"><span class="nav-icon">🐾</span>Pets</a>
+    <a href="https://jev-rv.github.io/getting-started/" id="nav-start"><span class="nav-icon">&#129302;</span>AI&nbsp;Agents</a>
+  </div>
+</nav>
+<header class="page-header">
+  <a class="back-link" href="https://jev-rv.github.io/">&#8592; Back to all tools</a>
+  <h1 id="h-title">Europe Safety Map</h1>
+  <p class="sub" id="h-sub">Data-driven safety overview for North American RV travelers. Based on Numbeo Crime Index 2025 and Transparency International CPI 2024.</p>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</header>
+<main class="main">
+
+<div class="region-grid" id="regionGrid"></div>
+<div class="detail-panel" id="detailPanel"></div>
+
+<div class="card">
+  <div class="card-header"><span>&#128203;</span><h2 id="tbl-title">Full safety comparison</h2></div>
+  <div class="card-body">
+    <div style="overflow-x:auto">
+      <table class="safety-table" id="safetyTable"></table>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header"><span>&#128683;</span><h2 id="avoid-title">Always avoid overnight</h2></div>
+  <div class="card-body">
+    <ul class="avoid-list" id="avoidList"></ul>
+  </div>
+</div>
+
+<div class="disclaimer" id="disclaimer">
+  <strong>Sources:</strong> Numbeo Crime Index 2025 (crowd-sourced, widely used by researchers and governments); Transparency International Corruption Perceptions Index 2024; Guide 8 &mdash; Safety, Solo Travel &amp; Group Convoys (J.-E. Vandenbroucke, 2026). Safety conditions can change &mdash; always check current travel advisories from your government before departure.<br><br>
+  &copy; 2026 Jack-Eric Vandenbroucke &middot; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+</div>
+</main>
+<script>
+const REGIONS = [
+  {
+    id:'scandinavia',
+    flags:'DK NO SE FI IS',
+    en:{name:'Scandinavia',countries:'Denmark, Finland, Norway, Iceland, Sweden'},
+    fr:{name:'Scandinavie',countries:'Danemark, Finlande, Norvege, Islande, Suede'},
+    crime:29, cpi:84, overall:'safe',
+    en_context:'Among the least corrupt globally. Extremely safe. Highly reliable institutions. Very welcoming to RV travelers. Wild camping legal in Scandinavia (allemansratten).',
+    fr_context:'Parmi les moins corrompus au monde. Extremement sure. Institutions tres fiables. Camping sauvage legal en Scandinavie (droit de tout le monde).',
+    wild_camping:'Legal (Scandinavia)',wild_camping_fr:'Legal (Scandinavie)',
+    stray_dogs:'Extremely rare',stray_dogs_fr:'Extremement rare',
+    convoy_needed:'No',convoy_needed_fr:'Non',
+    en_tips:['Wild camping legally permitted across most of Scandinavia','Police highly reliable and helpful','Very safe for solo travelers including women'],
+    fr_tips:['Camping sauvage legalement autorise','Police tres fiable','Tres sure pour voyageurs solos'],
+    en_avoid:['Ferry port areas at night (opportunistic theft)'],
+    fr_avoid:['Zones portuaires de nuit (vols opportunistes)'],
+  },
+  {
+    id:'west',
+    flags:'DE AT NL CH',
+    en:{name:'Western Europe',countries:'Germany, Austria, Netherlands, Switzerland'},
+    fr:{name:'Europe de l\'Ouest',countries:'Allemagne, Autriche, Pays-Bas, Suisse'},
+    crime:33, cpi:74, overall:'safe',
+    en_context:'Low corruption, strong rule of law, excellent RV infrastructure. Very safe for RV travel. Slight urban crime in major city centers.',
+    fr_context:'Faible corruption, etat de droit solide, excellente infrastructure VR. Tres sure pour le voyage VR.',
+    wild_camping:'Tolerated rural',wild_camping_fr:'Tolere en rural',
+    stray_dogs:'Rare',stray_dogs_fr:'Rare',
+    convoy_needed:'No',convoy_needed_fr:'Non',
+    en_tips:['Excellent motorhome infrastructure','Stellplatz system well-developed','Rural areas extremely safe'],
+    fr_tips:['Excellente infrastructure VR','Systeme Stellplatz tres developpe','Zones rurales extremement sures'],
+    en_avoid:['Motorway service areas overnight','City center aires near major stations'],
+    fr_avoid:['Aires de service autoroutiere la nuit','Aires centre-ville pres des grandes gares'],
+  },
+  {
+    id:'south',
+    flags:'FR ES PT IT',
+    en:{name:'Southern Europe',countries:'France, Spain, Italy, Portugal'},
+    fr:{name:'Europe du Sud',countries:'France, Espagne, Italie, Portugal'},
+    crime:47, cpi:54, overall:'moderate',
+    en_context:'Safe overall but higher petty theft in major tourist cities. France scores 55.4 crime index - highest in Western Europe driven by urban petty crime. Rural areas very safe. ZTL zones in Italy require extra planning.',
+    fr_context:'Sure dans l\'ensemble mais plus de vols a la tire dans les grandes villes touristiques. France 55.4 d\'indice crime - le plus eleve d\'Europe de l\'Ouest. Zones rurales tres sures.',
+    wild_camping:'Variable by country',wild_camping_fr:'Variable selon le pays',
+    stray_dogs:'Wild boar more common',stray_dogs_fr:'Sangliers plus frequents',
+    convoy_needed:'No',convoy_needed_fr:'Non',
+    en_tips:['Rural areas very welcoming and safe','Avoid motorway rest areas overnight','Keep valuables hidden in vehicle'],
+    fr_tips:['Zones rurales tres accueillantes','Eviter les aires autoroutieres la nuit','Garder les objets de valeur caches'],
+    en_avoid:['Barcelona aires near port','Marseille city center aires','Rome city center aires','Paris suburban aires','ANY motorway service area overnight'],
+    fr_avoid:['Aires pres du port de Barcelone','Aires centre-ville Marseille','Aires centre-ville Rome','Aires banlieue parisienne','Toute aire autoroutiere la nuit'],
+  },
+  {
+    id:'central',
+    flags:'CZ PL SI HR HU SK',
+    en:{name:'Central Europe',countries:'Czechia, Poland, Slovenia, Croatia, Hungary, Slovakia'},
+    fr:{name:'Europe Centrale',countries:'Tcheque, Pologne, Slovenie, Croatie, Hongrie, Slovaquie'},
+    crime:29, cpi:53, overall:'safe',
+    en_context:'Low crime, moderate corruption, stable and safe for travelers. Excellent RV infrastructure in Slovenia and Croatia. Good motorhome culture.',
+    fr_context:'Crime faible, corruption moderee, stable et sure pour les voyageurs. Excellente infrastructure VR en Slovenie et Croatie.',
+    wild_camping:'Variable',wild_camping_fr:'Variable',
+    stray_dogs:'Rare',stray_dogs_fr:'Rare',
+    convoy_needed:'No',convoy_needed_fr:'Non',
+    en_tips:['Generally very safe for RV travel','Good motorhome aire networks in CZ and SI','Croatia has strict wild boar food security rules'],
+    fr_tips:['Generalement tres sure pour le VR','Bons reseaux d\'aires en Tcheque et Slovenie'],
+    en_avoid:['Remote industrial zones at night','Unsupported border crossings'],
+    fr_avoid:['Zones industrielles isolees la nuit','Passages frontaliers non documentes'],
+  },
+  {
+    id:'balkans',
+    flags:'RS ME AL MK BA',
+    en:{name:'Balkans',countries:'Serbia, Montenegro, Albania, North Macedonia, Bosnia'},
+    fr:{name:'Balkans',countries:'Serbie, Montenegro, Albanie, Macedoine du Nord, Bosnie'},
+    crime:40, cpi:45, overall:'caution',
+    en_context:'Higher corruption, variable policing, rural unpredictability. Generally safe for travel but requires more awareness. Excellent landscapes and hospitality. Stray dogs present in Albania, North Macedonia, rural Bulgaria.',
+    fr_context:'Corruption plus elevee, police variable, imprevisibilite rurale. Generalement sure mais necessite plus de vigilance. Paysages excellents et hospitalite remarquable.',
+    wild_camping:'Tolerated rural',wild_camping_fr:'Tolere en rural',
+    stray_dogs:'Present (Albania, MK)',stray_dogs_fr:'Present (Albanie, MK)',
+    convoy_needed:'Optional Morocco-style',convoy_needed_fr:'Optionnel style Maroc',
+    en_tips:['Hospitality is genuinely warm','Rural areas generally very safe','Join LTV or vanlife convoy groups for first visit'],
+    fr_tips:['Hospitalite genuinement chaleureuse','Zones rurales generalement tres sures','Rejoindre des groupes convoy LTV pour premiere visite'],
+    en_avoid:['Isolated spots near border crossings','City outskirts with unlit industrial zones','Night stops without community recommendations'],
+    fr_avoid:['Spots isoles pres des frontieres','Peripherie urbaine non eclairee','Arrets nocturnes sans recommandations communautaires'],
+  },
+  {
+    id:'ro_bg',
+    flags:'RO BG',
+    en:{name:'Romania & Bulgaria',countries:'Romania, Bulgaria'},
+    fr:{name:'Roumanie & Bulgarie',countries:'Roumanie, Bulgarie'},
+    crime:34, cpi:46, overall:'caution',
+    en_context:'Moderate crime, corruption challenges. Safe for tourism. Stray dogs in rural zones a real concern - especially in Romania. Good hospitality. Beautiful landscapes.',
+    fr_context:'Crime modere, defis de corruption. Sure pour le tourisme. Chiens errants dans les zones rurales - preoccupation reelle surtout en Roumanie. Bonne hospitalite.',
+    wild_camping:'Tolerated',wild_camping_fr:'Tolere',
+    stray_dogs:'Present - be cautious',stray_dogs_fr:'Present - soyez prudent',
+    convoy_needed:'No but advisable for solo',convoy_needed_fr:'Non mais conseille pour solos',
+    en_tips:['Use established campgrounds more than wild spots','Keep food secured from stray dogs','Beautiful countryside and very affordable'],
+    fr_tips:['Privilegiez les campings etablis','Securisez la nourriture contre les chiens errants','Magnifique campagne et tres abordable'],
+    en_avoid:['Isolated rural spots with known stray dog presence','Remote areas without community validation'],
+    fr_avoid:['Spots ruraux isoles avec presence connue de chiens','Zones isolees sans validation communautaire'],
+  },
+  {
+    id:'greece',
+    flags:'GR',
+    en:{name:'Greece',countries:'Greece'},
+    fr:{name:'Grece',countries:'Grece'},
+    crime:46, cpi:50, overall:'caution',
+    en_context:'Moderate crime, corruption challenges. Stray dog situation most serious in Europe - multiple verified reports of attacks in rural areas. Safe in main tourist areas. Political stability good.',
+    fr_context:'Crime modere, defis de corruption. Situation des chiens errants la plus serieuse d\'Europe - rapports d\'attaques dans les zones rurales. Sure dans les zones touristiques principales.',
+    wild_camping:'Restricted - fines up to 300 EUR',wild_camping_fr:'Restreint - amendes jusqu\'a 300 EUR',
+    stray_dogs:'HIGHEST RISK in Europe',stray_dogs_fr:'RISQUE LE PLUS ELEVE d\'Europe',
+    convoy_needed:'No',convoy_needed_fr:'Non',
+    en_tips:['Use official campgrounds - wild camping fines up to 300 EUR','Tourist areas very safe and welcoming','Incredible destinations worth the extra planning'],
+    fr_tips:['Utilisez les campings officiels - amendes camping sauvage jusqu\'a 300 EUR','Zones touristiques tres sures et accueillantes'],
+    en_avoid:['Wild camping - strictly enforced in many areas','Isolated rural spots where stray dog packs have been reported','Abandoned farms and remote mountain areas on foot'],
+    fr_avoid:['Camping sauvage - strictement applique','Spots ruraux isoles avec meutes de chiens signalees','Fermes abandonnees et zones montagneuses isolees a pied'],
+  },
+  {
+    id:'morocco',
+    flags:'MA',
+    en:{name:'Morocco',countries:'Morocco (non-Schengen, resets both clocks)'},
+    fr:{name:'Maroc',countries:'Maroc (hors Schengen, remet les deux compteurs)'},
+    crime:54, cpi:39, overall:'caution',
+    en_context:'Higher crime index, higher corruption. Popular and rewarding destination. Solo travel very common but convoy strongly recommended for first-timers. Excellent RV culture in Morocco. Border via Algeciras or Tarifa.',
+    fr_context:'Indice de crime plus eleve, corruption plus elevee. Destination populaire et enrichissante. Voyage solo tres courant mais convoi fortement recommande pour les nouveaux. Excellente culture VR au Maroc.',
+    wild_camping:'Common but variable',wild_camping_fr:'Courant mais variable',
+    stray_dogs:'Present in some areas',stray_dogs_fr:'Present dans certaines zones',
+    convoy_needed:'Recommended for first visit',convoy_needed_fr:'Recommande pour premiere visite',
+    en_tips:['Join a convoy for your first Morocco crossing','Agadir and Essaouira well-established RV destinations','Resets both your Schengen and EU vehicle customs clocks'],
+    fr_tips:['Rejoindre un convoi pour la premiere traversee vers le Maroc','Agadir et Essaouira bien etablies pour les VR','Remet les deux compteurs Schengen et douane VR'],
+    en_avoid:['Isolated beaches without local recommendation','Urban areas at night without secured parking'],
+    fr_avoid:['Plages isolees sans recommandation locale','Zones urbaines la nuit sans stationnement securise'],
+  },
+];
+
+const AVOID_EN = [
+  'Motorway service areas (rest areas) overnight — highest break-in rate across all of Europe',
+  'Aires near major cities: Barcelona, Marseille, Rome, Paris suburbs — higher petty crime, easy for thieves to blend in',
+  'Ferry ports and Eurotunnel areas — opportunistic theft hotspots',
+  'Isolated industrial zones at night — no witnesses, higher vandalism risk',
+  'Never post your real-time location on social media',
+];
+const AVOID_FR = [
+  'Aires de service autoroutieres la nuit — taux de cambriolage le plus eleve partout en Europe',
+  'Aires pres des grandes villes: Barcelone, Marseille, Rome, banlieue parisienne — crime plus eleve, facile pour les voleurs de se fondre dans la masse',
+  'Ports de ferries et zones Eurotunnel — hotspots de vol opportuniste',
+  'Zones industrielles isolees la nuit — pas de temoins, risque de vandalisme plus eleve',
+  'Ne jamais publier votre localisation en temps reel sur les reseaux sociaux',
+];
+
+let lang='en', selectedRegion=null;
+
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  const isFr=l==='fr';
+  document.getElementById('h-title').textContent=isFr?'Carte de securite Europe':'Europe Safety Map';
+  document.getElementById('h-sub').textContent=isFr?'Apercu de securite base sur les donnees pour voyageurs VR nord-americains. Basé sur l\'Indice de criminalite Numbeo 2025 et l\'IPC Transparency International 2024.':'Data-driven safety overview for North American RV travelers. Based on Numbeo Crime Index 2025 and Transparency International CPI 2024.';
+  document.getElementById('tbl-title').textContent=isFr?'Comparaison complete de securite':'Full safety comparison';
+  document.getElementById('avoid-title').textContent=isFr?'Toujours eviter pour la nuit':'Always avoid overnight';
+  renderAll();
+}
+
+function scoreColor(overall){
+  if(overall==='safe') return '#1a7a4a';
+  if(overall==='moderate') return '#8a5a00';
+  return '#a02020';
+}
+function scoreBg(overall){
+  if(overall==='safe') return '#e4f5ec';
+  if(overall==='moderate') return '#fdf0d5';
+  return '#fde8e8';
+}
+function scoreLabel(overall,isFr){
+  if(overall==='safe') return isFr?'Sure':'Safe';
+  if(overall==='moderate') return isFr?'Moderee':'Moderate';
+  return isFr?'Prudence':'Caution';
+}
+function badgeCls(overall){
+  if(overall==='safe') return 'b-safe';
+  if(overall==='moderate') return 'b-mod';
+  return 'b-caut';
+}
+
+function renderAll(){
+  const isFr=lang==='fr';
+  const grid=document.getElementById('regionGrid');
+  grid.innerHTML=REGIONS.map(r=>{
+    const crimePct=Math.round((100-r.crime)/100*100);
+    const cpiPct=r.cpi;
+    const col=scoreColor(r.overall);
+    const bg=scoreBg(r.overall);
+    const name=isFr?r.fr.name:r.en.name;
+    const countries=isFr?r.fr.countries:r.en.countries;
+    return `<div class="region-card ${selectedRegion===r.id?'selected':''}" onclick="selectRegion('${r.id}')">
+      <div class="region-header">
+        <div style="font-size:13px;font-weight:700;background:var(--surface2);padding:2px 8px;border-radius:4px;letter-spacing:.05em">${r.flags}</div>
+        <div>
+          <div class="region-name">${name}</div>
+          <div style="font-size:11px;color:var(--text3)">${countries}</div>
+        </div>
+        <div class="region-score" style="color:${col}"><span class="badge ${badgeCls(r.overall)}">${scoreLabel(r.overall,isFr)}</span></div>
+      </div>
+      <div class="score-bars">
+        <div class="score-row">
+          <span class="score-lbl">${isFr?'Securite':'Safety'}</span>
+          <div class="score-bar"><div class="score-fill" style="width:${crimePct}%;background:${col}"></div></div>
+          <span style="font-size:11px;color:var(--text2)">${100-r.crime}/100</span>
+        </div>
+        <div class="score-row">
+          <span class="score-lbl">${isFr?'Anti-corruption':'Anti-corruption'}</span>
+          <div class="score-bar"><div class="score-fill" style="width:${cpiPct}%;background:${col}"></div></div>
+          <span style="font-size:11px;color:var(--text2)">${r.cpi}/100</span>
+        </div>
+      </div>
+      <div class="region-tags">
+        <span class="rtag ${r.overall==='safe'?'rtag-ok':r.overall==='moderate'?'rtag-warn':'rtag-caut'}">${isFr?'Crime: ':'Crime: '}${r.crime}</span>
+        <span class="rtag rtag-ok">${isFr?'IPC: ':'CPI: '}${r.cpi}</span>
+        ${r.convoy_needed!=='No'?`<span class="rtag rtag-warn">${isFr?'Convoi conseille':'Convoy recommended'}</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Table
+  const th=isFr?['Region','Indice crime','Score IPC','Camping sauvage','Chiens errants','Convoi conseille','Verdict']:['Region','Crime Index','CPI Score','Wild camping','Stray dogs','Convoy needed','Verdict'];
+  document.getElementById('safetyTable').innerHTML=`<thead><tr>${th.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>
+  ${REGIONS.map(r=>`<tr>
+    <td><strong>${isFr?r.fr.name:r.en.name}</strong><br><span style="font-size:11px;color:var(--text3)">${isFr?r.fr.countries:r.en.countries}</span></td>
+    <td>${r.crime}</td>
+    <td>${r.cpi}</td>
+    <td style="font-size:12px">${isFr?r.wild_camping_fr:r.wild_camping}</td>
+    <td style="font-size:12px">${isFr?r.stray_dogs_fr:r.stray_dogs}</td>
+    <td style="font-size:12px">${isFr?r.convoy_needed_fr:r.convoy_needed}</td>
+    <td><span class="badge ${badgeCls(r.overall)}">${scoreLabel(r.overall,isFr)}</span></td>
+  </tr>`).join('')}
+  </tbody>`;
+
+  // Avoid list
+  const avoidData=isFr?AVOID_FR:AVOID_EN;
+  document.getElementById('avoidList').innerHTML=avoidData.map(a=>`<li>&#128683; ${a}</li>`).join('');
+
+  if(selectedRegion) renderDetail(REGIONS.find(r=>r.id===selectedRegion));
+}
+
+function selectRegion(id){
+  selectedRegion=selectedRegion===id?null:id;
+  renderAll();
+  if(selectedRegion){
+    const r=REGIONS.find(r=>r.id===id);
+    renderDetail(r);
+    document.getElementById('detailPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+  } else {
+    document.getElementById('detailPanel').classList.remove('visible');
+  }
+}
+
+function renderDetail(r){
+  const isFr=lang==='fr';
+  const panel=document.getElementById('detailPanel');
+  panel.classList.add('visible');
+  const name=isFr?r.fr.name:r.en.name;
+  const context=isFr?r.fr_context:r.en_context;
+  const tips=isFr?r.fr_tips:r.en_tips;
+  const avoid=isFr?r.fr_avoid:r.en_avoid;
+  const col=scoreColor(r.overall);
+
+  panel.innerHTML=`
+    <div class="detail-title" style="color:${col}">${name} &mdash; ${scoreLabel(r.overall,isFr)}</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:1rem;line-height:1.6">${context}</p>
+    <div class="detail-grid">
+      <div class="detail-item">
+        <h4>${isFr?'Conseils pratiques':'Practical tips'}</h4>
+        <ul class="tips-list">${tips.map(t=>`<li>&#10003; ${t}</li>`).join('')}</ul>
+      </div>
+      <div class="detail-item">
+        <h4>${isFr?'A eviter':'Spots to avoid'}</h4>
+        <ul class="avoid-list">${avoid.map(a=>`<li>&#10007; ${a}</li>`).join('')}</ul>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1rem">
+      <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;font-size:12px">
+        <div style="color:var(--text3);margin-bottom:2px">${isFr?'Camping sauvage':'Wild camping'}</div>
+        <div style="font-weight:500">${isFr?r.wild_camping_fr:r.wild_camping}</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;font-size:12px">
+        <div style="color:var(--text3);margin-bottom:2px">${isFr?'Chiens errants':'Stray dogs'}</div>
+        <div style="font-weight:500;color:${r.stray_dogs.includes('HIGHEST')||r.stray_dogs.includes('Present')?'var(--red)':'inherit'}">${isFr?r.stray_dogs_fr:r.stray_dogs}</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;font-size:12px">
+        <div style="color:var(--text3);margin-bottom:2px">${isFr?'Convoi':'Convoy'}</div>
+        <div style="font-weight:500">${isFr?r.convoy_needed_fr:r.convoy_needed}</div>
+      </div>
+    </div>
+  `;
+}
+
+renderAll();
+</script>
+
+<script>document.getElementById("nav-safety").classList.add("active");</script>
+</body>
+</html>
