@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arrival Port Selector — North American RV Europe </title>
+<meta name="description" content="Avoid the Germany customs bond trap (29% of vehicle value). Check your arrival port before booking your RoRo shipping.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f2ec;--surface:#fff;--surface2:#f0ede6;--border:#ddd9d0;
+  --text:#1a1915;--text2:#6b6860;--text3:#9c9890;
+  --blue:#1a5fa8;--blue-bg:#e8f0fa;
+  --green:#1a7a4a;--green-bg:#e4f5ec;
+  --amber:#8a5a00;--amber-bg:#fdf0d5;
+  --red:#a02020;--red-bg:#fde8e8;
+  --radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.page-header{background:var(--text);color:#fff;padding:2.5rem 2rem 2rem;text-align:center}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:1rem}
+.back-link:hover{color:#fff;text-decoration:none}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:400;color:#fff;margin-bottom:.5rem}
+.page-header .sub{font-size:.9rem;color:rgba(255,255,255,0.6);max-width:540px;margin:0 auto}
+.lang-toggle{display:inline-flex;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.2);margin-top:1rem}
+.lang-btn{background:none;border:none;color:rgba(255,255,255,.6);padding:5px 14px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer}
+.lang-btn.active{background:rgba(255,255,255,.2);color:#fff;font-weight:500}
+
+.main{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+.warning-banner{background:var(--red-bg);border:2px solid var(--red);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:2rem;display:flex;gap:14px;align-items:flex-start}
+.warning-icon{font-size:24px;flex-shrink:0;margin-top:2px}
+.warning-text h3{font-size:15px;font-weight:500;color:var(--red);margin-bottom:4px}
+.warning-text p{font-size:13px;color:#6b1515;line-height:1.5}
+
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1.5rem}
+.card-header{padding:1rem 1.5rem;border-bottom:0.5px solid var(--border);background:var(--surface2);display:flex;align-items:center;gap:10px}
+.card-header h2{font-family:'DM Serif Display',serif;font-size:1.05rem;font-weight:400}
+.card-body{padding:1.5rem}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em}
+select,input[type=number]{
+  padding:10px 12px;border:0.5px solid var(--border);border-radius:8px;
+  font-size:14px;font-family:'DM Sans',sans-serif;
+  background:var(--surface);color:var(--text);outline:none;
+  transition:border-color .15s;width:100%
+}
+select:focus,input[type=number]:focus{border-color:var(--blue)}
+
+.check-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 28px;border-radius:8px;font-size:15px;font-weight:500;
+  border:none;background:var(--text);color:#fff;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:background .15s;width:100%
+  ;justify-content:center;margin-top:.5rem
+}
+.check-btn:hover{background:#333}
+
+.verdict{display:none;margin-top:1.5rem}
+.verdict.visible{display:block}
+
+.verdict-safe{background:var(--green-bg);border:2px solid var(--green);border-radius:var(--radius);padding:1.5rem}
+.verdict-warn{background:var(--amber-bg);border:2px solid var(--amber);border-radius:var(--radius);padding:1.5rem}
+.verdict-danger{background:var(--red-bg);border:2px solid var(--red);border-radius:var(--radius);padding:1.5rem}
+
+.verdict-header{display:flex;align-items:center;gap:12px;margin-bottom:1rem}
+.verdict-icon{font-size:32px}
+.verdict-title{font-family:'DM Serif Display',serif;font-size:1.3rem;font-weight:400}
+.verdict-safe .verdict-title{color:var(--green)}
+.verdict-warn .verdict-title{color:var(--amber)}
+.verdict-danger .verdict-title{color:var(--red)}
+
+.verdict-body{font-size:13px;line-height:1.6}
+.verdict-body p{margin-bottom:.75rem}
+.verdict-body p:last-child{margin-bottom:0}
+.verdict-body strong{font-weight:500}
+
+.bond-calc{background:rgba(160,32,32,0.08);border-radius:8px;padding:12px 16px;margin:12px 0;font-size:13px}
+.bond-calc .calc-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid rgba(160,32,32,0.2)}
+.bond-calc .calc-row:last-child{border-bottom:none;font-weight:500;padding-top:8px}
+
+.ports-table{width:100%;border-collapse:collapse;font-size:13px}
+.ports-table th{text-align:left;padding:8px 12px;border-bottom:1.5px solid var(--border);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.04em;color:var(--text2)}
+.ports-table td{padding:10px 12px;border-bottom:0.5px solid var(--border);vertical-align:top}
+.ports-table tr:last-child td{border-bottom:none}
+.ports-table tr.danger-row td{background:var(--red-bg)}
+.ports-table tr.safe-row td{background:var(--green-bg)}
+.ports-table tr.warn-row td{background:var(--amber-bg)}
+
+.status-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:500}
+.badge-safe{background:var(--green);color:#fff}
+.badge-warn{background:var(--amber);color:#fff}
+.badge-danger{background:var(--red);color:#fff}
+
+.tip-box{background:var(--blue-bg);border-radius:8px;padding:12px 16px;font-size:13px;color:#0c3a70;line-height:1.5;margin-top:1rem;border-left:3px solid var(--blue)}
+
+.disclaimer{font-size:11px;color:var(--text3);margin-top:1.5rem;line-height:1.5;padding:12px 16px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface)}
+
+@media(max-width:600px){
+  .form-grid{grid-template-columns:1fr}
+  .ports-table{font-size:12px}
+  .ports-table .hide-mobile{display:none}
+}
+
+.tool-nav{position:sticky;top:0;z-index:100;background:rgba(26,25,21,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.1);padding:0 1rem}
+.tool-nav-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.tool-nav-inner::-webkit-scrollbar{display:none}
+.tool-nav-inner a{display:flex;flex-direction:column;align-items:center;padding:8px 10px;color:rgba(255,255,255,0.55);text-decoration:none;font-size:9px;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;gap:3px;flex-shrink:0}
+.tool-nav-inner a:hover{color:#fff;text-decoration:none}
+.tool-nav-inner a.active{color:#fff;border-bottom-color:#fff}
+.tool-nav-inner .nav-icon{font-size:16px;line-height:1}
+</style>
+</head>
+<body><nav class="tool-nav">
+  <div class="tool-nav-inner">
+    <a href="https://jev-rv.github.io/" id="nav-home"><span class="nav-icon">🏠</span>Home</a>
+    <a href="https://jev-rv.github.io/schengen-rv-simulator/" id="nav-schengen"><span class="nav-icon">🗓️</span>Schengen</a>
+    <a href="https://jev-rv.github.io/budget-simulator/" id="nav-budget"><span class="nav-icon">💶</span>Budget</a>
+    <a href="https://jev-rv.github.io/rv-option-selector/" id="nav-options"><span class="nav-icon">🚐</span>Options</a>
+    <a href="https://jev-rv.github.io/port-selector/" id="nav-port"><span class="nav-icon">⚠️</span>Port</a>
+    <a href="https://jev-rv.github.io/pre-departure-checklist/" id="nav-checklist"><span class="nav-icon">✅</span>Checklist</a>
+    <a href="https://jev-rv.github.io/toll-calculator/" id="nav-tolls"><span class="nav-icon">🛣️</span>Tolls</a>
+    <a href="https://jev-rv.github.io/rhythm-planner/" id="nav-rhythm"><span class="nav-icon">🚐</span>Rhythm</a>
+    <a href="https://jev-rv.github.io/safety-map/" id="nav-safety"><span class="nav-icon">🗺️</span>Safety</a>
+    <a href="https://jev-rv.github.io/app-recommender/" id="nav-apps"><span class="nav-icon">📱</span>Apps</a>
+    <a href="https://jev-rv.github.io/pet-travel-checker/" id="nav-pets"><span class="nav-icon">🐾</span>Pets</a>
+    <a href="https://jev-rv.github.io/getting-started/" id="nav-start"><span class="nav-icon">&#129302;</span>AI&nbsp;Agents</a>
+  </div>
+</nav>
+
+<header class="page-header">
+  <a class="back-link" href="https://jev-rv.github.io/">← Back to all tools</a>
+  <h1 id="h-title">Arrival Port Selector</h1>
+  <p class="sub" id="h-sub">Check your arrival port before booking RoRo shipping — avoid the Germany customs bond trap.</p>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</header>
+
+<main class="main">
+
+  <div class="warning-banner">
+    <div class="warning-icon">⚠️</div>
+    <div class="warning-text">
+      <h3 id="warn-title">Critical: Germany requires a cash bond of ~29% of your vehicle's value</h3>
+      <p id="warn-text">For a vehicle valued at €175,000, this means ~€50,750 in cash euros, payable at the port. If the vehicle does not exit via Germany within 6 months, Germany keeps the entire deposit. Real incident documented: an American owner was demanded ~USD 19,000 cash on arrival — their shipping agent was unaware of this requirement.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span>⚙️</span><h2 id="config-title">Your trip configuration</h2></div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label id="lbl-port">Arrival port</label>
+          <select id="arrivalPort">
+            <option value="">— Select a port —</option>
+            <option value="zeebrugge">Zeebrugge / Antwerp (Belgium)</option>
+            <option value="southampton">Southampton / Tilbury (UK)</option>
+            <option value="rotterdam">Rotterdam (Netherlands)</option>
+            <option value="bremerhaven">Bremerhaven / Hamburg (Germany)</option>
+            <option value="lemans">Le Havre / Cherbourg (France)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label id="lbl-storage">Storage plan between blocks</label>
+          <select id="storagePlan">
+            <option value="">— Select storage plan —</option>
+            <option value="uk">Store in UK</option>
+            <option value="balkans">Store in Serbia / Montenegro / Albania</option>
+            <option value="spain">Spain customs sealing (precintado)</option>
+            <option value="france">Store in France / Germany (grey zone)</option>
+            <option value="nobreak">Single block — no storage needed</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label id="lbl-exit">Exit port (where RV leaves Europe)</label>
+          <select id="exitPort">
+            <option value="">— Select exit port —</option>
+            <option value="zeebrugge">Zeebrugge / Antwerp (Belgium)</option>
+            <option value="southampton">Southampton / Tilbury (UK)</option>
+            <option value="rotterdam">Rotterdam (Netherlands)</option>
+            <option value="bremerhaven">Bremerhaven / Hamburg (Germany)</option>
+            <option value="lemans">Le Havre / Cherbourg (France)</option>
+            <option value="same">Same as arrival port</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label id="lbl-rvval">RV value (€)</label>
+          <input type="number" id="rvValue" value="175000" min="10000" max="500000" step="5000">
+        </div>
+      </div>
+      <button class="check-btn" onclick="checkPort()" id="check-btn">Check my configuration →</button>
+    </div>
+  </div>
+
+  <div class="verdict" id="verdict"></div>
+
+  <div class="card">
+    <div class="card-header"><span>🚢</span><h2 id="ports-title">All arrival ports — comparison</h2></div>
+    <div class="card-body">
+      <div style="overflow-x:auto">
+        <table class="ports-table" id="portsTable"></table>
+      </div>
+      <div class="tip-box" id="tip-box">
+        <strong>Recommended default:</strong> Zeebrugge or Antwerp (Belgium) — no bond, efficient RoRo operations, well-documented for North American travelers. Contact IVSS or SeaBridge to confirm current requirements before booking.
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer" id="disclaimer">
+    <strong>Important:</strong> Port requirements can change. This tool is based on traveler reports from 2017–2024 and Guide 1 §1.1. The 29% Germany bond has been consistently documented but exact rates may vary. <strong>Always confirm current requirements directly with your shipping agent (IVSS or SeaBridge) before booking.</strong> Ask specifically: "Does the arrival port require a temporary import bond, and under what conditions is it refunded?"<br><br>
+    © 2026 Jack-Éric Vandenbroucke · <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+  </div>
+
+</main>
+
+<script>
+const T = {
+  en: {
+    'h-title': 'Arrival Port Selector',
+    'h-sub': 'Check your arrival port before booking RoRo shipping — avoid the Germany customs bond trap.',
+    'warn-title': 'Critical: Germany requires a cash bond of ~29% of your vehicle\'s value',
+    'warn-text': 'For a vehicle valued at €175,000, this means ~€50,750 in cash euros, payable at the port. If the vehicle does not exit via Germany within 6 months, Germany keeps the entire deposit. Real incident documented: an American owner was demanded ~USD 19,000 cash on arrival — their shipping agent was unaware of this requirement.',
+    'config-title': 'Your trip configuration',
+    'lbl-port': 'Arrival port',
+    'lbl-storage': 'Storage plan between blocks',
+    'lbl-exit': 'Exit port (where RV leaves Europe)',
+    'lbl-rvval': 'RV value (€)',
+    'check-btn': 'Check my configuration →',
+    'ports-title': 'All arrival ports — comparison',
+    ports: [
+      { name: 'Zeebrugge / Antwerp', country: '🇧🇪 Belgium', bond: 'None', status: 'safe', rec: '✅ Recommended', notes: 'Primary recommended port. No cash deposit. Efficient RoRo operations. Well-documented for North American RVs.' },
+      { name: 'Southampton / Tilbury', country: '🇬🇧 United Kingdom', bond: 'None', status: 'safe', rec: '✅ Good option', notes: 'UK is outside EU customs — vehicle customs clock starts only when entering EU via Channel Tunnel or ferry.' },
+      { name: 'Rotterdam', country: '🇳🇱 Netherlands', bond: 'Possible — refunded on exit', status: 'warn', rec: '⚠️ Acceptable', notes: 'May require a temporary bond but refunds it on re-export. Less documented than Belgium. Confirm with agent.' },
+      { name: 'Le Havre / Cherbourg', country: '🇫🇷 France', bond: 'Generally none', status: 'safe', rec: '✅ Acceptable', notes: 'Generally no bond required. Confirm with your shipping agent. Note: RV in France counts toward EU customs 6-month clock.' },
+      { name: 'Bremerhaven / Hamburg', country: '🇩🇪 Germany', bond: '~29% of vehicle value — CASH', status: 'danger', rec: '🚫 Not recommended', notes: 'Bond retained if vehicle does NOT exit via Germany within 6 months. Confirmed by multiple traveler reports. Avoid for multi-block plans.' },
+    ],
+    thPort: 'Port', thCountry: 'Country', thBond: 'Bond required', thRec: 'Recommendation', thNotes: 'Notes',
+    'tip-box': '<strong>Recommended default:</strong> Zeebrugge or Antwerp (Belgium) — no bond, efficient RoRo operations, well-documented for North American travelers. Contact <a href="https://ivssuk.com" target="_blank">IVSS</a> or <a href="https://seabridge-tours.de" target="_blank">SeaBridge</a> to confirm current requirements before booking.',
+    verdicts: {
+      safe: (port, bond) => ({
+        cls: 'verdict-safe', icon: '✅',
+        title: 'Your configuration looks safe',
+        body: `<p>Arriving at <strong>${port}</strong> does not require a customs bond for most North American travelers. Your storage plan and exit port are compatible with this arrival.</p><p>Always confirm the latest requirements with your shipping agent (IVSS or SeaBridge) before booking — port rules can change.</p>`
+      }),
+      germany_danger: (rvVal) => {
+        const bond = Math.round(rvVal * 0.29);
+        const duty = Math.round(rvVal * 0.085);
+        const vat = Math.round((rvVal + duty) * 0.19);
+        return {
+          cls: 'verdict-danger', icon: '🚫',
+          title: 'DANGER — Germany customs bond required',
+          body: `<p>Arriving at <strong>Bremerhaven or Hamburg</strong> triggers a mandatory customs bond of approximately <strong>29% of your vehicle's declared value</strong>.</p>
+          <div class="bond-calc">
+            <div class="calc-row"><span>Your vehicle value</span><span>€${rvVal.toLocaleString()}</span></div>
+            <div class="calc-row"><span>EU customs duty (~8.5%)</span><span>€${duty.toLocaleString()}</span></div>
+            <div class="calc-row"><span>German VAT on total (19%)</span><span>€${vat.toLocaleString()}</span></div>
+            <div class="calc-row"><span>⚠️ Estimated bond required</span><span>€${bond.toLocaleString()} CASH</span></div>
+          </div>
+          <p>This bond is <strong>only refunded if the vehicle exits via Germany within 6 months</strong>. If you store in France, exit via Belgium, or your trip exceeds 6 months — Germany keeps the entire amount.</p>
+          <p><strong>Recommended action:</strong> Change your arrival port to Zeebrugge/Antwerp (Belgium) or Southampton/Tilbury (UK). No bond required at either port.</p>`
+        };
+      },
+      germany_notsafe: (rvVal, storage) => {
+        const bond = Math.round(rvVal * 0.29);
+        return {
+          cls: 'verdict-danger', icon: '🚫',
+          title: 'DANGER — Germany bond trap for your plan',
+          body: `<p>You are arriving at <strong>Bremerhaven/Hamburg</strong> with a storage plan in <strong>${storage}</strong>. This is the exact scenario that triggers the bond forfeiture trap.</p>
+          <p>The estimated bond is <strong>€${bond.toLocaleString()} cash</strong>, payable at the port on arrival.</p>
+          <p>Since your RV will not exit via Germany within 6 months under your plan, <strong>Germany will retain the full bond</strong>.</p>
+          <p><strong>Solution:</strong> Use Zeebrugge/Antwerp or Southampton instead. No bond, no trap.</p>`
+        };
+      },
+      rotterdam_warn: (rvVal) => ({
+        cls: 'verdict-warn', icon: '⚠️',
+        title: 'Caution — Rotterdam may require a temporary bond',
+        body: `<p>Rotterdam sometimes requires a temporary bond, but it is typically refunded automatically when the vehicle re-exports. This is less documented than Belgium and requirements vary.</p><p><strong>Confirm explicitly with your shipping agent</strong> before booking Rotterdam: ask "Will a customs bond be required, and what are the exact refund conditions?"</p><p>If uncertain, use Zeebrugge/Antwerp instead.</p>`
+      }),
+    }
+  },
+  fr: {
+    'h-title': 'Sélecteur de port d\'arrivée',
+    'h-sub': 'Vérifiez votre port d\'arrivée avant de réserver l\'expédition RoRo — évitez le piège de la caution douanière allemande.',
+    'warn-title': 'Critique : l\'Allemagne exige une caution en espèces d\'environ 29% de la valeur de votre véhicule',
+    'warn-text': 'Pour un véhicule évalué à 175 000 €, cela représente environ 50 750 € en espèces euros, payables au port. Si le véhicule ne ressort pas via l\'Allemagne dans les 6 mois, l\'Allemagne conserve la totalité du dépôt. Incident réel documenté : un propriétaire américain s\'est vu réclamer environ 19 000 USD en espèces à l\'arrivée — son agent maritime n\'était pas au courant de cette exigence.',
+    'config-title': 'Configuration de votre voyage',
+    'lbl-port': 'Port d\'arrivée',
+    'lbl-storage': 'Plan d\'entreposage entre les blocs',
+    'lbl-exit': 'Port de sortie (départ d\'Europe)',
+    'lbl-rvval': 'Valeur du VR (€)',
+    'check-btn': 'Vérifier ma configuration →',
+    'ports-title': 'Tous les ports d\'arrivée — comparaison',
+    ports: [
+      { name: 'Zeebrugge / Anvers', country: '🇧🇪 Belgique', bond: 'Aucune', status: 'safe', rec: '✅ Recommandé', notes: 'Port principal recommandé. Pas de dépôt en espèces. Opérations RoRo efficaces. Bien documenté pour les VR nord-américains.' },
+      { name: 'Southampton / Tilbury', country: '🇬🇧 Royaume-Uni', bond: 'Aucune', status: 'safe', rec: '✅ Bonne option', notes: 'Le RU est hors territoire douanier UE — l\'horloge douanière VR démarre seulement lors de l\'entrée dans l\'UE.' },
+      { name: 'Rotterdam', country: '🇳🇱 Pays-Bas', bond: 'Possible — remboursée à la sortie', status: 'warn', rec: '⚠️ Acceptable', notes: 'Peut exiger une caution temporaire remboursée à la réexportation. Moins documenté que la Belgique. Confirmez avec votre agent.' },
+      { name: 'Le Havre / Cherbourg', country: '🇫🇷 France', bond: 'Généralement aucune', status: 'safe', rec: '✅ Acceptable', notes: 'Généralement pas de caution. Confirmez avec votre agent. Note : le VR en France compte vers la limite de 6 mois douaniers UE.' },
+      { name: 'Brème / Hambourg', country: '🇩🇪 Allemagne', bond: '~29% de la valeur — EN ESPÈCES', status: 'danger', rec: '🚫 Non recommandé', notes: 'Caution retenue si le VR ne ressort pas via l\'Allemagne dans les 6 mois. Confirmé par de nombreux voyageurs. À éviter pour les plans multi-blocs.' },
+    ],
+    thPort: 'Port', thCountry: 'Pays', thBond: 'Caution requise', thRec: 'Recommandation', thNotes: 'Notes',
+    'tip-box': '<strong>Défaut recommandé :</strong> Zeebrugge ou Anvers (Belgique) — pas de caution, opérations RoRo efficaces, bien documenté pour les voyageurs nord-américains. Contactez <a href="https://ivssuk.com" target="_blank">IVSS</a> ou <a href="https://seabridge-tours.de" target="_blank">SeaBridge</a> pour confirmer les exigences actuelles avant de réserver.',
+    verdicts: {
+      safe: (port, bond) => ({
+        cls: 'verdict-safe', icon: '✅',
+        title: 'Votre configuration semble sûre',
+        body: `<p>Arriver à <strong>${port}</strong> ne nécessite pas de caution douanière pour la plupart des voyageurs nord-américains. Votre plan d'entreposage et port de sortie sont compatibles.</p><p>Confirmez toujours les exigences actuelles avec votre agent maritime (IVSS ou SeaBridge) avant de réserver.</p>`
+      }),
+      germany_danger: (rvVal) => {
+        const bond = Math.round(rvVal * 0.29);
+        const duty = Math.round(rvVal * 0.085);
+        const vat = Math.round((rvVal + duty) * 0.19);
+        return {
+          cls: 'verdict-danger', icon: '🚫',
+          title: 'DANGER — Caution douanière allemande obligatoire',
+          body: `<p>Arriver à <strong>Brème ou Hambourg</strong> déclenche une caution douanière obligatoire d'environ <strong>29% de la valeur déclarée de votre véhicule</strong>.</p>
+          <div class="bond-calc">
+            <div class="calc-row"><span>Valeur de votre VR</span><span>€${rvVal.toLocaleString()}</span></div>
+            <div class="calc-row"><span>Droits de douane UE (~8,5%)</span><span>€${duty.toLocaleString()}</span></div>
+            <div class="calc-row"><span>TVA allemande sur le total (19%)</span><span>€${vat.toLocaleString()}</span></div>
+            <div class="calc-row"><span>⚠️ Caution estimée requise</span><span>€${bond.toLocaleString()} EN ESPÈCES</span></div>
+          </div>
+          <p>Cette caution n'est <strong>remboursée que si le véhicule ressort via l'Allemagne dans les 6 mois</strong>. Si vous stockez en France, sortez via la Belgique, ou dépassez 6 mois — l'Allemagne conserve la totalité.</p>
+          <p><strong>Action recommandée :</strong> Changez votre port d'arrivée pour Zeebrugge/Anvers (Belgique) ou Southampton/Tilbury (RU). Aucune caution requise.</p>`
+        };
+      },
+      germany_notsafe: (rvVal, storage) => {
+        const bond = Math.round(rvVal * 0.29);
+        return {
+          cls: 'verdict-danger', icon: '🚫',
+          title: 'DANGER — Piège de caution allemande pour votre plan',
+          body: `<p>Vous arrivez à <strong>Brème/Hambourg</strong> avec un plan d'entreposage en <strong>${storage}</strong>. C'est exactement le scénario qui déclenche la perte de la caution.</p>
+          <p>La caution estimée est de <strong>€${bond.toLocaleString()} en espèces</strong>, payable à l'arrivée au port.</p>
+          <p>Puisque votre VR ne ressortira pas via l'Allemagne dans les 6 mois selon votre plan, <strong>l'Allemagne retiendra la caution en entier</strong>.</p>
+          <p><strong>Solution :</strong> Utilisez Zeebrugge/Anvers ou Southampton. Pas de caution, pas de piège.</p>`
+        };
+      },
+      rotterdam_warn: (rvVal) => ({
+        cls: 'verdict-warn', icon: '⚠️',
+        title: 'Attention — Rotterdam peut exiger une caution temporaire',
+        body: `<p>Rotterdam exige parfois une caution temporaire, généralement remboursée automatiquement à la réexportation. Moins documenté que la Belgique.</p><p><strong>Confirmez explicitement avec votre agent maritime</strong> avant de réserver Rotterdam : demandez "Une caution douanière sera-t-elle requise, et quelles sont les conditions exactes de remboursement ?"</p><p>En cas de doute, utilisez Zeebrugge/Anvers.</p>`
+      }),
+    }
+  }
+};
+
+let lang = 'en';
+
+function setLang(l) {
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === l.toUpperCase()));
+  const Lc = T[l];
+  for (const [id, val] of Object.entries(Lc)) {
+    if (typeof val !== 'string') continue;
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = val;
+  }
+  document.getElementById('check-btn').textContent = Lc['check-btn'];
+  renderPortsTable();
+  document.getElementById('verdict').className = 'verdict';
+}
+
+function renderPortsTable() {
+  const Lc = T[lang];
+  const table = document.getElementById('portsTable');
+  const rowClass = { safe: 'safe-row', warn: 'warn-row', danger: 'danger-row' };
+  const badgeClass = { safe: 'badge-safe', warn: 'badge-warn', danger: 'badge-danger' };
+  table.innerHTML = `<thead><tr>
+    <th>${Lc.thPort}</th>
+    <th>${Lc.thCountry}</th>
+    <th>${Lc.thBond}</th>
+    <th>${Lc.thRec}</th>
+    <th class="hide-mobile">${Lc.thNotes}</th>
+  </tr></thead><tbody>
+  ${Lc.ports.map(p => `<tr class="${rowClass[p.status]}">
+    <td><strong>${p.name}</strong></td>
+    <td>${p.country}</td>
+    <td><span class="status-badge ${badgeClass[p.status]}">${p.bond}</span></td>
+    <td>${p.rec}</td>
+    <td class="hide-mobile" style="font-size:12px;color:var(--text2)">${p.notes}</td>
+  </tr>`).join('')}
+  </tbody>`;
+  document.getElementById('tip-box').innerHTML = Lc['tip-box'];
+}
+
+function checkPort() {
+  const port = document.getElementById('arrivalPort').value;
+  const storage = document.getElementById('storagePlan').value;
+  const exitPort = document.getElementById('exitPort').value;
+  const rvVal = +document.getElementById('rvValue').value || 175000;
+
+  if (!port || !storage || !exitPort) {
+    alert(lang === 'fr' ? 'Veuillez remplir tous les champs.' : 'Please fill in all fields.');
+    return;
+  }
+
+  const Lc = T[lang];
+  const verdictEl = document.getElementById('verdict');
+  let v;
+
+  if (port === 'bremerhaven') {
+    // Germany arrival
+    const safeExit = exitPort === 'bremerhaven' && storage === 'nobreak';
+    if (storage === 'nobreak' && exitPort === 'bremerhaven') {
+      // Single block, exit via Germany — bond refundable in theory
+      v = Lc.verdicts.germany_danger(rvVal);
+      v.body += (lang === 'fr'
+        ? `<p style="margin-top:.75rem;padding:10px;background:rgba(160,32,32,0.08);border-radius:6px;font-size:12px">Même pour un seul bloc avec sortie via l'Allemagne, la caution est quand même exigée à l'arrivée. Elle ne sera remboursée qu'à la sortie documentée via un port ou poste frontière allemand.</p>`
+        : `<p style="margin-top:.75rem;padding:10px;background:rgba(160,32,32,0.08);border-radius:6px;font-size:12px">Even for a single block with Germany exit, the bond is still required on arrival. It is only refunded upon documented exit through a German port or border crossing.</p>`);
+    } else {
+      const storageNames = { uk: 'UK', balkans: lang==='fr'?'Serbie/Monténégro':'Serbia/Montenegro', spain: lang==='fr'?'Espagne (precintado)':'Spain (precintado)', france: lang==='fr'?'France/Allemagne':'France/Germany' };
+      v = Lc.verdicts.germany_notsafe(rvVal, storageNames[storage] || storage);
+    }
+  } else if (port === 'rotterdam') {
+    v = Lc.verdicts.rotterdam_warn(rvVal);
+  } else {
+    const portNames = {
+      zeebrugge: lang==='fr'?'Zeebrugge/Anvers':'Zeebrugge/Antwerp',
+      southampton: lang==='fr'?'Southampton/Tilbury':'Southampton/Tilbury',
+      lemans: lang==='fr'?'Le Havre/Cherbourg':'Le Havre/Cherbourg'
+    };
+    v = Lc.verdicts.safe(portNames[port] || port);
+  }
+
+  verdictEl.innerHTML = `<div class="${v.cls}">
+    <div class="verdict-header">
+      <div class="verdict-icon">${v.icon}</div>
+      <div class="verdict-title">${v.title}</div>
+    </div>
+    <div class="verdict-body">${v.body}</div>
+  </div>`;
+  verdictEl.className = 'verdict visible';
+  verdictEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+renderPortsTable();
+</script>
+
+<script>document.getElementById("nav-port").classList.add("active");</script>
+</body>
+</html>
