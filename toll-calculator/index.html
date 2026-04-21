@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toll & Vignette Calculator — North American RV Europe</title>
+<meta name="description" content="Check toll and vignette requirements for your North American RV (>3.5t) in Europe.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f2ec;--surface:#fff;--surface2:#f0ede6;--border:#ddd9d0;--text:#1a1915;--text2:#6b6860;--text3:#9c9890;--blue:#1a5fa8;--blue-bg:#e8f0fa;--green:#1a7a4a;--green-bg:#e4f5ec;--amber:#8a5a00;--amber-bg:#fdf0d5;--red:#a02020;--red-bg:#fde8e8;--radius:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+.page-header{background:var(--text);color:#fff;padding:2.5rem 2rem 2rem;text-align:center}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:1rem}
+.back-link:hover{color:#fff;text-decoration:none}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:400;color:#fff;margin-bottom:.5rem}
+.page-header .sub{font-size:.9rem;color:rgba(255,255,255,0.6);max-width:560px;margin:0 auto}
+.lang-toggle{display:inline-flex;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.2);margin-top:1rem}
+.lang-btn{background:none;border:none;color:rgba(255,255,255,.6);padding:5px 14px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer}
+.lang-btn.active{background:rgba(255,255,255,.2);color:#fff;font-weight:500}
+.main{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.info-banner{background:var(--amber-bg);border:1px solid var(--amber);border-radius:var(--radius);padding:1rem 1.5rem;margin-bottom:1.5rem;font-size:13px;color:var(--amber);display:flex;gap:10px;align-items:flex-start}
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1.5rem}
+.card-header{padding:1rem 1.5rem;border-bottom:0.5px solid var(--border);background:var(--surface2);display:flex;align-items:center;gap:10px}
+.card-header h2{font-family:'DM Serif Display',serif;font-size:1.05rem;font-weight:400}
+.card-body{padding:1.5rem}
+.country-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:1rem}
+.country-btn{padding:8px 10px;border:0.5px solid var(--border);border-radius:8px;background:var(--surface);cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);text-align:left;transition:all .15s;display:flex;align-items:center;gap:6px}
+.country-btn:hover{border-color:var(--blue);background:var(--blue-bg)}
+.country-btn.selected{border:1.5px solid var(--blue);background:var(--blue-bg);color:var(--blue);font-weight:500}
+.select-actions{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.action-btn{padding:6px 14px;border-radius:7px;border:0.5px solid var(--border);background:var(--surface2);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;color:var(--text2)}
+.action-btn:hover{background:var(--border)}
+.check-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 28px;border-radius:8px;font-size:15px;font-weight:500;border:none;background:var(--text);color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s;width:100%;justify-content:center;margin-top:.5rem}
+.check-btn:hover{background:#333}
+.results-section{display:none}
+.results-section.visible{display:block}
+.result-item{padding:1.25rem 1.5rem;border-bottom:0.5px solid var(--border)}
+.result-item:last-child{border-bottom:none}
+.result-header{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.result-flag{font-size:20px}
+.result-country{font-size:15px;font-weight:500}
+.status-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:500}
+.pill-danger{background:var(--red);color:#fff}
+.pill-warn{background:var(--amber);color:#fff}
+.pill-ok{background:var(--green);color:#fff}
+.result-body{font-size:13px;color:var(--text2);line-height:1.55;margin-bottom:8px}
+.result-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.result-link{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;background:var(--blue-bg);color:var(--blue);font-size:12px;font-weight:500}
+.result-link:hover{background:#c5daf5;text-decoration:none}
+.result-warning{background:var(--red-bg);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--red);margin-top:6px;line-height:1.4}
+.result-tip{background:var(--green-bg);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--green);margin-top:6px;line-height:1.4}
+.summary-card{background:var(--surface2);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1.5rem;border:0.5px solid var(--border)}
+.summary-title{font-size:14px;font-weight:500;margin-bottom:8px}
+.summary-pills{display:flex;gap:8px;flex-wrap:wrap}
+.spill{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:500}
+.lez-table{width:100%;border-collapse:collapse;font-size:13px}
+.lez-table th{text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--border);font-size:11px;font-weight:500;text-transform:uppercase;color:var(--text2)}
+.lez-table td{padding:8px 10px;border-bottom:0.5px solid var(--border)}
+.disclaimer{font-size:11px;color:var(--text3);margin-top:1.5rem;line-height:1.5;padding:12px 16px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface)}
+@media(max-width:600px){.country-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}}
+
+.tool-nav{position:sticky;top:0;z-index:100;background:rgba(26,25,21,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.1);padding:0 1rem}
+.tool-nav-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.tool-nav-inner::-webkit-scrollbar{display:none}
+.tool-nav-inner a{display:flex;flex-direction:column;align-items:center;padding:8px 10px;color:rgba(255,255,255,0.55);text-decoration:none;font-size:9px;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;gap:3px;flex-shrink:0}
+.tool-nav-inner a:hover{color:#fff;text-decoration:none}
+.tool-nav-inner a.active{color:#fff;border-bottom-color:#fff}
+.tool-nav-inner .nav-icon{font-size:16px;line-height:1}
+</style>
+</head>
+<body><nav class="tool-nav">
+  <div class="tool-nav-inner">
+    <a href="https://jev-rv.github.io/" id="nav-home"><span class="nav-icon">🏠</span>Home</a>
+    <a href="https://jev-rv.github.io/schengen-rv-simulator/" id="nav-schengen"><span class="nav-icon">🗓️</span>Schengen</a>
+    <a href="https://jev-rv.github.io/budget-simulator/" id="nav-budget"><span class="nav-icon">💶</span>Budget</a>
+    <a href="https://jev-rv.github.io/rv-option-selector/" id="nav-options"><span class="nav-icon">🚐</span>Options</a>
+    <a href="https://jev-rv.github.io/port-selector/" id="nav-port"><span class="nav-icon">⚠️</span>Port</a>
+    <a href="https://jev-rv.github.io/pre-departure-checklist/" id="nav-checklist"><span class="nav-icon">✅</span>Checklist</a>
+    <a href="https://jev-rv.github.io/toll-calculator/" id="nav-tolls"><span class="nav-icon">🛣️</span>Tolls</a>
+    <a href="https://jev-rv.github.io/rhythm-planner/" id="nav-rhythm"><span class="nav-icon">🚐</span>Rhythm</a>
+    <a href="https://jev-rv.github.io/safety-map/" id="nav-safety"><span class="nav-icon">🗺️</span>Safety</a>
+    <a href="https://jev-rv.github.io/app-recommender/" id="nav-apps"><span class="nav-icon">📱</span>Apps</a>
+    <a href="https://jev-rv.github.io/pet-travel-checker/" id="nav-pets"><span class="nav-icon">🐾</span>Pets</a>
+    <a href="https://jev-rv.github.io/getting-started/" id="nav-start"><span class="nav-icon">&#129302;</span>AI&nbsp;Agents</a>
+  </div>
+</nav>
+<header class="page-header">
+  <a class="back-link" href="https://jev-rv.github.io/">&#8592; Back to all tools</a>
+  <h1 id="h-title">Toll &amp; Vignette Calculator</h1>
+  <p class="sub" id="h-sub">Select your countries &mdash; get a complete toll and vignette requirement checklist for your North American RV (&gt;3.5t).</p>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</header>
+<main class="main">
+<div class="info-banner">
+  <span style="font-size:18px;flex-shrink:0">&#9888;&#65039;</span>
+  <span id="info-text">If your RV exceeds 3.5t GVWR, it is classified as a heavy vehicle in most European countries. Standard car vignettes do NOT apply &mdash; you need the truck/heavy vehicle system. Select your weight class below.</span>
+</div>
+<div class="card">
+  <div class="card-header"><span>&#128506;&#65039;</span><h2 id="sel-title">Select your countries</h2></div>
+  <div class="card-body">
+    <div class="select-actions">
+      <button class="action-btn" onclick="selectPopular()" id="btn-popular">Popular route (FR/ES/PT/IT)</button>
+      <button class="action-btn" onclick="selectAll()" id="btn-all">Select all</button>
+      <button class="action-btn" onclick="clearAll()" id="btn-clear">Clear all</button>
+    </div>
+    <div class="country-grid" id="countryGrid"></div>
+    <button class="check-btn" onclick="showResults()" id="check-btn">Check my route &#8594;</button>
+  </div>
+</div>
+<div class="results-section" id="resultsSection">
+  <div class="summary-card" id="summaryCard"></div>
+  <div class="card">
+    <div class="card-header"><span>&#128203;</span><h2 id="res-title">Country-by-country requirements</h2></div>
+    <div id="resultsList"></div>
+  </div>
+  <div class="card" style="margin-top:1.5rem">
+    <div class="card-header"><span>&#128683;</span><h2 id="lez-title">Emissions zones &mdash; no sticker possible</h2></div>
+    <div class="card-body">
+      <p id="lez-text" style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:1rem"></p>
+      <div style="overflow-x:auto"><table class="lez-table" id="lezTable"></table></div>
+    </div>
+  </div>
+</div>
+<div class="disclaimer">
+  <strong>Source:</strong> Guide 5 &mdash; Driving in Europe (J.-E. Vandenbroucke, 2026). Toll requirements change frequently &mdash; always verify with official sources before departure. The 2026 Poland e-TOLL expansion and Austria GO-Box requirements are confirmed as of April 2026.<br><br>
+  &copy; 2026 Jack-Eric Vandenbroucke &middot; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+</div>
+</main>
+<script>
+const COUNTRIES=[
+  {id:'fr',flag:'FR',en:'France',fr:'France'},
+  {id:'es',flag:'ES',en:'Spain',fr:'Espagne'},
+  {id:'pt',flag:'PT',en:'Portugal',fr:'Portugal'},
+  {id:'it',flag:'IT',en:'Italy',fr:'Italie'},
+  {id:'de',flag:'DE',en:'Germany',fr:'Allemagne'},
+  {id:'be',flag:'BE',en:'Belgium',fr:'Belgique'},
+  {id:'nl',flag:'NL',en:'Netherlands',fr:'Pays-Bas'},
+  {id:'ch',flag:'CH',en:'Switzerland',fr:'Suisse'},
+  {id:'at',flag:'AT',en:'Austria',fr:'Autriche'},
+  {id:'si',flag:'SI',en:'Slovenia',fr:'Slovenie'},
+  {id:'hr',flag:'HR',en:'Croatia',fr:'Croatie'},
+  {id:'hu',flag:'HU',en:'Hungary',fr:'Hongrie'},
+  {id:'sk',flag:'SK',en:'Slovakia',fr:'Slovaquie'},
+  {id:'cz',flag:'CZ',en:'Czechia',fr:'Tcheque'},
+  {id:'pl',flag:'PL',en:'Poland',fr:'Pologne'},
+  {id:'ro',flag:'RO',en:'Romania',fr:'Roumanie'},
+  {id:'bg',flag:'BG',en:'Bulgaria',fr:'Bulgarie'},
+  {id:'gb',flag:'GB',en:'UK',fr:'Royaume-Uni'},
+  {id:'ie',flag:'IE',en:'Ireland',fr:'Irlande'},
+  {id:'rs',flag:'RS',en:'Serbia',fr:'Serbie'},
+  {id:'me',flag:'ME',en:'Montenegro',fr:'Montenegro'},
+  {id:'al',flag:'AL',en:'Albania',fr:'Albanie'},
+  {id:'gr',flag:'GR',en:'Greece',fr:'Grece'},
+  {id:'dk',flag:'DK',en:'Denmark',fr:'Danemark'},
+  {id:'no',flag:'NO',en:'Norway',fr:'Norvege'},
+];
+
+const REQ={
+  fr:{st:'ok',lb:'Pay at barriers / Peage aux barrieres',
+    en:'France uses classic barrier tolls. Nothing to buy in advance. Over 3.5t pays 2-3x more than a car.',
+    fr:'France utilise des peages aux barrieres classiques. Rien a acheter a l\'avance. Plus de 3,5t paie 2 a 3x plus.',
+    wen:'LEZ (Crit\'Air) zones in Paris, Lyon, Marseille. No Crit\'Air sticker possible for NA RVs. Park outside.',
+    wfr:'Zones LEZ (Crit\'Air) a Paris, Lyon, Marseille. Aucune vignette Crit\'Air possible. Garez-vous a l\'exterieur.',
+    links:[{t:'Autoroutes.fr',u:'https://autoroutes.fr'}]},
+  es:{st:'ok',lb:'Pay at barriers / Peage aux barrieres',
+    en:'Spain uses barrier tolls on some motorways (AP roads). Many are toll-free. No vignette. Over 3.5t pays higher rate.',
+    fr:'Espagne: peages aux barrieres sur certaines autoroutes. Beaucoup sont gratuites. Pas de vignette.',
+    wen:'Low emission zones (ZBE) in Madrid, Barcelona. No sticker possible.',
+    wfr:'Zones de basses emissions (ZBE) a Madrid, Barcelone. Pas d\'autocollant possible.',
+    links:[]},
+  pt:{st:'warn',lb:'Electronic tolls - register / Peages electroniques',
+    en:'Portugal uses electronic tolls on some motorways - no cash barriers. Pay online within 5 days at portugaltolls.com or use Via Verde.',
+    fr:'Portugal utilise des peages electroniques sur certaines autoroutes. Payez en ligne dans les 5 jours ou utilisez Via Verde.',
+    ten:'Register at portugaltolls.com before departure or buy a Via Verde transponder on arrival.',
+    tfr:'Enregistrez-vous sur portugaltolls.com avant le depart ou achetez une balise Via Verde a l\'arrivee.',
+    links:[{t:'Portugal Tolls',u:'https://www.portugaltolls.com'},{t:'Via Verde',u:'https://www.viaverde.pt'}]},
+  it:{st:'ok',lb:'Pay at barriers / Peage aux barrieres',
+    en:'Italy uses barrier tolls on autostrada. Over 3.5t pays in a higher category (class 3-4). Nothing to buy in advance.',
+    fr:'Italie: peages aux barrieres sur l\'autostrada. Plus de 3,5t en categorie superieure. Rien a acheter.',
+    wen:'ZTL zones in almost every Italian city. Cameras enforce access. No registration possible for NA RVs. Park outside and walk.',
+    wfr:'Zones ZTL dans presque chaque ville italienne. Cameras appliquent l\'acces. Pas d\'enregistrement possible.',
+    links:[{t:'Autostrade.it',u:'https://autostrade.it'},{t:'ZTL map',u:'https://ztl-italia.info'}]},
+  de:{st:'ok',lb:'No toll / exempt - Pas de peage',
+    en:'Germany has NO motorway toll for private vehicles. The HGV Maut applies to commercial freight only. Private motorhomes over 3.5t are EXEMPT - classified as passenger vehicles.',
+    fr:'Allemagne: PAS de peage autoroutier pour vehicules prives. La Maut HGV s\'applique au fret commercial uniquement. Les camping-cars prives sont EXEMPTES.',
+    wen:'Umweltzone in city centers. No German green sticker possible for NA RVs. Park outside.',
+    wfr:'Umweltzone dans les centres-villes. Aucune vignette verte possible. Garez-vous a l\'exterieur.',
+    links:[{t:'Toll-Collect (verify)',u:'https://www.toll-collect.de'}]},
+  be:{st:'ok',lb:'No toll / exempt - Pas de peage',
+    en:'Belgium has no motorway toll for private vehicles. Viapass HGV applies to commercial trucks only. Private motorhomes over 3.5t are EXEMPT.',
+    fr:'Belgique: pas de peage autoroutier pour vehicules prives. Viapass HGV s\'applique aux camions commerciaux. Camping-cars prives EXEMPTES.',
+    wen:'LEZ zones in Brussels, Antwerp, Ghent. No sticker possible.',
+    wfr:'Zones LEZ a Bruxelles, Anvers, Gand. Aucun autocollant possible.',
+    links:[]},
+  nl:{st:'ok',lb:'No toll / exempt - Pas de peage',
+    en:'Netherlands has no general motorway toll. A few tolled tunnels (Westerscheldetunnel). HGV systems do not apply to private motorhomes.',
+    fr:'Pays-Bas: pas de peage autoroutier. Quelques tunnels a peage. Les systemes HGV ne s\'appliquent pas.',
+    links:[]},
+  ch:{st:'danger',lb:'LSVA mandatory - Obligatoire',
+    en:'Switzerland has NO standard vignette for vehicles over 3.5t. The LSVA (distance-based heavy vehicle charge) is MANDATORY. Register and pay based on km driven, emission class, and weight.',
+    fr:'Suisse: PAS de vignette standard pour plus de 3,5t. La LSVA (redevance poids lourds) est OBLIGATOIRE. Enregistrer et payer selon les km parcourus.',
+    wen:'DO NOT enter Switzerland over 3.5t without registering for LSVA. Fines are significant.',
+    wfr:'NE PAS entrer en Suisse sans s\'enregistrer pour la LSVA. Les amendes sont importantes.',
+    ten:'Typical LSVA for a Switzerland transit with RV >3.5t is approximately CHF 30-80.',
+    tfr:'La LSVA typique pour un transit en Suisse est d\'environ CHF 30-80.',
+    links:[{t:'LSVA registration',u:'https://www.ezv.admin.ch/lsva'},{t:'Info',u:'https://tolltickets.com'}]},
+  at:{st:'danger',lb:'GO-Box mandatory - Obligatoire',
+    en:'Austria uses GO-Box for all vehicles over 3.5t. The standard car vignette does NOT apply to you. The GO-Box is a transponder that charges tolls automatically based on distance.',
+    fr:'Autriche: GO-Box pour tous les vehicules plus de 3,5t. La vignette voiture NE s\'applique PAS. La GO-Box est un transpondeur qui facture automatiquement les peages.',
+    wen:'DO NOT use a standard car vignette - invalid for your vehicle. Fines are automatic (camera enforcement).',
+    wfr:'N\'utilisez PAS la vignette voiture standard - invalide. Les amendes sont automatiques.',
+    ten:'GO-Box available at ASFINAG service points near the border. Budget ~25-50 EUR deposit + per-km charges.',
+    tfr:'GO-Box disponible aux points de service ASFINAG pres de la frontiere. ~25-50 EUR de depot + frais kilometriques.',
+    links:[{t:'GO-Box official',u:'https://www.go-maut.at'},{t:'ASFINAG shop',u:'https://shop.asfinag.at'}]},
+  si:{st:'danger',lb:'DarsGo OBU mandatory - Obligatoire',
+    en:'Slovenia uses DarsGo for vehicles over 3.5t. A physical OBU transponder is MANDATORY - you cannot use the standard e-vignette for cars. Pick up OBU at border service points.',
+    fr:'Slovenie: DarsGo pour vehicules plus de 3,5t. Un transpondeur OBU physique est OBLIGATOIRE - pas la vignette e-standard voiture.',
+    wen:'DO NOT enter Slovenia over 3.5t without DarsGo OBU. Fines are automatic at toll gantries.',
+    wfr:'NE PAS entrer en Slovenie sans l\'OBU DarsGo. Les amendes sont automatiques aux portiques.',
+    links:[{t:'DarsGo registration',u:'https://www.darsgo.si/portal/en/home'}]},
+  hr:{st:'ok',lb:'Pay at barriers / Peage aux barrieres',
+    en:'Croatia uses barrier tolls. Over 3.5t charged at higher rate. 2026 update: transitioning to electronic tolls (SMART MOTORING) by end of 2026 - check hac.hr.',
+    fr:'Croatie: peages aux barrieres. Mise a jour 2026: transition vers peages electroniques d\'ici fin 2026.',
+    links:[{t:'HAC Croatia',u:'https://www.hac.hr/en'}]},
+  hu:{st:'danger',lb:'HU-GO mandatory - Obligatoire',
+    en:'Hungary uses HU-GO for vehicles over 3.5t - distance-based electronic toll. The standard car e-vignette does NOT apply. Register at hu-go.hu before entry.',
+    fr:'Hongrie: HU-GO pour vehicules plus de 3,5t. La vignette e-standard voiture NE s\'applique PAS. Enregistrez-vous sur hu-go.hu.',
+    wen:'DO NOT use the standard Hungarian e-vignette - invalid for over 3.5t.',
+    wfr:'N\'utilisez PAS la vignette hongroise standard - invalide pour plus de 3,5t.',
+    links:[{t:'HU-GO',u:'https://hu-go.hu'},{t:'Autopay Mobility',u:'https://autopay.eu'}]},
+  sk:{st:'danger',lb:'Myto Slovakia mandatory - Obligatoire',
+    en:'Slovakia uses Myto electronic toll for vehicles over 3.5t. The standard car e-vignette does NOT apply.',
+    fr:'Slovaquie: systeme Myto pour vehicules plus de 3,5t. La vignette e-standard voiture NE s\'applique PAS.',
+    wen:'DO NOT use the standard Slovak e-vignette - invalid for over 3.5t.',
+    wfr:'N\'utilisez PAS la vignette slovaque standard - invalide.',
+    links:[{t:'Myto Slovakia',u:'https://eznamka.sk'},{t:'Autopay Mobility',u:'https://autopay.eu'}]},
+  cz:{st:'danger',lb:'Myto CZ mandatory - Obligatoire',
+    en:'Czechia uses Myto CZ electronic toll for vehicles over 3.5t. The standard car e-vignette does NOT apply.',
+    fr:'Tcheque: systeme Myto CZ pour vehicules plus de 3,5t. La vignette e-standard voiture NE s\'applique PAS.',
+    wen:'DO NOT use the standard Czech e-vignette - invalid for over 3.5t.',
+    wfr:'N\'utilisez PAS la vignette tcheque standard - invalide.',
+    links:[{t:'Myto CZ',u:'https://mytocz.eu'},{t:'Autopay Mobility',u:'https://autopay.eu'}]},
+  pl:{st:'danger',lb:'e-TOLL mandatory - Obligatoire',
+    en:'Poland uses e-TOLL for vehicles over 3.5t. IMPORTANT 2026: Network expanded Feb 1, 2026 (+645 km including S1, S6, S7, S8, S11, S17, S19). Rates increased 40-42%.',
+    fr:'Pologne: e-TOLL pour vehicules plus de 3,5t. IMPORTANT 2026: Reseau elargi le 1er fevrier 2026 (+645 km). Tarifs augmentes de 40-42%.',
+    wen:'Many roads that were free before February 2026 are now tolled. Check current map at etoll.gov.pl.',
+    wfr:'De nombreuses routes gratuites avant fevrier 2026 sont maintenant payantes. Verifiez la carte sur etoll.gov.pl.',
+    links:[{t:'e-TOLL Poland',u:'https://etoll.gov.pl/en/'}]},
+  ro:{st:'warn',lb:'Rovinieta e-vignette required / Requise',
+    en:'Romania uses Rovinieta e-vignette for all vehicles including over 3.5t. Purchase online before entry.',
+    fr:'Roumanie: vignette electronique Rovinieta pour tous les vehicules y compris plus de 3,5t. Achetez en ligne.',
+    links:[{t:'Roviniete',u:'https://www.roviniete.ro'},{t:'Autopay Mobility',u:'https://autopay.eu'}]},
+  bg:{st:'warn',lb:'E-vignette required / Requise',
+    en:'Bulgaria requires an e-vignette for motorway access. Covers over 3.5t private motorhomes.',
+    fr:'Bulgarie: vignette electronique pour acces autoroute. Couvre les camping-cars prives plus de 3,5t.',
+    links:[{t:'BG Toll',u:'https://www.bgtoll.bg'},{t:'Autopay Mobility',u:'https://autopay.eu'}]},
+  gb:{st:'ok',lb:'No motorway toll / ULEZ check',
+    en:'UK has no general motorway toll. London ULEZ applies - NA RVs cannot get UK emissions cert. ULEZ costs GBP 12.50/day or avoid. Left-hand traffic.',
+    fr:'RU: pas de peage autoroutier. ULEZ de Londres s\'applique. Conduite a gauche.',
+    wen:'ULEZ covers most of Greater London. Use TfL ULEZ checker before entering.',
+    wfr:'L\'ULEZ couvre la majeure partie du Grand Londres. Utilisez le verificateur ULEZ de TfL.',
+    links:[{t:'TfL ULEZ checker',u:'https://tfl.gov.uk/modes/driving/ulez-expansion'}]},
+  ie:{st:'ok',lb:'Pay at barriers / Peage aux barrieres',
+    en:'Ireland has a few tolled roads and bridges (M50 Dublin). No vignette. Left-hand traffic.',
+    fr:'Irlande: quelques routes et ponts a peage (M50 Dublin). Conduite a gauche.',
+    links:[{t:'eFlow M50',u:'https://www.eflow.ie'}]},
+  rs:{st:'ok',lb:'Pay at barriers / Peage aux barrieres',
+    en:'Serbia uses barrier tolls on main motorways. Over 3.5t charged at higher rate.',
+    fr:'Serbie: peages aux barrieres sur autoroutes principales. Plus de 3,5t tarif plus eleve.',
+    links:[]},
+  me:{st:'ok',lb:'Sozina Tunnel toll / Peage tunnel Sozina',
+    en:'Montenegro has limited toll roads. Main toll: Sozina Tunnel (Podgorica to Bar).',
+    fr:'Montenegro: peu de routes a peage. Principal: tunnel Sozina.',
+    links:[]},
+  al:{st:'ok',lb:'No significant tolls / Pas de peage',
+    en:'Albania has no significant motorway toll system.',
+    fr:'Albanie: pas de systeme de peage autoroutier significatif.',
+    links:[]},
+  gr:{st:'ok',lb:'Pay at barriers / Peage aux barrieres',
+    en:'Greece uses barrier tolls on main motorways. Over 3.5t charged at higher rate.',
+    fr:'Grece: peages aux barrieres sur autoroutes principales.',
+    links:[{t:'Aegean Motorway',u:'https://www.aegeanmotorway.gr'}]},
+  dk:{st:'ok',lb:'No motorway toll / Pas de peage',
+    en:'Denmark has no general motorway toll. Oresund Bridge and Storebalt Bridge have tolls.',
+    fr:'Danemark: pas de peage autoroutier. Ponts de l\'Oresund et Storebalt a peage.',
+    links:[{t:'Oresund Bridge',u:'https://www.oresundsbron.com'}]},
+  no:{st:'ok',lb:'AutoPASS toll roads / Routes a peage',
+    en:'Norway has many toll roads and urban toll rings. AutoPASS electronic system. Over 3.5t pays higher rate. You can drive and receive an invoice.',
+    fr:'Norvege: nombreuses routes a peage. Systeme electronique AutoPASS. Plus de 3,5t tarif superieur.',
+    links:[{t:'AutoPASS',u:'https://www.autopass.no/en/'}]},
+};
+
+const LEZ_EN=[
+  ['France','Crit\'Air (LEZ)','Paris, Lyon, Marseille, Grenoble...','No Crit\'Air sticker possible for NA RVs. Access forbidden.'],
+  ['Germany','Umweltzone','Berlin, Munich, Hamburg, Cologne...','No German green sticker possible. Access forbidden.'],
+  ['Belgium','LEZ','Brussels, Antwerp, Ghent','No LEZ sticker possible. Access forbidden.'],
+  ['Netherlands','ZE zones','Amsterdam, Utrecht, Rotterdam','Zero-emission zones expanding. No access without EV certification.'],
+  ['Italy','ZTL','Almost every city center','ZTL cameras enforce access. Park outside and walk.'],
+  ['UK','ULEZ','Greater London','GBP 12.50/day or avoid. No UK emissions cert for NA RVs.'],
+  ['Spain','ZBE','Madrid, Barcelona','No DGT sticker possible for NA RVs.'],
+];
+const LEZ_FR=[
+  ['France','Crit\'Air (LEZ)','Paris, Lyon, Marseille, Grenoble...','Aucune vignette Crit\'Air possible. Acces interdit.'],
+  ['Allemagne','Umweltzone','Berlin, Munich, Hambourg, Cologne...','Aucune vignette verte possible. Acces interdit.'],
+  ['Belgique','LEZ','Bruxelles, Anvers, Gand','Aucun autocollant LEZ possible. Acces interdit.'],
+  ['Pays-Bas','Zones ZE','Amsterdam, Utrecht, Rotterdam','Zones zero emission en expansion. Pas d\'acces sans VE.'],
+  ['Italie','ZTL','Presque chaque centre-ville','Cameras ZTL. Pas d\'enregistrement possible. Garez-vous dehors.'],
+  ['RU','ULEZ','Grand Londres','GBP 12,50/jour ou eviter. Pas de certificat emissions.'],
+  ['Espagne','ZBE','Madrid, Barcelone','Pas d\'autocollant DGT possible.'],
+];
+
+let lang='en', selected=new Set();
+
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  document.getElementById('h-title').textContent=l==='fr'?'Calculateur de peages et vignettes':'Toll & Vignette Calculator';
+  document.getElementById('h-sub').textContent=l==='fr'?'Selectionnez vos pays - obtenez une liste des exigences de peage pour votre VR nord-americain (>3,5t).':'Select your countries - get a complete toll and vignette requirement checklist for your North American RV (>3.5t).';
+  document.getElementById('info-text').textContent=l==='fr'?'Si votre VR depasse 3,5t PNBV, il est classe comme vehicule lourd. Les vignettes standard voitures NE s\'appliquent PAS - vous avez besoin du systeme poids lourds.':'If your RV exceeds 3.5t GVWR, it is classified as a heavy vehicle. Standard car vignettes do NOT apply - you need the truck/heavy vehicle system.';
+  document.getElementById('sel-title').textContent=l==='fr'?'Selectionnez vos pays':'Select your countries';
+  document.getElementById('btn-popular').textContent=l==='fr'?'Itineraire populaire (FR/ES/PT/IT)':'Popular route (FR/ES/PT/IT)';
+  document.getElementById('btn-all').textContent=l==='fr'?'Tout selectionner':'Select all';
+  document.getElementById('btn-clear').textContent=l==='fr'?'Tout effacer':'Clear all';
+  document.getElementById('check-btn').textContent=l==='fr'?'Verifier mon itineraire \u2192':'Check my route \u2192';
+  document.getElementById('res-title').textContent=l==='fr'?'Exigences pays par pays':'Country-by-country requirements';
+  document.getElementById('lez-title').textContent=l==='fr'?'Zones de basses emissions - aucun autocollant possible':'Emissions zones - no sticker possible';
+  document.getElementById('lez-text').textContent=l==='fr'?'Les VR nord-americains ne peuvent pas obtenir d\'autocollants d\'emissions europeens. L\'acces aux zones LEZ, ZTL, Umweltzone et ULEZ est interdit. Garez-vous a l\'exterieur.':'North American RVs cannot obtain European emissions stickers. Access to LEZ, ZTL, Umweltzone, and ULEZ zones is forbidden. Park outside and use public transit or walk in.';
+  renderCountries();
+  if(document.getElementById('resultsSection').classList.contains('visible')) showResults();
+}
+
+function renderCountries(){
+  document.getElementById('countryGrid').innerHTML=COUNTRIES.map(c=>
+    `<button class="country-btn ${selected.has(c.id)?'selected':''}" onclick="toggleCountry('${c.id}')">${c.flag} ${lang==='fr'?c.fr:c.en}</button>`
+  ).join('');
+}
+
+function toggleCountry(id){
+  if(selected.has(id)) selected.delete(id); else selected.add(id);
+  renderCountries();
+}
+function selectPopular(){selected=new Set(['fr','es','pt','it']);renderCountries();}
+function selectAll(){COUNTRIES.forEach(c=>selected.add(c.id));renderCountries();}
+function clearAll(){selected.clear();renderCountries();document.getElementById('resultsSection').classList.remove('visible');}
+
+function showResults(){
+  if(selected.size===0){alert(lang==='fr'?'Selectionnez au moins un pays.':'Please select at least one country.');return;}
+  const rs=document.getElementById('resultsSection');
+  rs.classList.add('visible');
+  const sel=[...selected];
+  const reqs=sel.map(id=>({id,r:REQ[id]})).filter(x=>x.r);
+  const danger=reqs.filter(x=>x.r.st==='danger').length;
+  const warn=reqs.filter(x=>x.r.st==='warn').length;
+  const hasMulti=sel.some(id=>['at','ch','si','hu','sk','cz','ro','bg','pl'].includes(id));
+  const stColors={danger:'var(--red-bg)',warn:'var(--amber-bg)',ok:'var(--green-bg)'};
+  const stText={danger:'var(--red)',warn:'var(--amber)',ok:'var(--green)'};
+  const pillCls={danger:'pill-danger',warn:'pill-warn',ok:'pill-ok'};
+
+  const sumEl=document.getElementById('summaryCard');
+  const isFr=lang==='fr';
+  sumEl.innerHTML=`<div class="summary-title">${sel.length} ${isFr?'pays selectionnes':'countries selected'} &middot; ${danger} ${isFr?'action requise':'requiring advance action'} &middot; ${warn} ${isFr?'pre-enregistrement':'pre-registration'}</div>
+  <div class="summary-pills">${reqs.map(x=>`<span class="spill" style="background:${stColors[x.r.st]};color:${stText[x.r.st]}">${x.id.toUpperCase()}</span>`).join('')}</div>
+  ${hasMulti?`<div style="margin-top:10px;font-size:12px;background:var(--blue-bg);color:var(--blue);padding:8px 12px;border-radius:6px">${isFr?'Autopay Mobility (autopay.eu) couvre AT, CH, CZ, SK, SI, HU, RO, BG - un seul enregistrement.':'Autopay Mobility (autopay.eu) covers AT, CH, CZ, SK, SI, HU, RO, BG - one registration for multiple countries.'} <a href="https://autopay.eu" target="_blank">autopay.eu</a></div>`:''}`;
+
+  const list=document.getElementById('resultsList');
+  list.innerHTML=reqs.sort((a,b)=>{const o={danger:0,warn:1,ok:2};return o[a.r.st]-o[b.r.st];}).map(({id,r})=>{
+    const body=lang==='fr'?r.fr:r.en;
+    const warn=(lang==='fr'?r.wfr:r.wen)||'';
+    const tip=(lang==='fr'?r.tfr:r.ten)||'';
+    return `<div class="result-item">
+      <div class="result-header">
+        <span class="result-flag" style="font-weight:700;font-size:13px;background:var(--surface2);padding:3px 6px;border-radius:4px">${id.toUpperCase()}</span>
+        <span class="result-country">${lang==='fr'?COUNTRIES.find(c=>c.id===id)?.fr:COUNTRIES.find(c=>c.id===id)?.en}</span>
+        <span class="status-pill ${pillCls[r.st]}">${r.lb}</span>
+      </div>
+      <div class="result-body">${body}</div>
+      ${warn?`<div class="result-warning">&#9888;&#65039; ${warn}</div>`:''}
+      ${tip?`<div class="result-tip">&#128161; ${tip}</div>`:''}
+      ${r.links&&r.links.length?`<div class="result-links">${r.links.map(l=>`<a class="result-link" href="${l.u}" target="_blank">\u2192 ${l.t}</a>`).join('')}</div>`:''}
+    </div>`;
+  }).join('');
+
+  const lezData=lang==='fr'?LEZ_FR:LEZ_EN;
+  const th=lang==='fr'?['Pays','Zone','Villes','Regle pour VR nord-americains']:['Country','Zone type','Main cities','Rule for NA RVs'];
+  document.getElementById('lezTable').innerHTML=`<thead><tr>${th.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${lezData.map(r=>`<tr>${r.map((c,i)=>`<td style="padding:8px 10px;border-bottom:0.5px solid var(--border);font-size:13px;${i===3?'color:var(--red)':''}">${c}</td>`).join('')}</tr>`).join('')}</tbody>`;
+  rs.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+renderCountries();
+</script>
+
+<script>document.getElementById("nav-tolls").classList.add("active");</script>
+</body>
+</html>
