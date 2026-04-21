@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RV Option Selector — North American RV Europe </title>
+<meta name="description" content="Answer 5 questions and get a personalized recommendation among the 7 RV travel options available to North Americans in Europe.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f2ec;--surface:#fff;--surface2:#f0ede6;--border:#ddd9d0;
+  --text:#1a1915;--text2:#6b6860;--text3:#9c9890;
+  --blue:#1a5fa8;--blue-bg:#e8f0fa;
+  --green:#1a7a4a;--green-bg:#e4f5ec;
+  --amber:#8a5a00;--amber-bg:#fdf0d5;
+  --red:#a02020;--red-bg:#fde8e8;
+  --radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
+a{color:var(--blue);text-decoration:none}
+
+.page-header{background:var(--text);color:#fff;padding:2.5rem 2rem 2rem;text-align:center}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:1rem}
+.back-link:hover{color:#fff;text-decoration:none}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:400;color:#fff;margin-bottom:.5rem}
+.page-header .sub{font-size:.9rem;color:rgba(255,255,255,0.6);max-width:520px;margin:0 auto}
+.lang-toggle{display:inline-flex;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.2);margin-top:1rem}
+.lang-btn{background:none;border:none;color:rgba(255,255,255,.6);padding:5px 14px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer}
+.lang-btn.active{background:rgba(255,255,255,.2);color:#fff;font-weight:500}
+
+.main{max-width:800px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+.progress-bar{height:4px;background:var(--border);border-radius:2px;margin-bottom:2rem}
+.progress-fill{height:100%;background:var(--blue);border-radius:2px;transition:width .4s ease}
+
+.question-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:2rem;margin-bottom:1.5rem}
+.q-num{font-size:12px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem}
+.q-text{font-family:'DM Serif Display',serif;font-size:1.3rem;font-weight:400;color:var(--text);margin-bottom:1.25rem;line-height:1.3}
+.q-options{display:flex;flex-direction:column;gap:8px}
+.q-option{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border:0.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;background:var(--surface)}
+.q-option:hover{border-color:var(--blue);background:var(--blue-bg)}
+.q-option.selected{border-color:var(--blue);background:var(--blue-bg)}
+.q-option.selected .opt-circle{background:var(--blue);border-color:var(--blue)}
+.q-option.selected .opt-circle::after{content:'';display:block;width:8px;height:8px;border-radius:50%;background:#fff;margin:auto}
+.opt-circle{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.opt-label{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
+.opt-desc{font-size:12px;color:var(--text2)}
+
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem}
+.nav-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:500;border:0.5px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s}
+.nav-btn:hover{background:var(--surface2)}
+.nav-btn.primary{background:var(--text);color:#fff;border-color:var(--text)}
+.nav-btn.primary:hover{background:#333}
+.nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+.results-section{display:none}
+.results-section.visible{display:block}
+
+.podium{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.5rem}
+.result-card{border-radius:var(--radius);padding:1.25rem;border:0.5px solid var(--border);background:var(--surface)}
+.result-card.rank-1{border:2px solid var(--green);background:var(--green-bg)}
+.result-card.rank-2{border-color:#aaa}
+.result-card.rank-3{opacity:.85}
+.rank-badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:500;margin-bottom:8px}
+.rank-1 .rank-badge{background:var(--green);color:#fff}
+.rank-2 .rank-badge{background:#555;color:#fff}
+.rank-3 .rank-badge{background:#aaa;color:#fff}
+.result-name{font-size:15px;font-weight:500;color:var(--text);margin-bottom:6px}
+.result-score{font-size:22px;font-weight:500;color:var(--text);margin-bottom:4px}
+.result-why{font-size:12px;color:var(--text2);line-height:1.5}
+
+.all-options{display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem}
+.option-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface);border:0.5px solid var(--border);border-radius:8px}
+.option-bar-wrap{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.option-bar{height:100%;border-radius:4px;background:var(--blue);transition:width .6s ease}
+.option-name{font-size:13px;font-weight:500;min-width:150px;color:var(--text)}
+.option-score-lbl{font-size:13px;font-weight:500;min-width:40px;text-align:right;color:var(--text)}
+
+.restart-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:500;border:0.5px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;margin-right:10px}
+.restart-btn:hover{background:var(--surface2)}
+
+.disclaimer{font-size:11px;color:var(--text3);margin-top:1.5rem;line-height:1.5;padding:12px 16px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface)}
+
+@media(max-width:600px){
+  .podium{grid-template-columns:1fr}
+  .option-name{min-width:110px}
+}
+
+.tool-nav{position:sticky;top:0;z-index:100;background:rgba(26,25,21,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.1);padding:0 1rem}
+.tool-nav-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.tool-nav-inner::-webkit-scrollbar{display:none}
+.tool-nav-inner a{display:flex;flex-direction:column;align-items:center;padding:8px 10px;color:rgba(255,255,255,0.55);text-decoration:none;font-size:9px;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;gap:3px;flex-shrink:0}
+.tool-nav-inner a:hover{color:#fff;text-decoration:none}
+.tool-nav-inner a.active{color:#fff;border-bottom-color:#fff}
+.tool-nav-inner .nav-icon{font-size:16px;line-height:1}
+</style>
+</head>
+<body><nav class="tool-nav">
+  <div class="tool-nav-inner">
+    <a href="https://jev-rv.github.io/" id="nav-home"><span class="nav-icon">🏠</span>Home</a>
+    <a href="https://jev-rv.github.io/schengen-rv-simulator/" id="nav-schengen"><span class="nav-icon">🗓️</span>Schengen</a>
+    <a href="https://jev-rv.github.io/budget-simulator/" id="nav-budget"><span class="nav-icon">💶</span>Budget</a>
+    <a href="https://jev-rv.github.io/rv-option-selector/" id="nav-options"><span class="nav-icon">🚐</span>Options</a>
+    <a href="https://jev-rv.github.io/port-selector/" id="nav-port"><span class="nav-icon">⚠️</span>Port</a>
+    <a href="https://jev-rv.github.io/pre-departure-checklist/" id="nav-checklist"><span class="nav-icon">✅</span>Checklist</a>
+    <a href="https://jev-rv.github.io/toll-calculator/" id="nav-tolls"><span class="nav-icon">🛣️</span>Tolls</a>
+    <a href="https://jev-rv.github.io/rhythm-planner/" id="nav-rhythm"><span class="nav-icon">🚐</span>Rhythm</a>
+    <a href="https://jev-rv.github.io/safety-map/" id="nav-safety"><span class="nav-icon">🗺️</span>Safety</a>
+    <a href="https://jev-rv.github.io/app-recommender/" id="nav-apps"><span class="nav-icon">📱</span>Apps</a>
+    <a href="https://jev-rv.github.io/pet-travel-checker/" id="nav-pets"><span class="nav-icon">🐾</span>Pets</a>
+    <a href="https://jev-rv.github.io/getting-started/" id="nav-start"><span class="nav-icon">&#129302;</span>AI&nbsp;Agents</a>
+  </div>
+</nav>
+
+<header class="page-header">
+  <a class="back-link" href="https://jev-rv.github.io/">← Back to all tools</a>
+  <h1 id="h-title">RV Option Selector</h1>
+  <p class="sub" id="h-sub">Answer 5 questions — get a personalized recommendation among the 7 options available to North Americans.</p>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</header>
+
+<main class="main">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:20%"></div></div>
+
+  <div id="questionsSection">
+    <div class="question-card" id="questionCard"></div>
+    <div class="nav-row">
+      <button class="nav-btn" id="btnPrev" onclick="prevQ()">← Back</button>
+      <span id="qCounter" style="font-size:13px;color:var(--text2)"></span>
+      <button class="nav-btn primary" id="btnNext" onclick="nextQ()">Next →</button>
+    </div>
+  </div>
+
+  <div class="results-section" id="resultsSection">
+    <div class="question-card" style="margin-bottom:1.5rem">
+      <div class="q-num" id="rec-label">Your recommendation</div>
+      <div class="q-text" id="rec-title"></div>
+      <div style="font-size:14px;color:var(--text2);margin-top:.5rem" id="rec-sub"></div>
+    </div>
+
+    <div class="podium" id="podium"></div>
+    <div class="all-options" id="allOptions"></div>
+
+    <div>
+      <button class="restart-btn" onclick="restart()">↺ Start over</button>
+      <a class="nav-btn primary" href="https://jev-rv.github.io/budget-simulator/" id="budget-link">💶 Calculate budget →</a>
+    </div>
+  </div>
+
+  <div class="disclaimer" id="disclaimer">
+    This tool provides a general orientation based on your answers. It does not constitute financial or legal advice. Guide 1 contains detailed analysis of all options. Always verify specific conditions with service providers.<br>
+    © 2026 Jack-Éric Vandenbroucke · <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+  </div>
+</main>
+
+<script>
+const DATA = {
+  en: {
+    questions: [
+      {
+        text: "How long do you plan to travel in Europe?",
+        hint: "Total Schengen days across all trips",
+        options: [
+          { label: "Under 4 weeks", desc: "One block, simple trip", scores: {rental:3, p2p:3, ship:-1, buysell:0, timeshare:1, sci:0, car:2} },
+          { label: "4–8 weeks", desc: "One block, longer stay", scores: {rental:2, p2p:1, ship:0, buysell:2, timeshare:2, sci:1, car:1} },
+          { label: "2–3 months (one block)", desc: "Near the 90-day limit", scores: {rental:1, p2p:-1, ship:2, buysell:3, timeshare:0, sci:2, car:0} },
+          { label: "180+ days (multiple blocks)", desc: "Multi-year or multi-block plan", scores: {rental:-2, p2p:-2, ship:4, buysell:2, timeshare:1, sci:3, car:-1} }
+        ]
+      },
+      {
+        text: "Will you travel to Europe more than once?",
+        hint: "Affects whether fixed costs are worth it",
+        options: [
+          { label: "Just once — one-time experience", desc: "Single trip only", scores: {rental:2, p2p:2, ship:-1, buysell:3, timeshare:-1, sci:-1, car:2} },
+          { label: "Every 1–2 years", desc: "Repeat traveler", scores: {rental:0, p2p:0, ship:3, buysell:1, timeshare:3, sci:3, car:0} },
+          { label: "Multiple times per year", desc: "Very frequent traveler", scores: {rental:-1, p2p:-1, ship:4, buysell:0, timeshare:2, sci:4, car:-1} },
+          { label: "Not sure yet", desc: "Still planning", scores: {rental:1, p2p:1, ship:1, buysell:2, timeshare:1, sci:1, car:1} }
+        ]
+      },
+      {
+        text: "How important is comfort and continuity?",
+        hint: "Your own bed vs. whatever is available",
+        options: [
+          { label: "Critical — I want my own RV setup", desc: "Same mattress, same kitchen, same gear", scores: {rental:-2, p2p:-2, ship:5, buysell:0, timeshare:-1, sci:2, car:-3} },
+          { label: "Important — some comfort flexibility OK", desc: "Can adapt but prefer consistent setup", scores: {rental:1, p2p:1, ship:3, buysell:2, timeshare:2, sci:2, car:0} },
+          { label: "Flexible — adventure matters more", desc: "Whatever works is fine", scores: {rental:3, p2p:3, ship:1, buysell:3, timeshare:1, sci:1, car:2} },
+          { label: "Hotels are fine for me", desc: "Not focused on RV comfort", scores: {rental:1, p2p:0, ship:-1, buysell:0, timeshare:0, sci:0, car:4} }
+        ]
+      },
+      {
+        text: "How do you feel about administrative complexity?",
+        hint: "Shipping, buying, registering, insuring in Europe",
+        options: [
+          { label: "I prefer simple — minimal paperwork", desc: "Book it and go", scores: {rental:3, p2p:2, ship:0, buysell:-2, timeshare:2, sci:-2, car:3} },
+          { label: "Moderate — I can handle some admin", desc: "Willing to research and organize", scores: {rental:1, p2p:1, ship:2, buysell:2, timeshare:1, sci:1, car:1} },
+          { label: "I enjoy planning — no problem with complexity", desc: "MacGyver mode", scores: {rental:0, p2p:0, ship:3, buysell:3, timeshare:2, sci:3, car:0} }
+        ]
+      },
+      {
+        text: "What is your budget comfort level for upfront fixed costs?",
+        hint: "Shipping costs ~€7–10k one-way, buying ~€40–80k",
+        options: [
+          { label: "Minimize upfront — prefer pay-as-you-go", desc: "No large upfront costs", scores: {rental:3, p2p:3, ship:-2, buysell:-1, timeshare:2, sci:-1, car:3} },
+          { label: "Comfortable with €5–15k upfront", desc: "Shipping range", scores: {rental:1, p2p:1, ship:3, buysell:2, timeshare:1, sci:1, car:0} },
+          { label: "Comfortable with €20–60k+ upfront", desc: "Buying or co-owning range", scores: {rental:0, p2p:0, ship:2, buysell:3, timeshare:1, sci:4, car:0} }
+        ]
+      }
+    ],
+    optionNames: {
+      ship: "Ship your RV (RoRo)",
+      rental: "RV Rental",
+      p2p: "Peer-to-Peer Rental",
+      buysell: "Buy & Sell",
+      timeshare: "Time-Sharing (Camping-Quart)",
+      sci: "SCI Co-Ownership",
+      car: "Car + Hotels"
+    },
+    optionGuide: {
+      ship: "Best for repeat travelers who want their own setup. Fixed shipping cost amortizes over multiple trips. See Guide 2.",
+      rental: "Best for first-timers and short trips. Simple, no ownership. Gets expensive over 6+ weeks. See Guide 1 §4.",
+      p2p: "Good for short flexible trips. Variable quality — do your due diligence. See Guide 1 §6.",
+      buysell: "Good for a single long trip. More admin than rental, less than shipping. Watch resale timing. See Guide 1 §2.",
+      timeshare: "Best for travellers wanting ≤7 weeks/year, zero ownership hassle. Limited to France. See Guide 1 §3A.",
+      sci: "Best for 2–6 couples planning repeat annual trips. Real ownership, real tax implications. See Guide 1 §3B.",
+      car: "Simplest option. Good if you don't need RV autonomy. No storage, no maintenance worries. See Guide 1 §8."
+    },
+    'rec-label': "Your recommendation",
+    'rec-title-fn': (name) => `Based on your answers: ${name}`,
+    'rec-sub': "Top 3 options for your profile, ranked by match score.",
+    'q-of': (c, t) => `Question ${c} of ${t}`,
+    'btn-next': 'Next →',
+    'btn-prev': '← Back',
+    'btn-see': 'See my recommendation →',
+    'btn-restart': '↺ Start over',
+    'budget-link': '💶 Calculate budget →',
+    'rank-labels': ['Best match', '2nd option', '3rd option'],
+    'h-title': 'RV Option Selector',
+    'h-sub': 'Answer 5 questions — get a personalized recommendation among the 7 options available to North Americans.',
+    'disclaimer': 'This tool provides a general orientation based on your answers. It does not constitute financial or legal advice. Guide 1 contains detailed analysis of all options. Always verify specific conditions with service providers.'
+  },
+  fr: {
+    questions: [
+      {
+        text: "Combien de temps prévoyez-vous voyager en Europe ?",
+        hint: "Total jours Schengen pour tous vos voyages",
+        options: [
+          { label: "Moins de 4 semaines", desc: "Un bloc, voyage simple", scores: {rental:3, p2p:3, ship:-1, buysell:0, timeshare:1, sci:0, car:2} },
+          { label: "4 à 8 semaines", desc: "Un bloc, séjour plus long", scores: {rental:2, p2p:1, ship:0, buysell:2, timeshare:2, sci:1, car:1} },
+          { label: "2 à 3 mois (un bloc)", desc: "Près de la limite des 90 jours", scores: {rental:1, p2p:-1, ship:2, buysell:3, timeshare:0, sci:2, car:0} },
+          { label: "180+ jours (plusieurs blocs)", desc: "Plan pluriannuel ou multi-blocs", scores: {rental:-2, p2p:-2, ship:4, buysell:2, timeshare:1, sci:3, car:-1} }
+        ]
+      },
+      {
+        text: "Allez-vous voyager en Europe plus d'une fois ?",
+        hint: "Détermine si les coûts fixes en valent la peine",
+        options: [
+          { label: "Une seule fois — expérience unique", desc: "Un seul voyage", scores: {rental:2, p2p:2, ship:-1, buysell:3, timeshare:-1, sci:-1, car:2} },
+          { label: "Tous les 1 à 2 ans", desc: "Voyageur régulier", scores: {rental:0, p2p:0, ship:3, buysell:1, timeshare:3, sci:3, car:0} },
+          { label: "Plusieurs fois par an", desc: "Très fréquent", scores: {rental:-1, p2p:-1, ship:4, buysell:0, timeshare:2, sci:4, car:-1} },
+          { label: "Pas encore décidé", desc: "Encore en planification", scores: {rental:1, p2p:1, ship:1, buysell:2, timeshare:1, sci:1, car:1} }
+        ]
+      },
+      {
+        text: "À quel point le confort et la continuité sont-ils importants ?",
+        hint: "Votre propre lit vs. ce qui est disponible",
+        options: [
+          { label: "Critique — je veux mon propre VR", desc: "Même matelas, même cuisine, même équipement", scores: {rental:-2, p2p:-2, ship:5, buysell:0, timeshare:-1, sci:2, car:-3} },
+          { label: "Important — un peu de flexibilité OK", desc: "Peut s'adapter mais préfère la continuité", scores: {rental:1, p2p:1, ship:3, buysell:2, timeshare:2, sci:2, car:0} },
+          { label: "Flexible — l'aventure prime", desc: "Ce qui fonctionne me convient", scores: {rental:3, p2p:3, ship:1, buysell:3, timeshare:1, sci:1, car:2} },
+          { label: "Les hôtels me conviennent", desc: "Pas focalisé sur le confort VR", scores: {rental:1, p2p:0, ship:-1, buysell:0, timeshare:0, sci:0, car:4} }
+        ]
+      },
+      {
+        text: "Comment gérez-vous la complexité administrative ?",
+        hint: "Expédition, achat, immatriculation, assurance en Europe",
+        options: [
+          { label: "Je préfère simple — minimum de paperasse", desc: "Réserver et partir", scores: {rental:3, p2p:2, ship:0, buysell:-2, timeshare:2, sci:-2, car:3} },
+          { label: "Modéré — je peux gérer un peu d'admin", desc: "Prêt à chercher et organiser", scores: {rental:1, p2p:1, ship:2, buysell:2, timeshare:1, sci:1, car:1} },
+          { label: "J'aime planifier — pas de problème", desc: "Mode MacGyver", scores: {rental:0, p2p:0, ship:3, buysell:3, timeshare:2, sci:3, car:0} }
+        ]
+      },
+      {
+        text: "Quel est votre confort avec les coûts fixes initiaux ?",
+        hint: "Expédition ~€7–10k aller simple, achat ~€40–80k",
+        options: [
+          { label: "Minimiser l'apport initial", desc: "Pas de gros frais upfront", scores: {rental:3, p2p:3, ship:-2, buysell:-1, timeshare:2, sci:-1, car:3} },
+          { label: "À l'aise avec €5–15k d'entrée", desc: "Fourchette expédition", scores: {rental:1, p2p:1, ship:3, buysell:2, timeshare:1, sci:1, car:0} },
+          { label: "À l'aise avec €20–60k+ d'entrée", desc: "Fourchette achat ou copropriété", scores: {rental:0, p2p:0, ship:2, buysell:3, timeshare:1, sci:4, car:0} }
+        ]
+      }
+    ],
+    optionNames: {
+      ship: "Expédier votre VR (RoRo)",
+      rental: "Location de VR",
+      p2p: "Location entre particuliers (P2P)",
+      buysell: "Achat & Revente",
+      timeshare: "Temps partagé (Camping-Quart)",
+      sci: "Copropriété SCI",
+      car: "Voiture + Hôtels"
+    },
+    optionGuide: {
+      ship: "Idéal pour les voyageurs réguliers qui veulent leur propre équipement. Le coût d'expédition s'amortit sur plusieurs voyages. Voir Guide 2.",
+      rental: "Idéal pour les premiers voyageurs et les courts séjours. Simple, sans propriété. Devient coûteux au-delà de 6 semaines. Voir Guide 1 §4.",
+      p2p: "Bon pour les courts séjours flexibles. Qualité variable — faites votre vérification préalable. Voir Guide 1 §6.",
+      buysell: "Bon pour un long voyage unique. Plus d'admin que la location, moins que l'expédition. Attention au timing de revente. Voir Guide 1 §2.",
+      timeshare: "Idéal pour ≤7 semaines/an, zéro tracas de propriété. Limité à la France. Voir Guide 1 §3A.",
+      sci: "Idéal pour 2 à 6 couples planifiant des voyages annuels répétés. Vraie propriété, vraies implications fiscales. Voir Guide 1 §3B.",
+      car: "Option la plus simple. Bon si vous n'avez pas besoin d'autonomie VR. Pas de stockage ni d'entretien. Voir Guide 1 §8."
+    },
+    'rec-label': "Votre recommandation",
+    'rec-title-fn': (name) => `D'après vos réponses : ${name}`,
+    'rec-sub': "Top 3 options pour votre profil, classées par score de correspondance.",
+    'q-of': (c, t) => `Question ${c} sur ${t}`,
+    'btn-next': 'Suivant →',
+    'btn-prev': '← Retour',
+    'btn-see': 'Voir ma recommandation →',
+    'btn-restart': '↺ Recommencer',
+    'budget-link': '💶 Calculer le budget →',
+    'rank-labels': ['Meilleure option', '2e option', '3e option'],
+    'h-title': 'Sélecteur d\'option VR',
+    'h-sub': 'Répondez à 5 questions — obtenez une recommandation personnalisée parmi les 7 options disponibles.',
+    'disclaimer': 'Cet outil fournit une orientation générale basée sur vos réponses. Il ne constitue pas un conseil financier ou juridique. Le Guide 1 contient une analyse détaillée de toutes les options. Vérifiez toujours les conditions spécifiques avec les prestataires de services.'
+  }
+};
+
+let lang = 'en';
+let currentQ = 0;
+let answers = [];
+const TOTAL_Q = 5;
+
+function setLang(l) {
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === l.toUpperCase()));
+  const D = DATA[l];
+  document.getElementById('h-title').textContent = D['h-title'];
+  document.getElementById('h-sub').textContent = D['h-sub'];
+  document.getElementById('disclaimer').innerHTML = D['disclaimer'] + '<br>© 2026 Jack-Éric Vandenbroucke · <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const D = DATA[lang];
+  const q = D.questions[currentQ];
+  const selectedAnswer = answers[currentQ];
+
+  document.getElementById('progressFill').style.width = ((currentQ + 1) / TOTAL_Q * 100) + '%';
+  document.getElementById('qCounter').textContent = D['q-of'](currentQ + 1, TOTAL_Q);
+
+  const card = document.getElementById('questionCard');
+  card.innerHTML = `
+    <div class="q-num">Question ${currentQ + 1} / ${TOTAL_Q}</div>
+    <div class="q-text">${q.text}</div>
+    ${q.hint ? `<div style="font-size:12px;color:var(--text3);margin-bottom:1rem">${q.hint}</div>` : ''}
+    <div class="q-options">
+      ${q.options.map((opt, i) => `
+        <div class="q-option ${selectedAnswer === i ? 'selected' : ''}" onclick="selectAnswer(${i})">
+          <div class="opt-circle ${selectedAnswer === i ? 'selected' : ''}">
+            ${selectedAnswer === i ? '<div style="width:8px;height:8px;border-radius:50%;background:#fff;margin:auto"></div>' : ''}
+          </div>
+          <div>
+            <div class="opt-label">${opt.label}</div>
+            <div class="opt-desc">${opt.desc}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  btnPrev.disabled = currentQ === 0;
+  btnNext.textContent = currentQ === TOTAL_Q - 1 ? D['btn-see'] : D['btn-next'];
+  btnNext.disabled = selectedAnswer === undefined;
+}
+
+function selectAnswer(idx) {
+  answers[currentQ] = idx;
+  renderQuestion();
+}
+
+function nextQ() {
+  if (answers[currentQ] === undefined) return;
+  if (currentQ < TOTAL_Q - 1) {
+    currentQ++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function prevQ() {
+  if (currentQ > 0) {
+    currentQ--;
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  const D = DATA[lang];
+  const scores = { ship:0, rental:0, p2p:0, buysell:0, timeshare:0, sci:0, car:0 };
+
+  answers.forEach((ansIdx, qIdx) => {
+    const s = D.questions[qIdx].options[ansIdx].scores;
+    for (const [k, v] of Object.entries(s)) scores[k] += v;
+  });
+
+  const maxPossible = 20;
+  const ranked = Object.entries(scores)
+    .sort((a, b) => b[1] - a[1])
+    .map(([key, score]) => ({ key, score, pct: Math.max(0, Math.round(((score + 5) / (maxPossible + 5)) * 100)) }));
+
+  document.getElementById('questionsSection').style.display = 'none';
+  const rs = document.getElementById('resultsSection');
+  rs.classList.add('visible');
+
+  const top = ranked[0];
+  document.getElementById('rec-label').textContent = D['rec-label'];
+  document.getElementById('rec-title').textContent = D['rec-title-fn'](D.optionNames[top.key]);
+  document.getElementById('rec-sub').textContent = D['rec-sub'];
+
+  const COLORS = ['#1a7a4a','#555','#aaa'];
+  const podium = document.getElementById('podium');
+  podium.innerHTML = ranked.slice(0, 3).map((r, i) => `
+    <div class="result-card rank-${i+1}">
+      <div class="rank-badge">${D['rank-labels'][i]}</div>
+      <div class="result-name">${D.optionNames[r.key]}</div>
+      <div class="result-score">${r.pct}%</div>
+      <div class="result-why">${D.optionGuide[r.key]}</div>
+    </div>
+  `).join('');
+
+  const allOpts = document.getElementById('allOptions');
+  allOpts.innerHTML = ranked.map(r => `
+    <div class="option-row">
+      <div class="option-name">${D.optionNames[r.key]}</div>
+      <div class="option-bar-wrap">
+        <div class="option-bar" style="width:${r.pct}%"></div>
+      </div>
+      <div class="option-score-lbl">${r.pct}%</div>
+    </div>
+  `).join('');
+
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('budget-link').textContent = D['budget-link'];
+  document.querySelector('.restart-btn').textContent = D['btn-restart'];
+}
+
+function restart() {
+  currentQ = 0;
+  answers = [];
+  document.getElementById('questionsSection').style.display = 'block';
+  document.getElementById('resultsSection').classList.remove('visible');
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+
+<script>document.getElementById("nav-options").classList.add("active");</script>
+</body>
+</html>
