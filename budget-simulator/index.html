@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trip Budget Simulator — North American RV Europe</title>
+<meta name="description" content="Calculate your realistic Europe RV trip budget across all travel options — shipping, rental, buy and sell, time-sharing, car and hotels.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f2ec;--surface:#fff;--surface2:#f0ede6;--border:#ddd9d0;
+  --text:#1a1915;--text2:#6b6860;--text3:#9c9890;
+  --blue:#1a5fa8;--blue-bg:#e8f0fa;
+  --green:#1a7a4a;--green-bg:#e4f5ec;
+  --amber:#8a5a00;--amber-bg:#fdf0d5;
+  --red:#a02020;--red-bg:#fde8e8;
+  --opt1:#1a5fa8;--opt2:#8a5a00;--opt3:#6b3fa0;--opt4:#1a7a4a;--opt5:#5a5a5a;
+  --radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
+a{color:var(--blue);text-decoration:none}
+
+.page-header{background:var(--text);color:#fff;padding:2.5rem 2rem 2rem;text-align:center}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:1rem}
+.back-link:hover{color:#fff;text-decoration:none}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:400;color:#fff;margin-bottom:.5rem}
+.page-header .sub{font-size:.9rem;color:rgba(255,255,255,0.6);max-width:520px;margin:0 auto}
+
+.main{max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1.5rem}
+.card-header{padding:1rem 1.5rem;border-bottom:0.5px solid var(--border);background:var(--surface2);display:flex;align-items:center;gap:10px}
+.card-header h2{font-family:'DM Serif Display',serif;font-size:1.05rem;font-weight:400}
+.card-body{padding:1.5rem}
+
+.params-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.param-group{display:flex;flex-direction:column;gap:5px}
+.param-group label{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em}
+.range-row{display:flex;align-items:center;gap:10px}
+.range-row input[type=range]{flex:1;accent-color:var(--blue)}
+.range-val{font-size:14px;font-weight:500;min-width:70px;text-align:right;color:var(--text)}
+.pct-warning{font-size:12px;color:var(--red);margin-top:4px}
+.pct-ok{font-size:12px;color:var(--green);margin-top:4px}
+
+.results-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1.5rem}
+.result-card{border-radius:8px;padding:14px 12px;text-align:center;border:0.5px solid var(--border)}
+.result-card.winner{border-width:2px}
+.result-card .opt-name{font-size:11px;font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+.result-card .opt-total{font-size:20px;font-weight:500;margin-bottom:4px}
+.result-card .opt-daily{font-size:11px;opacity:.7}
+.result-card .opt-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:500;margin-top:6px}
+
+.breakdown-table{width:100%;border-collapse:collapse;font-size:13px}
+.breakdown-table th{text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--border);color:var(--text2);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.breakdown-table td{padding:8px 10px;border-bottom:0.5px solid var(--border)}
+.breakdown-table tr:last-child td{border-bottom:none;font-weight:500;background:var(--surface2)}
+.breakdown-table .num{text-align:right;font-variant-numeric:tabular-nums}
+
+.chart-wrap{height:200px;position:relative;margin-bottom:1rem}
+.bar-chart{display:flex;align-items:flex-end;height:100%;gap:8px;padding:0 0 24px}
+.bar-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.bar{width:100%;border-radius:4px 4px 0 0;transition:height .4s ease;min-height:4px}
+.bar-label{font-size:10px;color:var(--text2);text-align:center;width:100%}
+.bar-val{font-size:11px;font-weight:500;color:var(--text);margin-bottom:2px}
+
+.note-box{background:var(--surface2);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--text2);line-height:1.5;margin-top:1rem;border-left:3px solid var(--border)}
+.disclaimer{font-size:11px;color:var(--text3);margin-top:1.5rem;line-height:1.5;padding:12px 16px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface)}
+
+.lang-toggle{display:inline-flex;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.2);margin-bottom:1rem}
+.lang-btn{background:none;border:none;color:rgba(255,255,255,.6);padding:5px 14px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer}
+.lang-btn.active{background:rgba(255,255,255,.2);color:#fff;font-weight:500}
+
+@media(max-width:640px){
+  .params-grid{grid-template-columns:1fr}
+  .results-grid{grid-template-columns:repeat(2,1fr)}
+  .results-grid .result-card:last-child{grid-column:1/-1}
+  .breakdown-table{font-size:12px}
+  .breakdown-table .hide-mobile{display:none}
+}
+
+.tool-nav{position:sticky;top:0;z-index:100;background:rgba(26,25,21,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.1);padding:0 1rem}
+.tool-nav-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.tool-nav-inner::-webkit-scrollbar{display:none}
+.tool-nav-inner a{display:flex;flex-direction:column;align-items:center;padding:8px 10px;color:rgba(255,255,255,0.55);text-decoration:none;font-size:9px;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;gap:3px;flex-shrink:0}
+.tool-nav-inner a:hover{color:#fff;text-decoration:none}
+.tool-nav-inner a.active{color:#fff;border-bottom-color:#fff}
+.tool-nav-inner .nav-icon{font-size:16px;line-height:1}
+</style>
+</head>
+<body><nav class="tool-nav">
+  <div class="tool-nav-inner">
+    <a href="https://jev-rv.github.io/" id="nav-home"><span class="nav-icon">🏠</span>Home</a>
+    <a href="https://jev-rv.github.io/schengen-rv-simulator/" id="nav-schengen"><span class="nav-icon">🗓️</span>Schengen</a>
+    <a href="https://jev-rv.github.io/budget-simulator/" id="nav-budget"><span class="nav-icon">💶</span>Budget</a>
+    <a href="https://jev-rv.github.io/rv-option-selector/" id="nav-options"><span class="nav-icon">🚐</span>Options</a>
+    <a href="https://jev-rv.github.io/port-selector/" id="nav-port"><span class="nav-icon">⚠️</span>Port</a>
+    <a href="https://jev-rv.github.io/pre-departure-checklist/" id="nav-checklist"><span class="nav-icon">✅</span>Checklist</a>
+    <a href="https://jev-rv.github.io/toll-calculator/" id="nav-tolls"><span class="nav-icon">🛣️</span>Tolls</a>
+    <a href="https://jev-rv.github.io/rhythm-planner/" id="nav-rhythm"><span class="nav-icon">🚐</span>Rhythm</a>
+    <a href="https://jev-rv.github.io/safety-map/" id="nav-safety"><span class="nav-icon">🗺️</span>Safety</a>
+    <a href="https://jev-rv.github.io/app-recommender/" id="nav-apps"><span class="nav-icon">📱</span>Apps</a>
+    <a href="https://jev-rv.github.io/pet-travel-checker/" id="nav-pets"><span class="nav-icon">🐾</span>Pets</a>
+    <a href="https://jev-rv.github.io/getting-started/" id="nav-start"><span class="nav-icon">&#129302;</span>AI&nbsp;Agents</a>
+  </div>
+</nav>
+
+<header class="page-header">
+  <a class="back-link" href="https://jev-rv.github.io/">← Back to all tools</a>
+  <h1 id="h-title">Trip Budget Simulator</h1>
+  <p class="sub" id="h-sub">Realistic cost breakdown for all 5 travel options — based on validated planning data from the Guide 11 model.</p>
+  <div class="lang-toggle" style="margin-top:1rem">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</header>
+
+<main class="main">
+
+<div class="card">
+  <div class="card-header"><span>⚙️</span><h2 id="params-title">Trip parameters</h2></div>
+  <div class="card-body">
+    <div class="params-grid">
+
+      <div class="param-group">
+        <label id="lbl-nights1">Schengen nights — Block 1</label>
+        <div class="range-row">
+          <input type="range" min="14" max="90" step="1" id="nights1" value="89">
+          <span class="range-val" id="v-nights1">89</span>
+        </div>
+      </div>
+
+      <div class="param-group">
+        <label id="lbl-nights2">Schengen nights — Block 2</label>
+        <div class="range-row">
+          <input type="range" min="0" max="90" step="1" id="nights2" value="90">
+          <span class="range-val" id="v-nights2">90</span>
+        </div>
+      </div>
+
+      <div class="param-group">
+        <label id="lbl-nonsch">Non-Schengen nights (break)</label>
+        <div class="range-row">
+          <input type="range" min="0" max="200" step="1" id="nonsch" value="0">
+          <span class="range-val" id="v-nonsch">0</span>
+        </div>
+      </div>
+
+      <div class="param-group">
+        <label id="lbl-diesel">Diesel price (€/L)</label>
+        <div class="range-row">
+          <input type="range" min="1.4" max="2.5" step="0.05" id="diesel" value="2.0">
+          <span class="range-val" id="v-diesel">€2.00</span>
+        </div>
+      </div>
+
+      <div class="param-group">
+        <label id="lbl-paire">% nights at aire/stellplatz</label>
+        <div class="range-row">
+          <input type="range" min="0" max="100" step="5" id="paire" value="60">
+          <span class="range-val" id="v-paire">60%</span>
+        </div>
+      </div>
+
+      <div class="param-group">
+        <label id="lbl-pcamp">% nights at campsite</label>
+        <div class="range-row">
+          <input type="range" min="0" max="100" step="5" id="pcamp" value="25">
+          <span class="range-val" id="v-pcamp">25%</span>
+        </div>
+      </div>
+
+      <div class="param-group">
+        <label id="lbl-grocery">Grocery budget (€/day, 2 people)</label>
+        <div class="range-row">
+          <input type="range" min="15" max="80" step="5" id="grocery" value="30">
+          <span class="range-val" id="v-grocery">€30</span>
+        </div>
+      </div>
+
+      <div class="param-group">
+        <label id="lbl-resto">Restaurant budget (€/day, 2 people)</label>
+        <div class="range-row">
+          <input type="range" min="0" max="80" step="5" id="resto" value="20">
+          <span class="range-val" id="v-resto">€20</span>
+        </div>
+      </div>
+
+      <div class="param-group">
+        <label id="lbl-activ">Activities/culture (€/day)</label>
+        <div class="range-row">
+          <input type="range" min="0" max="60" step="5" id="activ" value="15">
+          <span class="range-val" id="v-activ">€15</span>
+        </div>
+      </div>
+
+      <div class="param-group">
+        <label id="lbl-roroval">RV value for shipping (€)</label>
+        <div class="range-row">
+          <input type="range" min="50000" max="300000" step="5000" id="roroval" value="175000">
+          <span class="range-val" id="v-roroval">€175k</span>
+        </div>
+      </div>
+
+    </div>
+    <div id="pct-status" class="pct-ok" style="margin-top:10px"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header"><span>📊</span><h2 id="results-title">Cost comparison</h2></div>
+  <div class="card-body">
+    <div class="results-grid" id="resultsGrid"></div>
+    <div class="chart-wrap">
+      <div class="bar-chart" id="barChart"></div>
+    </div>
+    <div class="note-box" id="noteBox"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header"><span>📋</span><h2 id="breakdown-title">Cost breakdown by category</h2></div>
+  <div class="card-body">
+    <div style="overflow-x:auto">
+      <table class="breakdown-table" id="breakdownTable"></table>
+    </div>
+  </div>
+</div>
+
+<div class="disclaimer" id="disclaimer">
+  <strong>Disclaimer:</strong> This tool is provided for informational and planning purposes only. While every effort has been made to reflect realistic cost ranges, the author assumes no responsibility for errors or changes after publication. This tool does not constitute financial or legal advice. Always verify specific costs with service providers before making travel decisions.<br>
+  <strong>Source:</strong> Cost ranges validated from the Guide 11 Excel model (RV_Europe_Budget_EN_v11) based on real traveler data, European rental platforms, and RoRo shipping agents (IVSS, SeaBridge).<br><br>
+  © 2026 Jack-Éric Vandenbroucke · <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+</div>
+
+</main>
+
+<script>
+const L = {
+  en: {
+    'h-title':'Trip Budget Simulator',
+    'h-sub':'Realistic cost breakdown for all 5 travel options — based on validated planning data from the Guide 11 model.',
+    'params-title':'Trip parameters',
+    'lbl-nights1':'Schengen nights — Block 1',
+    'lbl-nights2':'Schengen nights — Block 2 (0 = single block)',
+    'lbl-nonsch':'Non-Schengen nights (break between blocks)',
+    'lbl-diesel':'Diesel price (€/L)',
+    'lbl-paire':'% nights at aire / stellplatz',
+    'lbl-pcamp':'% nights at campsite',
+    'lbl-grocery':'Grocery budget (€/day, 2 people)',
+    'lbl-resto':'Restaurant budget (€/day, 2 people)',
+    'lbl-activ':'Activities / culture (€/day)',
+    'lbl-roroval':'Shipped RV value (€) — affects insurance',
+    'results-title':'Cost comparison',
+    'breakdown-title':'Cost breakdown by category',
+    opts:['Ship RV (RoRo)','RV Rental','Time-Sharing','Buy & Sell','Car + Hotels'],
+    rows:['Transport / shipping','RV acquisition / rental','Insurance','Accommodation','Fuel & vehicle','Daily living','Flights & transfers','GRAND TOTAL'],
+    'pct-ok':'✅ Accommodation mix: 100%',
+    'pct-warn': p => `⚠️ Accommodation mix: ${p}% — must total 100%`,
+    'winner':'Best value',
+    'note': (n,d,min,minName) => `Trip duration: ${n} nights · Average daily cost across options: €${d} · Lowest cost option: ${minName} at €${min.toLocaleString()}`,
+  },
+  fr: {
+    'h-title':'Simulateur de budget voyage',
+    'h-sub':'Budget réaliste pour les 5 options de voyage — basé sur les données validées du modèle Guide 11.',
+    'params-title':'Paramètres du voyage',
+    'lbl-nights1':'Nuits Schengen — Bloc 1',
+    'lbl-nights2':'Nuits Schengen — Bloc 2 (0 = bloc unique)',
+    'lbl-nonsch':'Nuits hors Schengen (pause entre blocs)',
+    'lbl-diesel':'Prix du diesel (€/L)',
+    'lbl-paire':'% nuits aire / stellplatz',
+    'lbl-pcamp':'% nuits camping',
+    'lbl-grocery':'Budget épicerie (€/jour, 2 personnes)',
+    'lbl-resto':'Budget restaurant (€/jour, 2 personnes)',
+    'lbl-activ':'Activités / culture (€/jour)',
+    'lbl-roroval':'Valeur du VR expédié (€) — impact assurance',
+    'results-title':'Comparaison des coûts',
+    'breakdown-title':'Détail des coûts par catégorie',
+    opts:['Expédition VR (RoRo)','Location VR','Temps partagé','Achat & Vente','Voiture + Hôtels'],
+    rows:['Transport / expédition','Acquisition / location VR','Assurance','Hébergement','Carburant & véhicule','Vie quotidienne','Vols & transferts','TOTAL GÉNÉRAL'],
+    'pct-ok':'✅ Mix hébergement : 100%',
+    'pct-warn': p => `⚠️ Mix hébergement : ${p}% — doit totaliser 100%`,
+    'winner':'Meilleur prix',
+    'note': (n,d,min,minName) => `Durée : ${n} nuits · Coût journalier moyen : €${d} · Option la moins chère : ${minName} à €${min.toLocaleString()}`,
+  }
+};
+
+let lang = 'en';
+
+function setLang(l) {
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === l.toUpperCase()));
+  for (const [id, val] of Object.entries(L[l])) {
+    if (typeof val === 'string') {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    }
+  }
+  compute();
+}
+
+function v(id) { return +document.getElementById(id).value; }
+function fmt(n) { return '€' + Math.round(n).toLocaleString(); }
+
+const COLORS = ['#1a5fa8','#8a5a00','#6b3fa0','#1a7a4a','#5a5a5a'];
+const COLORS_BG = ['#e8f0fa','#fdf0d5','#f0e8fa','#e4f5ec','#f0f0f0'];
+
+function compute() {
+  const n1 = v('nights1');
+  const n2 = v('nights2');
+  const ns = v('nonsch');
+  const diesel = v('diesel');
+  const paire = v('paire') / 100;
+  const pcamp = v('pcamp') / 100;
+  const pwild = 1 - paire - pcamp;
+  const grocery = v('grocery');
+  const resto = v('resto');
+  const activ = v('activ');
+  const rvVal = v('roroval');
+
+  const totalNights = n1 + n2 + ns;
+  const schengenNights = n1 + n2;
+
+  // Update display values
+  document.getElementById('v-nights1').textContent = n1;
+  document.getElementById('v-nights2').textContent = n2;
+  document.getElementById('v-nonsch').textContent = ns;
+  document.getElementById('v-diesel').textContent = '€' + diesel.toFixed(2);
+  document.getElementById('v-paire').textContent = Math.round(v('paire')) + '%';
+  document.getElementById('v-pcamp').textContent = Math.round(v('pcamp')) + '%';
+  document.getElementById('v-grocery').textContent = '€' + grocery;
+  document.getElementById('v-resto').textContent = '€' + resto;
+  document.getElementById('v-activ').textContent = '€' + activ;
+  document.getElementById('v-roroval').textContent = '€' + Math.round(rvVal/1000) + 'k';
+
+  const pctTotal = Math.round(v('paire') + v('pcamp') + (100 - v('paire') - v('pcamp')));
+  const pctDisplay = Math.round(v('paire') + v('pcamp'));
+  const wildPct = 100 - v('paire') - v('pcamp');
+  const pctEl = document.getElementById('pct-status');
+  const Lc = L[lang];
+  if (wildPct < 0) {
+    pctEl.className = 'pct-warning';
+    pctEl.textContent = Lc['pct-warn'](pctDisplay);
+  } else {
+    pctEl.className = 'pct-ok';
+    pctEl.textContent = Lc['pct-ok'] + (wildPct > 0 ? ` (wild/free: ${Math.round(wildPct)}%)` : '');
+  }
+
+  // --- CORE CALCULATIONS (from Excel model) ---
+  const km = 36; // avg km/day
+  const conso = 12.5; // L/100km
+  const fuelPerDay = (km / 100) * conso * diesel;
+
+  // Accommodation
+  const aireRate = 14;
+  const campRate = 35;
+  const wildRate = 0;
+  const avgAccomm = paire * aireRate + Math.max(0, pcamp) * campRate + Math.max(0, wildPct/100) * wildRate;
+  const touristTax = 1.5 * 2; // 2 persons
+  const accommTotal = totalNights * (avgAccomm + touristTax);
+
+  // Daily living (food + activities + misc)
+  const misc = 10; // misc/contingency
+  const laundry = 8/7; // per day
+  const propane = 25/30;
+  const dailyLiving = totalNights * (grocery + resto + activ + misc + laundry + propane);
+
+  // Flights & transfers (fixed)
+  const flights_ship = 3700; // 2×RT flights
+  const flights_other = 2450; // one-way flights
+
+  // OPTION 1 — Ship RV (RoRo)
+  const roro_ship = 10660; // RoRo RT + port + delivery flights
+  const insurance_ship = rvVal * 0.02 * (totalNights/365) + 1050 + 1100; // comprehensive + green card + medical
+  const accomm_ship = accommTotal;
+  const fuel_ship = totalNights * fuelPerDay;
+  const opt1 = {
+    transport: roro_ship,
+    rv: 0,
+    insurance: Math.round(insurance_ship),
+    accomm: Math.round(accomm_ship),
+    fuel: Math.round(fuel_ship),
+    living: Math.round(dailyLiving),
+    flights: flights_ship
+  };
+
+  // OPTION 2 — RV Rental
+  const rentalRate = 200; // €/day
+  const opt2 = {
+    transport: 0,
+    rv: Math.round(schengenNights * rentalRate),
+    insurance: 1100, // medical only
+    accomm: Math.round(accommTotal * 0.9), // rental usually at campgrounds
+    fuel: Math.round(schengenNights * fuelPerDay * 0.8),
+    living: Math.round(dailyLiving),
+    flights: flights_other
+  };
+
+  // OPTION 3 — Time-Sharing (Camping-Quart style)
+  const tsWeeks = Math.ceil(schengenNights / 7);
+  const tsAnnual = 5800;
+  const opt3 = {
+    transport: 0,
+    rv: Math.round(tsAnnual * (schengenNights / 365)),
+    insurance: 1800,
+    accomm: Math.round(accommTotal * 0.9),
+    fuel: Math.round(schengenNights * fuelPerDay * 0.7),
+    living: Math.round(dailyLiving),
+    flights: flights_other
+  };
+
+  // OPTION 4 — Buy & Sell
+  const buyPrice = 65000;
+  const agencyFees = 2500;
+  const depreciation = km * schengenNights * 0.35;
+  const resaleComm = buyPrice * 0.12;
+  const netRVCost = agencyFees + depreciation + resaleComm;
+  const opt4 = {
+    transport: 0,
+    rv: Math.round(netRVCost),
+    insurance: 1100,
+    accomm: Math.round(accommTotal * 0.5), // less campground = more wild
+    fuel: Math.round(schengenNights * fuelPerDay),
+    living: Math.round(dailyLiving),
+    flights: flights_other
+  };
+
+  // OPTION 5 — Car + Hotels
+  const hotelRate = 120; // €/night (budget hotels)
+  const carRental = 45; // €/day
+  const opt5 = {
+    transport: 0,
+    rv: Math.round(schengenNights * carRental),
+    insurance: 3000,
+    accomm: Math.round(totalNights * hotelRate),
+    fuel: Math.round(schengenNights * 35 * (conso/100) * diesel * 0.6),
+    living: Math.round(dailyLiving),
+    flights: flights_other
+  };
+
+  const opts = [opt1, opt2, opt3, opt4, opt5];
+  const totals = opts.map(o => o.transport + o.rv + o.insurance + o.accomm + o.fuel + o.living + o.flights);
+  const minTotal = Math.min(...totals);
+  const minIdx = totals.indexOf(minTotal);
+  const optNames = Lc.opts;
+
+  // Results cards
+  const grid = document.getElementById('resultsGrid');
+  grid.innerHTML = opts.map((o, i) => {
+    const total = totals[i];
+    const daily = Math.round(total / totalNights);
+    const isWinner = i === minIdx;
+    return `<div class="result-card ${isWinner?'winner':''}" style="background:${COLORS_BG[i]};${isWinner?'border-color:'+COLORS[i]+';':''}" >
+      <div class="opt-name" style="color:${COLORS[i]}">${optNames[i]}</div>
+      <div class="opt-total" style="color:${COLORS[i]}">${fmt(total)}</div>
+      <div class="opt-daily" style="color:${COLORS[i]}">€${daily}/night</div>
+      ${isWinner ? `<div class="opt-badge" style="background:${COLORS[i]};color:#fff">${Lc.winner}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  // Bar chart
+  const maxTotal = Math.max(...totals);
+  const barChart = document.getElementById('barChart');
+  barChart.innerHTML = opts.map((o, i) => {
+    const total = totals[i];
+    const heightPct = Math.round((total / maxTotal) * 85);
+    return `<div class="bar-item">
+      <div class="bar-val" style="color:${COLORS[i]}">${fmt(total)}</div>
+      <div class="bar" style="height:${heightPct}%;background:${COLORS[i]};opacity:0.85"></div>
+      <div class="bar-label" style="color:${COLORS[i]}">${optNames[i].split(' ').slice(0,2).join(' ')}</div>
+    </div>`;
+  }).join('');
+
+  // Note
+  const avgDaily = Math.round(totals.reduce((a,b)=>a+b,0) / totals.length / totalNights);
+  document.getElementById('noteBox').textContent = Lc.note(totalNights, avgDaily, minTotal, optNames[minIdx]);
+
+  // Breakdown table
+  const rowLabels = Lc.rows;
+  const rowKeys = ['transport','rv','insurance','accomm','fuel','living','flights'];
+  const table = document.getElementById('breakdownTable');
+  table.innerHTML = `<thead><tr>
+    <th>${rowLabels[0].split('/')[0]}</th>
+    ${optNames.map((n,i) => `<th class="num" style="color:${COLORS[i]}">${n.split(' ').slice(0,2).join(' ')}</th>`).join('')}
+  </tr></thead><tbody>
+  ${rowKeys.map((key, ri) => `<tr>
+    <td>${rowLabels[ri]}</td>
+    ${opts.map((o,i) => `<td class="num">${o[key] > 0 ? fmt(o[key]) : '—'}</td>`).join('')}
+  </tr>`).join('')}
+  <tr>
+    <td>${rowLabels[rowLabels.length-1]}</td>
+    ${totals.map((t,i) => `<td class="num" style="color:${COLORS[i]}">${fmt(t)}</td>`).join('')}
+  </tr>
+  </tbody>`;
+}
+
+['nights1','nights2','nonsch','diesel','paire','pcamp','grocery','resto','activ','roroval'].forEach(id => {
+  document.getElementById(id).addEventListener('input', compute);
+});
+
+compute();
+</script>
+
+<script>document.getElementById("nav-budget").classList.add("active");</script>
+</body>
+</html>
