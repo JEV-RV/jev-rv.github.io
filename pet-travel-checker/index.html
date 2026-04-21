@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pet Travel Checker — North American RV Europe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f2ec;--surface:#fff;--surface2:#f0ede6;--border:#ddd9d0;--text:#1a1915;--text2:#6b6860;--text3:#9c9890;--blue:#1a5fa8;--blue-bg:#e8f0fa;--green:#1a7a4a;--green-bg:#e4f5ec;--amber:#8a5a00;--amber-bg:#fdf0d5;--red:#a02020;--red-bg:#fde8e8;--radius:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+.page-header{background:var(--text);color:#fff;padding:2.5rem 2rem 2rem;text-align:center}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:1rem}
+.back-link:hover{color:#fff;text-decoration:none}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:400;color:#fff;margin-bottom:.5rem}
+.page-header .sub{font-size:.9rem;color:rgba(255,255,255,0.6);max-width:540px;margin:0 auto}
+.lang-toggle{display:inline-flex;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.2);margin-top:1rem}
+.lang-btn{background:none;border:none;color:rgba(255,255,255,.6);padding:5px 14px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer}
+.lang-btn.active{background:rgba(255,255,255,.2);color:#fff;font-weight:500}
+.main{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1.5rem}
+.card-header{padding:1rem 1.5rem;border-bottom:0.5px solid var(--border);background:var(--surface2);display:flex;align-items:center;gap:10px}
+.card-header h2{font-family:'DM Serif Display',serif;font-size:1.05rem;font-weight:400}
+.card-body{padding:1.5rem}
+.q-group{margin-bottom:1.25rem}
+.q-label{font-size:13px;font-weight:500;color:var(--text2);margin-bottom:8px;display:block}
+.q-options{display:flex;gap:8px;flex-wrap:wrap}
+.q-btn{padding:8px 16px;border:0.5px solid var(--border);border-radius:8px;background:var(--surface);cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);transition:all .15s}
+.q-btn:hover{border-color:var(--blue);background:var(--blue-bg)}
+.q-btn.selected{border:1.5px solid var(--blue);background:var(--blue-bg);color:var(--blue);font-weight:500}
+.country-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;margin-top:8px}
+.c-btn{padding:7px 10px;border:0.5px solid var(--border);border-radius:7px;background:var(--surface);cursor:pointer;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text);transition:all .15s;text-align:left;display:flex;align-items:center;gap:5px}
+.c-btn:hover{border-color:var(--blue);background:var(--blue-bg)}
+.c-btn.selected{border:1.5px solid var(--blue);background:var(--blue-bg);color:var(--blue);font-weight:500}
+.check-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 28px;border-radius:8px;font-size:15px;font-weight:500;border:none;background:var(--text);color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;justify-content:center;margin-top:.5rem}
+.check-btn:hover{background:#333}
+.results{display:none}
+.results.visible{display:block}
+.step-card{border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1rem;border-left:4px solid}
+.step-critical{background:var(--red-bg);border-color:var(--red)}
+.step-warn{background:var(--amber-bg);border-color:var(--amber)}
+.step-ok{background:var(--green-bg);border-color:var(--green)}
+.step-info{background:var(--blue-bg);border-color:var(--blue)}
+.step-header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.step-icon{font-size:20px}
+.step-title{font-size:14px;font-weight:500}
+.step-critical .step-title{color:var(--red)}
+.step-warn .step-title{color:var(--amber)}
+.step-ok .step-title{color:var(--green)}
+.step-info .step-title{color:var(--blue)}
+.step-body{font-size:13px;line-height:1.55;color:var(--text2)}
+.step-body strong{font-weight:500;color:var(--text)}
+.timeline-box{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1.5rem}
+.tl-title{font-family:'DM Serif Display',serif;font-size:1rem;margin-bottom:1rem}
+.tl-item{display:flex;gap:14px;padding:8px 0;border-bottom:0.5px solid var(--border)}
+.tl-item:last-child{border-bottom:none}
+.tl-time{font-size:12px;font-weight:500;color:var(--blue);min-width:110px;flex-shrink:0}
+.tl-desc{font-size:13px;color:var(--text2);line-height:1.4}
+.tl-desc strong{font-weight:500;color:var(--text)}
+.country-result{padding:10px 14px;border-radius:8px;margin-bottom:8px;font-size:13px}
+.cr-warn{background:var(--amber-bg);border-left:3px solid var(--amber)}
+.cr-ok{background:var(--green-bg);border-left:3px solid var(--green)}
+.cr-bad{background:var(--red-bg);border-left:3px solid var(--red)}
+.links-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.ext-link{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:6px;background:var(--blue-bg);color:var(--blue);font-size:12px;font-weight:500}
+.ext-link:hover{background:#c5daf5;text-decoration:none}
+.disclaimer{font-size:11px;color:var(--text3);margin-top:1.5rem;line-height:1.5;padding:12px 16px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface)}
+@media(max-width:600px){.country-grid{grid-template-columns:1fr 1fr}.q-options{flex-direction:column}}
+
+.tool-nav{position:sticky;top:0;z-index:100;background:rgba(26,25,21,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.1);padding:0 1rem}
+.tool-nav-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.tool-nav-inner::-webkit-scrollbar{display:none}
+.tool-nav-inner a{display:flex;flex-direction:column;align-items:center;padding:8px 10px;color:rgba(255,255,255,0.55);text-decoration:none;font-size:9px;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;gap:3px;flex-shrink:0}
+.tool-nav-inner a:hover{color:#fff;text-decoration:none}
+.tool-nav-inner a.active{color:#fff;border-bottom-color:#fff}
+.tool-nav-inner .nav-icon{font-size:16px;line-height:1}
+</style>
+</head>
+<body><nav class="tool-nav">
+  <div class="tool-nav-inner">
+    <a href="https://jev-rv.github.io/" id="nav-home"><span class="nav-icon">🏠</span>Home</a>
+    <a href="https://jev-rv.github.io/schengen-rv-simulator/" id="nav-schengen"><span class="nav-icon">🗓️</span>Schengen</a>
+    <a href="https://jev-rv.github.io/budget-simulator/" id="nav-budget"><span class="nav-icon">💶</span>Budget</a>
+    <a href="https://jev-rv.github.io/rv-option-selector/" id="nav-options"><span class="nav-icon">🚐</span>Options</a>
+    <a href="https://jev-rv.github.io/port-selector/" id="nav-port"><span class="nav-icon">⚠️</span>Port</a>
+    <a href="https://jev-rv.github.io/pre-departure-checklist/" id="nav-checklist"><span class="nav-icon">✅</span>Checklist</a>
+    <a href="https://jev-rv.github.io/toll-calculator/" id="nav-tolls"><span class="nav-icon">🛣️</span>Tolls</a>
+    <a href="https://jev-rv.github.io/rhythm-planner/" id="nav-rhythm"><span class="nav-icon">🚐</span>Rhythm</a>
+    <a href="https://jev-rv.github.io/safety-map/" id="nav-safety"><span class="nav-icon">🗺️</span>Safety</a>
+    <a href="https://jev-rv.github.io/app-recommender/" id="nav-apps"><span class="nav-icon">📱</span>Apps</a>
+    <a href="https://jev-rv.github.io/pet-travel-checker/" id="nav-pets"><span class="nav-icon">🐾</span>Pets</a>
+    <a href="https://jev-rv.github.io/getting-started/" id="nav-start"><span class="nav-icon">&#129302;</span>AI&nbsp;Agents</a>
+  </div>
+</nav>
+<header class="page-header">
+  <a class="back-link" href="https://jev-rv.github.io/">&#8592; Back to all tools</a>
+  <h1 id="h-title">Pet Travel Checker</h1>
+  <p class="sub" id="h-sub">Bringing your dog or cat to Europe in your RV? Answer a few questions &mdash; get your complete document checklist and timeline.</p>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</header>
+<main class="main">
+<div class="card">
+  <div class="card-header"><span>&#128062;</span><h2 id="q-title">Tell us about your pet</h2></div>
+  <div class="card-body">
+    <div class="q-group">
+      <span class="q-label" id="lbl-type">Type of pet</span>
+      <div class="q-options">
+        <button class="q-btn selected" id="btn-dog" onclick="setPet('dog')">&#128054; Dog</button>
+        <button class="q-btn" id="btn-cat" onclick="setPet('cat')">&#128049; Cat</button>
+      </div>
+    </div>
+    <div class="q-group">
+      <span class="q-label" id="lbl-chip">Microchip already implanted?</span>
+      <div class="q-options">
+        <button class="q-btn" id="btn-chip-yes" onclick="setChip('yes')">Yes</button>
+        <button class="q-btn" id="btn-chip-no" onclick="setChip('no')">No</button>
+        <button class="q-btn selected" id="btn-chip-unsure" onclick="setChip('unsure')">Not sure</button>
+      </div>
+    </div>
+    <div class="q-group">
+      <span class="q-label" id="lbl-rabies">Rabies vaccine — current status</span>
+      <div class="q-options">
+        <button class="q-btn" id="btn-rab-current" onclick="setRabies('current')">Valid &amp; current</button>
+        <button class="q-btn" id="btn-rab-expired" onclick="setRabies('expired')">Expired / due soon</button>
+        <button class="q-btn selected" id="btn-rab-none" onclick="setRabies('none')">Not done yet</button>
+      </div>
+    </div>
+    <div class="q-group" id="grp-breed">
+      <span class="q-label" id="lbl-breed">Breed category (dogs only)</span>
+      <div class="q-options">
+        <button class="q-btn selected" id="btn-breed-standard" onclick="setBreed('standard')">Standard breed</button>
+        <button class="q-btn" id="btn-breed-restricted" onclick="setBreed('restricted')">Restricted / pit bull / Rottweiler</button>
+        <button class="q-btn" id="btn-breed-unsure" onclick="setBreed('unsure')">Not sure</button>
+      </div>
+    </div>
+    <div class="q-group">
+      <span class="q-label" id="lbl-duration">Trip duration</span>
+      <div class="q-options">
+        <button class="q-btn selected" id="btn-dur-short" onclick="setDuration('short')">Under 4 months</button>
+        <button class="q-btn" id="btn-dur-long" onclick="setDuration('long')">4 months or more</button>
+      </div>
+    </div>
+    <div class="q-group">
+      <span class="q-label" id="lbl-countries">Countries in your itinerary (select all that apply)</span>
+      <div class="country-grid" id="countryGrid"></div>
+    </div>
+    <button class="check-btn" onclick="showResults()" id="check-btn">Check my requirements &#8594;</button>
+  </div>
+</div>
+
+<div class="results" id="results">
+  <div class="timeline-box">
+    <div class="tl-title" id="tl-title">Preparation timeline</div>
+    <div id="timeline"></div>
+  </div>
+  <div id="stepCards"></div>
+  <div id="countryResults"></div>
+  <div class="links-row">
+    <a class="ext-link" href="https://europa.eu/youreurope/citizens/travel/carry/pets-and-other-animals/index_en.htm" target="_blank">&#8594; EU Pet Travel (official)</a>
+    <a class="ext-link" href="https://inspection.canada.ca/en/animal-health/terrestrial-animals/exports/pets/eu-non-commercial" target="_blank">&#8594; CFIA Canada</a>
+    <a class="ext-link" href="https://www.aphis.usda.gov/pet-travel" target="_blank">&#8594; USDA APHIS</a>
+  </div>
+</div>
+
+<div class="disclaimer" id="disclaimer">
+  <strong>Source:</strong> Guide 3 &mdash; Insurance, Documents &amp; Compliance (J.-E. Vandenbroucke, 2026). Pet travel requirements can change &mdash; always verify with your veterinarian and official sources before departure. The 10-day AHC window and 21-day rabies waiting period are EU regulations as of 2025.<br><br>
+  &copy; 2026 Jack-Eric Vandenbroucke &middot; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+</div>
+</main>
+<script>
+const SPECIAL_COUNTRIES = [
+  {id:'fi', en:'Finland', fr:'Finlande', tapeworm:true},
+  {id:'ie', en:'Ireland', fr:'Irlande', tapeworm:true},
+  {id:'mt', en:'Malta', fr:'Malte', tapeworm:true},
+  {id:'no', en:'Norway', fr:'Norvege', tapeworm:true},
+  {id:'ma', en:'Morocco', fr:'Maroc', special:true},
+  {id:'de', en:'Germany', fr:'Allemagne', breed:true},
+  {id:'fr', en:'France', fr:'France', breed:true},
+  {id:'gr', en:'Greece', fr:'Grece', stray:true},
+  {id:'al', en:'Albania', fr:'Albanie', stray:true},
+  {id:'rs', en:'Serbia', fr:'Serbie', stray:false},
+];
+
+let lang='en';
+let pet='dog', chip='unsure', rabies='none', breed='standard', duration='short';
+let selectedCountries=new Set();
+
+function setPet(v){ pet=v; updateBtns('btn-dog','btn-cat',v==='dog'); document.getElementById('grp-breed').style.display=v==='dog'?'block':'none'; }
+function setChip(v){ chip=v; updateBtns3('btn-chip-yes','btn-chip-no','btn-chip-unsure',v); }
+function setRabies(v){ rabies=v; updateBtns3('btn-rab-current','btn-rab-expired','btn-rab-none',v); }
+function setBreed(v){ breed=v; updateBtns3('btn-breed-standard','btn-breed-restricted','btn-breed-unsure',v); }
+function setDuration(v){ duration=v; updateBtns('btn-dur-short','btn-dur-long',v==='short'); }
+
+function updateBtns(a,b,aSelected){ document.getElementById(a).className='q-btn'+(aSelected?' selected':''); document.getElementById(b).className='q-btn'+(!aSelected?' selected':''); }
+function updateBtns3(a,b,c,selected){ [a,b,c].forEach((id,i)=>{ const vals=['yes','no','unsure','current','expired','none','standard','restricted','unsure']; document.getElementById(id).className='q-btn'+(document.getElementById(id).id.includes(selected)||id.endsWith(selected.replace('yes','yes').replace('no','no'))?' selected':''); }); const map={yes:'btn-chip-yes',no:'btn-chip-no',unsure:'btn-chip-unsure',current:'btn-rab-current',expired:'btn-rab-expired',none:'btn-rab-none',standard:'btn-breed-standard',restricted:'btn-breed-restricted'}; Object.values(map).forEach(id=>{ const el=document.getElementById(id); if(el) el.className='q-btn'; }); const selId=map[selected]; if(selId) document.getElementById(selId).className='q-btn selected'; if(selected==='unsure'){ if(document.getElementById('btn-chip-unsure')) document.getElementById('btn-chip-unsure').className='q-btn selected'; if(document.getElementById('btn-breed-unsure')) document.getElementById('btn-breed-unsure').className='q-btn selected'; } }
+
+function toggleCountry(id){ if(selectedCountries.has(id)) selectedCountries.delete(id); else selectedCountries.add(id); renderCountries(); }
+function renderCountries(){
+  document.getElementById('countryGrid').innerHTML=SPECIAL_COUNTRIES.map(c=>`
+    <button class="c-btn ${selectedCountries.has(c.id)?'selected':''}" onclick="toggleCountry('${c.id}')">
+      ${lang==='fr'?c.fr:c.en}
+      ${c.tapeworm?'&#127707;':''}${c.special?'&#9888;&#65039;':''}${c.breed?'&#128054;':''}${c.stray?'&#9888;&#65039;':''}
+    </button>
+  `).join('');
+}
+
+function setLang(l){
+  lang=l; const isFr=l==='fr';
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  document.getElementById('h-title').textContent=isFr?'Verification voyage avec animaux':'Pet Travel Checker';
+  document.getElementById('h-sub').textContent=isFr?'Voyagez avec votre chien ou chat en VR en Europe? Repondez a quelques questions - obtenez votre liste de documents et votre calendrier.':'Bringing your dog or cat to Europe in your RV? Answer a few questions - get your complete document checklist and timeline.';
+  document.getElementById('q-title').textContent=isFr?'Dites-nous ce qui concerne votre animal':'Tell us about your pet';
+  document.getElementById('lbl-type').textContent=isFr?'Type d\'animal':'Type of pet';
+  document.getElementById('btn-dog').innerHTML=isFr?'&#128054; Chien':'&#128054; Dog';
+  document.getElementById('btn-cat').innerHTML=isFr?'&#128049; Chat':'&#128049; Cat';
+  document.getElementById('lbl-chip').textContent=isFr?'Micropuce deja implantee?':'Microchip already implanted?';
+  document.getElementById('btn-chip-yes').textContent=isFr?'Oui':'Yes';
+  document.getElementById('btn-chip-no').textContent=isFr?'Non':'No';
+  document.getElementById('btn-chip-unsure').textContent=isFr?'Pas certain':'Not sure';
+  document.getElementById('lbl-rabies').textContent=isFr?'Vaccin antirabique - statut actuel':'Rabies vaccine - current status';
+  document.getElementById('btn-rab-current').innerHTML=isFr?'Valide et a jour':'Valid &amp; current';
+  document.getElementById('btn-rab-expired').textContent=isFr?'Expire / a renouveler':'Expired / due soon';
+  document.getElementById('btn-rab-none').textContent=isFr?'Pas encore fait':'Not done yet';
+  document.getElementById('lbl-breed').textContent=isFr?'Categorie de race (chiens seulement)':'Breed category (dogs only)';
+  document.getElementById('btn-breed-standard').textContent=isFr?'Race standard':'Standard breed';
+  document.getElementById('btn-breed-restricted').textContent=isFr?'Race restreinte / pit bull / Rottweiler':'Restricted / pit bull / Rottweiler';
+  document.getElementById('btn-breed-unsure').textContent=isFr?'Pas certain':'Not sure';
+  document.getElementById('lbl-duration').textContent=isFr?'Duree du voyage':'Trip duration';
+  document.getElementById('btn-dur-short').textContent=isFr?'Moins de 4 mois':'Under 4 months';
+  document.getElementById('btn-dur-long').textContent=isFr?'4 mois ou plus':'4 months or more';
+  document.getElementById('lbl-countries').textContent=isFr?'Pays dans votre itineraire (cochez tous ceux qui s\'appliquent)':'Countries in your itinerary (select all that apply)';
+  document.getElementById('check-btn').textContent=isFr?'Verifier mes exigences →':'Check my requirements →';
+  renderCountries();
+  if(document.getElementById('results').classList.contains('visible')) showResults();
+}
+
+function showResults(){
+  const isFr=lang==='fr';
+  const res=document.getElementById('results');
+  res.classList.add('visible');
+
+  const needChip=chip!=='yes';
+  const needRabies=rabies!=='current';
+  const needBreedCheck=pet==='dog'&&(breed==='restricted'||breed==='unsure');
+  const needTapeworm=pet==='dog'&&[...selectedCountries].some(id=>SPECIAL_COUNTRIES.find(c=>c.id===id&&c.tapeworm));
+  const needMorocco=[...selectedCountries].includes('ma');
+  const needLongTrip=duration==='long';
+  const hasStray=[...selectedCountries].some(id=>SPECIAL_COUNTRIES.find(c=>c.id===id&&c.stray));
+
+  // Timeline
+  const tlItems=[];
+  if(needChip||needRabies){
+    if(needChip) tlItems.push({time:isFr?'8 sem. avant depart':'8 weeks before',desc:isFr?'<strong>Microchip ISO 11784/11785</strong> - doit etre implante AVANT le vaccin':'<strong>Microchip ISO 11784/11785</strong> - must be implanted BEFORE rabies vaccine'});
+    if(needRabies) tlItems.push({time:isFr?'8 sem. avant depart':'8 weeks before',desc:isFr?'<strong>Vaccin antirabique</strong> apres la micropuce - delai d\'attente 21 jours':'<strong>Rabies vaccine</strong> after microchip - 21-day waiting period'});
+    tlItems.push({time:isFr?'21 jours apres vaccin':'21 days after vaccine',desc:isFr?'Fin du delai d\'attente obligatoire':'Mandatory waiting period ends'});
+  }
+  if(needTapeworm) tlItems.push({time:isFr?'24-120h avant arrivee (FI/IE/MT/NO)':'24-120h before arrival (FI/IE/MT/NO)',desc:isFr?'<strong>Traitement antiparasitaire (cestodes)</strong> par un veterinaire - delai tres precis':'<strong>Tapeworm treatment</strong> by vet - precise timing required'});
+  tlItems.push({time:isFr?'Max 10 jours avant depart':'Max 10 days before departure',desc:isFr?'<strong>Certificat Sanitaire Animal (CSA)</strong> emis par un veterinaire officiel autorise':'<strong>Animal Health Certificate (AHC)</strong> issued by an official authorized veterinarian'});
+  tlItems.push({time:isFr?'Des l\'arrivee dans l\'UE':'On arrival in EU',desc:isFr?'Obtenir un <strong>Passeport Europeen pour Animal</strong> aupres d\'un veterinaire UE - valable pour tout votre sejour':'Get an <strong>EU Pet Passport</strong> from any EU vet - valid for entire stay'});
+  if(needLongTrip) tlItems.push({time:isFr?'A 4 mois (si >4 mois de sejour)':'At 4 months (if >4 month stay)',desc:isFr?'Le CSA expire - nouveau CSA emis par un veterinaire dans l\'UE requis':'AHC expires - new AHC from an EU veterinarian required'});
+  tlItems.push({time:isFr?'Au retour au Canada':'On return to Canada',desc:isFr?'Passeport EU accepte comme preuve vaccination. Chiens >3 mois: vaccin antirabique valide requis.':'EU Pet Passport accepted as proof of vaccination. Dogs >3 months: valid rabies vaccine required.'});
+
+  document.getElementById('tl-title').textContent=isFr?'Calendrier de preparation':'Preparation timeline';
+  document.getElementById('timeline').innerHTML=tlItems.map(t=>`<div class="tl-item"><div class="tl-time">${t.time}</div><div class="tl-desc">${t.desc}</div></div>`).join('');
+
+  // Step cards
+  const steps=[];
+
+  steps.push({cls:'step-critical',icon:'&#128058;',
+    en:{title:'Microchip — ISO 11784/11785 standard REQUIRED',body:'Your pet must have an ISO-standard microchip (15 digits, 134.2 kHz) implanted <strong>before</strong> the rabies vaccine. This is the most critical rule: if the vaccine was given before microchipping, the EU will reject the vaccination — you must start over with a new chip, new vaccine, and a new 21-day wait. The chip number must match exactly on all documents — a single digit difference can result in denial of entry.'},
+    fr:{title:'Micropuce — norme ISO 11784/11785 OBLIGATOIRE',body:'Votre animal doit avoir une micropuce ISO (15 chiffres, 134,2 kHz) implantee <strong>avant</strong> le vaccin antirabique. C\'est la regle la plus critique: si le vaccin a ete administre avant la micropuce, l\'UE rejettera la vaccination - vous devez recommencer. Le numero de puce doit correspondre exactement sur tous les documents.'}
+  });
+
+  steps.push({cls:'step-critical',icon:'&#128138;',
+    en:{title:'Rabies vaccine — 21-day waiting period',body:'Rabies vaccination must be administered <strong>after</strong> microchip implantation. A mandatory 21-day waiting period must pass before the pet can enter the EU. If your pet already has a valid rabies vaccine administered after the chip was implanted, you are good to go — no new vaccine needed until expiry.'},
+    fr:{title:'Vaccin antirabique — delai d\'attente de 21 jours',body:'Le vaccin antirabique doit etre administre <strong>apres</strong> l\'implantation de la micropuce. Un delai d\'attente obligatoire de 21 jours doit s\'ecouler avant l\'entree dans l\'UE. Si votre animal a deja un vaccin valide administre apres la puce, vous etes en ordre - pas besoin de nouveau vaccin jusqu\'a expiration.'}
+  });
+
+  steps.push({cls:'step-critical',icon:'&#128196;',
+    en:{title:'Animal Health Certificate (AHC) — 10-day window',body:'The AHC must be issued by an <strong>official authorized veterinarian</strong> no earlier than 10 days before arrival in the EU. Not all vets are licensed for this — call ahead. After entry into the EU, the AHC is valid for 4 months or until the rabies vaccine expires (whichever comes first). Once in the EU, get an EU Pet Passport from any EU vet — it replaces the AHC for the rest of your stay.'},
+    fr:{title:'Certificat Sanitaire Animal (CSA) — fenetre de 10 jours',body:'Le CSA doit etre emis par un <strong>veterinaire officiel autorise</strong> au maximum 10 jours avant l\'arrivee dans l\'UE. Pas tous les vets sont autorises - appelez a l\'avance. Apres l\'entree dans l\'UE, le CSA est valide 4 mois. Des votre arrivee, obtenez un Passeport Europeen pour Animal aupres d\'un vet UE - il remplace le CSA pour le reste du sejour.'}
+  });
+
+  steps.push({cls:'step-ok',icon:'&#128216;',
+    en:{title:'Non-commercial movement declaration',body:'You must be able to confirm that your pet is traveling with you for personal reasons and is not being sold or transferred. This is a simple declaration — your vet can include it in the AHC or as a separate document.'},
+    fr:{title:'Declaration de deplacement non commercial',body:'Vous devez pouvoir confirmer que votre animal voyage avec vous pour des raisons personnelles et n\'est pas vendu ni cede. C\'est une simple declaration - votre vet peut l\'inclure dans le CSA ou comme document separe.'}
+  });
+
+  if(needTapeworm) steps.push({cls:'step-warn',icon:'&#127807;',
+    en:{title:'Tapeworm treatment REQUIRED — Finland, Ireland, Malta, Norway',body:'Your itinerary includes one or more of these countries. Your <strong>dog</strong> must receive an approved tapeworm treatment (praziquantel or equivalent) from a veterinarian between <strong>24 and 120 hours</strong> before arrival in each of these countries. The timing is precise and must be recorded on the health certificate. This is a quick, inexpensive treatment but missing the window means denial of entry.'},
+    fr:{title:'Traitement antiparasitaire OBLIGATOIRE — Finlande, Irlande, Malte, Norvege',body:'Votre itineraire comprend un ou plusieurs de ces pays. Votre <strong>chien</strong> doit recevoir un traitement antiparasitaire approuve (praziquantel ou equivalent) d\'un veterinaire entre <strong>24 et 120 heures</strong> avant l\'arrivee dans chacun de ces pays. Le calendrier est precis et doit etre inscrit sur le certificat. Rapide et peu couteux mais rater la fenetre = refus d\'entree.'}
+  });
+
+  if(needLongTrip) steps.push({cls:'step-warn',icon:'&#128197;',
+    en:{title:'Trip over 4 months — second AHC required',body:'Your AHC is valid for 4 months from EU entry. For longer trips, you must have a <strong>new AHC issued by an EU-licensed veterinarian</strong> before the first one expires. Plan ahead: identify a veterinarian in the country where you will be when the 4-month mark approaches. The EU Pet Passport you obtain on arrival will remain valid and can be updated by any EU vet.'},
+    fr:{title:'Voyage de plus de 4 mois — deuxieme CSA requis',body:'Votre CSA est valide 4 mois a partir de l\'entree dans l\'UE. Pour les sejours plus longs, vous devez avoir un <strong>nouveau CSA emis par un veterinaire autorise UE</strong> avant l\'expiration du premier. Planifiez: identifiez un veterinaire dans le pays ou vous serez au moment de la marque des 4 mois.'}
+  });
+
+  if(needBreedCheck) steps.push({cls:'step-warn',icon:'&#9888;&#65039;',
+    en:{title:'Restricted breed — verify before entry to Germany and France',body:'Germany and France have breed-specific legislation for certain dog breeds (including pit bull types, American Staffordshire Terriers, Rottweilers, and others depending on the country). Rules vary by state in Germany. Contact the embassy or consulate of your destination countries for current requirements. Some breeds may require muzzling or leash rules in public.'},
+    fr:{title:'Race restreinte — verifiez avant l\'entree en Allemagne et en France',body:'L\'Allemagne et la France ont une legislation sur les races specifiques pour certaines races de chiens. Les regles varient par Etat en Allemagne. Contactez l\'ambassade ou le consulat de vos pays de destination pour les exigences actuelles. Certaines races peuvent necessiter une museliere ou des regles de laisse en public.'}
+  });
+
+  if(needMorocco) steps.push({cls:'step-warn',icon:'&#127474;&#127462;',
+    en:{title:'Morocco — different rules apply',body:'Morocco is not part of the EU pet travel system. Different rules apply and requirements can change. <strong>Contact the Moroccan embassy or consulate</strong> before your trip for current pet import requirements. Do not assume EU documentation is sufficient for Morocco entry.'},
+    fr:{title:'Maroc — regles differentes s\'appliquent',body:'Le Maroc ne fait pas partie du systeme de voyage des animaux de l\'UE. Des regles differentes s\'appliquent. <strong>Contactez l\'ambassade ou le consulat du Maroc</strong> avant votre voyage pour les exigences actuelles d\'importation d\'animaux.'}
+  });
+
+  if(hasStray) steps.push({cls:'step-warn',icon:'&#128054;',
+    en:{title:'Stray dog risk — Greece, Albania, Balkans',body:'Your itinerary includes areas with known stray or semi-feral dog populations. Keep your pet on a leash at all times in rural areas. Greece has the highest documented stray dog risk in Europe. Never approach stray dogs and keep food secured. Incidents are rare but do happen.'},
+    fr:{title:'Risque chiens errants — Grece, Albanie, Balkans',body:'Votre itineraire comprend des zones avec des populations de chiens errants ou semi-sauvages connues. Gardez votre animal en laisse en tout temps dans les zones rurales. La Grece a le risque de chiens errants le plus eleve documente en Europe. N\'approchez jamais les chiens errants et securisez la nourriture.'}
+  });
+
+  steps.push({cls:'step-info',icon:'&#127964;',
+    en:{title:'Campground tips for traveling with pets',body:'Most European campgrounds accept pets but require proof of vaccination — keep a copy of the AHC or EU Pet Passport handy at check-in. Never leave your pet unattended in a parked RV in summer — temperatures inside can reach dangerous levels within minutes. Many aires and stellplatz also welcome pets.'},
+    fr:{title:'Conseils camping avec animaux',body:'La plupart des campings europeens acceptent les animaux mais exigent une preuve de vaccination - gardez une copie du CSA ou du Passeport Europeen accessible a l\'arrivee. Ne laissez jamais votre animal sans surveillance dans un VR stationne en ete - les temperatures peuvent atteindre des niveaux dangereux en quelques minutes.'}
+  });
+
+  document.getElementById('stepCards').innerHTML=steps.map(s=>`
+    <div class="step-card ${s.cls}">
+      <div class="step-header"><span class="step-icon">${s.icon}</span><span class="step-title">${isFr?s.fr.title:s.en.title}</span></div>
+      <div class="step-body">${isFr?s.fr.body:s.en.body}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('countryResults').innerHTML='';
+  res.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+renderCountries();
+</script>
+
+<script>document.getElementById("nav-pets").classList.add("active");</script>
+</body>
+</html>
