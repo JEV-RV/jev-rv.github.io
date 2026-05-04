@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jev-rv.github.io/sitemap.xml
