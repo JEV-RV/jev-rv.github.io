@@ -59,12 +59,13 @@ a{color:var(--blue);text-decoration:none}
 .card-body{padding:1.25rem}
 
 /* ── PARAMS ── */
-.params-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+/* Single column inside the sticky left panel — no room for 2 cols at 42% */
+.params-grid{display:grid;grid-template-columns:1fr;gap:.85rem}
 .param-group{display:flex;flex-direction:column;gap:4px}
 .param-group label{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;line-height:1.3}
 .range-row{display:flex;align-items:center;gap:8px}
 .range-row input[type=range]{flex:1;accent-color:var(--blue)}
-.range-val{font-size:13px;font-weight:500;min-width:62px;text-align:right;color:var(--text)}
+.range-val{font-size:13px;font-weight:500;min-width:52px;text-align:right;color:var(--text);white-space:nowrap}
 .pct-warning{font-size:11px;color:var(--red);margin-top:4px}
 .pct-ok{font-size:11px;color:var(--green);margin-top:4px}
 
@@ -128,7 +129,6 @@ a{color:var(--blue);text-decoration:none}
   .workspace{grid-template-columns:1fr;gap:1rem}
   .col-left{position:static;max-height:none;overflow:visible}
   .results-grid{grid-template-columns:repeat(3,1fr)}
-  .params-grid{grid-template-columns:1fr}
   .breakdown-table{font-size:11px}
 }
 @media(max-width:440px){
@@ -233,7 +233,7 @@ a{color:var(--blue);text-decoration:none}
             <div class="range-row"><input type="range" min="50000" max="300000" step="5000" id="roroval" value="175000"><span class="range-val" id="v-roroval">€175k</span></div>
           </div>
           <!-- Surcharge — full width inside left col grid -->
-          <div class="param-group" style="grid-column:1/-1;border-top:0.5px solid var(--border);padding-top:.85rem;margin-top:.1rem">
+          <div class="param-group" style="border-top:0.5px solid var(--border);padding-top:.85rem;margin-top:.1rem">
             <label id="lbl-surcharge">🌐 RoRo surcharge (Opt 1 only)</label>
             <div class="range-row"><input type="range" min="0" max="35" step="1" id="surcharge" value="20"><span class="range-val" id="v-surcharge">+20%</span></div>
             <div class="surcharge-banner" id="surcharge-banner">USTR Recovery Fee (Nov 2025). Community-validated: ~+23% on a recent IVSS return shipment (May 2026). Set to 0% for pre-surcharge baseline. Always get a current quote from IVSS / SeaBridge.</div>
