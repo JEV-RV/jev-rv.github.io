@@ -301,7 +301,12 @@ a{color:var(--blue);text-decoration:none}
             <div class="range-row"><input type="range" min="0" max="35" step="1" id="surcharge" value="20"><span class="range-val" id="v-surcharge">+20%</span></div>
             <div class="surcharge-banner" id="surcharge-banner">USTR Recovery Fee (Nov 2025). Community-validated: ~+23% on a recent IVSS return shipment (May 2026). Set to 0% for pre-surcharge baseline. Always get a current quote from IVSS / SeaBridge.</div>
           </div>
-
+          <!-- P2P inspection cost slider -->
+          <div class="param-group" style="border-top:0.5px solid var(--border);padding-top:.85rem;margin-top:.85rem">
+            <label id="lbl-p2p-inspect">🔍 P2P inspection level</label>
+            <div class="range-row"><input type="range" min="0" max="2" step="1" id="p2p-inspect" value="1"><span class="range-val" id="v-p2p-inspect">€500</span></div>
+            <div class="surcharge-banner">P2P only — you cannot inspect the RV before arrival. Level 0: trust blindly (€0, risky). Level 1: remote mechanic inspection + 2-day arrival buffer (€500). Level 2: worst case — poor condition on arrival, replacement delay (€900).</div>
+          </div>
 
         </div>
         <div id="pct-status" class="pct-ok" style="margin-top:8px"></div>
@@ -508,10 +513,12 @@ const L={
     'bev-title':'Break-even — cost by trip duration',
     'breakdown-title':'Cost breakdown by category',
     opts:['Ship RV (RoRo)','RV Rental (Pro)','Time-Sharing','Buy & Sell','Car + Hotels','P2P Rental'],
-    rows:['Transport / shipping','RV acquisition / rental','Insurance','Accommodation','Fuel, tolls & vehicle','Daily living','Flights & transfers','GRAND TOTAL'],
+    rows:['Transport / shipping','RV acquisition / rental','B&S resale return trip','P2P inspection / delay','Insurance','Accommodation','Fuel, tolls & vehicle','Daily living','Flights & transfers','GRAND TOTAL'],
     'pct-ok':'✅ Accommodation mix: 100%',
     'pct-warn':p=>`⚠️ Mix ${p}% — must total 100%`,
     'winner':'Best value',
+    'lbl-p2p-inspect':'🔍 P2P inspection level',
+    'bs-resale-note':'Includes estimated return trip to EU for resale (~€2,500: flight + 10d accomm + per diem). Cost if sale delayed beyond Schengen exit.',
     'note':(n,d,min,name)=>`Trip: ${n} nights · Average: €${d}/night · Best: ${name} at €${min.toLocaleString()}`,
     'ts-unavail':w=>`❌ Time-Sharing unavailable: ${w} weeks needed, cap is 7 wk/yr. Needs ${Math.ceil(w/7)} subscriptions.`,
     'ts-warn':km=>`⚠️ Time-Sharing: km overage likely (~€${km.toLocaleString()}) — very few km/week included.`,
@@ -547,10 +554,12 @@ const L={
     'bev-title':'Seuil de rentabilité — coût selon la durée',
     'breakdown-title':'Détail des coûts par catégorie',
     opts:['Expédition VR (RoRo)','Location VR (Pro)','Temps partagé','Achat & Vente','Voiture + Hôtels','Location P2P'],
-    rows:['Transport / expédition','Acquisition / location VR','Assurance','Hébergement','Carburant, péages & véhicule','Vie quotidienne','Vols & transferts','TOTAL GÉNÉRAL'],
+    rows:['Transport / expédition','Acquisition / location VR','Retour revente A&V','Inspection / délai P2P','Assurance','Hébergement','Carburant, péages & véhicule','Vie quotidienne','Vols & transferts','TOTAL GÉNÉRAL'],
     'pct-ok':'✅ Mix hébergement : 100%',
     'pct-warn':p=>`⚠️ Mix ${p}% — doit totaliser 100%`,
     'winner':'Meilleur prix',
+    'lbl-p2p-inspect':"🔍 Niveau d'inspection P2P",
+    'bs-resale-note':'Inclut le voyage retour estimé en Europe pour la revente (~2 500 € : vol + 10j hébergement + per diem). Coût si la vente est retardée au-delà du départ Schengen.',
     'note':(n,d,min,name)=>`Voyage : ${n} nuits · Moyenne : €${d}/nuit · Meilleure : ${name} à €${min.toLocaleString()}`,
     'ts-unavail':w=>`❌ Temps partagé non dispo : ${w} sem. requises, max 7 sem/an. Nécessite ${Math.ceil(w/7)} souscriptions.`,
     'ts-warn':km=>`⚠️ Temps partagé : km excédentaires (~€${km.toLocaleString()}) — très peu de km inclus/semaine.`,
@@ -592,7 +601,7 @@ function setLang(l){
 
 // ── Core cost engine ──────────────────────────────────────────────────────────
 function calcOpts(schNights,totalNights,p){
-  const {diesel,paire,pcamp,grocery,resto,activ,sm,roroSurcharge}=p;
+  const {diesel,paire,pcamp,grocery,resto,activ,sm,roroSurcharge,p2pInspect}=p;
   const km=36,conso=12.5,fpd=(km/100)*conso*diesel;
   const avgN=paire*14+Math.max(0,pcamp)*35*sm.camp;
   const ttax=3.0;
@@ -619,14 +628,19 @@ function calcOpts(schNights,totalNights,p){
   const t3x=t3base; // extrapolated for chart dashed line
 
   // Opt4 Buy&Sell
-  const t4=13000+1800+Math.round(accommSch*0.85)+Math.round(schNights*fpd+schNights*tollCar)+Math.round(dl)+fl_o;
+  // +2,500€ resale return trip: flight back to EU (~800€) + accomm 10d (~900€) + per diem (~800€)
+  // Conservative estimate; could be higher if sale takes >2 weeks
+  const bsResaleTrip = 2500;
+  const t4=13000+bsResaleTrip+1800+Math.round(accommSch*0.85)+Math.round(schNights*fpd+schNights*tollCar)+Math.round(dl)+fl_o;
 
   // Opt5 Car+Hotels
   const livH=totalNights*(resto*1.75+activ+misc+laundry);
   const t5=Math.round(schNights*40*sm.car+1800)+1100+Math.round(totalNights*105*sm.hotel)+Math.round(schNights*35*(9/100)*diesel*0.55+schNights*tollCar)+Math.round(livH)+fl_o;
 
   // Opt6 P2P
-  const t6=Math.round(schNights*130*sm.p2p+Math.round((schNights/90)*800))+1100+Math.round(accommSch*0.92)+Math.round(schNights*fpd*0.85+schNights*tollCar)+Math.round(dl)+fl_o;
+  // Inspection cost: 0=trust(€0), 1=remote inspection+buffer(€500), 2=worst-case delay(€900)
+  const p2pInspCost = [0, 500, 900][Math.min(2, Math.max(0, p2pInspect||0))];
+  const t6=Math.round(schNights*130*sm.p2p+Math.round((schNights/90)*800))+1100+p2pInspCost+Math.round(accommSch*0.92)+Math.round(schNights*fpd*0.85+schNights*tollCar)+Math.round(dl)+fl_o;
 
   return {t1,t2,t3,t3x,t4,t5,t6,tsU};
 }
@@ -793,6 +807,8 @@ function compute(){
   document.getElementById('v-activ').textContent='€'+activ;
   document.getElementById('v-roroval').textContent='€'+Math.round(rvVal/1000)+'k';
   document.getElementById('v-surcharge').textContent=roroSurcharge>0?'+'+roroSurcharge+'%':'0%';
+  const p2pLabels=['€0','€500','€900'];
+  document.getElementById('v-p2p-inspect').textContent=p2pLabels[p2pInspect]||'€0';
 
   const wPct=100-v('paire')-v('pcamp');
   const pEl=document.getElementById('pct-status');
@@ -800,7 +816,8 @@ function compute(){
   pEl.className=wPct<0?'pct-warning':'pct-ok';
   pEl.textContent=wPct<0?Lc['pct-warn'](Math.round(v('paire')+v('pcamp'))):Lc['pct-ok']+(wPct>0?` (wild/free: ${Math.round(wPct)}%)`:'');
 
-  const params={diesel,paire,pcamp,grocery,resto,activ,rvVal,sm,roroSurcharge};
+  const p2pInspect=v('p2p-inspect');
+  const params={diesel,paire,pcamp,grocery,resto,activ,rvVal,sm,roroSurcharge,p2pInspect};
   const res=calcOpts(schNights,totalNights,params);
   const TS_MAX=49,tsU=res.tsU,tsW=Math.ceil(schNights/7);
   const tsKm=Math.round((schNights/TS_MAX)*1960);
@@ -819,12 +836,12 @@ function compute(){
     {transport:roro,rv:0,insurance:ins1,accomm:Math.round(accommAll),fuel:Math.round(totalNights*fpd+totalNights*tollRV),living:Math.round(dl),flights:3700,unavail:false,note:roroSurcharge>0?Lc['surcharge-active'](roroSurcharge):null},
     {transport:0,rv:Math.round(schNights*200*sm.rental+700),insurance:1100,accomm:Math.round(accommSch*0.92),fuel:Math.round(schNights*fpd*0.85+schNights*tollRV),living:Math.round(dl),flights:2450,unavail:false,note:null},
     {transport:0,rv:tsU?null:Math.round(5800+tsKm+600),insurance:tsU?null:1100,accomm:tsU?null:Math.round(accommSch*0.45),fuel:tsU?null:Math.round(schNights*fpd*0.72),living:tsU?null:Math.round(dl*(schNights/Math.max(totalNights,1))),flights:tsU?null:2450,unavail:tsU,note:tsU?Lc['ts-unavail'](tsW):(schNights>28?Lc['ts-warn'](tsKm):Lc['ts-ok'])},
-    {transport:0,rv:13000,insurance:1800,accomm:Math.round(accommSch*0.85),fuel:Math.round(schNights*fpd+schNights*tollCar),living:Math.round(dl),flights:2450,unavail:false,note:null},
+    {transport:0,rv:13000,resale:2500,insurance:1800,accomm:Math.round(accommSch*0.85),fuel:Math.round(schNights*fpd+schNights*tollCar),living:Math.round(dl),flights:2450,unavail:false,note:Lc['bs-resale-note']},
     {transport:0,rv:Math.round(schNights*40*sm.car+1800),insurance:1100,accomm:Math.round(totalNights*105*sm.hotel),fuel:Math.round(schNights*35*(9/100)*diesel*0.55+schNights*tollCar),living:Math.round(totalNights*(resto*1.75+activ+misc+laundry)),flights:2450,unavail:false,note:null},
-    {transport:0,rv:Math.round(schNights*130*sm.p2p+Math.round((schNights/90)*800)),insurance:1100,accomm:Math.round(accommSch*0.92),fuel:Math.round(schNights*fpd*0.85+schNights*tollCar),living:Math.round(dl),flights:2450,unavail:false,note:schNights>60?Lc['p2p-warn']:null},
+    {transport:0,rv:Math.round(schNights*130*sm.p2p+Math.round((schNights/90)*800)),inspect:p2pInspect>0?[0,500,900][p2pInspect]:0,insurance:1100,accomm:Math.round(accommSch*0.92),fuel:Math.round(schNights*fpd*0.85+schNights*tollCar),living:Math.round(dl),flights:2450,unavail:false,note:schNights>60?Lc['p2p-warn']:null},
   ];
 
-  function tot(o){if(o.unavail)return Infinity;return(o.transport||0)+(o.rv||0)+(o.insurance||0)+(o.accomm||0)+(o.fuel||0)+(o.living||0)+(o.flights||0);}
+  function tot(o){if(o.unavail)return Infinity;return(o.transport||0)+(o.rv||0)+(o.resale||0)+(o.inspect||0)+(o.insurance||0)+(o.accomm||0)+(o.fuel||0)+(o.living||0)+(o.flights||0);}
   const totals=opts.map(tot);
   const avail=totals.filter(t=>t!==Infinity);
   const minT=Math.min(...avail),minIdx=totals.indexOf(minT);
@@ -872,7 +889,7 @@ function compute(){
   ib.innerHTML=lines.map(l=>`<div style="margin-bottom:3px">${l}</div>`).join('');
 
   // Breakdown table (full width)
-  const rk=['transport','rv','insurance','accomm','fuel','living','flights'];
+  const rk=['transport','rv','resale','inspect','insurance','accomm','fuel','living','flights'];
   document.getElementById('breakdownTable').innerHTML=`<thead><tr>
     <th>Category</th>
     ${optNames.map((n,i)=>`<th class="num" style="color:${COLORS[i]}">${n.split(' ').slice(0,2).join('<br>')}</th>`).join('')}
@@ -1066,7 +1083,7 @@ function renderIntangibles(minCostIdx, minCostTotal, totals, opts) {
   const bsData = {
     en: {
       title:"Buy & Sell — what the numbers don't show",
-      badge:'Not in the €13k total',
+      badge:'Not fully in the model',
       alert: cost => `⚠️ Buy & Sell is currently the lowest financial cost (€${cost.toLocaleString()}). Before choosing it, review the friction factors below — they are real costs that don\'t show up in the numbers.`,
       items:[
         {icon:'📋',text:'Registration agency (Harro/ECC/ERC) — 2–4 week setup, paperwork, €2,500 in fees before you can drive legally'},
@@ -1081,7 +1098,7 @@ function renderIntangibles(minCostIdx, minCostTotal, totals, opts) {
     },
     fr: {
       title:'Achat & Vente — ce que les chiffres ne montrent pas',
-      badge:'Non inclus dans les 13k€',
+      badge:'Partiellement hors modèle',
       alert: cost => `⚠️ L'Achat & Vente est actuellement le coût financier le plus bas (€${cost.toLocaleString()}). Avant de choisir cette option, consultez les facteurs de friction ci-dessous — ce sont des coûts réels qui n'apparaissent pas dans les chiffres.`,
       items:[
         {icon:'📋',text:"Agence d'immatriculation (Harro/ECC/ERC) — 2–4 semaines de setup, paperasse, 2 500 € de frais avant de conduire légalement"},
@@ -1140,7 +1157,7 @@ function renderIntangibles(minCostIdx, minCostTotal, totals, opts) {
 ['nights1','nights2','nonsch','diesel','paire','pcamp','grocery','resto','activ','roroval','surcharge'].forEach(id=>{
   document.getElementById(id).addEventListener('input',compute);
 });
-['ibed','ilogistic','iadmin'].forEach(id=>{
+['ibed','ilogistic','iadmin','p2p-inspect'].forEach(id=>{
   document.getElementById(id).addEventListener('input',compute);
 });
 window.addEventListener('resize',compute);
