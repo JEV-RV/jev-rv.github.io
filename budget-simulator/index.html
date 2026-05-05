@@ -302,46 +302,7 @@ a{color:var(--blue);text-decoration:none}
             <div class="surcharge-banner" id="surcharge-banner">USTR Recovery Fee (Nov 2025). Community-validated: ~+23% on a recent IVSS return shipment (May 2026). Set to 0% for pre-surcharge baseline. Always get a current quote from IVSS / SeaBridge.</div>
           </div>
 
-          <!-- ── INTANGIBLE PRIORITY SLIDERS ── -->
-          <div class="intang-sliders-block">
-            <div class="intang-sliders-title" id="lbl-intang-section">✨ My travel priorities</div>
-            <div class="intang-slider-item">
-              <div class="intang-slider-header">
-                <span class="intang-slider-icon">🛏️</span>
-                <label class="intang-slider-label" id="lbl-ibed">Bed &amp; comfort</label>
-                <span class="intang-chip" id="chip-ibed">Low</span>
-              </div>
-              <div class="range-row">
-                <input type="range" min="0" max="2" step="1" id="ibed" value="0" class="intang-range">
-                <div class="intang-impact" id="impact-ibed"></div>
-              </div>
-              <div class="intang-hint" id="hint-ibed">Your own mattress vs unknown bed quality for 90+ nights</div>
-            </div>
-            <div class="intang-slider-item">
-              <div class="intang-slider-header">
-                <span class="intang-slider-icon">🧳</span>
-                <label class="intang-slider-label" id="lbl-ilogistic">Logistics &amp; continuity</label>
-                <span class="intang-chip" id="chip-ilogistic">Low</span>
-              </div>
-              <div class="range-row">
-                <input type="range" min="0" max="2" step="1" id="ilogistic" value="0" class="intang-range">
-                <div class="intang-impact" id="impact-ilogistic"></div>
-              </div>
-              <div class="intang-hint" id="hint-ilogistic">No suitcases, same setup between blocks, zero repacking fatigue</div>
-            </div>
-            <div class="intang-slider-item">
-              <div class="intang-slider-header">
-                <span class="intang-slider-icon">📋</span>
-                <label class="intang-slider-label" id="lbl-iadmin">Admin &amp; simplicity</label>
-                <span class="intang-chip" id="chip-iadmin">Low</span>
-              </div>
-              <div class="range-row">
-                <input type="range" min="0" max="2" step="1" id="iadmin" value="0" class="intang-range">
-                <div class="intang-impact" id="impact-iadmin"></div>
-              </div>
-              <div class="intang-hint" id="hint-iadmin">Registration agencies, unknown history, resale pressure, re-purchase cost</div>
-            </div>
-          </div>
+
         </div>
         <div id="pct-status" class="pct-ok" style="margin-top:8px"></div>
 
@@ -364,7 +325,7 @@ a{color:var(--blue);text-decoration:none}
 
     <!-- Bar chart + result notes -->
     <div class="card">
-      <div class="card-header"><span>📊</span><h2 id="results-title-bar">Current trip totals</h2></div>
+      <div class="card-header"><span>📊</span><h2 id="results-title-bar">Financial cost — current trip</h2></div>
       <div class="card-body">
         <div class="chart-wrap"><div class="bar-chart" id="barChart"></div></div>
         <div class="note-box" id="noteBox" style="margin-top:.85rem"></div>
@@ -422,8 +383,9 @@ a{color:var(--blue);text-decoration:none}
 
   <!-- Right: adjusted ranking -->
   <div class="card intang-ranking-card">
-    <div class="card-header"><span>📊</span><h2 id="intang-rank-title">Adjusted ranking — priorities applied</h2></div>
+    <div class="card-header"><span>✨</span><h2 id="intang-rank-title">Adjusted ranking — priorities applied</h2></div>
     <div class="card-body">
+      <p style="font-size:11px;color:var(--text2);margin-bottom:.75rem;line-height:1.5" id="intang-rank-subtitle">Financial cost + penalty for options that score poorly on your priorities. Sliders at Low = identical to financial ranking.</p>
       <div id="intangRankingBars"></div>
       <div class="intang-rank-legend">
         <span class="intang-leg-item"><span class="intang-leg-swatch base"></span><span id="leg-base">Financial cost</span></span>
@@ -1051,13 +1013,34 @@ function renderAdjustedRanking(totals, opts) {
 
   // Note
   const noteEl = document.getElementById('intang-rank-note');
+  const subtitleEl = document.getElementById('intang-rank-subtitle');
+
+  // Find financial winner (rank by raw cost)
+  const financialWinner = [...items].filter(x=>!x.unavail).sort((a,b)=>a.raw-b.raw)[0];
+  const adjustedWinner  = sorted.filter(x=>!x.unavail)[0];
+  const rankingChanged  = financialWinner && adjustedWinner && financialWinner.i !== adjustedWinner.i;
+
   if (!anyActive) {
     noteEl.textContent = lang==='en'
-      ? 'Move the priority sliders on the left to see how your preferences adjust the ranking.'
-      : 'Bougez les sliders de priorité à gauche pour voir comment vos préférences ajustent le classement.';
+      ? 'All sliders at Low = financial ranking only. Move sliders to apply your priorities.'
+      : 'Tous les sliders à Faible = classement financier pur. Bougez les sliders pour appliquer vos priorités.';
+    if (subtitleEl) subtitleEl.style.display = 'none';
   } else {
-    const penLabel = lang==='en'?'Striped portion = intangibles penalty not reflected in the base cost.':'La portion hachurée = pénalité intangibles non reflétée dans le coût financier.';
-    noteEl.textContent = penLabel;
+    if (subtitleEl) subtitleEl.style.display = 'block';
+    if (rankingChanged) {
+      const finName  = optNames[financialWinner.i].split(' ').slice(0,2).join(' ');
+      const adjName  = optNames[adjustedWinner.i].split(' ').slice(0,2).join(' ');
+      noteEl.textContent = lang==='en'
+        ? `⚡ Ranking changed: ${finName} wins on cost alone — ${adjName} wins when your priorities are applied.`
+        : `⚡ Classement modifié : ${finName} gagne sur le coût seul — ${adjName} gagne avec vos priorités appliquées.`;
+      noteEl.style.color = '#8a5a00';
+    } else {
+      const winName = optNames[adjustedWinner.i].split(' ').slice(0,2).join(' ');
+      noteEl.textContent = lang==='en'
+        ? `${winName} remains the best option even with your priorities applied.`
+        : `${winName} reste la meilleure option même avec vos priorités appliquées.`;
+      noteEl.style.color = '';
+    }
   }
 
   // Title
