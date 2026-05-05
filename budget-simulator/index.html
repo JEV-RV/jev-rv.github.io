@@ -149,21 +149,22 @@ a{color:var(--blue);text-decoration:none}
 .intang-hint{font-size:10px;color:var(--text3);line-height:1.4;margin-top:2px}
 
 /* ── ADJUSTED RANKING (right col card) ── */
-.intang-rank-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.intang-rank-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .intang-rank-num{font-size:11px;font-weight:500;color:var(--text3);width:14px;flex-shrink:0;text-align:right}
 .intang-rank-name{font-size:11px;color:var(--text);min-width:88px;flex-shrink:0;line-height:1.3}
-.intang-rank-bars{flex:1;display:flex;height:12px;border-radius:3px;overflow:hidden;position:relative}
-.intank-bar-base{height:100%;transition:width .4s ease;flex-shrink:0}
-.intank-bar-penalty{height:100%;transition:width .4s ease;flex-shrink:0;
-  background:repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(0,0,0,0.18) 2px,rgba(0,0,0,0.18) 4px)}
-.intang-rank-total{font-size:11px;font-weight:500;min-width:52px;text-align:right;white-space:nowrap}
+.intang-rank-bars{flex:1;height:14px;background:rgba(0,0,0,0.05);border-radius:3px;overflow:hidden;position:relative}
+.intank-bar-total{height:100%;display:flex;border-radius:3px;overflow:hidden;transition:width .45s ease}
+.intank-bar-base{height:100%;transition:width .45s ease;flex-shrink:0}
+.intank-bar-penalty{height:100%;transition:width .45s ease;flex-shrink:0;
+  background:repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(0,0,0,0.22) 2px,rgba(0,0,0,0.22) 4px)}
+.intang-rank-total{font-size:11px;font-weight:500;min-width:72px;text-align:right;white-space:nowrap;line-height:1.3}
 .intang-rank-badge{font-size:9px;padding:1px 5px;border-radius:3px;margin-left:3px;white-space:nowrap}
 .intang-rank-unavail{font-size:10px;color:var(--text3);font-style:italic}
-.intang-rank-legend{display:flex;gap:12px;margin-top:.6rem}
+.intang-rank-legend{display:flex;gap:12px;margin-top:.65rem;padding-top:.65rem;border-top:0.5px solid var(--border)}
 .intang-leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text3)}
-.intang-leg-swatch{width:14px;height:8px;border-radius:2px;flex-shrink:0}
-.intang-leg-swatch.base{background:#378ADD;opacity:.8}
-.intang-leg-swatch.penalty{background:repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(0,0,0,0.25) 2px,rgba(0,0,0,0.25) 4px);background-color:#378ADD}
+.intang-leg-swatch{width:16px;height:9px;border-radius:2px;flex-shrink:0}
+.intang-leg-swatch.base{background:#378ADD;opacity:.78}
+.intang-leg-swatch.penalty{background-image:repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(0,0,0,0.25) 2px,rgba(0,0,0,0.25) 4px);background-color:#378ADD}
 .intang-rank-note{font-size:11px;color:var(--text3);margin-top:.5rem;line-height:1.5}
 
 /* ── INTANGIBLES FULL-WIDTH ── */
@@ -1007,25 +1008,38 @@ function renderAdjustedRanking(totals, opts) {
       html += `<div class="intang-rank-row">
         <div class="intang-rank-num">${rank+1}</div>
         <div class="intang-rank-name" style="color:${COLORS[item.i]}">${optNames[item.i].split(' ').slice(0,2).join(' ')}</div>
+        <div class="intang-rank-bars" style="flex:1"></div>
         <div class="intang-rank-unavail">N/A</div>
       </div>`;
       return;
     }
-    const basePct  = Math.round((item.raw / maxAdj) * 100);
-    const penPct   = Math.round((item.penalty / maxAdj) * 100);
+    // Total bar width = adjusted / maxAdj (fills proportionally to worst option)
+    // Inside that bar: base portion and penalty portion split by their share
+    const totalPct = Math.round((item.adjusted / maxAdj) * 100);
     const isWinner = rank === 0;
     const hasPen   = item.penalty > 0;
+    // Share of base vs penalty within the total bar
+    const baseFrac = item.raw / item.adjusted;        // e.g. 0.85
+    const penFrac  = item.penalty / item.adjusted;    // e.g. 0.15
+    const penBar = hasPen
+      ? `<div class="intank-bar-penalty" style="width:${Math.round(penFrac*100)}%;background-color:${COLORS[item.i]};height:100%"></div>`
+      : '';
+    const adjNote = hasPen
+      ? `<span style="font-size:9px;color:var(--text3);display:block;margin-top:1px">(+${fmt(item.penalty)})</span>`
+      : '';
+    const winBadge = isWinner
+      ? `<span class="intang-rank-badge" style="background:${COLORS[item.i]};color:#fff">${Lc.winner}</span>`
+      : '';
     html += `<div class="intang-rank-row">
       <div class="intang-rank-num">${rank+1}</div>
       <div class="intang-rank-name" style="color:${COLORS[item.i]}">${optNames[item.i].split(' ').slice(0,2).join('<br>')}</div>
       <div class="intang-rank-bars">
-        <div class="intank-bar-base" style="width:${basePct}%;background:${COLORS[item.i]};opacity:.75"></div>
-        ${hasPen?`<div class="intank-bar-penalty" style="width:${penPct}%;background-color:${COLORS[item.i]}"></div>`:''}
+        <div class="intank-bar-total" style="width:${totalPct}%;display:flex;height:100%">
+          <div class="intank-bar-base" style="width:${Math.round(baseFrac*100)}%;background:${COLORS[item.i]};opacity:.78;height:100%"></div>
+          ${penBar}
+        </div>
       </div>
-      <div class="intang-rank-total" style="color:${COLORS[item.i]}">
-        ${fmt(item.adjusted)}
-        ${isWinner?`<span class="intang-rank-badge" style="background:${COLORS[item.i]};color:#fff">${Lc.winner}</span>`:''}
-      </div>
+      <div class="intang-rank-total" style="color:${COLORS[item.i]}">${fmt(item.adjusted)}${winBadge}${adjNote}</div>
     </div>`;
   });
 
