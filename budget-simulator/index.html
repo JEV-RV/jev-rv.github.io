@@ -124,45 +124,68 @@ a{color:var(--blue);text-decoration:none}
 
 .disclaimer{font-size:11px;color:var(--text3);margin-top:1.5rem;line-height:1.5;padding:12px 16px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface)}
 
-/* ── INTANGIBLES ── */
-.intang-scores-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:.5rem}
-.intang-score-card{border-radius:8px;padding:10px 8px;text-align:center;border:0.5px solid var(--border)}
-.intang-score-card .isc-name{font-size:9.5px;font-weight:500;text-transform:uppercase;letter-spacing:.03em;line-height:1.3;margin-bottom:6px}
-.intang-score-card .isc-pct{font-size:20px;font-weight:500;margin-bottom:4px}
-.intang-score-card .isc-bar-wrap{height:5px;background:rgba(0,0,0,0.07);border-radius:3px;overflow:hidden;margin-bottom:3px}
-.intang-score-card .isc-bar{height:100%;border-radius:3px;transition:width .5s ease}
-.intang-score-card .isc-label{font-size:9px;opacity:.65}
-/* Intangibles criteria table */
-.intang-table{width:100%;border-collapse:collapse;font-size:12px}
-.intang-table th{text-align:left;padding:6px 8px;border-bottom:1.5px solid var(--border);color:var(--text2);font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
-.intang-table th.rot{vertical-align:bottom}
-.intang-table td{padding:6px 8px;border-bottom:0.5px solid var(--border);vertical-align:middle}
-.intang-table tr:last-child td{font-weight:500;background:var(--surface2);border-bottom:none}
-.intang-table .crit-name{font-size:12px;color:var(--text);max-width:200px;line-height:1.4}
-.intang-table .crit-why{font-size:10px;color:var(--text3);line-height:1.4;margin-top:2px}
-.intang-table .star-cell{text-align:center;white-space:nowrap}
-/* Star bars */
-.star-bar{display:inline-flex;gap:2px;align-items:center}
-.star-pip{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.star-pip.full{opacity:1}
-.star-pip.empty{opacity:.15}
-/* Buy & Sell friction box */
-.bs-friction{background:#fff8e8;border:1px solid #e8c84a;border-radius:10px;padding:1rem 1.25rem}
-.bs-friction .bs-title{font-size:13px;font-weight:500;color:#6b4a00;margin-bottom:.65rem;display:flex;align-items:center;gap:6px}
-.bs-friction .bs-warn{display:inline-block;background:#e8c84a;color:#3a2600;font-size:10px;font-weight:500;padding:2px 8px;border-radius:4px}
-.bs-friction-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem .85rem}
-.bs-item{display:flex;gap:7px;align-items:flex-start;font-size:12px;color:#5a3c00;line-height:1.5}
-.bs-item .bs-icon{font-size:14px;flex-shrink:0;margin-top:1px}
-.bs-winner-alert{background:#fde8e8;border:1px solid #e8a0a0;border-radius:8px;padding:.75rem 1rem;margin-bottom:.85rem;font-size:13px;color:#7a1010;display:flex;gap:8px;align-items:flex-start;line-height:1.5}
-/* 5 questions */
-.q-item{display:flex;gap:10px;align-items:flex-start}
-.q-num{width:22px;height:22px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--text2);flex-shrink:0;margin-top:1px}
-.q-text{font-size:13px;color:var(--text);line-height:1.55}
-.q-text em{font-style:normal;color:var(--text2);font-size:12px}
+/* ── INTANGIBLES ROW (side-by-side, below workspace) ── */
+.intang-row{display:grid;grid-template-columns:42% 1fr;gap:1.5rem;margin-bottom:1.5rem;align-items:start}
+.intang-sliders-card{}
+.intang-ranking-card{}
+.intang-row-intro{font-size:12px;color:var(--text2);margin-bottom:.85rem;line-height:1.5}
 
-@media(max-width:700px){
-  .intang-scores-grid{grid-template-columns:repeat(3,1fr)}
+/* ── INTANGIBLE SLIDERS ── */
+.intang-sliders-block{border-top:0.5px solid var(--border);padding-top:.85rem;margin-top:.85rem}
+.intang-sliders-title{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem}
+.intang-slider-item{margin-bottom:.85rem}
+.intang-slider-header{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.intang-slider-icon{font-size:13px;line-height:1;flex-shrink:0}
+.intang-slider-label{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;flex:1}
+.intang-chip{font-size:10px;font-weight:500;padding:1px 7px;border-radius:10px;white-space:nowrap;transition:background .2s,color .2s}
+.intang-chip.level-0{background:#e4f5ec;color:#1a7a4a}
+.intang-chip.level-1{background:#fdf0d5;color:#8a5a00}
+.intang-chip.level-2{background:#fde8e8;color:#a02020}
+.intang-range{accent-color:var(--blue);flex:1}
+.intang-impact{font-size:10px;font-weight:500;min-width:44px;text-align:right;white-space:nowrap}
+.intang-impact.level-0{color:#1a7a4a}
+.intang-impact.level-1{color:#8a5a00}
+.intang-impact.level-2{color:#a02020}
+.intang-hint{font-size:10px;color:var(--text3);line-height:1.4;margin-top:2px}
+
+/* ── ADJUSTED RANKING (right col card) ── */
+.intang-rank-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.intang-rank-num{font-size:11px;font-weight:500;color:var(--text3);width:14px;flex-shrink:0;text-align:right}
+.intang-rank-name{font-size:11px;color:var(--text);min-width:88px;flex-shrink:0;line-height:1.3}
+.intang-rank-bars{flex:1;display:flex;height:12px;border-radius:3px;overflow:hidden;position:relative}
+.intank-bar-base{height:100%;transition:width .4s ease;flex-shrink:0}
+.intank-bar-penalty{height:100%;transition:width .4s ease;flex-shrink:0;
+  background:repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(0,0,0,0.18) 2px,rgba(0,0,0,0.18) 4px)}
+.intang-rank-total{font-size:11px;font-weight:500;min-width:52px;text-align:right;white-space:nowrap}
+.intang-rank-badge{font-size:9px;padding:1px 5px;border-radius:3px;margin-left:3px;white-space:nowrap}
+.intang-rank-unavail{font-size:10px;color:var(--text3);font-style:italic}
+.intang-rank-legend{display:flex;gap:12px;margin-top:.6rem}
+.intang-leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text3)}
+.intang-leg-swatch{width:14px;height:8px;border-radius:2px;flex-shrink:0}
+.intang-leg-swatch.base{background:#378ADD;opacity:.8}
+.intang-leg-swatch.penalty{background:repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(0,0,0,0.25) 2px,rgba(0,0,0,0.25) 4px);background-color:#378ADD}
+.intang-rank-note{font-size:11px;color:var(--text3);margin-top:.5rem;line-height:1.5}
+
+/* ── INTANGIBLES FULL-WIDTH ── */
+.q-five-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem .85rem}
+.q-item{display:flex;gap:8px;align-items:flex-start}
+.q-num{width:20px;height:20px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--text2);flex-shrink:0;margin-top:2px}
+.q-text{font-size:12px;color:var(--text);line-height:1.5}
+.q-text em{font-style:normal;color:var(--text3);font-size:11px;display:block;margin-top:2px}
+/* Buy & Sell friction */
+.bs-friction{background:#fff8e8;border:0.5px solid #e8c84a;border-radius:10px;padding:1rem 1.25rem}
+.bs-friction-title{font-size:13px;font-weight:500;color:#6b4a00;margin-bottom:.65rem;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.bs-warn-badge{background:#e8c84a;color:#3a2600;font-size:10px;font-weight:500;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.bs-friction-grid{display:grid;grid-template-columns:1fr 1fr;gap:.4rem .85rem}
+.bs-item{display:flex;gap:6px;align-items:flex-start;font-size:12px;color:#5a3c00;line-height:1.5}
+.bs-icon{font-size:13px;flex-shrink:0;margin-top:1px}
+.bs-winner-alert{background:#fde8e8;border:0.5px solid #e8a0a0;border-radius:8px;padding:.7rem 1rem;margin-bottom:.85rem;font-size:12px;color:#7a1010;display:flex;gap:8px;align-items:flex-start;line-height:1.5}
+
+@media(max-width:760px){
+  .intang-row{grid-template-columns:1fr}
+  .q-five-grid{grid-template-columns:1fr}
   .bs-friction-grid{grid-template-columns:1fr}
+  .intang-rank-name{min-width:70px}
 }
 @media(max-width:760px){
   .workspace{grid-template-columns:1fr;gap:1rem}
@@ -277,6 +300,47 @@ a{color:var(--blue);text-decoration:none}
             <div class="range-row"><input type="range" min="0" max="35" step="1" id="surcharge" value="20"><span class="range-val" id="v-surcharge">+20%</span></div>
             <div class="surcharge-banner" id="surcharge-banner">USTR Recovery Fee (Nov 2025). Community-validated: ~+23% on a recent IVSS return shipment (May 2026). Set to 0% for pre-surcharge baseline. Always get a current quote from IVSS / SeaBridge.</div>
           </div>
+
+          <!-- ── INTANGIBLE PRIORITY SLIDERS ── -->
+          <div class="intang-sliders-block">
+            <div class="intang-sliders-title" id="lbl-intang-section">✨ My travel priorities</div>
+            <div class="intang-slider-item">
+              <div class="intang-slider-header">
+                <span class="intang-slider-icon">🛏️</span>
+                <label class="intang-slider-label" id="lbl-ibed">Bed &amp; comfort</label>
+                <span class="intang-chip" id="chip-ibed">Low</span>
+              </div>
+              <div class="range-row">
+                <input type="range" min="0" max="2" step="1" id="ibed" value="0" class="intang-range">
+                <div class="intang-impact" id="impact-ibed"></div>
+              </div>
+              <div class="intang-hint" id="hint-ibed">Your own mattress vs unknown bed quality for 90+ nights</div>
+            </div>
+            <div class="intang-slider-item">
+              <div class="intang-slider-header">
+                <span class="intang-slider-icon">🧳</span>
+                <label class="intang-slider-label" id="lbl-ilogistic">Logistics &amp; continuity</label>
+                <span class="intang-chip" id="chip-ilogistic">Low</span>
+              </div>
+              <div class="range-row">
+                <input type="range" min="0" max="2" step="1" id="ilogistic" value="0" class="intang-range">
+                <div class="intang-impact" id="impact-ilogistic"></div>
+              </div>
+              <div class="intang-hint" id="hint-ilogistic">No suitcases, same setup between blocks, zero repacking fatigue</div>
+            </div>
+            <div class="intang-slider-item">
+              <div class="intang-slider-header">
+                <span class="intang-slider-icon">📋</span>
+                <label class="intang-slider-label" id="lbl-iadmin">Admin &amp; simplicity</label>
+                <span class="intang-chip" id="chip-iadmin">Low</span>
+              </div>
+              <div class="range-row">
+                <input type="range" min="0" max="2" step="1" id="iadmin" value="0" class="intang-range">
+                <div class="intang-impact" id="impact-iadmin"></div>
+              </div>
+              <div class="intang-hint" id="hint-iadmin">Registration agencies, unknown history, resale pressure, re-purchase cost</div>
+            </div>
+          </div>
         </div>
         <div id="pct-status" class="pct-ok" style="margin-top:8px"></div>
 
@@ -312,6 +376,65 @@ a{color:var(--blue);text-decoration:none}
 </div><!-- /workspace -->
 
 <!-- ══════════════════════════════════════════════════════
+     INTANGIBLES ROW — sliders left, adjusted ranking right
+     Same visual level as workspace, but independent frame
+     ══════════════════════════════════════════════════════ -->
+<div class="intang-row">
+
+  <!-- Left: 3 priority sliders -->
+  <div class="card intang-sliders-card">
+    <div class="card-header"><span>✨</span><h2 id="lbl-intang-section">My travel priorities</h2></div>
+    <div class="card-body">
+      <p class="intang-row-intro" id="intang-row-intro">How much do these non-financial factors matter to you? Adjust to see the impact on the ranking.</p>
+      <div class="intang-slider-item">
+        <div class="intang-slider-header">
+          <span class="intang-slider-icon">🛏️</span>
+          <label class="intang-slider-label" id="lbl-ibed">Bed &amp; comfort</label>
+          <span class="intang-chip level-0" id="chip-ibed">Low</span>
+          <span class="intang-impact level-0" id="impact-ibed">+0%</span>
+        </div>
+        <div class="range-row"><input type="range" min="0" max="2" step="1" id="ibed" value="0" class="intang-range"></div>
+        <div class="intang-hint" id="hint-ibed">Your own mattress vs unknown bed for 90+ nights</div>
+      </div>
+      <div class="intang-slider-item">
+        <div class="intang-slider-header">
+          <span class="intang-slider-icon">🧳</span>
+          <label class="intang-slider-label" id="lbl-ilogistic">Logistics &amp; continuity</label>
+          <span class="intang-chip level-0" id="chip-ilogistic">Low</span>
+          <span class="intang-impact level-0" id="impact-ilogistic">+0%</span>
+        </div>
+        <div class="range-row"><input type="range" min="0" max="2" step="1" id="ilogistic" value="0" class="intang-range"></div>
+        <div class="intang-hint" id="hint-ilogistic">No suitcases, same setup between blocks, zero repacking fatigue</div>
+      </div>
+      <div class="intang-slider-item">
+        <div class="intang-slider-header">
+          <span class="intang-slider-icon">📋</span>
+          <label class="intang-slider-label" id="lbl-iadmin">Admin &amp; simplicity</label>
+          <span class="intang-chip level-0" id="chip-iadmin">Low</span>
+          <span class="intang-impact level-0" id="impact-iadmin">+0%</span>
+        </div>
+        <div class="range-row"><input type="range" min="0" max="2" step="1" id="iadmin" value="0" class="intang-range"></div>
+        <div class="intang-hint" id="hint-iadmin">Agencies, unknown vehicle history, resale deadline pressure</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: adjusted ranking -->
+  <div class="card intang-ranking-card">
+    <div class="card-header"><span>📊</span><h2 id="intang-rank-title">Adjusted ranking — priorities applied</h2></div>
+    <div class="card-body">
+      <div id="intangRankingBars"></div>
+      <div class="intang-rank-legend">
+        <span class="intang-leg-item"><span class="intang-leg-swatch base"></span><span id="leg-base">Financial cost</span></span>
+        <span class="intang-leg-item"><span class="intang-leg-swatch penalty"></span><span id="leg-penalty">Priority penalty</span></span>
+      </div>
+      <div class="intang-rank-note" id="intang-rank-note">Move the sliders to see your priorities reflected in the ranking.</div>
+    </div>
+  </div>
+
+</div><!-- /intang-row -->
+
+<!-- ══════════════════════════════════════════════════════
      FULL-WIDTH SECTION
      Results cards + Breakdown table
      ══════════════════════════════════════════════════════ -->
@@ -339,34 +462,23 @@ a{color:var(--blue);text-decoration:none}
 </div>
 
 <!-- ══════════════════════════════════════════════════════
-     INTANGIBLES — Quality of Travel
+     INTANGIBLES — Buy & Sell friction + 5 questions
      ══════════════════════════════════════════════════════ -->
 <div class="fullwidth">
   <div class="card">
     <div class="card-header"><span>✨</span><h2 id="intang-title">Intangibles — quality of travel</h2></div>
     <div class="card-body">
 
-      <!-- Intro text -->
-      <p id="intang-intro" style="font-size:13px;color:var(--text2);margin-bottom:1.25rem;line-height:1.6">Numbers tell only part of the story. These scores reflect real factors that affect 90–180 days of travel comfort, logistics, and freedom. Source: Guide 11 — <em>Intangibles &amp; Quality</em> grid (weighted v2).</p>
-
-      <!-- Score bars — 6 options -->
-      <div id="intangScores" style="margin-bottom:1.5rem"></div>
-
-      <!-- Criteria detail table -->
-      <div style="overflow-x:auto;margin-bottom:1.25rem">
-        <table class="breakdown-table" id="intangTable"></table>
-      </div>
-
       <!-- Buy & Sell friction panel — shown dynamically -->
-      <div id="bs-friction-box" style="display:none"></div>
+      <div id="bs-friction-box" style="margin-bottom:1.25rem"></div>
 
-      <!-- 5 questions -->
-      <div style="background:var(--surface2);border-radius:8px;padding:1rem 1.25rem;border-left:3px solid var(--border)">
-        <div style="font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.65rem" id="intang-q-title">5 questions to discuss before deciding</div>
-        <div id="intangQuestions" style="display:flex;flex-direction:column;gap:.6rem"></div>
+      <!-- 5 questions — 2-col grid -->
+      <div class="q-five-block">
+        <div style="font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem" id="intang-q-title">5 questions to discuss before deciding</div>
+        <div id="intangQuestions" class="q-five-grid"></div>
       </div>
 
-      <p style="font-size:11px;color:var(--text3);margin-top:.85rem;line-height:1.5" id="intang-source">Source: Guide 11 §2 — The Intangibles. Scores: Guide 11 §3 Intangibles table + Excel Intangibles &amp; Quality sheet (weighted grid v2, Jack-Éric Vandenbroucke). Buy &amp; Sell friction factors: Guide 11 §4 + Excel RV Options §2 commentary.</p>
+      <p style="font-size:11px;color:var(--text3);margin-top:.85rem;line-height:1.5" id="intang-source">Source: Guide 11 §2 + §3 + Excel Intangibles &amp; Quality (weighted grid v2). Intangible penalty: 0%/15%/30% applied to options scoring below their max per criterion, weighted by slider importance.</p>
     </div>
   </div>
 </div>
@@ -374,7 +486,7 @@ a{color:var(--blue);text-decoration:none}
 <div class="disclaimer" id="disclaimer">
   <strong>Disclaimer:</strong> Informational and planning purposes only. No responsibility for errors or post-publication regulatory changes. Not financial or legal advice. Always verify costs with service providers.<br>
   <strong>Sources:</strong> Guide 11 Excel model v11 · McRent/Indie Campers 2025–2026 · Yescapa/Goboony P2P · IVSS/SeaBridge RoRo quotations · camping-quart.fr · USTR Recovery Fee (Nov 2025) — community-validated ~+23% on Halifax↔EU route (LTV group, May 2026).<br>
-  <strong>v5.0</strong> — Intangibles / quality-of-travel section · Buy &amp; Sell friction panel · Two-column layout · RoRo surcharge slider · Real-time break-even chart · P2P Option 6 · Time-Sharing 7-week cap · Corrected Buy &amp; Sell / Option 1 insurance · Seasonal pricing · PL toll rates.<br><br>
+  <strong>v6.0</strong> — Interactive intangibles sliders (bed/logistics/admin) with adjusted ranking · Buy &amp; Sell friction panel · Two-column layout · RoRo surcharge slider · Real-time break-even chart · P2P Option 6 · Time-Sharing 7-week cap · Corrected Buy &amp; Sell / Option 1 insurance · Seasonal pricing · PL toll rates.<br><br>
   © 2026 Jack-Éric Vandenbroucke · <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
 </div>
 
@@ -818,219 +930,220 @@ function compute(){
   drawBev(params,schNights);
 
   // Intangibles section
-  renderIntangibles(minIdx, minT);
+  renderIntangibles(minIdx, minT, totals, opts);
 }
 
-// ── Intangibles data (Guide 11 §3 + Excel Intangibles & Quality sheet v2) ────
-// Scores out of 5 stars per criterion per option
-// Opts index: 0=RoRo, 1=Rental, 2=TS, 3=Buy&Sell, 4=Car+Hotel, 5=P2P
-// null = N/A for that option/criterion
-const INTANG_CRITERIA = [
-  {
-    key:'comfort',
-    en:{ name:'Comfort — bed & setup', why:'After 30–60 nights, your own mattress is not a detail — it defines the trip. Generic RVs vary widely.' },
-    fr:{ name:'Confort — lit & équipement', why:'Après 30–60 nuits, votre propre matelas n\'est pas un détail — il définit le voyage.' },
-    scores:[5,2,2,3,4,2],   // RoRo,Rental,TS,B&S,Car,P2P
-    weight:5
-  },
-  {
-    key:'logistics',
-    en:{ name:'Logistics — no suitcases', why:'Skol stored in Europe: lock it in December, open it in April — same kitchen, same cables, same clothes in the same drawers.' },
-    fr:{ name:'Logistique — sans valises', why:'Skol entreposé en Europe : fermé en décembre, ouvert en avril — même cuisine, mêmes câbles, mêmes vêtements aux mêmes places.' },
-    scores:[5,1,1,3,5,1],
-    weight:5
-  },
-  {
-    key:'flexibility',
-    en:{ name:'Flexibility — km & pace', why:'Time-Sharing: km caps (~300–400/week) restrict spontaneity. Rental: daily limits apply. RoRo/B&S/Car: unlimited km.' },
-    fr:{ name:'Flexibilité — km & rythme', why:'Temps partagé : plafonds km (~300–400/semaine) limitent la spontanéité. Location : limites journalières. RoRo/A&V/Voiture : km illimités.' },
-    scores:[5,3,2,5,5,3],
-    weight:2
-  },
-  {
-    key:'cityaccess',
-    en:{ name:'City-centre access', why:'Motorhomes >3.5t face ZTL/LEZ zones, height barriers, scarce parking. Car: maximum access anywhere.' },
-    fr:{ name:'Accès centre-ville', why:'Motorhomes >3,5t : zones ZTL/LEZ, hauteur limitée, stationnement rare. Voiture : accès maximal partout.' },
-    scores:[3,3,3,4,5,3],
-    weight:2
-  },
-  {
-    key:'continuity',
-    en:{ name:'Continuity — 2nd block ready', why:'Exclusive to own RV stored in EU between blocks. No re-purchase, no re-packing. Compounds with every additional trip.' },
-    fr:{ name:'Continuité — 2e bloc prêt', why:'Exclusif au VR propre entreposé en UE entre les blocs. Pas de rachat, pas de repackage. L\'avantage s\'accumule à chaque voyage.' },
-    scores:[5,null,null,2,null,null],
-    weight:4
-  },
-  {
-    key:'financial',
-    en:{ name:'Financial — repeat trips', why:'RoRo: fixed cost amortized over trips. B&S: full re-purchase each time. Rental/P2P: always full price. TS: 7-week cap, not scalable.' },
-    fr:{ name:'Financier — voyages répétés', why:'RoRo : coût fixe amorti sur les voyages. A&V : rachat complet à chaque fois. Location/P2P : toujours plein tarif. TS : plafond 7 sem, non scalable.' },
-    scores:[5,2,4,3,3,2],
-    weight:3
-  },
-];
+// ── Intangible priority state ────────────────────────────────────────────────
+// Slider values: 0=Low(0%), 1=Moderate(15%), 2=High(30%)
+// Intang quality scores per option [RoRo,Rental,TS,B&S,Car+Hotel,P2P] 0-1
+// Higher = option performs BETTER on this criterion → less penalty
+const INTANG_SCORES = {
+  //                    RoRo  Rental  TS     B&S    Car    P2P
+  bed:       [1.00,  0.40,  0.40,  0.55,  0.80,  0.40],
+  logistics: [1.00,  0.20,  0.20,  0.60,  1.00,  0.20],
+  admin:     [0.90,  0.85,  0.70,  0.20,  0.95,  0.75],
+};
+// Penalty multipliers per level
+const INTANG_PENALTY = [0, 0.15, 0.30];
+const INTANG_LABELS  = {
+  en: {0:'Low',  1:'Moderate', 2:'High'},
+  fr: {0:'Faible',1:'Moyen',   2:'Fort'},
+};
+const INTANG_IMPACTS = {
+  en: {0:'+0%',1:'+15%',2:'+30%'},
+  fr: {0:'+0%',1:'+15%',2:'+30%'},
+};
 
-// Weighted total scores (out of 100%)
-// Weight × score for each criterion, sum / max_possible × 100
-function calcIntangScore(optIdx){
-  let sum=0, max=0;
-  INTANG_CRITERIA.forEach(c=>{
-    const s=c.scores[optIdx];
-    if(s===null) return; // N/A: skip both sum and max for that criterion
-    sum += c.weight * s;
-    max += c.weight * 5;
-  });
-  return max===0 ? 0 : Math.round((sum/max)*100);
+// Compute adjusted cost for option i, given raw cost
+function calcAdjusted(rawCost, optIdx) {
+  const bedW  = v('ibed');
+  const logW  = v('ilogistic');
+  const admW  = v('iadmin');
+  // Penalty = rate × (1 - quality_score) × raw_cost
+  const bedP  = INTANG_PENALTY[bedW]  * (1 - INTANG_SCORES.bed[optIdx])      * rawCost;
+  const logP  = INTANG_PENALTY[logW]  * (1 - INTANG_SCORES.logistics[optIdx]) * rawCost;
+  const admP  = INTANG_PENALTY[admW]  * (1 - INTANG_SCORES.admin[optIdx])     * rawCost;
+  return { raw: rawCost, penalty: Math.round(bedP + logP + admP), adjusted: Math.round(rawCost + bedP + logP + admP) };
 }
 
-// Buy & Sell friction points (Guide 11 §4 + Excel RV Options §2 commentary)
-const BS_FRICTION = {
-  en:{
-    title:'Buy & Sell — what the numbers don\'t show',
-    items:[
-      { icon:'📋', text:'Registration agency required (Harro/ECC/ERC) — paperwork, delays, 2–4 week setup before you can drive legally' },
-      { icon:'⚖️', text:'Non-EU resident purchase process — complex VAT rules, foreign buyer restrictions in some countries' },
-      { icon:'🔍', text:'Unknown vehicle history — zero mechanical background, no customization, 2–3 day learning curve on systems' },
-      { icon:'⏱️', text:'Schengen clock pressure — must sell before departure deadline; delayed resale converts to ownership + storage + extra flights' },
-      { icon:'💸', text:'Re-purchase at every trip — no amortization, full acquisition cost each time (€13,000 net per trip)' },
-      { icon:'🧳', text:'Suitcase logistics × 2 — empty RV on purchase, empty again on resale; Montreal storage required between trips' },
-      { icon:'🏦', text:'Resale risk — market exposure, condition risk, dealer commission up to 15% if private sale fails before departure' },
-      { icon:'🛏️', text:'Mattress lottery — unknown bed quality for 90 nights; no guarantee after 30–60 nights of travel fatigue' },
-    ],
-    alert:'⚠️ Buy & Sell is currently the lowest-cost option for your configuration. Before choosing it, review the 8 friction factors below — they are not reflected in the €{cost} total.',
-  },
-  fr:{
-    title:'Achat & Vente — ce que les chiffres ne montrent pas',
-    items:[
-      { icon:'📋', text:'Agence d\'immatriculation obligatoire (Harro/ECC/ERC) — paperasse, délais, 2–4 semaines de setup avant de pouvoir conduire légalement' },
-      { icon:'⚖️', text:'Processus d\'achat non-résident UE — règles TVA complexes, restrictions acheteurs étrangers selon les pays' },
-      { icon:'🔍', text:'Historique véhicule inconnu — zéro background mécanique, pas de personnalisation, 2–3 jours d\'apprentissage des systèmes' },
-      { icon:'⏱️', text:'Pression horloge Schengen — doit être vendu avant le départ; revente tardive = propriété + entreposage + vols supplémentaires' },
-      { icon:'💸', text:'Rachat à chaque voyage — aucune amortisation, coût d\'acquisition complet à chaque fois (13 000 € net/voyage)' },
-      { icon:'🧳', text:'Logistique valises × 2 — vider le VR à l\'achat, revider à la vente; entreposage Montréal requis entre les voyages' },
-      { icon:'🏦', text:'Risque de revente — exposition marché, risque état, commission revendeur jusqu\'à 15% si vente privée échoue avant départ' },
-      { icon:'🛏️', text:'Loterie matelas — qualité inconnue pour 90 nuits; aucune garantie après 30–60 nuits de fatigue de voyage' },
-    ],
-    alert:'⚠️ L\'Achat & Vente est actuellement l\'option la moins chère pour votre configuration. Avant de le choisir, lisez les 8 facteurs de friction ci-dessous — ils ne sont pas reflétés dans le total de €{cost}.',
-  }
-};
+function getChipClass(val) {
+  return ['level-0','level-1','level-2'][val];
+}
 
-const INTANG_QUESTIONS = {
-  en:[
-    { q:'Will you miss your own bed after 3 weeks?', note:'If yes — or if your partner\'s answer is yes — ship your own RV. This is the single most underestimated factor in long-term travel comfort.' },
-    { q:'Does your RV have features you\'ve spent months perfecting?', note:'A specific electrical system, cooking setup, storage organization. If you\'ve customized your RV for your life — you\'ll feel its absence every single day.' },
-    { q:'How do you feel about unpacking and repacking every 90 days?', note:'With your own RV stored in Europe: everything stays in place. Lock it in January, open it in April — same clothes in the same drawers.' },
-    { q:'Is this a once-in-a-lifetime trip or the beginning of a habit?', note:'If you go once: Buy & Sell is often most economical. If you go twice or more: shipping your own RV becomes the best financial and practical choice.' },
-    { q:'What does your travel partner say when you show them the budget?', note:'"How much does it cost?" → start with Section 3 (numbers). "Will we be comfortable?" → start here and let the numbers confirm the decision.' },
-  ],
-  fr:[
-    { q:'Votre lit va-t-il vous manquer après 3 semaines ?', note:'Si oui — ou si c\'est la réponse de votre partenaire — expédiez votre propre VR. C\'est le facteur le plus sous-estimé du confort en voyage longue durée.' },
-    { q:'Votre VR a-t-il des équipements que vous avez mis des mois à perfectionner ?', note:'Système électrique, cuisine, organisation du rangement. Si vous avez personnalisé votre VR pour votre vie — vous sentirez son absence chaque jour.' },
-    { q:'Comment vous sentez-vous à l\'idée de défaire et refaire les valises tous les 90 jours ?', note:'Avec votre VR entreposé en Europe : tout reste en place. Fermé en janvier, ouvert en avril — mêmes vêtements aux mêmes endroits.' },
-    { q:'Est-ce un voyage d\'une vie ou le début d\'une habitude ?', note:'Si une seule fois : Achat & Vente est souvent le plus économique. Si deux fois ou plus : expédier votre VR devient le meilleur choix financier et pratique.' },
-    { q:'Que dit votre partenaire de voyage en voyant le budget ?', note:'"Combien ça coûte ?" → commencez par la Section 3 (chiffres). "Sera-t-on confortables ?" → commencez ici et laissez les chiffres confirmer.' },
-  ]
-};
-
-// ── Render intangibles section ────────────────────────────────────────────────
-function renderIntangibles(minCostIdx, minCostTotal){
+// Update the 3 slider chips + impact labels
+function updateIntangChips() {
   const Lc = L[lang];
+  ['ibed','ilogistic','iadmin'].forEach(id => {
+    const val = v(id);
+    const chip = document.getElementById('chip-'+id);
+    const impact = document.getElementById('impact-'+id);
+    chip.textContent = INTANG_LABELS[lang][val];
+    chip.className = 'intang-chip ' + getChipClass(val);
+    impact.textContent = INTANG_IMPACTS[lang][val];
+    impact.className = 'intang-impact ' + getChipClass(val);
+  });
+}
+
+// Render the adjusted ranking bars in right col
+function renderAdjustedRanking(totals, opts) {
+  const Lc = L[lang];
+  const anyActive = v('ibed')>0 || v('ilogistic')>0 || v('iadmin')>0;
+
+  // Build adjusted list
+  const items = [0,1,2,3,4,5].map(i => {
+    if (opts[i].unavail) return { i, raw: Infinity, penalty: 0, adjusted: Infinity, unavail: true };
+    const r = calcAdjusted(totals[i], i);
+    return { i, ...r, unavail: false };
+  });
+
+  // Sort available by adjusted cost
+  const sorted = [...items].sort((a,b) => a.adjusted - b.adjusted);
+  const maxAdj = Math.max(...sorted.filter(x=>!x.unavail).map(x=>x.adjusted));
+
   const optNames = Lc.opts;
-  const scores = [0,1,2,3,4,5].map(calcIntangScore);
-
-  // ── Score cards ──
-  document.getElementById('intangScores').innerHTML = `
-    <div class="intang-scores-grid">
-      ${[0,1,2,3,4,5].map(i=>{
-        const sc=scores[i];
-        const label = sc>=65?'Excellent':sc>=50?'Good':sc>=35?'Fair':'Limited';
-        const labelFr = sc>=65?'Excellent':sc>=50?'Bien':sc>=35?'Passable':'Limité';
-        return `<div class="intang-score-card" style="background:${COLORS_BG[i]};border-color:${COLORS[i]}22">
-          <div class="isc-name" style="color:${COLORS[i]}">${optNames[i]}</div>
-          <div class="isc-pct" style="color:${COLORS[i]}">${sc}%</div>
-          <div class="isc-bar-wrap"><div class="isc-bar" style="width:${sc}%;background:${COLORS[i]}"></div></div>
-          <div class="isc-label" style="color:${COLORS[i]}">${lang==='fr'?labelFr:label}</div>
-        </div>`;
-      }).join('')}
+  let html = '';
+  sorted.forEach((item, rank) => {
+    if (item.unavail) {
+      html += `<div class="intang-rank-row">
+        <div class="intang-rank-num">${rank+1}</div>
+        <div class="intang-rank-name" style="color:${COLORS[item.i]}">${optNames[item.i].split(' ').slice(0,2).join(' ')}</div>
+        <div class="intang-rank-unavail">N/A</div>
+      </div>`;
+      return;
+    }
+    const basePct  = Math.round((item.raw / maxAdj) * 100);
+    const penPct   = Math.round((item.penalty / maxAdj) * 100);
+    const isWinner = rank === 0;
+    const hasPen   = item.penalty > 0;
+    html += `<div class="intang-rank-row">
+      <div class="intang-rank-num">${rank+1}</div>
+      <div class="intang-rank-name" style="color:${COLORS[item.i]}">${optNames[item.i].split(' ').slice(0,2).join('<br>')}</div>
+      <div class="intang-rank-bars">
+        <div class="intank-bar-base" style="width:${basePct}%;background:${COLORS[item.i]};opacity:.75"></div>
+        ${hasPen?`<div class="intank-bar-penalty" style="width:${penPct}%;background-color:${COLORS[item.i]}"></div>`:''}
+      </div>
+      <div class="intang-rank-total" style="color:${COLORS[item.i]}">
+        ${fmt(item.adjusted)}
+        ${isWinner?`<span class="intang-rank-badge" style="background:${COLORS[item.i]};color:#fff">${Lc.winner}</span>`:''}
+      </div>
     </div>`;
+  });
 
-  // ── Criteria table ──
-  const tHead = `<thead><tr>
-    <th style="min-width:160px">${lang==='en'?'Criterion':'Critère'}</th>
-    ${optNames.map((n,i)=>`<th class="star-cell rot" style="color:${COLORS[i]};min-width:60px">${n.split(' ').slice(0,2).join('<br>')}</th>`).join('')}
-    <th style="min-width:120px;color:var(--text3);font-size:10px">${lang==='en'?'Why scores differ':'Pourquoi les scores diffèrent'}</th>
-  </tr></thead>`;
+  document.getElementById('intangRankingBars').innerHTML = html;
 
-  const tBody = INTANG_CRITERIA.map(c=>{
-    const cData = c[lang];
-    return `<tr>
-      <td><div class="crit-name">${cData.name}</div></td>
-      ${[0,1,2,3,4,5].map(i=>{
-        const s=c.scores[i];
-        if(s===null) return `<td class="star-cell" style="color:var(--text3);font-size:11px">—</td>`;
-        // Mini pip bar: 5 pips
-        const pips = Array.from({length:5},(_,p)=>
-          `<span class="star-pip ${p<s?'full':'empty'}" style="background:${COLORS[i]}"></span>`
-        ).join('');
-        return `<td class="star-cell"><div class="star-bar">${pips}</div></td>`;
-      }).join('')}
-      <td style="font-size:11px;color:var(--text2);line-height:1.4">${cData.why}</td>
-    </tr>`;
-  }).join('');
+  // Legend
+  document.getElementById('leg-base').textContent   = lang==='en'?'Financial cost':'Coût financier';
+  document.getElementById('leg-penalty').textContent = lang==='en'?'Priority penalty':'Pénalité priorités';
 
-  // Total row
-  const tTotal = `<tr>
-    <td>${lang==='en'?'Overall weighted score':'Score global pondéré'}</td>
-    ${scores.map((sc,i)=>`<td class="star-cell" style="color:${COLORS[i]};font-size:13px;font-weight:500">${sc}%</td>`).join('')}
-    <td style="font-size:11px;color:var(--text3)">${lang==='en'?'Weighted across 6 criteria — Guide 11 §3':'Pondéré sur 6 critères — Guide 11 §3'}</td>
-  </tr>`;
+  // Note
+  const noteEl = document.getElementById('intang-rank-note');
+  if (!anyActive) {
+    noteEl.textContent = lang==='en'
+      ? 'Move the priority sliders on the left to see how your preferences adjust the ranking.'
+      : 'Bougez les sliders de priorité à gauche pour voir comment vos préférences ajustent le classement.';
+  } else {
+    const penLabel = lang==='en'?'Striped portion = intangibles penalty not reflected in the base cost.':'La portion hachurée = pénalité intangibles non reflétée dans le coût financier.';
+    noteEl.textContent = penLabel;
+  }
 
-  document.getElementById('intangTable').innerHTML = tHead + `<tbody>${tBody}${tTotal}</tbody>`;
+  // Title
+  document.getElementById('intang-rank-title').textContent = lang==='en'
+    ? 'Adjusted ranking — your priorities applied'
+    : 'Classement ajusté — vos priorités appliquées';
+}
+
+// Render Buy & Sell friction + 5 questions (compact)
+function renderIntangibles(minCostIdx, minCostTotal, totals, opts) {
+  const Lc = L[lang];
+
+  // ── Slider chips (always update) ──
+  updateIntangChips();
+
+  // ── Adjusted ranking ──
+  renderAdjustedRanking(totals, opts);
 
   // ── Buy & Sell friction box ──
   const bsBox = document.getElementById('bs-friction-box');
-  const bsData = BS_FRICTION[lang];
-  const isBSWinner = minCostIdx === 3; // Buy&Sell is index 3
+  const isBSWinner = minCostIdx === 3;
 
-  bsBox.style.display = 'block';
-  bsBox.innerHTML = `
-    <div class="bs-friction">
-      ${isBSWinner ? `<div class="bs-winner-alert">
-        <span style="font-size:18px;flex-shrink:0">⚠️</span>
-        <span>${bsData.alert.replace('{cost}', Math.round(minCostTotal).toLocaleString())}</span>
-      </div>` : ''}
-      <div class="bs-title">
-        <span style="font-size:16px">🟦</span>
-        ${bsData.title}
-        <span class="bs-warn">${lang==='en'?'Not in the €13k total':'Non inclus dans le total 13k€'}</span>
-      </div>
-      <div class="bs-friction-grid">
-        ${bsData.items.map(item=>`
-          <div class="bs-item">
-            <span class="bs-icon">${item.icon}</span>
-            <span>${item.text}</span>
-          </div>`).join('')}
-      </div>
-    </div>`;
+  const bsData = {
+    en: {
+      title:"Buy & Sell — what the numbers don't show",
+      badge:'Not in the €13k total',
+      alert: cost => `⚠️ Buy & Sell is currently the lowest financial cost (€${cost.toLocaleString()}). Before choosing it, review the friction factors below — they are real costs that don\'t show up in the numbers.`,
+      items:[
+        {icon:'📋',text:'Registration agency (Harro/ECC/ERC) — 2–4 week setup, paperwork, €2,500 in fees before you can drive legally'},
+        {icon:'⚖️',text:'Non-EU resident purchase — complex VAT rules, foreign buyer restrictions vary by country'},
+        {icon:'🔍',text:'Unknown vehicle history — zero mechanical background, 2–3 day learning curve on unfamiliar systems'},
+        {icon:'⏱️',text:'Schengen clock pressure — must sell before departure; delayed resale converts to ownership + storage + extra flights'},
+        {icon:'💸',text:'Re-purchase every trip — no amortization, full €13k net acquisition cost each time you travel'},
+        {icon:'🧳',text:'Suitcase logistics ×2 — empty RV on purchase, empty again on resale; Montreal storage required between trips'},
+        {icon:'🏦',text:'Resale risk — market exposure, dealer commission up to 15% if private sale fails before your departure date'},
+        {icon:'🛏️',text:'Mattress lottery — unknown bed quality for 90 nights; real fatigue risk after 30–60 nights'},
+      ]
+    },
+    fr: {
+      title:'Achat & Vente — ce que les chiffres ne montrent pas',
+      badge:'Non inclus dans les 13k€',
+      alert: cost => `⚠️ L'Achat & Vente est actuellement le coût financier le plus bas (€${cost.toLocaleString()}). Avant de choisir cette option, consultez les facteurs de friction ci-dessous — ce sont des coûts réels qui n'apparaissent pas dans les chiffres.`,
+      items:[
+        {icon:'📋',text:"Agence d'immatriculation (Harro/ECC/ERC) — 2–4 semaines de setup, paperasse, 2 500 € de frais avant de conduire légalement"},
+        {icon:'⚖️',text:'Achat non-résident UE — règles TVA complexes, restrictions acheteurs étrangers selon les pays'},
+        {icon:'🔍',text:"Historique véhicule inconnu — zéro background mécanique, 2–3 jours d'apprentissage de systèmes inconnus"},
+        {icon:'⏱️',text:'Pression horloge Schengen — doit être vendu avant le départ; revente tardive = propriété + entreposage + vols supplémentaires'},
+        {icon:'💸',text:"Rachat à chaque voyage — pas d'amortisation, coût net de 13k€ complet à chaque voyage"},
+        {icon:'🧳',text:"Logistique valises ×2 — vider à l'achat, revider à la vente; entreposage Montréal requis entre les voyages"},
+        {icon:'🏦',text:"Risque de revente — exposition marché, commission revendeur jusqu'à 15% si vente privée échoue avant le départ"},
+        {icon:'🛏️',text:'Loterie matelas — qualité inconnue pour 90 nuits; risque de fatigue réel après 30–60 nuits'},
+      ]
+    }
+  };
+  const bd = bsData[lang];
 
-  // ── 5 Questions ──
-  const qs = INTANG_QUESTIONS[lang];
-  document.getElementById('intangQuestions').innerHTML = qs.map((q,i)=>`
+  bsBox.innerHTML = `<div class="bs-friction">
+    ${isBSWinner?`<div class="bs-winner-alert"><span style="font-size:16px;flex-shrink:0">⚠️</span><span>${bd.alert(Math.round(minCostTotal))}</span></div>`:''}
+    <div class="bs-friction-title">
+      <span style="font-size:15px">🟦</span>${bd.title}
+      <span class="bs-warn-badge">${bd.badge}</span>
+    </div>
+    <div class="bs-friction-grid">
+      ${bd.items.map(item=>`<div class="bs-item"><span class="bs-icon">${item.icon}</span><span>${item.text}</span></div>`).join('')}
+    </div>
+  </div>`;
+
+  // ── 5 questions ──
+  const qs = {
+    en:[
+      {q:'Will you miss your own bed after 3 weeks?', note:'If yes — ship your own RV. The single most underestimated factor in long-term comfort.'},
+      {q:"Does your RV have features you've spent months perfecting?", note:"Customized electrical, cooking, storage? You'll feel its absence every single day."},
+      {q:'How do you feel about repacking every 90 days?', note:"Own RV stored in EU: lock in January, open in April — same setup, zero fatigue."},
+      {q:'Once-in-a-lifetime or beginning of a habit?', note:'Once: Buy & Sell often cheapest. Twice+: shipping becomes best financial and practical choice.'},
+      {q:'What does your partner say when you show the budget?', note:'"How much?" → start with numbers. "Will we be comfortable?" → start here.'},
+    ],
+    fr:[
+      {q:'Votre lit va-t-il vous manquer après 3 semaines ?', note:'Si oui — expédiez votre propre VR. Le facteur le plus sous-estimé du confort longue durée.'},
+      {q:'Votre VR a-t-il des équipements que vous avez mis des mois à perfectionner ?', note:'Électrique, cuisine, rangement? Vous sentirez son absence chaque jour.'},
+      {q:"Comment vous sentez-vous à l'idée de repackager tous les 90 jours ?", note:'VR entreposé en UE : fermé en janvier, ouvert en avril — même setup, zéro fatigue.'},
+      {q:"Voyage unique ou début d'une habitude ?", note:'Une fois : A&V souvent le moins cher. Deux fois+ : expédier devient le meilleur choix.'},
+      {q:'Que dit votre partenaire en voyant le budget ?', note:'"Combien ça coûte ?" → commencez par les chiffres. "Sera-t-on confortables ?" → commencez ici.'},
+    ]
+  };
+
+  document.getElementById('intangQuestions').innerHTML = qs[lang].map((q,i)=>`
     <div class="q-item">
       <div class="q-num">${i+1}</div>
-      <div class="q-text"><strong style="font-weight:500">${q.q}</strong><br><em>${q.note}</em></div>
+      <div class="q-text"><strong style="font-weight:500">${q.q}</strong><em>${q.note}</em></div>
     </div>`).join('');
 
-  // Update static text labels
-  document.getElementById('intang-title').textContent = lang==='en'?'Intangibles — quality of travel':'Intangibles — qualité du voyage';
-  document.getElementById('intang-intro').innerHTML = lang==='en'
-    ? 'Numbers tell only part of the story. These scores reflect real factors that affect 90–180 days of travel comfort, logistics, and freedom. Source: Guide 11 — <em>Intangibles &amp; Quality</em> grid (weighted v2).'
-    : 'Les chiffres ne racontent qu\'une partie de l\'histoire. Ces scores reflètent les facteurs réels qui affectent 90–180 jours de confort, de logistique et de liberté. Source : Guide 11 — grille <em>Intangibles &amp; Qualité</em> (pondérée v2).';
-  document.getElementById('intang-q-title').textContent = lang==='en'?'5 questions to discuss before deciding':'5 questions à se poser avant de décider';
+  document.getElementById('intang-title').textContent      = lang==='en'?'Intangibles — quality of travel':'Intangibles — qualité du voyage';
+  document.getElementById('intang-q-title').textContent    = lang==='en'?'5 questions to discuss before deciding':'5 questions à se poser avant de décider';
 }
 
-// ── Init ──────────────────────────────────────────────────────────────────────
+// ── Init ──────────────────────────────────────────────────────────────────────// ── Init ──────────────────────────────────────────────────────────────────────
 ['nights1','nights2','nonsch','diesel','paire','pcamp','grocery','resto','activ','roroval','surcharge'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',compute);
+});
+['ibed','ilogistic','iadmin'].forEach(id=>{
   document.getElementById(id).addEventListener('input',compute);
 });
 window.addEventListener('resize',compute);
