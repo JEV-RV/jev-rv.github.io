@@ -200,271 +200,240 @@ a{color:var(--blue);text-decoration:none}
 </style>
 </head>
 <body>
-
 <nav class="tool-nav">
-  <div class="tool-nav-inner">
-    <a href="https://jev-rv.github.io/" id="nav-home"><span class="nav-icon">🏠</span>Home</a>
-    <a href="https://jev-rv.github.io/schengen-rv-simulator/" id="nav-schengen"><span class="nav-icon">🗓️</span>Schengen</a>
-    <a href="https://jev-rv.github.io/budget-simulator/" id="nav-budget"><span class="nav-icon">💶</span>Budget</a>
-    <a href="https://jev-rv.github.io/rv-option-selector/" id="nav-options"><span class="nav-icon">🚐</span>Options</a>
-    <a href="https://jev-rv.github.io/port-selector/" id="nav-port"><span class="nav-icon">⚠️</span>Port</a>
-    <a href="https://jev-rv.github.io/pre-departure-checklist/" id="nav-checklist"><span class="nav-icon">✅</span>Checklist</a>
-    <a href="https://jev-rv.github.io/toll-calculator/" id="nav-tolls"><span class="nav-icon">🛣️</span>Tolls</a>
-    <a href="https://jev-rv.github.io/rhythm-planner/" id="nav-rhythm"><span class="nav-icon">🚐</span>Rhythm</a>
-    <a href="https://jev-rv.github.io/safety-map/" id="nav-safety"><span class="nav-icon">🗺️</span>Safety</a>
-    <a href="https://jev-rv.github.io/app-recommender/" id="nav-apps"><span class="nav-icon">📱</span>Apps</a>
-    <a href="https://jev-rv.github.io/pet-travel-checker/" id="nav-pets"><span class="nav-icon">🐾</span>Pets</a>
-    <a href="https://jev-rv.github.io/getting-started/" id="nav-start"><span class="nav-icon">&#129302;</span>AI&nbsp;Agents</a>
-  </div>
+ <div class="tool-nav-inner">
+ <a href="https://jev-rv.github.io/" id="nav-home"><span class="nav-icon">🏠</span>Home</a>
+ <a href="https://jev-rv.github.io/schengen-rv-simulator/" id="nav-schengen"><span class="nav-icon">🗓️</span>Schengen</a>
+ <a href="https://jev-rv.github.io/budget-simulator/" id="nav-budget"><span class="nav-icon">💶</span>Budget</a>
+ <a href="https://jev-rv.github.io/rv-option-selector/" id="nav-options"><span class="nav-icon">🚐</span>Options</a>
+ <a href="https://jev-rv.github.io/port-selector/" id="nav-port"><span class="nav-icon">⚠️</span>Port</a>
+ <a href="https://jev-rv.github.io/pre-departure-checklist/" id="nav-checklist"><span class="nav-icon">✅</span>Checklist</a>
+ <a href="https://jev-rv.github.io/toll-calculator/" id="nav-tolls"><span class="nav-icon">🛣️</span>Tolls</a>
+ <a href="https://jev-rv.github.io/rhythm-planner/" id="nav-rhythm"><span class="nav-icon">🚐</span>Rhythm</a>
+ <a href="https://jev-rv.github.io/safety-map/" id="nav-safety"><span class="nav-icon">🗺️</span>Safety</a>
+ <a href="https://jev-rv.github.io/app-recommender/" id="nav-apps"><span class="nav-icon">📱</span>Apps</a>
+ <a href="https://jev-rv.github.io/pet-travel-checker/" id="nav-pets"><span class="nav-icon">🐾</span>Pets</a>
+ <a href="https://jev-rv.github.io/getting-started/" id="nav-start"><span class="nav-icon">&#129302;</span>AI&nbsp;Agents</a>
+ </div>
 </nav>
-
 <header class="page-header">
-  <a class="back-link" href="https://jev-rv.github.io/">← Back to all tools</a>
-  <h1 id="h-title">Trip Budget Simulator</h1>
-  <p class="sub" id="h-sub">Realistic cost breakdown for all 6 travel options — validated against the Guide 11 Excel model (v11).</p>
-  <div class="lang-toggle">
-    <button class="lang-btn active" onclick="setLang('en')">EN</button>
-    <button class="lang-btn" onclick="setLang('fr')">FR</button>
-  </div>
+ <a class="back-link" href="https://jev-rv.github.io/">← Back to all tools</a>
+ <h1 id="h-title">Trip Budget Simulator</h1>
+ <p class="sub" id="h-sub">Realistic cost breakdown for all 6 travel options — validated against the Guide 11 Excel model (v11).</p>
+ <div class="lang-toggle">
+ <button class="lang-btn active" onclick="setLang('en')">EN</button>
+ <button class="lang-btn" onclick="setLang('fr')">FR</button>
+ </div>
 </header>
-
 <main class="main">
-
 <!-- ══════════════════════════════════════════════════════
-     TWO-COLUMN WORKSPACE
-     Left: parameters (sticky)   Right: charts
-     ══════════════════════════════════════════════════════ -->
+ TWO-COLUMN WORKSPACE
+ Left: parameters (sticky) Right: charts
+ ══════════════════════════════════════════════════════ -->
 <div class="workspace">
-
-  <!-- ── LEFT COLUMN — Parameters ── -->
-  <div class="col-left">
-    <div class="card">
-      <div class="card-header"><span>⚙️</span><h2 id="params-title">Trip parameters</h2></div>
-      <div class="card-body">
-
-        <!-- Season selector -->
-        <div style="margin-bottom:.85rem">
-          <div style="font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem" id="lbl-season">Travel season</div>
-          <div class="season-row">
-            <button class="season-btn" id="btn-low" onclick="setSeason('low')">❄️ <span id="s-lbl-low">Winter</span><span class="season-tag tag-low" id="s-tag-low">Oct–Apr</span></button>
-            <button class="season-btn active" id="btn-mid" onclick="setSeason('mid')">🌤️ <span id="s-lbl-mid">Shoulder</span><span class="season-tag tag-mid" id="s-tag-mid">May–Jun·Sep</span></button>
-            <button class="season-btn" id="btn-high" onclick="setSeason('high')">☀️ <span id="s-lbl-high">High</span><span class="season-tag tag-high" id="s-tag-high">Jul–Aug</span></button>
-          </div>
-          <div class="season-info" id="season-info-box">Shoulder pricing: standard rates. Best overall balance of cost and travel conditions.</div>
-        </div>
-
-        <!-- Sliders grid -->
-        <div class="params-grid">
-          <div class="param-group">
-            <label id="lbl-nights1">Schengen nights — Block 1</label>
-            <div class="range-row"><input type="range" min="14" max="90" step="1" id="nights1" value="89"><span class="range-val" id="v-nights1">89</span></div>
-          </div>
-          <div class="param-group">
-            <label id="lbl-nights2">Schengen nights — Block 2</label>
-            <div class="range-row"><input type="range" min="0" max="90" step="1" id="nights2" value="90"><span class="range-val" id="v-nights2">90</span></div>
-          </div>
-          <div class="param-group">
-            <label id="lbl-nonsch">Non-Schengen nights (break)</label>
-            <div class="range-row"><input type="range" min="0" max="200" step="1" id="nonsch" value="0"><span class="range-val" id="v-nonsch">0</span></div>
-          </div>
-          <div class="param-group">
-            <label id="lbl-diesel">Diesel (€/L)</label>
-            <div class="range-row"><input type="range" min="1.4" max="2.5" step="0.05" id="diesel" value="2.0"><span class="range-val" id="v-diesel">€2.00</span></div>
-          </div>
-          <div class="param-group">
-            <label id="lbl-paire">% nights at aire</label>
-            <div class="range-row"><input type="range" min="0" max="100" step="5" id="paire" value="60"><span class="range-val" id="v-paire">60%</span></div>
-          </div>
-          <div class="param-group">
-            <label id="lbl-pcamp">% nights at campsite</label>
-            <div class="range-row"><input type="range" min="0" max="100" step="5" id="pcamp" value="25"><span class="range-val" id="v-pcamp">25%</span></div>
-          </div>
-          <div class="param-group">
-            <label id="lbl-grocery">Grocery €/day (2 pax)</label>
-            <div class="range-row"><input type="range" min="15" max="80" step="5" id="grocery" value="30"><span class="range-val" id="v-grocery">€30</span></div>
-          </div>
-          <div class="param-group">
-            <label id="lbl-resto">Restaurant €/day (2 pax)</label>
-            <div class="range-row"><input type="range" min="0" max="80" step="5" id="resto" value="20"><span class="range-val" id="v-resto">€20</span></div>
-          </div>
-          <div class="param-group">
-            <label id="lbl-activ">Activities €/day</label>
-            <div class="range-row"><input type="range" min="0" max="60" step="5" id="activ" value="15"><span class="range-val" id="v-activ">€15</span></div>
-          </div>
-          <div class="param-group">
-            <label id="lbl-roroval">Shipped RV value (€)</label>
-            <div class="range-row"><input type="range" min="50000" max="300000" step="5000" id="roroval" value="175000"><span class="range-val" id="v-roroval">€175k</span></div>
-          </div>
-          <!-- Surcharge — full width inside left col grid -->
-          <div class="param-group" style="border-top:0.5px solid var(--border);padding-top:.85rem;margin-top:.1rem">
-            <label id="lbl-surcharge">🌐 RoRo surcharge (Opt 1 only)</label>
-            <div class="range-row"><input type="range" min="0" max="35" step="1" id="surcharge" value="20"><span class="range-val" id="v-surcharge">+20%</span></div>
-            <div class="surcharge-banner" id="surcharge-banner">USTR Recovery Fee (Nov 2025). Community-validated: ~+23% on a recent IVSS return shipment (May 2026). Set to 0% for pre-surcharge baseline. Always get a current quote from IVSS / SeaBridge.</div>
-          </div>
-          <!-- P2P inspection cost slider -->
-          <div class="param-group" style="border-top:0.5px solid var(--border);padding-top:.85rem;margin-top:.85rem">
-            <label id="lbl-p2p-inspect">🔍 P2P inspection level</label>
-            <div class="range-row"><input type="range" min="0" max="2" step="1" id="p2p-inspect" value="1"><span class="range-val" id="v-p2p-inspect">€500</span></div>
-            <div class="surcharge-banner">P2P only — you cannot inspect the RV before arrival. Level 0: trust blindly (€0, risky). Level 1: remote mechanic inspection + 2-day arrival buffer (€500). Level 2: worst case — poor condition on arrival, replacement delay (€900).</div>
-          </div>
-
-        </div>
-        <div id="pct-status" class="pct-ok" style="margin-top:8px"></div>
-
-      </div>
-    </div>
-  </div><!-- /col-left -->
-
-  <!-- ── RIGHT COLUMN — Break-even chart + Bar chart ── -->
-  <div class="col-right">
-
-    <!-- Break-even line chart -->
-    <div class="card">
-      <div class="card-header"><span>📈</span><h2 id="bev-title">Break-even — cost by trip duration</h2></div>
-      <div class="card-body">
-        <div class="bev-wrap"><canvas id="bevCanvas"></canvas></div>
-        <div class="bev-legend" id="bevLegend"></div>
-        <div class="bev-note" id="bev-note">Sliders update curves in real time. Dot = your current config. Click legend to hide/show a curve.</div>
-      </div>
-    </div>
-
-    <!-- Bar chart + result notes -->
-    <div class="card">
-      <div class="card-header"><span>📊</span><h2 id="results-title-bar">Financial cost — current trip</h2></div>
-      <div class="card-body">
-        <div class="chart-wrap"><div class="bar-chart" id="barChart"></div></div>
-        <div class="note-box" id="noteBox" style="margin-top:.85rem"></div>
-        <div class="interp-box" id="interpBox" style="margin-top:.65rem"></div>
-      </div>
-    </div>
-
-  </div><!-- /col-right -->
-
+ <!-- ── LEFT COLUMN — Parameters ── -->
+ <div class="col-left">
+ <div class="card">
+ <div class="card-header"><span>⚙️</span><h2 id="params-title">Trip parameters</h2></div>
+ <div class="card-body">
+ <!-- Season selector -->
+ <div style="margin-bottom:.85rem">
+ <div style="font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem" id="lbl-season">Travel season</div>
+ <div class="season-row">
+ <button class="season-btn" id="btn-low" onclick="setSeason('low')">❄️ <span id="s-lbl-low">Winter</span><span class="season-tag tag-low" id="s-tag-low">Oct–Apr</span></button>
+ <button class="season-btn active" id="btn-mid" onclick="setSeason('mid')">🌤️ <span id="s-lbl-mid">Shoulder</span><span class="season-tag tag-mid" id="s-tag-mid">May–Jun·Sep</span></button>
+ <button class="season-btn" id="btn-high" onclick="setSeason('high')">☀️ <span id="s-lbl-high">High</span><span class="season-tag tag-high" id="s-tag-high">Jul–Aug</span></button>
+ </div>
+ <div class="season-info" id="season-info-box">Shoulder pricing: standard rates. Best overall balance of cost and travel conditions.</div>
+ </div>
+ <!-- Sliders grid -->
+ <div class="params-grid">
+ <div class="param-group">
+ <label id="lbl-nights1">Schengen nights — Block 1</label>
+ <div class="range-row"><input type="range" min="14" max="90" step="1" id="nights1" value="89"><span class="range-val" id="v-nights1">89</span></div>
+ </div>
+ <div class="param-group">
+ <label id="lbl-nights2">Schengen nights — Block 2</label>
+ <div class="range-row"><input type="range" min="0" max="90" step="1" id="nights2" value="90"><span class="range-val" id="v-nights2">90</span></div>
+ </div>
+ <div class="param-group">
+ <label id="lbl-nonsch">Non-Schengen nights (break)</label>
+ <div class="range-row"><input type="range" min="0" max="200" step="1" id="nonsch" value="0"><span class="range-val" id="v-nonsch">0</span></div>
+ </div>
+ <div class="param-group">
+ <label id="lbl-diesel">Diesel (€/L)</label>
+ <div class="range-row"><input type="range" min="1.4" max="2.5" step="0.05" id="diesel" value="2.0"><span class="range-val" id="v-diesel">€2.00</span></div>
+ </div>
+ <div class="param-group">
+ <label id="lbl-paire">% nights at aire</label>
+ <div class="range-row"><input type="range" min="0" max="100" step="5" id="paire" value="60"><span class="range-val" id="v-paire">60%</span></div>
+ </div>
+ <div class="param-group">
+ <label id="lbl-pcamp">% nights at campsite</label>
+ <div class="range-row"><input type="range" min="0" max="100" step="5" id="pcamp" value="25"><span class="range-val" id="v-pcamp">25%</span></div>
+ </div>
+ <div class="param-group">
+ <label id="lbl-grocery">Grocery €/day (2 pax)</label>
+ <div class="range-row"><input type="range" min="15" max="80" step="5" id="grocery" value="30"><span class="range-val" id="v-grocery">€30</span></div>
+ </div>
+ <div class="param-group">
+ <label id="lbl-resto">Restaurant €/day (2 pax)</label>
+ <div class="range-row"><input type="range" min="0" max="80" step="5" id="resto" value="20"><span class="range-val" id="v-resto">€20</span></div>
+ </div>
+ <div class="param-group">
+ <label id="lbl-activ">Activities €/day</label>
+ <div class="range-row"><input type="range" min="0" max="60" step="5" id="activ" value="15"><span class="range-val" id="v-activ">€15</span></div>
+ </div>
+ <div class="param-group">
+ <label id="lbl-roroval">Shipped RV value (€)</label>
+ <div class="range-row"><input type="range" min="50000" max="300000" step="5000" id="roroval" value="175000"><span class="range-val" id="v-roroval">€175k</span></div>
+ </div>
+ <!-- Surcharge — full width inside left col grid -->
+ <div class="param-group" style="border-top:0.5px solid var(--border);padding-top:.85rem;margin-top:.1rem">
+ <label id="lbl-surcharge">🌐 RoRo surcharge (Opt 1 only)</label>
+ <div class="range-row"><input type="range" min="0" max="35" step="1" id="surcharge" value="20"><span class="range-val" id="v-surcharge">+20%</span></div>
+ <div class="surcharge-banner" id="surcharge-banner">USTR Recovery Fee (Nov 2025). Community-validated: ~+23% on a recent IVSS return shipment (May 2026). Set to 0% for pre-surcharge baseline. Always get a current quote from IVSS / SeaBridge.</div>
+ </div>
+ <!-- P2P inspection cost slider -->
+ <div class="param-group" style="border-top:0.5px solid var(--border);padding-top:.85rem;margin-top:.85rem">
+ <label id="lbl-p2p-inspect">🔍 P2P inspection level</label>
+ <div class="range-row"><input type="range" min="0" max="2" step="1" id="p2p-inspect" value="1"><span class="range-val" id="v-p2p-inspect">€500</span></div>
+ <div class="surcharge-banner">P2P only — you cannot inspect the RV before arrival. Level 0: trust blindly (€0, risky). Level 1: remote mechanic inspection + 2-day arrival buffer (€500). Level 2: worst case — poor condition on arrival, replacement delay (€900).</div>
+ </div>
+ </div>
+ <div id="pct-status" class="pct-ok" style="margin-top:8px"></div>
+ </div>
+ </div>
+ </div><!-- /col-left -->
+ <!-- ── RIGHT COLUMN — Break-even chart + Bar chart ── -->
+ <div class="col-right">
+ <!-- Break-even line chart -->
+ <div class="card">
+ <div class="card-header"><span>📈</span><h2 id="bev-title">Break-even — cost by trip duration</h2></div>
+ <div class="card-body">
+ <div class="bev-wrap"><canvas id="bevCanvas"></canvas></div>
+ <div class="bev-legend" id="bevLegend"></div>
+ <div class="bev-note" id="bev-note">Sliders update curves in real time. Dot = your current config. Click legend to hide/show a curve.</div>
+ </div>
+ </div>
+ <!-- Bar chart + result notes -->
+ <div class="card">
+ <div class="card-header"><span>📊</span><h2 id="results-title-bar">Financial cost — current trip</h2></div>
+ <div class="card-body">
+ <div class="chart-wrap"><div class="bar-chart" id="barChart"></div></div>
+ <div class="note-box" id="noteBox" style="margin-top:.85rem"></div>
+ <div class="interp-box" id="interpBox" style="margin-top:.65rem"></div>
+ </div>
+ </div>
+ </div><!-- /col-right -->
 </div><!-- /workspace -->
-
 <!-- ══════════════════════════════════════════════════════
-     INTANGIBLES ROW — sliders left, adjusted ranking right
-     Same visual level as workspace, but independent frame
-     ══════════════════════════════════════════════════════ -->
+ INTANGIBLES ROW — sliders left, adjusted ranking right
+ Same visual level as workspace, but independent frame
+ ══════════════════════════════════════════════════════ -->
 <div class="intang-row">
-
-  <!-- Left: 3 priority sliders -->
-  <div class="card intang-sliders-card">
-    <div class="card-header"><span>✨</span><h2 id="lbl-intang-section">My travel priorities</h2></div>
-    <div class="card-body">
-      <p class="intang-row-intro" id="intang-row-intro">How much do these non-financial factors matter to you? Adjust to see the impact on the ranking.</p>
-      <div class="intang-slider-item">
-        <div class="intang-slider-header">
-          <span class="intang-slider-icon">🛏️</span>
-          <label class="intang-slider-label" id="lbl-ibed">Bed &amp; comfort</label>
-          <span class="intang-chip level-0" id="chip-ibed">Low</span>
-          <span class="intang-impact level-0" id="impact-ibed">+0%</span>
-        </div>
-        <div class="range-row"><input type="range" min="0" max="2" step="1" id="ibed" value="0" class="intang-range"></div>
-        <div class="intang-hint" id="hint-ibed">Your own mattress vs unknown bed for 90+ nights</div>
-      </div>
-      <div class="intang-slider-item">
-        <div class="intang-slider-header">
-          <span class="intang-slider-icon">🧳</span>
-          <label class="intang-slider-label" id="lbl-ilogistic">Logistics &amp; continuity</label>
-          <span class="intang-chip level-0" id="chip-ilogistic">Low</span>
-          <span class="intang-impact level-0" id="impact-ilogistic">+0%</span>
-        </div>
-        <div class="range-row"><input type="range" min="0" max="2" step="1" id="ilogistic" value="0" class="intang-range"></div>
-        <div class="intang-hint" id="hint-ilogistic">No suitcases, same setup between blocks, zero repacking fatigue</div>
-      </div>
-      <div class="intang-slider-item">
-        <div class="intang-slider-header">
-          <span class="intang-slider-icon">📋</span>
-          <label class="intang-slider-label" id="lbl-iadmin">Admin &amp; simplicity</label>
-          <span class="intang-chip level-0" id="chip-iadmin">Low</span>
-          <span class="intang-impact level-0" id="impact-iadmin">+0%</span>
-        </div>
-        <div class="range-row"><input type="range" min="0" max="2" step="1" id="iadmin" value="0" class="intang-range"></div>
-        <div class="intang-hint" id="hint-iadmin">Agencies, unknown vehicle history, resale deadline pressure</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Right: adjusted ranking -->
-  <div class="card intang-ranking-card">
-    <div class="card-header"><span>✨</span><h2 id="intang-rank-title">Adjusted ranking — priorities applied</h2></div>
-    <div class="card-body">
-      <p style="font-size:11px;color:var(--text2);margin-bottom:.75rem;line-height:1.5" id="intang-rank-subtitle">Financial cost + penalty for options that score poorly on your priorities. Sliders at Low = identical to financial ranking.</p>
-      <div id="intangRankingBars"></div>
-      <div class="intang-rank-legend">
-        <span class="intang-leg-item"><span class="intang-leg-swatch base"></span><span id="leg-base">Financial cost</span></span>
-        <span class="intang-leg-item"><span class="intang-leg-swatch penalty"></span><span id="leg-penalty">Priority penalty</span></span>
-      </div>
-      <div class="intang-rank-note" id="intang-rank-note">Move the sliders to see your priorities reflected in the ranking.</div>
-    </div>
-  </div>
-
+ <!-- Left: 3 priority sliders -->
+ <div class="card intang-sliders-card">
+ <div class="card-header"><span>✨</span><h2 id="lbl-intang-section">My travel priorities</h2></div>
+ <div class="card-body">
+ <p class="intang-row-intro" id="intang-row-intro">How much do these non-financial factors matter to you? Adjust to see the impact on the ranking.</p>
+ <div class="intang-slider-item">
+ <div class="intang-slider-header">
+ <span class="intang-slider-icon">🛏️</span>
+ <label class="intang-slider-label" id="lbl-ibed">Bed &amp; comfort</label>
+ <span class="intang-chip level-0" id="chip-ibed">Low</span>
+ <span class="intang-impact level-0" id="impact-ibed">+0%</span>
+ </div>
+ <div class="range-row"><input type="range" min="0" max="2" step="1" id="ibed" value="0" class="intang-range"></div>
+ <div class="intang-hint" id="hint-ibed">Your own mattress vs unknown bed for 90+ nights</div>
+ </div>
+ <div class="intang-slider-item">
+ <div class="intang-slider-header">
+ <span class="intang-slider-icon">🧳</span>
+ <label class="intang-slider-label" id="lbl-ilogistic">Logistics &amp; continuity</label>
+ <span class="intang-chip level-0" id="chip-ilogistic">Low</span>
+ <span class="intang-impact level-0" id="impact-ilogistic">+0%</span>
+ </div>
+ <div class="range-row"><input type="range" min="0" max="2" step="1" id="ilogistic" value="0" class="intang-range"></div>
+ <div class="intang-hint" id="hint-ilogistic">No suitcases, same setup between blocks, zero repacking fatigue</div>
+ </div>
+ <div class="intang-slider-item">
+ <div class="intang-slider-header">
+ <span class="intang-slider-icon">📋</span>
+ <label class="intang-slider-label" id="lbl-iadmin">Admin &amp; simplicity</label>
+ <span class="intang-chip level-0" id="chip-iadmin">Low</span>
+ <span class="intang-impact level-0" id="impact-iadmin">+0%</span>
+ </div>
+ <div class="range-row"><input type="range" min="0" max="2" step="1" id="iadmin" value="0" class="intang-range"></div>
+ <div class="intang-hint" id="hint-iadmin">Agencies, unknown vehicle history, resale deadline pressure</div>
+ </div>
+ </div>
+ </div>
+ <!-- Right: adjusted ranking -->
+ <div class="card intang-ranking-card">
+ <div class="card-header"><span>✨</span><h2 id="intang-rank-title">Adjusted ranking — priorities applied</h2></div>
+ <div class="card-body">
+ <p style="font-size:11px;color:var(--text2);margin-bottom:.75rem;line-height:1.5" id="intang-rank-subtitle">Financial cost + penalty for options that score poorly on your priorities. Sliders at Low = identical to financial ranking.</p>
+ <div id="intangRankingBars"></div>
+ <div class="intang-rank-legend">
+ <span class="intang-leg-item"><span class="intang-leg-swatch base"></span><span id="leg-base">Financial cost</span></span>
+ <span class="intang-leg-item"><span class="intang-leg-swatch penalty"></span><span id="leg-penalty">Priority penalty</span></span>
+ </div>
+ <div class="intang-rank-note" id="intang-rank-note">Move the sliders to see your priorities reflected in the ranking.</div>
+ </div>
+ </div>
 </div><!-- /intang-row -->
-
 <!-- ══════════════════════════════════════════════════════
-     FULL-WIDTH SECTION
-     Results cards + Breakdown table
-     ══════════════════════════════════════════════════════ -->
-
+ FULL-WIDTH SECTION
+ Results cards + Breakdown table
+ ══════════════════════════════════════════════════════ -->
 <!-- Result cards — 6 options summary -->
 <div class="fullwidth">
-  <div class="card">
-    <div class="card-header"><span>💶</span><h2 id="results-title">Cost comparison</h2></div>
-    <div class="card-body">
-      <div class="results-grid" id="resultsGrid"></div>
-    </div>
-  </div>
+ <div class="card">
+ <div class="card-header"><span>💶</span><h2 id="results-title">Cost comparison</h2></div>
+ <div class="card-body">
+ <div class="results-grid" id="resultsGrid"></div>
+ </div>
+ </div>
 </div>
-
 <!-- Breakdown table -->
 <div class="fullwidth">
-  <div class="card">
-    <div class="card-header"><span>📋</span><h2 id="breakdown-title">Cost breakdown by category</h2></div>
-    <div class="card-body">
-      <div style="overflow-x:auto">
-        <table class="breakdown-table" id="breakdownTable"></table>
-      </div>
-    </div>
-  </div>
+ <div class="card">
+ <div class="card-header"><span>📋</span><h2 id="breakdown-title">Cost breakdown by category</h2></div>
+ <div class="card-body">
+ <div style="overflow-x:auto">
+ <table class="breakdown-table" id="breakdownTable"></table>
+ </div>
+ </div>
+ </div>
 </div>
-
 <!-- ══════════════════════════════════════════════════════
-     INTANGIBLES — Buy & Sell friction + 5 questions
-     ══════════════════════════════════════════════════════ -->
+ INTANGIBLES — Buy & Sell friction + 5 questions
+ ══════════════════════════════════════════════════════ -->
 <div class="fullwidth">
-  <div class="card">
-    <div class="card-header"><span>✨</span><h2 id="intang-title">Intangibles — quality of travel</h2></div>
-    <div class="card-body">
-
-      <!-- Buy & Sell friction panel — shown dynamically -->
-      <div id="bs-friction-box" style="margin-bottom:1.25rem"></div>
-
-      <!-- 5 questions — 2-col grid -->
-      <div class="q-five-block">
-        <div style="font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem" id="intang-q-title">5 questions to discuss before deciding</div>
-        <div id="intangQuestions" class="q-five-grid"></div>
-      </div>
-
-      <p style="font-size:11px;color:var(--text3);margin-top:.85rem;line-height:1.5" id="intang-source">Source: Guide 11 §2 + §3 + Excel Intangibles &amp; Quality (weighted grid v2). Intangible penalty: 0%/15%/30% applied to options scoring below their max per criterion, weighted by slider importance.</p>
-    </div>
-  </div>
+ <div class="card">
+ <div class="card-header"><span>✨</span><h2 id="intang-title">Intangibles — quality of travel</h2></div>
+ <div class="card-body">
+ <!-- Buy & Sell friction panel — shown dynamically -->
+ <div id="bs-friction-box" style="margin-bottom:1.25rem"></div>
+ <!-- 5 questions — 2-col grid -->
+ <div class="q-five-block">
+ <div style="font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem" id="intang-q-title">5 questions to discuss before deciding</div>
+ <div id="intangQuestions" class="q-five-grid"></div>
+ </div>
+ <p style="font-size:11px;color:var(--text3);margin-top:.85rem;line-height:1.5" id="intang-source">Source: Guide 11 §2 + §3 + Excel Intangibles &amp; Quality (weighted grid v2). Intangible penalty: 0%/15%/30% applied to options scoring below their max per criterion, weighted by slider importance.</p>
+ </div>
+ </div>
 </div>
-
 <div class="disclaimer" id="disclaimer">
-  <strong>Disclaimer:</strong> Informational and planning purposes only. No responsibility for errors or post-publication regulatory changes. Not financial or legal advice. Always verify costs with service providers.<br>
-  <strong>Sources:</strong> Guide 11 Excel model v11 · McRent/Indie Campers 2025–2026 · Yescapa/Goboony P2P · IVSS/SeaBridge RoRo quotations · camping-quart.fr · USTR Recovery Fee (Nov 2025) — community-validated ~+23% on Halifax↔EU route (LTV group, May 2026).<br>
-  <strong>v6.0</strong> — Interactive intangibles sliders (bed/logistics/admin) with adjusted ranking · Buy &amp; Sell friction panel · Two-column layout · RoRo surcharge slider · Real-time break-even chart · P2P Option 6 · Time-Sharing 7-week cap · Corrected Buy &amp; Sell / Option 1 insurance · Seasonal pricing · PL toll rates.<br><br>
-  © 2026 Jack-Éric Vandenbroucke · <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+ <strong>Disclaimer:</strong> Informational and planning purposes only. No responsibility for errors or post-publication regulatory changes. Not financial or legal advice. Always verify costs with service providers.<br>
+ <strong>Sources:</strong> Guide 11 Excel model v11 · McRent/Indie Campers 2025–2026 · Yescapa/Goboony P2P · IVSS/SeaBridge RoRo quotations · camping-quart.fr · USTR Recovery Fee (Nov 2025) — community-validated ~+23% on Halifax↔EU route (LTV group, May 2026).<br>
+ <strong>v6.0</strong> — Interactive intangibles sliders (bed/logistics/admin) with adjusted ranking · Buy &amp; Sell friction panel · Two-column layout · RoRo surcharge slider · Real-time break-even chart · P2P Option 6 · Time-Sharing 7-week cap · Corrected Buy &amp; Sell / Option 1 insurance · Seasonal pricing · PL toll rates.<br><br>
+ © 2026 Jack-Éric Vandenbroucke · <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
 </div>
-
 </main>
-
-<script>
-// ── Constants ─────────────────────────────────────────────────────────────────
-const COLORS    = ['#1a5fa8','#8a5a00','#a02020','#1a7a4a','#5a5a5a','#1a6a7a'];
+<script>const COLORS    = ['#1a5fa8','#8a5a00','#a02020','#1a7a4a','#5a5a5a','#1a6a7a'];
 const COLORS_BG = ['#e8f0fa','#fdf0d5','#fde8e8','#e4f5ec','#f0f0f0','#e4f5f2'];
-
 const SEASON_MULT = {
   low:  {rental:0.78,p2p:0.75,camp:0.82,hotel:0.72,car:0.85},
   mid:  {rental:1.00,p2p:1.00,camp:1.00,hotel:1.00,car:1.00},
@@ -482,12 +451,8 @@ const SEASON_INFO = {
     high:'Surcharges haute saison : locations +28%, campings +22%, hôtels +32%, voiture +18%. Réservez tôt.',
   }
 };
-
-// ── State ─────────────────────────────────────────────────────────────────────
 let lang='en', season='mid';
 let bevHidden=[false,false,false,false,false,false];
-
-// ── Translations ──────────────────────────────────────────────────────────────
 const L={
   en:{
     'h-title':'Trip Budget Simulator',
@@ -572,18 +537,14 @@ const L={
     'bev-note':'Les sliders mettent les courbes à jour en temps réel. Point = votre config. Pointillé = Temps partagé hors cap. Cliquez la légende pour masquer/afficher.',
   }
 };
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
 function v(id){return +document.getElementById(id).value;}
 function fmt(n){return '€'+Math.round(n).toLocaleString();}
-
 function setSeason(s){
   season=s;
   ['low','mid','high'].forEach(x=>document.getElementById('btn-'+x).classList.toggle('active',x===s));
   document.getElementById('season-info-box').textContent=SEASON_INFO[lang][s];
   compute();
 }
-
 function setLang(l){
   lang=l;
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
@@ -598,8 +559,6 @@ function setLang(l){
   document.getElementById('season-info-box').textContent=SEASON_INFO[l][season];
   compute();
 }
-
-// ── Core cost engine ──────────────────────────────────────────────────────────
 function calcOpts(schNights,totalNights,p){
   const {diesel,paire,pcamp,grocery,resto,activ,sm,roroSurcharge,p2pInspect}=p;
   const km=36,conso=12.5,fpd=(km/100)*conso*diesel;
@@ -612,48 +571,28 @@ function calcOpts(schNights,totalNights,p){
   const dl=totalNights*(grocery+resto+activ+misc+laundry+propane);
   const fl_s=3700,fl_o=2450;
   const TS_MAX=49,tsU=schNights>TS_MAX;
-
-  // Opt1 RoRo
   const roro=Math.round(10650*(1+roroSurcharge/100));
   const ins1=Math.round(6250*(totalNights/180)+1050+1100);
   const t1=roro+ins1+Math.round(accommAll)+Math.round(totalNights*fpd+totalNights*tollRV)+Math.round(dl)+fl_s;
-
-  // Opt2 Pro rental
   const t2=Math.round(schNights*200*sm.rental+700)+1100+Math.round(accommSch*0.92)+Math.round(schNights*fpd*0.85+schNights*tollRV)+Math.round(dl)+fl_o;
-
-  // Opt3 Time-sharing
   const tsKm=Math.round((schNights/TS_MAX)*1960);
   const t3base=Math.round(5800+tsKm+600)+1100+Math.round(accommSch*0.45)+Math.round(schNights*fpd*0.72)+Math.round(dl*(schNights/Math.max(totalNights,1)))+fl_o;
   const t3=tsU?null:t3base;
-  const t3x=t3base; // extrapolated for chart dashed line
-
-  // Opt4 Buy&Sell
-  // +2,500€ resale return trip: flight back to EU (~800€) + accomm 10d (~900€) + per diem (~800€)
-  // Conservative estimate; could be higher if sale takes >2 weeks
+  const t3x=t3base;
   const bsResaleTrip = 2500;
   const t4=13000+bsResaleTrip+1800+Math.round(accommSch*0.85)+Math.round(schNights*fpd+schNights*tollCar)+Math.round(dl)+fl_o;
-
-  // Opt5 Car+Hotels
   const livH=totalNights*(resto*1.75+activ+misc+laundry);
   const t5=Math.round(schNights*40*sm.car+1800)+1100+Math.round(totalNights*105*sm.hotel)+Math.round(schNights*35*(9/100)*diesel*0.55+schNights*tollCar)+Math.round(livH)+fl_o;
-
-  // Opt6 P2P
-  // Inspection cost: 0=trust(€0), 1=remote inspection+buffer(€500), 2=worst-case delay(€900)
   const p2pInspCost = [0, 500, 900][Math.min(2, Math.max(0, p2pInspect||0))];
   const t6=Math.round(schNights*130*sm.p2p+Math.round((schNights/90)*800))+1100+p2pInspCost+Math.round(accommSch*0.92)+Math.round(schNights*fpd*0.85+schNights*tollCar)+Math.round(dl)+fl_o;
-
   return {t1,t2,t3,t3x,t4,t5,t6,tsU};
 }
-
-// ── Break-even canvas ─────────────────────────────────────────────────────────
 let bevCanvas,bevCtx;
 const BEV_MIN=14,BEV_MAX=200;
-
 function initBev(){
   bevCanvas=document.getElementById('bevCanvas');
   bevCtx=bevCanvas.getContext('2d');
 }
-
 function drawBev(params,curSch){
   const dpr=window.devicePixelRatio||1;
   const W=bevCanvas.parentElement.clientWidth||500;
@@ -662,25 +601,16 @@ function drawBev(params,curSch){
   bevCanvas.style.width=W+'px'; bevCanvas.style.height=H+'px';
   const ctx=bevCtx;
   ctx.setTransform(dpr,0,0,dpr,0,0);
-
   const PAD={top:20,right:14,bottom:42,left:62};
   const pw=W-PAD.left-PAD.right, ph=H-PAD.top-PAD.bottom;
-
-  // Build series
   const days=[];
   for(let d=BEV_MIN;d<=BEV_MAX;d++) days.push(d);
   const series=days.map(d=>{const r=calcOpts(d,d,params);return [r.t1,r.t2,r.t3,r.t3x,r.t4,r.t5,r.t6];});
-
-  // Y range
   const allV=series.flatMap(s=>s.filter(x=>x!=null&&x>0));
   const yMax=Math.ceil(Math.max(...allV)/5000)*5000;
-
   const xPx=d=>PAD.left+((d-BEV_MIN)/(BEV_MAX-BEV_MIN))*pw;
   const yPx=val=>PAD.top+ph-(val/yMax)*ph;
-
   ctx.clearRect(0,0,W,H);
-
-  // Grid + Y labels
   ctx.font=`${Math.max(9,Math.round(W/60))}px DM Sans,sans-serif`;
   ctx.textAlign='right';
   for(let i=0;i<=6;i++){
@@ -690,8 +620,6 @@ function drawBev(params,curSch){
     ctx.beginPath(); ctx.moveTo(PAD.left,y); ctx.lineTo(PAD.left+pw,y); ctx.stroke();
     if(val>0){ctx.fillStyle='#9c9890'; ctx.fillText((val/1000).toFixed(0)+'k',PAD.left-5,y+3.5);}
   }
-
-  // X labels + verticals
   const xTicks=[14,30,49,60,90,120,150,180,200];
   ctx.textAlign='center';
   xTicks.forEach(d=>{
@@ -701,15 +629,11 @@ function drawBev(params,curSch){
     ctx.strokeStyle='rgba(0,0,0,0.05)'; ctx.lineWidth=0.5;
     ctx.beginPath(); ctx.moveTo(x,PAD.top); ctx.lineTo(x,PAD.top+ph); ctx.stroke();
   });
-
-  // Axes
   ctx.strokeStyle='rgba(0,0,0,0.15)'; ctx.lineWidth=0.5;
   ctx.beginPath();
   ctx.moveTo(PAD.left,PAD.top); ctx.lineTo(PAD.left,PAD.top+ph);
   ctx.moveTo(PAD.left,PAD.top+ph); ctx.lineTo(PAD.left+pw,PAD.top+ph);
   ctx.stroke();
-
-  // Reference verticals
   [{d:49,lbl:'7-wk cap',c:'#a02020'},{d:90,lbl:'90d',c:'#1a5fa8'}].forEach(r=>{
     const x=xPx(r.d);
     ctx.strokeStyle=r.c; ctx.lineWidth=1; ctx.setLineDash([4,4]);
@@ -718,8 +642,6 @@ function drawBev(params,curSch){
     ctx.font=`9px DM Sans,sans-serif`; ctx.textAlign='center';
     ctx.fillText(r.lbl,x,H-PAD.bottom+27);
   });
-
-  // Curves: [t1,t2,t3(≤49solid),t4,t5,t6]
   const curves=[
     {si:0,oi:0},{si:1,oi:1},{si:2,oi:2},
     {si:4,oi:3},{si:5,oi:4},{si:6,oi:5}
@@ -735,8 +657,6 @@ function drawBev(params,curSch){
     });
     ctx.stroke();
   });
-
-  // TS dashed extension beyond 49d
   if(!bevHidden[2]){
     ctx.strokeStyle=COLORS[2]; ctx.lineWidth=1.2; ctx.setLineDash([5,4]); ctx.globalAlpha=0.42;
     ctx.beginPath(); let go=false;
@@ -748,8 +668,6 @@ function drawBev(params,curSch){
     });
     ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=1;
   }
-
-  // Current-position dots + mini labels
   const cs=Math.min(Math.max(curSch,BEV_MIN),BEV_MAX);
   const cr=calcOpts(cs,cs,params);
   const dotMap=[
@@ -766,27 +684,19 @@ function drawBev(params,curSch){
     ctx.font=`9px DM Sans,sans-serif`; ctx.textAlign='center';
     ctx.fillText(fmt(val),x,y-9);
   });
-
-  // Axis labels
   ctx.save(); ctx.translate(11,PAD.top+ph/2); ctx.rotate(-Math.PI/2);
   ctx.fillStyle='#9c9890'; ctx.font=`10px DM Sans,sans-serif`; ctx.textAlign='center';
   ctx.fillText('Total (€)',0,0); ctx.restore();
   ctx.fillStyle='#9c9890'; ctx.font=`10px DM Sans,sans-serif`; ctx.textAlign='center';
   ctx.fillText('Schengen nights',PAD.left+pw/2,H-2);
-
-  // Legend
   document.getElementById('bevLegend').innerHTML=L[lang].opts.map((n,i)=>`
     <div class="bev-leg-item" style="opacity:${bevHidden[i]?0.32:1}" onclick="toggleBevLine(${i})">
       <div class="bev-leg-dot" style="${i===2?'border-top:2px dashed '+COLORS[i]+';background:none':'background:'+COLORS[i]}"></div>
       <span>${n}</span>
     </div>`).join('');
-
   document.getElementById('bev-note').textContent=L[lang]['bev-note'];
 }
-
 function toggleBevLine(i){bevHidden[i]=!bevHidden[i];compute();}
-
-// ── Main compute ──────────────────────────────────────────────────────────────
 function compute(){
   const n1=v('nights1'),n2=v('nights2'),ns=v('nonsch');
   const diesel=v('diesel'),paire=v('paire')/100,pcamp=v('pcamp')/100;
@@ -794,8 +704,6 @@ function compute(){
   const rvVal=v('roroval'),roroSurcharge=v('surcharge');
   const sm=SEASON_MULT[season];
   const totalNights=n1+n2+ns, schNights=n1+n2;
-
-  // Display
   document.getElementById('v-nights1').textContent=n1;
   document.getElementById('v-nights2').textContent=n2;
   document.getElementById('v-nonsch').textContent=ns;
@@ -807,22 +715,18 @@ function compute(){
   document.getElementById('v-activ').textContent='€'+activ;
   document.getElementById('v-roroval').textContent='€'+Math.round(rvVal/1000)+'k';
   document.getElementById('v-surcharge').textContent=roroSurcharge>0?'+'+roroSurcharge+'%':'0%';
+  const p2pInspect=v('p2p-inspect');
   const p2pLabels=['€0','€500','€900'];
   document.getElementById('v-p2p-inspect').textContent=p2pLabels[p2pInspect]||'€0';
-
   const wPct=100-v('paire')-v('pcamp');
   const pEl=document.getElementById('pct-status');
   const Lc=L[lang];
   pEl.className=wPct<0?'pct-warning':'pct-ok';
   pEl.textContent=wPct<0?Lc['pct-warn'](Math.round(v('paire')+v('pcamp'))):Lc['pct-ok']+(wPct>0?` (wild/free: ${Math.round(wPct)}%)`:'');
-
-  const p2pInspect=v('p2p-inspect');
   const params={diesel,paire,pcamp,grocery,resto,activ,rvVal,sm,roroSurcharge,p2pInspect};
   const res=calcOpts(schNights,totalNights,params);
   const TS_MAX=49,tsU=res.tsU,tsW=Math.ceil(schNights/7);
   const tsKm=Math.round((schNights/TS_MAX)*1960);
-
-  // Build detailed opts for table / cards / bar
   const km=36,conso=12.5,fpd=(km/100)*conso*diesel;
   const avgN=paire*14+Math.max(0,pcamp)*35*sm.camp, ttax=3.0;
   const accommAll=totalNights*(avgN+ttax), accommSch=schNights*(avgN+ttax);
@@ -831,7 +735,6 @@ function compute(){
   const dl=totalNights*(grocery+resto+activ+misc+laundry+propane);
   const roro=Math.round(10650*(1+roroSurcharge/100));
   const ins1=Math.round(6250*(totalNights/180)+1050+1100);
-
   const opts=[
     {transport:roro,rv:0,insurance:ins1,accomm:Math.round(accommAll),fuel:Math.round(totalNights*fpd+totalNights*tollRV),living:Math.round(dl),flights:3700,unavail:false,note:roroSurcharge>0?Lc['surcharge-active'](roroSurcharge):null},
     {transport:0,rv:Math.round(schNights*200*sm.rental+700),insurance:1100,accomm:Math.round(accommSch*0.92),fuel:Math.round(schNights*fpd*0.85+schNights*tollRV),living:Math.round(dl),flights:2450,unavail:false,note:null},
@@ -840,14 +743,11 @@ function compute(){
     {transport:0,rv:Math.round(schNights*40*sm.car+1800),insurance:1100,accomm:Math.round(totalNights*105*sm.hotel),fuel:Math.round(schNights*35*(9/100)*diesel*0.55+schNights*tollCar),living:Math.round(totalNights*(resto*1.75+activ+misc+laundry)),flights:2450,unavail:false,note:null},
     {transport:0,rv:Math.round(schNights*130*sm.p2p+Math.round((schNights/90)*800)),inspect:p2pInspect>0?[0,500,900][p2pInspect]:0,insurance:1100,accomm:Math.round(accommSch*0.92),fuel:Math.round(schNights*fpd*0.85+schNights*tollCar),living:Math.round(dl),flights:2450,unavail:false,note:schNights>60?Lc['p2p-warn']:null},
   ];
-
   function tot(o){if(o.unavail)return Infinity;return(o.transport||0)+(o.rv||0)+(o.resale||0)+(o.inspect||0)+(o.insurance||0)+(o.accomm||0)+(o.fuel||0)+(o.living||0)+(o.flights||0);}
   const totals=opts.map(tot);
   const avail=totals.filter(t=>t!==Infinity);
   const minT=Math.min(...avail),minIdx=totals.indexOf(minT);
   const optNames=Lc.opts;
-
-  // Results cards (full width)
   document.getElementById('resultsGrid').innerHTML=opts.map((o,i)=>{
     const t=totals[i],isW=i===minIdx,isU=o.unavail;
     const sL=season!=='mid'?`<span class="opt-season">${season==='low'?'❄️':'☀️'} ${season==='low'?'winter':'peak'}</span>`:'';
@@ -859,8 +759,6 @@ function compute(){
       ${isU?`<div class="opt-unavail">Not available</div>`:''}${sL}
     </div>`;
   }).join('');
-
-  // Bar chart (right col)
   const maxT=Math.max(...avail);
   document.getElementById('barChart').innerHTML=opts.map((o,i)=>{
     const t=totals[i],isU=o.unavail,h=isU?4:Math.round((t/maxT)*85);
@@ -870,12 +768,8 @@ function compute(){
       <div class="bar-label" style="color:${COLORS[i]}">${optNames[i].split(' ').slice(0,2).join(' ')}</div>
     </div>`;
   }).join('');
-
-  // Summary note
   const avgD=Math.round(avail.reduce((a,b)=>a+b,0)/avail.length/Math.max(schNights,1));
   document.getElementById('noteBox').textContent=Lc.note(totalNights,avgD,minT,optNames[minIdx]);
-
-  // Interpretation
   const lines=[];
   if(tsU) lines.push(Lc['ts-unavail'](tsW));
   else if(opts[2].note&&opts[2].note!==Lc['ts-ok']) lines.push(opts[2].note);
@@ -887,8 +781,6 @@ function compute(){
   const ib=document.getElementById('interpBox');
   ib.style.display=lines.length?'block':'none';
   ib.innerHTML=lines.map(l=>`<div style="margin-bottom:3px">${l}</div>`).join('');
-
-  // Breakdown table (full width)
   const rk=['transport','rv','resale','inspect','insurance','accomm','fuel','living','flights'];
   document.getElementById('breakdownTable').innerHTML=`<thead><tr>
     <th>Category</th>
@@ -905,25 +797,14 @@ function compute(){
   <tr><td>${Lc.rows[Lc.rows.length-1]}</td>
     ${opts.map((o,i)=>o.unavail?`<td class="na-cell" style="color:${COLORS[i]}">N/A</td>`:`<td class="num" style="color:${COLORS[i]}">${fmt(totals[i])}</td>`).join('')}
   </tr></tbody>`;
-
-  // Break-even chart
   drawBev(params,schNights);
-
-  // Intangibles section
   renderIntangibles(minIdx, minT, totals, opts);
 }
-
-// ── Intangible priority state ────────────────────────────────────────────────
-// Slider values: 0=Low(0%), 1=Moderate(15%), 2=High(30%)
-// Intang quality scores per option [RoRo,Rental,TS,B&S,Car+Hotel,P2P] 0-1
-// Higher = option performs BETTER on this criterion → less penalty
 const INTANG_SCORES = {
-  //                    RoRo  Rental  TS     B&S    Car    P2P
   bed:       [1.00,  0.40,  0.40,  0.55,  0.80,  0.40],
   logistics: [1.00,  0.20,  0.20,  0.60,  1.00,  0.20],
   admin:     [0.90,  0.85,  0.70,  0.20,  0.95,  0.75],
 };
-// Penalty multipliers per level
 const INTANG_PENALTY = [0, 0.15, 0.30];
 const INTANG_LABELS  = {
   en: {0:'Low',  1:'Moderate', 2:'High'},
@@ -933,24 +814,18 @@ const INTANG_IMPACTS = {
   en: {0:'+0%',1:'+15%',2:'+30%'},
   fr: {0:'+0%',1:'+15%',2:'+30%'},
 };
-
-// Compute adjusted cost for option i, given raw cost
 function calcAdjusted(rawCost, optIdx) {
   const bedW  = v('ibed');
   const logW  = v('ilogistic');
   const admW  = v('iadmin');
-  // Penalty = rate × (1 - quality_score) × raw_cost
   const bedP  = INTANG_PENALTY[bedW]  * (1 - INTANG_SCORES.bed[optIdx])      * rawCost;
   const logP  = INTANG_PENALTY[logW]  * (1 - INTANG_SCORES.logistics[optIdx]) * rawCost;
   const admP  = INTANG_PENALTY[admW]  * (1 - INTANG_SCORES.admin[optIdx])     * rawCost;
   return { raw: rawCost, penalty: Math.round(bedP + logP + admP), adjusted: Math.round(rawCost + bedP + logP + admP) };
 }
-
 function getChipClass(val) {
   return ['level-0','level-1','level-2'][val];
 }
-
-// Update the 3 slider chips + impact labels
 function updateIntangChips() {
   const Lc = L[lang];
   ['ibed','ilogistic','iadmin'].forEach(id => {
@@ -963,23 +838,16 @@ function updateIntangChips() {
     impact.className = 'intang-impact ' + getChipClass(val);
   });
 }
-
-// Render the adjusted ranking bars in right col
 function renderAdjustedRanking(totals, opts) {
   const Lc = L[lang];
   const anyActive = v('ibed')>0 || v('ilogistic')>0 || v('iadmin')>0;
-
-  // Build adjusted list
   const items = [0,1,2,3,4,5].map(i => {
     if (opts[i].unavail) return { i, raw: Infinity, penalty: 0, adjusted: Infinity, unavail: true };
     const r = calcAdjusted(totals[i], i);
     return { i, ...r, unavail: false };
   });
-
-  // Sort available by adjusted cost
   const sorted = [...items].sort((a,b) => a.adjusted - b.adjusted);
   const maxAdj = Math.max(...sorted.filter(x=>!x.unavail).map(x=>x.adjusted));
-
   const optNames = Lc.opts;
   let html = '';
   sorted.forEach((item, rank) => {
@@ -992,14 +860,11 @@ function renderAdjustedRanking(totals, opts) {
       </div>`;
       return;
     }
-    // Total bar width = adjusted / maxAdj (fills proportionally to worst option)
-    // Inside that bar: base portion and penalty portion split by their share
     const totalPct = Math.round((item.adjusted / maxAdj) * 100);
     const isWinner = rank === 0;
     const hasPen   = item.penalty > 0;
-    // Share of base vs penalty within the total bar
-    const baseFrac = item.raw / item.adjusted;        // e.g. 0.85
-    const penFrac  = item.penalty / item.adjusted;    // e.g. 0.15
+    const baseFrac = item.raw / item.adjusted;       
+    const penFrac  = item.penalty / item.adjusted;   
     const penBar = hasPen
       ? `<div class="intank-bar-penalty" style="width:${Math.round(penFrac*100)}%;background-color:${COLORS[item.i]};height:100%"></div>`
       : '';
@@ -1021,22 +886,14 @@ function renderAdjustedRanking(totals, opts) {
       <div class="intang-rank-total" style="color:${COLORS[item.i]}">${fmt(item.adjusted)}${winBadge}${adjNote}</div>
     </div>`;
   });
-
   document.getElementById('intangRankingBars').innerHTML = html;
-
-  // Legend
   document.getElementById('leg-base').textContent   = lang==='en'?'Financial cost':'Coût financier';
   document.getElementById('leg-penalty').textContent = lang==='en'?'Priority penalty':'Pénalité priorités';
-
-  // Note
   const noteEl = document.getElementById('intang-rank-note');
   const subtitleEl = document.getElementById('intang-rank-subtitle');
-
-  // Find financial winner (rank by raw cost)
   const financialWinner = [...items].filter(x=>!x.unavail).sort((a,b)=>a.raw-b.raw)[0];
   const adjustedWinner  = sorted.filter(x=>!x.unavail)[0];
   const rankingChanged  = financialWinner && adjustedWinner && financialWinner.i !== adjustedWinner.i;
-
   if (!anyActive) {
     noteEl.textContent = lang==='en'
       ? 'All sliders at Low = financial ranking only. Move sliders to apply your priorities.'
@@ -1059,27 +916,16 @@ function renderAdjustedRanking(totals, opts) {
       noteEl.style.color = '';
     }
   }
-
-  // Title
   document.getElementById('intang-rank-title').textContent = lang==='en'
     ? 'Adjusted ranking — your priorities applied'
     : 'Classement ajusté — vos priorités appliquées';
 }
-
-// Render Buy & Sell friction + 5 questions (compact)
 function renderIntangibles(minCostIdx, minCostTotal, totals, opts) {
   const Lc = L[lang];
-
-  // ── Slider chips (always update) ──
   updateIntangChips();
-
-  // ── Adjusted ranking ──
   renderAdjustedRanking(totals, opts);
-
-  // ── Buy & Sell friction box ──
   const bsBox = document.getElementById('bs-friction-box');
   const isBSWinner = minCostIdx === 3;
-
   const bsData = {
     en: {
       title:"Buy & Sell — what the numbers don't show",
@@ -1113,7 +959,6 @@ function renderIntangibles(minCostIdx, minCostTotal, totals, opts) {
     }
   };
   const bd = bsData[lang];
-
   bsBox.innerHTML = `<div class="bs-friction">
     ${isBSWinner?`<div class="bs-winner-alert"><span style="font-size:16px;flex-shrink:0">⚠️</span><span>${bd.alert(Math.round(minCostTotal))}</span></div>`:''}
     <div class="bs-friction-title">
@@ -1124,8 +969,6 @@ function renderIntangibles(minCostIdx, minCostTotal, totals, opts) {
       ${bd.items.map(item=>`<div class="bs-item"><span class="bs-icon">${item.icon}</span><span>${item.text}</span></div>`).join('')}
     </div>
   </div>`;
-
-  // ── 5 questions ──
   const qs = {
     en:[
       {q:'Will you miss your own bed after 3 weeks?', note:'If yes — ship your own RV. The single most underestimated factor in long-term comfort.'},
@@ -1142,18 +985,14 @@ function renderIntangibles(minCostIdx, minCostTotal, totals, opts) {
       {q:'Que dit votre partenaire en voyant le budget ?', note:'"Combien ça coûte ?" → commencez par les chiffres. "Sera-t-on confortables ?" → commencez ici.'},
     ]
   };
-
   document.getElementById('intangQuestions').innerHTML = qs[lang].map((q,i)=>`
     <div class="q-item">
       <div class="q-num">${i+1}</div>
       <div class="q-text"><strong style="font-weight:500">${q.q}</strong><em>${q.note}</em></div>
     </div>`).join('');
-
   document.getElementById('intang-title').textContent      = lang==='en'?'Intangibles — quality of travel':'Intangibles — qualité du voyage';
   document.getElementById('intang-q-title').textContent    = lang==='en'?'5 questions to discuss before deciding':'5 questions à se poser avant de décider';
 }
-
-// ── Init ──────────────────────────────────────────────────────────────────────// ── Init ──────────────────────────────────────────────────────────────────────
 ['nights1','nights2','nonsch','diesel','paire','pcamp','grocery','resto','activ','roroval','surcharge'].forEach(id=>{
   document.getElementById(id).addEventListener('input',compute);
 });
@@ -1162,8 +1001,7 @@ function renderIntangibles(minCostIdx, minCostTotal, totals, opts) {
 });
 window.addEventListener('resize',compute);
 initBev();
-compute();
-</script>
+compute();</script>
 <script>document.getElementById("nav-budget").classList.add("active");</script>
 </body>
 </html>
