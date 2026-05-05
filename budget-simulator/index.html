@@ -12,45 +12,77 @@
   --bg:#f5f2ec;--surface:#fff;--surface2:#f0ede6;--border:#ddd9d0;
   --text:#1a1915;--text2:#6b6860;--text3:#9c9890;
   --blue:#1a5fa8;--blue-bg:#e8f0fa;
-  --green:#1a7a4a;--green-bg:#e4f5ec;
-  --amber:#8a5a00;--amber-bg:#fdf0d5;
+  --green:#1a7a4a;
   --red:#a02020;--red-bg:#fde8e8;
   --radius:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
 a{color:var(--blue);text-decoration:none}
+
+/* ── NAV ── */
+.tool-nav{position:sticky;top:0;z-index:100;background:rgba(26,25,21,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.1);padding:0 1rem}
+.tool-nav-inner{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tool-nav-inner::-webkit-scrollbar{display:none}
+.tool-nav-inner a{display:flex;flex-direction:column;align-items:center;padding:8px 10px;color:rgba(255,255,255,0.55);text-decoration:none;font-size:9px;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;gap:3px;flex-shrink:0}
+.tool-nav-inner a:hover{color:#fff}
+.tool-nav-inner a.active{color:#fff;border-bottom-color:#fff}
+.tool-nav-inner .nav-icon{font-size:16px;line-height:1}
+
+/* ── HEADER ── */
 .page-header{background:var(--text);color:#fff;padding:2.5rem 2rem 2rem;text-align:center}
 .back-link{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:1rem}
-.back-link:hover{color:#fff;text-decoration:none}
+.back-link:hover{color:#fff}
 .page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:400;color:#fff;margin-bottom:.5rem}
 .page-header .sub{font-size:.9rem;color:rgba(255,255,255,0.6);max-width:540px;margin:0 auto}
+.lang-toggle{display:inline-flex;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.2);margin-top:1rem}
+.lang-btn{background:none;border:none;color:rgba(255,255,255,.6);padding:5px 14px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer}
+.lang-btn.active{background:rgba(255,255,255,.2);color:#fff;font-weight:500}
+
+/* ── LAYOUT ── */
 .main{max-width:980px;margin:0 auto;padding:2rem 1.5rem 4rem}
-.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1.5rem}
-.card-header{padding:1rem 1.5rem;border-bottom:0.5px solid var(--border);background:var(--surface2);display:flex;align-items:center;gap:10px}
-.card-header h2{font-family:'DM Serif Display',serif;font-size:1.05rem;font-weight:400}
-.card-body{padding:1.5rem}
-.params-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.param-group{display:flex;flex-direction:column;gap:5px}
-.param-group label{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em}
-.range-row{display:flex;align-items:center;gap:10px}
+
+/* Two-column workspace: left=params, right=charts */
+.workspace{display:grid;grid-template-columns:42% 1fr;gap:1.5rem;align-items:start;margin-bottom:1.5rem}
+.col-left{position:sticky;top:52px;max-height:calc(100vh - 68px);overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.col-left::-webkit-scrollbar{width:4px}
+.col-left::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.col-right{display:flex;flex-direction:column;gap:1rem}
+
+/* Full-width section below workspace */
+.fullwidth{margin-bottom:1.5rem}
+
+/* ── CARD ── */
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.card-header{padding:.85rem 1.25rem;border-bottom:0.5px solid var(--border);background:var(--surface2);display:flex;align-items:center;gap:10px}
+.card-header h2{font-family:'DM Serif Display',serif;font-size:1rem;font-weight:400}
+.card-body{padding:1.25rem}
+
+/* ── PARAMS ── */
+.params-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+.param-group{display:flex;flex-direction:column;gap:4px}
+.param-group label{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;line-height:1.3}
+.range-row{display:flex;align-items:center;gap:8px}
 .range-row input[type=range]{flex:1;accent-color:var(--blue)}
-.range-val{font-size:14px;font-weight:500;min-width:70px;text-align:right;color:var(--text)}
-.pct-warning{font-size:12px;color:var(--red);margin-top:4px}
-.pct-ok{font-size:12px;color:var(--green);margin-top:4px}
-/* Surcharge warning banner */
-.surcharge-banner{background:#fff8e8;border:0.5px solid #e8c84a;border-radius:8px;padding:9px 14px;font-size:12px;color:#6b4a00;margin-top:.75rem;line-height:1.5}
-/* Season */
-.season-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:.75rem}
-.season-btn{border:0.5px solid var(--border);background:var(--surface2);border-radius:6px;padding:6px 14px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;color:var(--text2);transition:all .15s}
+.range-val{font-size:13px;font-weight:500;min-width:62px;text-align:right;color:var(--text)}
+.pct-warning{font-size:11px;color:var(--red);margin-top:4px}
+.pct-ok{font-size:11px;color:var(--green);margin-top:4px}
+
+/* Season buttons */
+.season-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.65rem}
+.season-btn{border:0.5px solid var(--border);background:var(--surface2);border-radius:6px;padding:5px 10px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;color:var(--text2);transition:all .15s;line-height:1.3}
 .season-btn.active{background:var(--text);color:#fff;border-color:var(--text)}
-.season-tag{display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px;margin-left:5px;font-weight:500}
+.season-tag{display:inline-block;font-size:9px;padding:1px 5px;border-radius:4px;margin-left:4px;font-weight:500;vertical-align:middle}
 .tag-low{background:#e4f5ec;color:#1a7a4a}
 .tag-mid{background:#fdf0d5;color:#8a5a00}
 .tag-high{background:#fde8e8;color:#a02020}
-.season-info{font-size:12px;color:var(--text2);padding:8px 12px;background:var(--surface2);border-radius:6px;border-left:3px solid var(--border);margin-bottom:1.25rem}
-/* Results */
-.results-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-bottom:1.5rem}
+.season-info{font-size:11px;color:var(--text2);padding:7px 11px;background:var(--surface2);border-radius:6px;border-left:3px solid var(--border);margin-bottom:1rem;line-height:1.5}
+
+/* Surcharge */
+.surcharge-banner{background:#fff8e8;border:0.5px solid #e8c84a;border-radius:8px;padding:8px 12px;font-size:11px;color:#6b4a00;margin-top:.65rem;line-height:1.5}
+
+/* ── RESULTS GRID (6 cards, full width) ── */
+.results-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-bottom:1.25rem}
 .result-card{border-radius:8px;padding:11px 8px;text-align:center;border:0.5px solid var(--border)}
 .result-card.winner{border-width:2px}
 .result-card.unavailable{opacity:.5}
@@ -60,52 +92,52 @@ a{color:var(--blue);text-decoration:none}
 .result-card .opt-badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:500;margin-top:5px}
 .result-card .opt-unavail{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:500;margin-top:5px;background:var(--red-bg);color:var(--red)}
 .result-card .opt-season{display:block;font-size:9px;margin-top:3px;opacity:.65}
-/* Bar chart */
-.chart-wrap{height:190px;position:relative;margin-bottom:1rem}
-.bar-chart{display:flex;align-items:flex-end;height:100%;gap:5px;padding:0 0 22px}
+
+/* ── BAR CHART ── */
+.chart-wrap{height:160px;position:relative}
+.bar-chart{display:flex;align-items:flex-end;height:100%;gap:5px;padding:0 0 20px}
 .bar-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%;justify-content:flex-end}
 .bar{width:100%;border-radius:4px 4px 0 0;transition:height .4s ease;min-height:3px}
-.bar-label{font-size:9px;color:var(--text2);text-align:center;width:100%}
-.bar-val{font-size:10px;font-weight:500;color:var(--text);margin-bottom:1px}
-/* Break-even chart */
-.bev-wrap{position:relative;width:100%;margin-bottom:.5rem}
+.bar-label{font-size:8.5px;color:var(--text2);text-align:center;width:100%}
+.bar-val{font-size:9.5px;font-weight:500;color:var(--text);margin-bottom:1px}
+
+/* ── BREAK-EVEN CHART ── */
+.bev-wrap{position:relative;width:100%}
 .bev-wrap canvas{display:block;width:100%!important}
-.bev-legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:.75rem}
+.bev-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:.65rem}
 .bev-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);cursor:pointer;user-select:none}
 .bev-leg-dot{width:12px;height:3px;border-radius:2px;flex-shrink:0}
 .bev-note{font-size:11px;color:var(--text3);margin-top:.5rem;line-height:1.5}
-/* Table */
+
+/* ── NOTES ── */
+.note-box{background:var(--surface2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text2);line-height:1.5;border-left:3px solid var(--border)}
+.interp-box{background:var(--blue-bg);border-radius:8px;padding:10px 14px;font-size:12px;color:#0d3a6b;line-height:1.6;border-left:3px solid #185FA5;display:none}
+
+/* ── TABLE ── */
 .breakdown-table{width:100%;border-collapse:collapse;font-size:12.5px}
 .breakdown-table th{text-align:left;padding:7px 9px;border-bottom:1.5px solid var(--border);color:var(--text2);font-size:10.5px;font-weight:500;text-transform:uppercase;letter-spacing:.04em;line-height:1.3}
 .breakdown-table td{padding:7px 9px;border-bottom:0.5px solid var(--border);vertical-align:middle}
 .breakdown-table tr:last-child td{border-bottom:none;font-weight:500;background:var(--surface2)}
 .breakdown-table .num{text-align:right;font-variant-numeric:tabular-nums}
 .breakdown-table .na-cell{text-align:right;color:var(--text3);font-size:11px}
-/* Notes */
-.note-box{background:var(--surface2);border-radius:8px;padding:11px 15px;font-size:13px;color:var(--text2);line-height:1.5;margin-top:1rem;border-left:3px solid var(--border)}
-.interp-box{background:var(--blue-bg);border-radius:8px;padding:11px 15px;font-size:13px;color:#0d3a6b;line-height:1.65;margin-top:.75rem;border-left:3px solid #185FA5;display:none}
+
 .disclaimer{font-size:11px;color:var(--text3);margin-top:1.5rem;line-height:1.5;padding:12px 16px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface)}
-.lang-toggle{display:inline-flex;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.2);margin-bottom:1rem}
-.lang-btn{background:none;border:none;color:rgba(255,255,255,.6);padding:5px 14px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer}
-.lang-btn.active{background:rgba(255,255,255,.2);color:#fff;font-weight:500}
-.tool-nav{position:sticky;top:0;z-index:100;background:rgba(26,25,21,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.1);padding:0 1rem}
-.tool-nav-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
-.tool-nav-inner::-webkit-scrollbar{display:none}
-.tool-nav-inner a{display:flex;flex-direction:column;align-items:center;padding:8px 10px;color:rgba(255,255,255,0.55);text-decoration:none;font-size:9px;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;gap:3px;flex-shrink:0}
-.tool-nav-inner a:hover{color:#fff;text-decoration:none}
-.tool-nav-inner a.active{color:#fff;border-bottom-color:#fff}
-.tool-nav-inner .nav-icon{font-size:16px;line-height:1}
-@media(max-width:700px){
-  .params-grid{grid-template-columns:1fr}
+
+/* ── RESPONSIVE ── */
+@media(max-width:760px){
+  .workspace{grid-template-columns:1fr;gap:1rem}
+  .col-left{position:static;max-height:none;overflow:visible}
   .results-grid{grid-template-columns:repeat(3,1fr)}
+  .params-grid{grid-template-columns:1fr}
   .breakdown-table{font-size:11px}
 }
-@media(max-width:420px){
+@media(max-width:440px){
   .results-grid{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
 <body>
+
 <nav class="tool-nav">
   <div class="tool-nav-inner">
     <a href="https://jev-rv.github.io/" id="nav-home"><span class="nav-icon">🏠</span>Home</a>
@@ -127,7 +159,7 @@ a{color:var(--blue);text-decoration:none}
   <a class="back-link" href="https://jev-rv.github.io/">← Back to all tools</a>
   <h1 id="h-title">Trip Budget Simulator</h1>
   <p class="sub" id="h-sub">Realistic cost breakdown for all 6 travel options — validated against the Guide 11 Excel model (v11).</p>
-  <div class="lang-toggle" style="margin-top:1rem">
+  <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
     <button class="lang-btn" onclick="setLang('fr')">FR</button>
   </div>
@@ -135,142 +167,134 @@ a{color:var(--blue);text-decoration:none}
 
 <main class="main">
 
-<!-- ── PARAMETERS ── -->
-<div class="card">
-  <div class="card-header"><span>⚙️</span><h2 id="params-title">Trip parameters</h2></div>
-  <div class="card-body">
+<!-- ══════════════════════════════════════════════════════
+     TWO-COLUMN WORKSPACE
+     Left: parameters (sticky)   Right: charts
+     ══════════════════════════════════════════════════════ -->
+<div class="workspace">
 
-    <!-- Season -->
-    <div style="margin-bottom:1rem">
-      <div style="font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem" id="lbl-season">Travel season</div>
-      <div class="season-row">
-        <button class="season-btn" id="btn-low" onclick="setSeason('low')">❄️ <span id="s-lbl-low">Winter / Shoulder</span> <span class="season-tag tag-low" id="s-tag-low">Oct–Apr</span></button>
-        <button class="season-btn active" id="btn-mid" onclick="setSeason('mid')">🌤️ <span id="s-lbl-mid">Shoulder</span> <span class="season-tag tag-mid" id="s-tag-mid">May–Jun · Sep</span></button>
-        <button class="season-btn" id="btn-high" onclick="setSeason('high')">☀️ <span id="s-lbl-high">High season</span> <span class="season-tag tag-high" id="s-tag-high">Jul–Aug</span></button>
-      </div>
-      <div class="season-info" id="season-info-box">Shoulder pricing: standard rates across all options. Best overall balance of cost and travel conditions.</div>
-    </div>
+  <!-- ── LEFT COLUMN — Parameters ── -->
+  <div class="col-left">
+    <div class="card">
+      <div class="card-header"><span>⚙️</span><h2 id="params-title">Trip parameters</h2></div>
+      <div class="card-body">
 
-    <div class="params-grid">
-      <div class="param-group">
-        <label id="lbl-nights1">Schengen nights — Block 1</label>
-        <div class="range-row">
-          <input type="range" min="14" max="90" step="1" id="nights1" value="89">
-          <span class="range-val" id="v-nights1">89</span>
+        <!-- Season selector -->
+        <div style="margin-bottom:.85rem">
+          <div style="font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem" id="lbl-season">Travel season</div>
+          <div class="season-row">
+            <button class="season-btn" id="btn-low" onclick="setSeason('low')">❄️ <span id="s-lbl-low">Winter</span><span class="season-tag tag-low" id="s-tag-low">Oct–Apr</span></button>
+            <button class="season-btn active" id="btn-mid" onclick="setSeason('mid')">🌤️ <span id="s-lbl-mid">Shoulder</span><span class="season-tag tag-mid" id="s-tag-mid">May–Jun·Sep</span></button>
+            <button class="season-btn" id="btn-high" onclick="setSeason('high')">☀️ <span id="s-lbl-high">High</span><span class="season-tag tag-high" id="s-tag-high">Jul–Aug</span></button>
+          </div>
+          <div class="season-info" id="season-info-box">Shoulder pricing: standard rates. Best overall balance of cost and travel conditions.</div>
         </div>
-      </div>
-      <div class="param-group">
-        <label id="lbl-nights2">Schengen nights — Block 2 (0 = single block)</label>
-        <div class="range-row">
-          <input type="range" min="0" max="90" step="1" id="nights2" value="90">
-          <span class="range-val" id="v-nights2">90</span>
+
+        <!-- Sliders grid -->
+        <div class="params-grid">
+          <div class="param-group">
+            <label id="lbl-nights1">Schengen nights — Block 1</label>
+            <div class="range-row"><input type="range" min="14" max="90" step="1" id="nights1" value="89"><span class="range-val" id="v-nights1">89</span></div>
+          </div>
+          <div class="param-group">
+            <label id="lbl-nights2">Schengen nights — Block 2</label>
+            <div class="range-row"><input type="range" min="0" max="90" step="1" id="nights2" value="90"><span class="range-val" id="v-nights2">90</span></div>
+          </div>
+          <div class="param-group">
+            <label id="lbl-nonsch">Non-Schengen nights (break)</label>
+            <div class="range-row"><input type="range" min="0" max="200" step="1" id="nonsch" value="0"><span class="range-val" id="v-nonsch">0</span></div>
+          </div>
+          <div class="param-group">
+            <label id="lbl-diesel">Diesel (€/L)</label>
+            <div class="range-row"><input type="range" min="1.4" max="2.5" step="0.05" id="diesel" value="2.0"><span class="range-val" id="v-diesel">€2.00</span></div>
+          </div>
+          <div class="param-group">
+            <label id="lbl-paire">% nights at aire</label>
+            <div class="range-row"><input type="range" min="0" max="100" step="5" id="paire" value="60"><span class="range-val" id="v-paire">60%</span></div>
+          </div>
+          <div class="param-group">
+            <label id="lbl-pcamp">% nights at campsite</label>
+            <div class="range-row"><input type="range" min="0" max="100" step="5" id="pcamp" value="25"><span class="range-val" id="v-pcamp">25%</span></div>
+          </div>
+          <div class="param-group">
+            <label id="lbl-grocery">Grocery €/day (2 pax)</label>
+            <div class="range-row"><input type="range" min="15" max="80" step="5" id="grocery" value="30"><span class="range-val" id="v-grocery">€30</span></div>
+          </div>
+          <div class="param-group">
+            <label id="lbl-resto">Restaurant €/day (2 pax)</label>
+            <div class="range-row"><input type="range" min="0" max="80" step="5" id="resto" value="20"><span class="range-val" id="v-resto">€20</span></div>
+          </div>
+          <div class="param-group">
+            <label id="lbl-activ">Activities €/day</label>
+            <div class="range-row"><input type="range" min="0" max="60" step="5" id="activ" value="15"><span class="range-val" id="v-activ">€15</span></div>
+          </div>
+          <div class="param-group">
+            <label id="lbl-roroval">Shipped RV value (€)</label>
+            <div class="range-row"><input type="range" min="50000" max="300000" step="5000" id="roroval" value="175000"><span class="range-val" id="v-roroval">€175k</span></div>
+          </div>
+          <!-- Surcharge — full width inside left col grid -->
+          <div class="param-group" style="grid-column:1/-1;border-top:0.5px solid var(--border);padding-top:.85rem;margin-top:.1rem">
+            <label id="lbl-surcharge">🌐 RoRo surcharge (Opt 1 only)</label>
+            <div class="range-row"><input type="range" min="0" max="35" step="1" id="surcharge" value="20"><span class="range-val" id="v-surcharge">+20%</span></div>
+            <div class="surcharge-banner" id="surcharge-banner">USTR Recovery Fee (Nov 2025). Community-validated: ~+23% on a recent IVSS return shipment (May 2026). Set to 0% for pre-surcharge baseline. Always get a current quote from IVSS / SeaBridge.</div>
+          </div>
         </div>
-      </div>
-      <div class="param-group">
-        <label id="lbl-nonsch">Non-Schengen nights (break between blocks)</label>
-        <div class="range-row">
-          <input type="range" min="0" max="200" step="1" id="nonsch" value="0">
-          <span class="range-val" id="v-nonsch">0</span>
-        </div>
-      </div>
-      <div class="param-group">
-        <label id="lbl-diesel">Diesel price (€/L)</label>
-        <div class="range-row">
-          <input type="range" min="1.4" max="2.5" step="0.05" id="diesel" value="2.0">
-          <span class="range-val" id="v-diesel">€2.00</span>
-        </div>
-      </div>
-      <div class="param-group">
-        <label id="lbl-paire">% nights at aire / stellplatz</label>
-        <div class="range-row">
-          <input type="range" min="0" max="100" step="5" id="paire" value="60">
-          <span class="range-val" id="v-paire">60%</span>
-        </div>
-      </div>
-      <div class="param-group">
-        <label id="lbl-pcamp">% nights at campsite</label>
-        <div class="range-row">
-          <input type="range" min="0" max="100" step="5" id="pcamp" value="25">
-          <span class="range-val" id="v-pcamp">25%</span>
-        </div>
-      </div>
-      <div class="param-group">
-        <label id="lbl-grocery">Grocery budget (€/day, 2 people)</label>
-        <div class="range-row">
-          <input type="range" min="15" max="80" step="5" id="grocery" value="30">
-          <span class="range-val" id="v-grocery">€30</span>
-        </div>
-      </div>
-      <div class="param-group">
-        <label id="lbl-resto">Restaurant budget (€/day, 2 people)</label>
-        <div class="range-row">
-          <input type="range" min="0" max="80" step="5" id="resto" value="20">
-          <span class="range-val" id="v-resto">€20</span>
-        </div>
-      </div>
-      <div class="param-group">
-        <label id="lbl-activ">Activities / culture (€/day)</label>
-        <div class="range-row">
-          <input type="range" min="0" max="60" step="5" id="activ" value="15">
-          <span class="range-val" id="v-activ">€15</span>
-        </div>
-      </div>
-      <div class="param-group">
-        <label id="lbl-roroval">Shipped RV value (€) — affects insurance</label>
-        <div class="range-row">
-          <input type="range" min="50000" max="300000" step="5000" id="roroval" value="175000">
-          <span class="range-val" id="v-roroval">€175k</span>
-        </div>
-      </div>
-      <!-- SURCHARGE SLIDER — full width -->
-      <div class="param-group" style="grid-column:1/-1;border-top:0.5px solid var(--border);padding-top:1rem;margin-top:.25rem">
-        <label id="lbl-surcharge">🌐 RoRo geopolitical surcharge (Option 1 only)</label>
-        <div class="range-row">
-          <input type="range" min="0" max="35" step="1" id="surcharge" value="20">
-          <span class="range-val" id="v-surcharge">+20%</span>
-        </div>
-        <div class="surcharge-banner" id="surcharge-banner">
-          USTR Recovery Fee (Nov 2025) + market conditions apply to Halifax↔EU RoRo only. Community-validated: ~+23% on a recent IVSS return shipment (May 2026). Set to 0% to see pre-surcharge baseline. Always get a current quote from IVSS / SeaBridge before budgeting.
-        </div>
+        <div id="pct-status" class="pct-ok" style="margin-top:8px"></div>
+
       </div>
     </div>
-    <div id="pct-status" class="pct-ok" style="margin-top:10px"></div>
-  </div>
-</div>
+  </div><!-- /col-left -->
 
-<!-- ── RESULTS ── -->
-<div class="card">
-  <div class="card-header"><span>📊</span><h2 id="results-title">Cost comparison</h2></div>
-  <div class="card-body">
-    <div class="results-grid" id="resultsGrid"></div>
-    <div class="chart-wrap"><div class="bar-chart" id="barChart"></div></div>
-    <div class="note-box" id="noteBox"></div>
-    <div class="interp-box" id="interpBox"></div>
-  </div>
-</div>
+  <!-- ── RIGHT COLUMN — Break-even chart + Bar chart ── -->
+  <div class="col-right">
 
-<!-- ── BREAK-EVEN CHART ── -->
-<div class="card">
-  <div class="card-header"><span>📈</span><h2 id="bev-title">Break-even analysis — total cost by trip duration</h2></div>
-  <div class="card-body">
-    <div class="bev-wrap">
-      <canvas id="bevCanvas"></canvas>
+    <!-- Break-even line chart -->
+    <div class="card">
+      <div class="card-header"><span>📈</span><h2 id="bev-title">Break-even — cost by trip duration</h2></div>
+      <div class="card-body">
+        <div class="bev-wrap"><canvas id="bevCanvas"></canvas></div>
+        <div class="bev-legend" id="bevLegend"></div>
+        <div class="bev-note" id="bev-note">Sliders update curves in real time. Dot = your current config. Click legend to hide/show a curve.</div>
+      </div>
     </div>
-    <div class="bev-legend" id="bevLegend"></div>
-    <div class="bev-note" id="bev-note">
-      All parameters from the sliders above apply in real time. Solid dot = your current trip configuration.
-      Vertical lines: 49 days (Time-Sharing cap) · 90 days (single Schengen block limit).
-      Time-Sharing shown as dashed line after the 7-week cap.
+
+    <!-- Bar chart + result notes -->
+    <div class="card">
+      <div class="card-header"><span>📊</span><h2 id="results-title-bar">Current trip totals</h2></div>
+      <div class="card-body">
+        <div class="chart-wrap"><div class="bar-chart" id="barChart"></div></div>
+        <div class="note-box" id="noteBox" style="margin-top:.85rem"></div>
+        <div class="interp-box" id="interpBox" style="margin-top:.65rem"></div>
+      </div>
+    </div>
+
+  </div><!-- /col-right -->
+
+</div><!-- /workspace -->
+
+<!-- ══════════════════════════════════════════════════════
+     FULL-WIDTH SECTION
+     Results cards + Breakdown table
+     ══════════════════════════════════════════════════════ -->
+
+<!-- Result cards — 6 options summary -->
+<div class="fullwidth">
+  <div class="card">
+    <div class="card-header"><span>💶</span><h2 id="results-title">Cost comparison</h2></div>
+    <div class="card-body">
+      <div class="results-grid" id="resultsGrid"></div>
     </div>
   </div>
 </div>
 
-<!-- ── BREAKDOWN ── -->
-<div class="card">
-  <div class="card-header"><span>📋</span><h2 id="breakdown-title">Cost breakdown by category</h2></div>
-  <div class="card-body">
-    <div style="overflow-x:auto">
-      <table class="breakdown-table" id="breakdownTable"></table>
+<!-- Breakdown table -->
+<div class="fullwidth">
+  <div class="card">
+    <div class="card-header"><span>📋</span><h2 id="breakdown-title">Cost breakdown by category</h2></div>
+    <div class="card-body">
+      <div style="overflow-x:auto">
+        <table class="breakdown-table" id="breakdownTable"></table>
+      </div>
     </div>
   </div>
 </div>
@@ -278,14 +302,14 @@ a{color:var(--blue);text-decoration:none}
 <div class="disclaimer" id="disclaimer">
   <strong>Disclaimer:</strong> Informational and planning purposes only. No responsibility for errors or post-publication regulatory changes. Not financial or legal advice. Always verify costs with service providers.<br>
   <strong>Sources:</strong> Guide 11 Excel model v11 · McRent/Indie Campers 2025–2026 · Yescapa/Goboony P2P · IVSS/SeaBridge RoRo quotations · camping-quart.fr · USTR Recovery Fee (Nov 2025) — community-validated ~+23% on Halifax↔EU route (LTV group, May 2026).<br>
-  <strong>v3.0</strong> — RoRo geopolitical surcharge slider (USTR fee) · Real-time break-even line chart · Added Option 6 P2P · Fixed Time-Sharing 7-week cap · Corrected Buy &amp; Sell net cost · Corrected Option 1 insurance · Seasonal pricing.<br><br>
+  <strong>v4.0</strong> — Two-column layout (params left / charts right) · RoRo surcharge slider · Real-time break-even chart · P2P Option 6 · Time-Sharing 7-week cap · Buy &amp; Sell corrected · Option 1 insurance corrected · Seasonal pricing · PL toll rates.<br><br>
   © 2026 Jack-Éric Vandenbroucke · <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
 </div>
 
 </main>
 
 <script>
-// ── Constants ────────────────────────────────────────────────────────────────
+// ── Constants ─────────────────────────────────────────────────────────────────
 const COLORS    = ['#1a5fa8','#8a5a00','#a02020','#1a7a4a','#5a5a5a','#1a6a7a'];
 const COLORS_BG = ['#e8f0fa','#fdf0d5','#fde8e8','#e4f5ec','#f0f0f0','#e4f5f2'];
 
@@ -294,109 +318,108 @@ const SEASON_MULT = {
   mid:  {rental:1.00,p2p:1.00,camp:1.00,hotel:1.00,car:1.00},
   high: {rental:1.28,p2p:1.25,camp:1.22,hotel:1.32,car:1.18},
 };
-
 const SEASON_INFO = {
   en:{
-    low:'Winter/shoulder discounts: rentals −22%, campsites −18%, hotels −28%, car −15%. Ideal for slow travel — less crowds, better rates.',
-    mid:'Shoulder pricing: standard rates across all options. Best overall balance of cost and travel conditions.',
-    high:'Peak surcharges: rentals +28%, campsites +22%, hotels +32%, car +18%. Book early — July–August adds €3,000–5,000 to the total.',
+    low:'Winter/shoulder discounts: rentals −22%, campsites −18%, hotels −28%, car −15%. Ideal for slow travel.',
+    mid:'Shoulder pricing: standard rates. Best overall balance of cost and travel conditions.',
+    high:'Peak surcharges: rentals +28%, campsites +22%, hotels +32%, car +18%. Book early — July–August adds €3,000–5,000.',
   },
   fr:{
     low:'Remises hiver/épaule : locations −22%, campings −18%, hôtels −28%, voiture −15%. Idéal pour le voyage lent.',
-    mid:'Tarifs épaule : prix standards pour toutes les options. Meilleur équilibre coût/conditions.',
+    mid:'Tarifs épaule : prix standards. Meilleur équilibre coût/conditions.',
     high:'Surcharges haute saison : locations +28%, campings +22%, hôtels +32%, voiture +18%. Réservez tôt.',
   }
 };
 
-// ── State ────────────────────────────────────────────────────────────────────
-let lang = 'en';
-let season = 'mid';
-// track which lines are hidden in break-even chart
-let bevHidden = [false,false,false,false,false,false];
+// ── State ─────────────────────────────────────────────────────────────────────
+let lang='en', season='mid';
+let bevHidden=[false,false,false,false,false,false];
 
-// ── Translations ─────────────────────────────────────────────────────────────
-const L = {
+// ── Translations ──────────────────────────────────────────────────────────────
+const L={
   en:{
     'h-title':'Trip Budget Simulator',
     'h-sub':'Realistic cost breakdown for all 6 travel options — validated against the Guide 11 Excel model (v11).',
     'params-title':'Trip parameters',
     'lbl-season':'Travel season',
-    's-lbl-low':'Winter / Shoulder','s-tag-low':'Oct–Apr',
-    's-lbl-mid':'Shoulder','s-tag-mid':'May–Jun · Sep',
-    's-lbl-high':'High season','s-tag-high':'Jul–Aug',
+    's-lbl-low':'Winter','s-tag-low':'Oct–Apr',
+    's-lbl-mid':'Shoulder','s-tag-mid':'May–Jun·Sep',
+    's-lbl-high':'High','s-tag-high':'Jul–Aug',
     'lbl-nights1':'Schengen nights — Block 1',
-    'lbl-nights2':'Schengen nights — Block 2 (0 = single block)',
-    'lbl-nonsch':'Non-Schengen nights (break between blocks)',
-    'lbl-diesel':'Diesel price (€/L)',
-    'lbl-paire':'% nights at aire / stellplatz',
+    'lbl-nights2':'Schengen nights — Block 2',
+    'lbl-nonsch':'Non-Schengen nights (break)',
+    'lbl-diesel':'Diesel (€/L)',
+    'lbl-paire':'% nights at aire',
     'lbl-pcamp':'% nights at campsite',
-    'lbl-grocery':'Grocery budget (€/day, 2 people)',
-    'lbl-resto':'Restaurant budget (€/day, 2 people)',
-    'lbl-activ':'Activities / culture (€/day)',
-    'lbl-roroval':'Shipped RV value (€) — affects insurance',
-    'lbl-surcharge':'🌐 RoRo geopolitical surcharge (Option 1 only)',
+    'lbl-grocery':'Grocery €/day (2 pax)',
+    'lbl-resto':'Restaurant €/day (2 pax)',
+    'lbl-activ':'Activities €/day',
+    'lbl-roroval':'Shipped RV value (€)',
+    'lbl-surcharge':'🌐 RoRo surcharge (Opt 1 only)',
     'results-title':'Cost comparison',
-    'bev-title':'Break-even analysis — total cost by trip duration',
+    'results-title-bar':'Current trip totals',
+    'bev-title':'Break-even — cost by trip duration',
     'breakdown-title':'Cost breakdown by category',
     opts:['Ship RV (RoRo)','RV Rental (Pro)','Time-Sharing','Buy & Sell','Car + Hotels','P2P Rental'],
     rows:['Transport / shipping','RV acquisition / rental','Insurance','Accommodation','Fuel, tolls & vehicle','Daily living','Flights & transfers','GRAND TOTAL'],
     'pct-ok':'✅ Accommodation mix: 100%',
-    'pct-warn': p=>`⚠️ Accommodation mix: ${p}% — must total 100%`,
+    'pct-warn':p=>`⚠️ Mix ${p}% — must total 100%`,
     'winner':'Best value',
-    'note':(n,d,min,name)=>`Trip: ${n} nights · Average: €${d}/night · Best available: ${name} at €${min.toLocaleString()}`,
-    'ts-unavail':w=>`❌ Time-Sharing unavailable: ${w} weeks needed — cap is 7 weeks/year. Requires ${Math.ceil(w/7)} annual subscriptions.`,
-    'ts-warn':km=>`⚠️ Time-Sharing: km overage likely (~€${km.toLocaleString()} est.) — very few km/week included (~300–400 km max).`,
-    'ts-ok':'✅ Time-Sharing fits within the 7-week/year cap.',
-    'p2p-warn':'⚠️ P2P Rental: Most owners decline >60 days. Confirm long-duration availability and non-EU resident insurance coverage.',
-    'season-high-note':'☀️ High-season surcharges applied to rental, P2P, campsite, hotel, and car rates.',
-    'season-low-note':'❄️ Winter/shoulder discounts applied to rental, P2P, campsite, hotel, and car rates.',
-    'long-trip-note':'💡 At 2×90 days, shipping becomes competitive from the 2nd trip onward — RoRo cost is fixed and amortized.',
-    'surcharge-active':pct=>`⚠️ RoRo surcharge active: +${pct}% on shipping cost (Option 1). Community-validated ~+23% on Halifax↔EU (May 2026).`,
-    'bev-note':'All slider parameters apply in real time. Solid dot = your current configuration. Dashed line = Time-Sharing beyond 7-week cap (unavailable in a single year). Click legend labels to show/hide curves.',
+    'note':(n,d,min,name)=>`Trip: ${n} nights · Average: €${d}/night · Best: ${name} at €${min.toLocaleString()}`,
+    'ts-unavail':w=>`❌ Time-Sharing unavailable: ${w} weeks needed, cap is 7 wk/yr. Needs ${Math.ceil(w/7)} subscriptions.`,
+    'ts-warn':km=>`⚠️ Time-Sharing: km overage likely (~€${km.toLocaleString()}) — very few km/week included.`,
+    'ts-ok':'✅ Time-Sharing fits the 7-week/year cap.',
+    'p2p-warn':'⚠️ P2P: Most owners decline >60 days. Confirm long-duration availability and non-EU insurance.',
+    'season-high-note':'☀️ Peak surcharges applied to rental, P2P, campsite, hotel and car rates.',
+    'season-low-note':'❄️ Winter/shoulder discounts applied to rental, P2P, campsite, hotel and car rates.',
+    'long-trip-note':'💡 At 2×90 days, shipping is competitive from the 2nd trip onward — RoRo cost is fixed and amortized.',
+    'surcharge-active':p=>`⚠️ RoRo surcharge +${p}% on shipping (Opt 1). Community-validated ~+23% Halifax↔EU (May 2026).`,
+    'bev-note':'Sliders update curves in real time. Solid dot = your current config. Dashed = Time-Sharing beyond 7-wk cap. Click legend to show/hide.',
   },
   fr:{
     'h-title':'Simulateur de budget voyage',
     'h-sub':'Budget réaliste pour les 6 options — validé sur le modèle Excel Guide 11 (v11).',
     'params-title':'Paramètres du voyage',
     'lbl-season':'Saison de voyage',
-    's-lbl-low':'Hiver / Épaule','s-tag-low':'Oct–Avr',
-    's-lbl-mid':'Épaule','s-tag-mid':'Mai–Juin · Sep',
+    's-lbl-low':'Hiver','s-tag-low':'Oct–Avr',
+    's-lbl-mid':'Épaule','s-tag-mid':'Mai–Juin·Sep',
     's-lbl-high':'Haute saison','s-tag-high':'Juil–Août',
     'lbl-nights1':'Nuits Schengen — Bloc 1',
-    'lbl-nights2':'Nuits Schengen — Bloc 2 (0 = bloc unique)',
-    'lbl-nonsch':'Nuits hors Schengen (pause entre blocs)',
-    'lbl-diesel':'Prix du diesel (€/L)',
-    'lbl-paire':'% nuits aire / stellplatz',
+    'lbl-nights2':'Nuits Schengen — Bloc 2',
+    'lbl-nonsch':'Nuits hors Schengen (pause)',
+    'lbl-diesel':'Diesel (€/L)',
+    'lbl-paire':'% nuits aire',
     'lbl-pcamp':'% nuits camping',
-    'lbl-grocery':'Budget épicerie (€/jour, 2 personnes)',
-    'lbl-resto':'Budget restaurant (€/jour, 2 personnes)',
-    'lbl-activ':'Activités / culture (€/jour)',
-    'lbl-roroval':'Valeur du VR expédié (€) — impact assurance',
-    'lbl-surcharge':'🌐 Surcharge géopolitique RoRo (Option 1 seulement)',
+    'lbl-grocery':'Épicerie €/jour (2 pers)',
+    'lbl-resto':'Restaurant €/jour (2 pers)',
+    'lbl-activ':'Activités €/jour',
+    'lbl-roroval':'Valeur VR expédié (€)',
+    'lbl-surcharge':'🌐 Surcharge RoRo (Opt 1 seul.)',
     'results-title':'Comparaison des coûts',
-    'bev-title':'Analyse du seuil de rentabilité — coût total selon la durée',
+    'results-title-bar':'Totaux du voyage actuel',
+    'bev-title':'Seuil de rentabilité — coût selon la durée',
     'breakdown-title':'Détail des coûts par catégorie',
     opts:['Expédition VR (RoRo)','Location VR (Pro)','Temps partagé','Achat & Vente','Voiture + Hôtels','Location P2P'],
     rows:['Transport / expédition','Acquisition / location VR','Assurance','Hébergement','Carburant, péages & véhicule','Vie quotidienne','Vols & transferts','TOTAL GÉNÉRAL'],
     'pct-ok':'✅ Mix hébergement : 100%',
-    'pct-warn':p=>`⚠️ Mix hébergement : ${p}% — doit totaliser 100%`,
+    'pct-warn':p=>`⚠️ Mix ${p}% — doit totaliser 100%`,
     'winner':'Meilleur prix',
-    'note':(n,d,min,name)=>`Voyage : ${n} nuits · Moyenne : €${d}/nuit · Meilleure option : ${name} à €${min.toLocaleString()}`,
-    'ts-unavail':w=>`❌ Temps partagé non disponible : ${w} semaines requises — limité à 7 sem/an. Nécessiterait ${Math.ceil(w/7)} souscriptions.`,
-    'ts-warn':km=>`⚠️ Temps partagé : km excédentaires probables (~€${km.toLocaleString()} est.) — très peu de km inclus par semaine.`,
-    'ts-ok':'✅ Temps partagé compatible avec le plafond de 7 semaines/an.',
-    'p2p-warn':'⚠️ P2P : La plupart refusent >60 jours. Confirmez disponibilité longue durée et assurance pour non-résidents UE.',
-    'season-high-note':'☀️ Surcharges haute saison appliquées : location, P2P, campings, hôtels et voiture.',
-    'season-low-note':'❄️ Remises hiver/épaule appliquées : location, P2P, campings, hôtels et voiture.',
-    'long-trip-note':'💡 À 2×90 jours, expédier son VR devient compétitif dès le 2e voyage — coût RoRo fixe et amorti.',
-    'surcharge-active':pct=>`⚠️ Surcharge RoRo active : +${pct}% sur l'expédition (Option 1). Validé communauté ~+23% sur Halifax↔EU (mai 2026).`,
-    'bev-note':'Tous les paramètres des sliders s\'appliquent en temps réel. Point plein = votre configuration actuelle. Ligne pointillée = Temps partagé au-delà du cap 7 semaines (non disponible en une année). Cliquez sur la légende pour afficher/masquer.',
+    'note':(n,d,min,name)=>`Voyage : ${n} nuits · Moyenne : €${d}/nuit · Meilleure : ${name} à €${min.toLocaleString()}`,
+    'ts-unavail':w=>`❌ Temps partagé non dispo : ${w} sem. requises, max 7 sem/an. Nécessite ${Math.ceil(w/7)} souscriptions.`,
+    'ts-warn':km=>`⚠️ Temps partagé : km excédentaires (~€${km.toLocaleString()}) — très peu de km inclus/semaine.`,
+    'ts-ok':'✅ Temps partagé compatible avec le plafond 7 semaines/an.',
+    'p2p-warn':'⚠️ P2P : La plupart refusent >60 jours. Confirmez dispo longue durée et assurance non-résidents UE.',
+    'season-high-note':'☀️ Surcharges haute saison appliquées : location, P2P, campings, hôtels, voiture.',
+    'season-low-note':'❄️ Remises hiver/épaule appliquées : location, P2P, campings, hôtels, voiture.',
+    'long-trip-note':'💡 À 2×90 jours, expédier devient compétitif dès le 2e voyage — coût RoRo fixe et amorti.',
+    'surcharge-active':p=>`⚠️ Surcharge RoRo +${p}% sur l'expédition (Opt 1). Validé ~+23% Halifax↔EU (mai 2026).`,
+    'bev-note':'Les sliders mettent les courbes à jour en temps réel. Point = votre config. Pointillé = Temps partagé hors cap. Cliquez la légende pour masquer/afficher.',
   }
 };
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
-function v(id){ return +document.getElementById(id).value; }
-function fmt(n){ return '€'+Math.round(n).toLocaleString(); }
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function v(id){return +document.getElementById(id).value;}
+function fmt(n){return '€'+Math.round(n).toLocaleString();}
 
 function setSeason(s){
   season=s;
@@ -413,295 +436,205 @@ function setLang(l){
     if(typeof val==='string'){const el=document.getElementById(id);if(el)el.textContent=val;}
   }
   ['low','mid','high'].forEach(s=>{
-    const tEl=document.getElementById('s-tag-'+s); if(tEl)tEl.textContent=Lc['s-tag-'+s];
-    const lEl=document.getElementById('s-lbl-'+s); if(lEl)lEl.textContent=Lc['s-lbl-'+s];
+    const t=document.getElementById('s-tag-'+s);if(t)t.textContent=Lc['s-tag-'+s];
+    const lb=document.getElementById('s-lbl-'+s);if(lb)lb.textContent=Lc['s-lbl-'+s];
   });
   document.getElementById('season-info-box').textContent=SEASON_INFO[l][season];
   compute();
 }
 
-// ── Core cost engine — returns total for given schNights + totalNights ────────
-// Used both by compute() (current config) and break-even (sweeps days)
-function calcOpts(schNights, totalNights, params){
-  const {diesel,paire,pcamp,grocery,resto,activ,rvVal,sm,roroSurcharge} = params;
-
-  const km=36, conso=12.5;
-  const fpd=(km/100)*conso*diesel;
-  const aireRate=14, campRate=35*sm.camp;
-  const avgN=paire*aireRate+Math.max(0,pcamp)*campRate;
-  const ttax=3.0; // 1.5×2 persons
+// ── Core cost engine ──────────────────────────────────────────────────────────
+function calcOpts(schNights,totalNights,p){
+  const {diesel,paire,pcamp,grocery,resto,activ,sm,roroSurcharge}=p;
+  const km=36,conso=12.5,fpd=(km/100)*conso*diesel;
+  const avgN=paire*14+Math.max(0,pcamp)*35*sm.camp;
+  const ttax=3.0;
   const accommAll=totalNights*(avgN+ttax);
   const accommSch=schNights*(avgN+ttax);
-  const tollRVday=1250/180, tollCarday=500/180;
-  const misc=10, laundry=8/7, propane=25/30;
-  const dailyLiving=totalNights*(grocery+resto+activ+misc+laundry+propane);
-  const fl_ship=3700, fl_other=2450;
-  const TS_MAX=49;
-  const tsUnavail=schNights>TS_MAX;
+  const tollRV=1250/180,tollCar=500/180;
+  const misc=10,laundry=8/7,propane=25/30;
+  const dl=totalNights*(grocery+resto+activ+misc+laundry+propane);
+  const fl_s=3700,fl_o=2450;
+  const TS_MAX=49,tsU=schNights>TS_MAX;
 
-  // Opt1 — RoRo (surcharge applied to transport only)
-  const roroBase=10650;
-  const roroWithSurcharge=Math.round(roroBase*(1+roroSurcharge/100));
+  // Opt1 RoRo
+  const roro=Math.round(10650*(1+roroSurcharge/100));
   const ins1=Math.round(6250*(totalNights/180)+1050+1100);
-  const t1=roroWithSurcharge+ins1+Math.round(accommAll)+Math.round(totalNights*fpd+totalNights*tollRVday)+Math.round(dailyLiving)+fl_ship;
+  const t1=roro+ins1+Math.round(accommAll)+Math.round(totalNights*fpd+totalNights*tollRV)+Math.round(dl)+fl_s;
 
-  // Opt2 — Pro rental
-  const rentalRate=200*sm.rental;
-  const t2=Math.round(schNights*rentalRate+700)+1100+Math.round(accommSch*0.92)+Math.round(schNights*fpd*0.85+schNights*tollRVday)+Math.round(dailyLiving)+fl_other;
+  // Opt2 Pro rental
+  const t2=Math.round(schNights*200*sm.rental+700)+1100+Math.round(accommSch*0.92)+Math.round(schNights*fpd*0.85+schNights*tollRV)+Math.round(dl)+fl_o;
 
-  // Opt3 — Time-sharing (hard-cap logic)
-  let t3;
-  if(tsUnavail){
-    t3=null; // unavailable
-  } else {
-    const tsKmOver=Math.round((schNights/TS_MAX)*1960);
-    t3=Math.round(5800+tsKmOver+600)+1100+Math.round(accommSch*0.45)+Math.round(schNights*fpd*0.72)+Math.round(dailyLiving*(schNights/Math.max(totalNights,1)))+fl_other;
-  }
-  // For break-even chart only: show extrapolated dashed line beyond cap (indicative only)
-  const tsKmOverBev=Math.round((schNights/TS_MAX)*1960);
-  const t3_extrap=Math.round(5800+tsKmOverBev+600)+1100+Math.round(accommSch*0.45)+Math.round(schNights*fpd*0.72)+Math.round(dailyLiving*(schNights/Math.max(totalNights,1)))+fl_other;
+  // Opt3 Time-sharing
+  const tsKm=Math.round((schNights/TS_MAX)*1960);
+  const t3base=Math.round(5800+tsKm+600)+1100+Math.round(accommSch*0.45)+Math.round(schNights*fpd*0.72)+Math.round(dl*(schNights/Math.max(totalNights,1)))+fl_o;
+  const t3=tsU?null:t3base;
+  const t3x=t3base; // extrapolated for chart dashed line
 
-  // Opt4 — Buy & Sell
-  const t4=13000+1800+Math.round(accommSch*0.85)+Math.round(schNights*fpd+schNights*tollCarday)+Math.round(dailyLiving)+fl_other;
+  // Opt4 Buy&Sell
+  const t4=13000+1800+Math.round(accommSch*0.85)+Math.round(schNights*fpd+schNights*tollCar)+Math.round(dl)+fl_o;
 
-  // Opt5 — Car + Hotels
-  const hotelRate=105*sm.hotel, carRate=40*sm.car;
-  const livOpt5=totalNights*(resto*1.75+activ+misc+laundry);
-  const t5=Math.round(schNights*carRate+1800)+1100+Math.round(totalNights*hotelRate)+Math.round(schNights*35*(9/100)*diesel*0.55+schNights*tollCarday)+Math.round(livOpt5)+fl_other;
+  // Opt5 Car+Hotels
+  const livH=totalNights*(resto*1.75+activ+misc+laundry);
+  const t5=Math.round(schNights*40*sm.car+1800)+1100+Math.round(totalNights*105*sm.hotel)+Math.round(schNights*35*(9/100)*diesel*0.55+schNights*tollCar)+Math.round(livH)+fl_o;
 
-  // Opt6 — P2P
-  const p2pRate=130*sm.p2p;
-  const t6=Math.round(schNights*p2pRate+Math.round((schNights/90)*800))+1100+Math.round(accommSch*0.92)+Math.round(schNights*fpd*0.85+schNights*tollCarday)+Math.round(dailyLiving)+fl_other;
+  // Opt6 P2P
+  const t6=Math.round(schNights*130*sm.p2p+Math.round((schNights/90)*800))+1100+Math.round(accommSch*0.92)+Math.round(schNights*fpd*0.85+schNights*tollCar)+Math.round(dl)+fl_o;
 
-  return {t1,t2,t3,t3_extrap,t4,t5,t6,tsUnavail};
+  return {t1,t2,t3,t3x,t4,t5,t6,tsU};
 }
 
 // ── Break-even canvas ─────────────────────────────────────────────────────────
-let bevCanvas, bevCtx;
-const BEV_MIN=14, BEV_MAX=200;
+let bevCanvas,bevCtx;
+const BEV_MIN=14,BEV_MAX=200;
 
 function initBev(){
   bevCanvas=document.getElementById('bevCanvas');
   bevCtx=bevCanvas.getContext('2d');
 }
 
-function drawBev(params, currentSchNights, currentTotalNights){
+function drawBev(params,curSch){
   const dpr=window.devicePixelRatio||1;
-  const W=bevCanvas.parentElement.clientWidth||700;
-  const H=Math.round(W*0.48);
+  const W=bevCanvas.parentElement.clientWidth||500;
+  const H=Math.round(W*0.52);
   bevCanvas.width=W*dpr; bevCanvas.height=H*dpr;
   bevCanvas.style.width=W+'px'; bevCanvas.style.height=H+'px';
   const ctx=bevCtx;
   ctx.setTransform(dpr,0,0,dpr,0,0);
 
-  const PAD={top:18,right:16,bottom:40,left:68};
-  const pw=W-PAD.left-PAD.right;
-  const ph=H-PAD.top-PAD.bottom;
+  const PAD={top:20,right:14,bottom:42,left:62};
+  const pw=W-PAD.left-PAD.right, ph=H-PAD.top-PAD.bottom;
 
-  // Generate data series — for each day d, schNights=d, totalNights=d (simplified: no break)
+  // Build series
   const days=[];
   for(let d=BEV_MIN;d<=BEV_MAX;d++) days.push(d);
-
-  const series=[]; // [t1,t2,t3,t3_extrap,t4,t5,t6] per day
-  for(const d of days){
-    const r=calcOpts(d,d,params);
-    series.push([r.t1,r.t2,r.t3,r.t3_extrap,r.t4,r.t5,r.t6]);
-  }
+  const series=days.map(d=>{const r=calcOpts(d,d,params);return [r.t1,r.t2,r.t3,r.t3x,r.t4,r.t5,r.t6];});
 
   // Y range
-  const allVals=series.flatMap(s=>s.filter(x=>x!=null&&x>0));
-  const yMin=0;
-  const yMax=Math.ceil(Math.max(...allVals)/5000)*5000;
+  const allV=series.flatMap(s=>s.filter(x=>x!=null&&x>0));
+  const yMax=Math.ceil(Math.max(...allV)/5000)*5000;
 
-  function xPx(d){ return PAD.left+((d-BEV_MIN)/(BEV_MAX-BEV_MIN))*pw; }
-  function yPx(val){ return PAD.top+ph-(val/yMax)*ph; }
+  const xPx=d=>PAD.left+((d-BEV_MIN)/(BEV_MAX-BEV_MIN))*pw;
+  const yPx=val=>PAD.top+ph-(val/yMax)*ph;
 
-  // Background
   ctx.clearRect(0,0,W,H);
 
-  // Grid lines + Y labels
-  const yTicks=6;
-  ctx.font='10px DM Sans, sans-serif';
-  ctx.fillStyle='#9c9890';
+  // Grid + Y labels
+  ctx.font=`${Math.max(9,Math.round(W/60))}px DM Sans,sans-serif`;
   ctx.textAlign='right';
-  for(let i=0;i<=yTicks;i++){
-    const val=Math.round((yMax/yTicks)*i);
+  for(let i=0;i<=6;i++){
+    const val=Math.round((yMax/6)*i);
     const y=yPx(val);
-    ctx.strokeStyle='rgba(0,0,0,0.06)';
-    ctx.lineWidth=0.5;
+    ctx.strokeStyle='rgba(0,0,0,0.05)'; ctx.lineWidth=0.5;
     ctx.beginPath(); ctx.moveTo(PAD.left,y); ctx.lineTo(PAD.left+pw,y); ctx.stroke();
-    if(val>0){
-      ctx.fillText((val/1000)+'k',PAD.left-6,y+3.5);
-    }
+    if(val>0){ctx.fillStyle='#9c9890'; ctx.fillText((val/1000).toFixed(0)+'k',PAD.left-5,y+3.5);}
   }
 
-  // X axis labels
+  // X labels + verticals
+  const xTicks=[14,30,49,60,90,120,150,180,200];
   ctx.textAlign='center';
-  const xTickDays=[14,30,49,60,90,120,150,180,200];
-  xTickDays.forEach(d=>{
+  xTicks.forEach(d=>{
     if(d<BEV_MIN||d>BEV_MAX) return;
     const x=xPx(d);
-    ctx.fillStyle='#9c9890';
-    ctx.fillText(d+'d',x,H-PAD.bottom+13);
-    ctx.strokeStyle='rgba(0,0,0,0.06)';
-    ctx.lineWidth=0.5;
+    ctx.fillStyle='#9c9890'; ctx.fillText(d+'d',x,H-PAD.bottom+13);
+    ctx.strokeStyle='rgba(0,0,0,0.05)'; ctx.lineWidth=0.5;
     ctx.beginPath(); ctx.moveTo(x,PAD.top); ctx.lineTo(x,PAD.top+ph); ctx.stroke();
   });
 
   // Axes
-  ctx.strokeStyle='rgba(0,0,0,0.15)';
-  ctx.lineWidth=0.5;
+  ctx.strokeStyle='rgba(0,0,0,0.15)'; ctx.lineWidth=0.5;
   ctx.beginPath();
   ctx.moveTo(PAD.left,PAD.top); ctx.lineTo(PAD.left,PAD.top+ph);
   ctx.moveTo(PAD.left,PAD.top+ph); ctx.lineTo(PAD.left+pw,PAD.top+ph);
   ctx.stroke();
 
-  // Vertical reference lines: 49d (TS cap) and 90d (Schengen limit)
-  const refs=[{d:49,label:'7-wk cap',color:'#a02020'},{d:90,label:'90d limit',color:'#1a5fa8'}];
-  refs.forEach(r=>{
+  // Reference verticals
+  [{d:49,lbl:'7-wk cap',c:'#a02020'},{d:90,lbl:'90d',c:'#1a5fa8'}].forEach(r=>{
     const x=xPx(r.d);
-    ctx.strokeStyle=r.color;
-    ctx.lineWidth=1;
-    ctx.setLineDash([4,4]);
+    ctx.strokeStyle=r.c; ctx.lineWidth=1; ctx.setLineDash([4,4]);
     ctx.beginPath(); ctx.moveTo(x,PAD.top); ctx.lineTo(x,PAD.top+ph); ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle=r.color;
-    ctx.font='9px DM Sans, sans-serif';
-    ctx.textAlign='center';
-    ctx.fillText(r.label,x,PAD.top+ph+26);
+    ctx.setLineDash([]); ctx.fillStyle=r.c;
+    ctx.font=`9px DM Sans,sans-serif`; ctx.textAlign='center';
+    ctx.fillText(r.lbl,x,H-PAD.bottom+27);
   });
 
-  // Opt names for tooltip reference
-  const optNames=L[lang].opts;
-
-  // Draw curves
-  // Series index mapping: 0=t1,1=t2,2=t3(solid≤49),3=t3_extrap(dashed>49),4=t4,5=t5,6=t6
-  // We draw 6 curves: [t1,t2,t3,t4,t5,t6] mapped to opt indices [0..5]
-  const curveMap=[
-    {serIdx:0,optIdx:0},  // RoRo
-    {serIdx:1,optIdx:1},  // Rental
-    {serIdx:2,optIdx:2},  // TS solid part (≤49)
-    {serIdx:4,optIdx:3},  // Buy&Sell
-    {serIdx:5,optIdx:4},  // Car+Hotels
-    {serIdx:6,optIdx:5},  // P2P
+  // Curves: [t1,t2,t3(≤49solid),t4,t5,t6]
+  const curves=[
+    {si:0,oi:0},{si:1,oi:1},{si:2,oi:2},
+    {si:4,oi:3},{si:5,oi:4},{si:6,oi:5}
   ];
-
-  curveMap.forEach(({serIdx,optIdx})=>{
-    if(bevHidden[optIdx]) return;
-    const color=COLORS[optIdx];
-    ctx.strokeStyle=color;
-    ctx.lineWidth=1.8;
-    ctx.setLineDash([]);
-    ctx.beginPath();
-    let started=false;
+  curves.forEach(({si,oi})=>{
+    if(bevHidden[oi]) return;
+    ctx.strokeStyle=COLORS[oi]; ctx.lineWidth=1.8; ctx.setLineDash([]);
+    ctx.beginPath(); let go=false;
     days.forEach((d,i)=>{
-      const val=series[i][serIdx];
-      if(val==null) return;
-      const x=xPx(d), y=yPx(val);
-      if(!started){ctx.moveTo(x,y);started=true;}
-      else ctx.lineTo(x,y);
+      const val=series[i][si]; if(val==null) return;
+      const x=xPx(d),y=yPx(val);
+      if(!go){ctx.moveTo(x,y);go=true;} else ctx.lineTo(x,y);
     });
     ctx.stroke();
   });
 
-  // Time-sharing dashed extension beyond 49 days (indicative, not available)
+  // TS dashed extension beyond 49d
   if(!bevHidden[2]){
-    ctx.strokeStyle=COLORS[2];
-    ctx.lineWidth=1.2;
-    ctx.setLineDash([5,4]);
-    ctx.globalAlpha=0.45;
-    ctx.beginPath();
-    let started=false;
+    ctx.strokeStyle=COLORS[2]; ctx.lineWidth=1.2; ctx.setLineDash([5,4]); ctx.globalAlpha=0.42;
+    ctx.beginPath(); let go=false;
     days.forEach((d,i)=>{
       if(d<49) return;
-      const val=series[i][3]; // t3_extrap
-      if(val==null) return;
-      const x=xPx(d), y=yPx(val);
-      if(!started){ctx.moveTo(x,y);started=true;}
-      else ctx.lineTo(x,y);
+      const val=series[i][3]; if(val==null) return;
+      const x=xPx(d),y=yPx(val);
+      if(!go){ctx.moveTo(x,y);go=true;} else ctx.lineTo(x,y);
     });
-    ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.globalAlpha=1.0;
+    ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=1;
   }
 
-  // Current-position dots on each curve
-  const curSchNights=Math.min(Math.max(currentSchNights,BEV_MIN),BEV_MAX);
-  const curResult=calcOpts(curSchNights, curSchNights, params);
-  const curVals=[curResult.t1,curResult.t2,curResult.t3,curResult.t4,curResult.t5,curResult.t6];
-  const curExtrap=curResult.t3_extrap;
-
-  curveMap.forEach(({serIdx,optIdx})=>{
-    if(bevHidden[optIdx]) return;
-    let val;
-    if(optIdx===2){
-      // for TS: use real value if ≤49, extrap if >49
-      val = curSchNights<=49 ? curResult.t3 : curExtrap;
-    } else {
-      const valMap=[curResult.t1,curResult.t2,null,curResult.t4,curResult.t5,curResult.t6];
-      val=valMap[optIdx];
-    }
-    if(val==null) return;
-    const x=xPx(curSchNights), y=yPx(val);
-    ctx.fillStyle='#fff';
-    ctx.strokeStyle=COLORS[optIdx];
-    ctx.lineWidth=2;
+  // Current-position dots + mini labels
+  const cs=Math.min(Math.max(curSch,BEV_MIN),BEV_MAX);
+  const cr=calcOpts(cs,cs,params);
+  const dotMap=[
+    {oi:0,val:cr.t1},{oi:1,val:cr.t2},
+    {oi:2,val:cs<=49?cr.t3:cr.t3x},
+    {oi:3,val:cr.t4},{oi:4,val:cr.t5},{oi:5,val:cr.t6}
+  ];
+  dotMap.forEach(({oi,val})=>{
+    if(bevHidden[oi]||val==null) return;
+    const x=xPx(cs),y=yPx(val);
+    ctx.fillStyle='#fff'; ctx.strokeStyle=COLORS[oi]; ctx.lineWidth=2;
     ctx.beginPath(); ctx.arc(x,y,5,0,Math.PI*2); ctx.fill(); ctx.stroke();
-    // Small label above dot
-    ctx.fillStyle=COLORS[optIdx];
-    ctx.font='9px DM Sans, sans-serif';
-    ctx.textAlign='center';
+    ctx.fillStyle=COLORS[oi];
+    ctx.font=`9px DM Sans,sans-serif`; ctx.textAlign='center';
     ctx.fillText(fmt(val),x,y-9);
   });
 
-  // Y axis label (€)
-  ctx.save();
-  ctx.translate(12, PAD.top+ph/2);
-  ctx.rotate(-Math.PI/2);
-  ctx.fillStyle='#9c9890';
-  ctx.font='10px DM Sans, sans-serif';
-  ctx.textAlign='center';
-  ctx.fillText('Total cost (€)',0,0);
-  ctx.restore();
+  // Axis labels
+  ctx.save(); ctx.translate(11,PAD.top+ph/2); ctx.rotate(-Math.PI/2);
+  ctx.fillStyle='#9c9890'; ctx.font=`10px DM Sans,sans-serif`; ctx.textAlign='center';
+  ctx.fillText('Total (€)',0,0); ctx.restore();
+  ctx.fillStyle='#9c9890'; ctx.font=`10px DM Sans,sans-serif`; ctx.textAlign='center';
+  ctx.fillText('Schengen nights',PAD.left+pw/2,H-2);
 
-  // X axis label
-  ctx.fillStyle='#9c9890';
-  ctx.font='10px DM Sans, sans-serif';
-  ctx.textAlign='center';
-  ctx.fillText('Schengen nights',PAD.left+pw/2,H-3);
-
-  // Update legend
-  const optNames2=L[lang].opts;
-  const leg=document.getElementById('bevLegend');
-  leg.innerHTML=optNames2.map((n,i)=>{
-    const alpha=bevHidden[i]?0.35:1.0;
-    return `<div class="bev-leg-item" style="opacity:${alpha}" onclick="toggleBevLine(${i})">
-      <div class="bev-leg-dot" style="background:${COLORS[i]};height:${i===2?'2px':'3px'};${i===2?'border-top:2px dashed '+COLORS[i]+';background:none':''}"></div>
+  // Legend
+  document.getElementById('bevLegend').innerHTML=L[lang].opts.map((n,i)=>`
+    <div class="bev-leg-item" style="opacity:${bevHidden[i]?0.32:1}" onclick="toggleBevLine(${i})">
+      <div class="bev-leg-dot" style="${i===2?'border-top:2px dashed '+COLORS[i]+';background:none':'background:'+COLORS[i]}"></div>
       <span>${n}</span>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 
   document.getElementById('bev-note').textContent=L[lang]['bev-note'];
 }
 
-function toggleBevLine(i){
-  bevHidden[i]=!bevHidden[i];
-  compute();
-}
+function toggleBevLine(i){bevHidden[i]=!bevHidden[i];compute();}
 
 // ── Main compute ──────────────────────────────────────────────────────────────
 function compute(){
-  const n1=v('nights1'), n2=v('nights2'), ns=v('nonsch');
-  const diesel=v('diesel');
-  const paire=v('paire')/100, pcamp=v('pcamp')/100;
-  const grocery=v('grocery'), resto=v('resto'), activ=v('activ');
-  const rvVal=v('roroval');
-  const roroSurcharge=v('surcharge');
+  const n1=v('nights1'),n2=v('nights2'),ns=v('nonsch');
+  const diesel=v('diesel'),paire=v('paire')/100,pcamp=v('pcamp')/100;
+  const grocery=v('grocery'),resto=v('resto'),activ=v('activ');
+  const rvVal=v('roroval'),roroSurcharge=v('surcharge');
   const sm=SEASON_MULT[season];
-  const totalNights=n1+n2+ns;
-  const schNights=n1+n2;
+  const totalNights=n1+n2+ns, schNights=n1+n2;
 
-  // Display updates
+  // Display
   document.getElementById('v-nights1').textContent=n1;
   document.getElementById('v-nights2').textContent=n2;
   document.getElementById('v-nonsch').textContent=ns;
@@ -712,75 +645,64 @@ function compute(){
   document.getElementById('v-resto').textContent='€'+resto;
   document.getElementById('v-activ').textContent='€'+activ;
   document.getElementById('v-roroval').textContent='€'+Math.round(rvVal/1000)+'k';
-  document.getElementById('v-surcharge').textContent=roroSurcharge>0?'+'+roroSurcharge+'%':'0% (baseline)';
+  document.getElementById('v-surcharge').textContent=roroSurcharge>0?'+'+roroSurcharge+'%':'0%';
 
-  const wildPct=100-v('paire')-v('pcamp');
-  const pctEl=document.getElementById('pct-status');
+  const wPct=100-v('paire')-v('pcamp');
+  const pEl=document.getElementById('pct-status');
   const Lc=L[lang];
-  pctEl.className=wildPct<0?'pct-warning':'pct-ok';
-  pctEl.textContent=wildPct<0?Lc['pct-warn'](Math.round(v('paire')+v('pcamp'))):Lc['pct-ok']+(wildPct>0?` (wild/free: ${Math.round(wildPct)}%)`:'');
+  pEl.className=wPct<0?'pct-warning':'pct-ok';
+  pEl.textContent=wPct<0?Lc['pct-warn'](Math.round(v('paire')+v('pcamp'))):Lc['pct-ok']+(wPct>0?` (wild/free: ${Math.round(wPct)}%)`:'');
 
   const params={diesel,paire,pcamp,grocery,resto,activ,rvVal,sm,roroSurcharge};
   const res=calcOpts(schNights,totalNights,params);
+  const TS_MAX=49,tsU=res.tsU,tsW=Math.ceil(schNights/7);
+  const tsKm=Math.round((schNights/TS_MAX)*1960);
 
-  const TS_MAX=49;
-  const tsUnavail=res.tsUnavail;
-  const tsWeeks=Math.ceil(schNights/7);
-  const tsKmOver=Math.round((schNights/TS_MAX)*1960);
-
-  // Build option objects for display
+  // Build detailed opts for table / cards / bar
   const km=36,conso=12.5,fpd=(km/100)*conso*diesel;
-  const sm2=sm;
-  const aireRate=14,campRate=35*sm2.camp;
-  const avgN=paire*aireRate+Math.max(0,pcamp)*campRate;
-  const ttax=3.0;
-  const accommAll=totalNights*(avgN+ttax);
-  const accommSch=schNights*(avgN+ttax);
-  const tollRVday=1250/180,tollCarday=500/180;
+  const avgN=paire*14+Math.max(0,pcamp)*35*sm.camp, ttax=3.0;
+  const accommAll=totalNights*(avgN+ttax), accommSch=schNights*(avgN+ttax);
+  const tollRV=1250/180,tollCar=500/180;
   const misc=10,laundry=8/7,propane=25/30;
-  const dailyLiving=totalNights*(grocery+resto+activ+misc+laundry+propane);
-  const fl_ship=3700,fl_other=2450;
-  const roroBase=10650;
-  const roroWithSurcharge=Math.round(roroBase*(1+roroSurcharge/100));
+  const dl=totalNights*(grocery+resto+activ+misc+laundry+propane);
+  const roro=Math.round(10650*(1+roroSurcharge/100));
   const ins1=Math.round(6250*(totalNights/180)+1050+1100);
 
   const opts=[
-    { transport:roroWithSurcharge, rv:0, insurance:ins1, accomm:Math.round(accommAll), fuel:Math.round(totalNights*fpd+totalNights*tollRVday), living:Math.round(dailyLiving), flights:fl_ship, unavail:false, note:roroSurcharge>0?Lc['surcharge-active'](roroSurcharge):null },
-    { transport:0, rv:Math.round(schNights*200*sm2.rental+700), insurance:1100, accomm:Math.round(accommSch*0.92), fuel:Math.round(schNights*fpd*0.85+schNights*tollRVday), living:Math.round(dailyLiving), flights:fl_other, unavail:false, note:null },
-    { transport:0, rv:tsUnavail?null:Math.round(5800+tsKmOver+600), insurance:tsUnavail?null:1100, accomm:tsUnavail?null:Math.round(accommSch*0.45), fuel:tsUnavail?null:Math.round(schNights*fpd*0.72), living:tsUnavail?null:Math.round(dailyLiving*(schNights/Math.max(totalNights,1))), flights:tsUnavail?null:fl_other, unavail:tsUnavail, note:tsUnavail?Lc['ts-unavail'](tsWeeks):(schNights>28?Lc['ts-warn'](tsKmOver):Lc['ts-ok']) },
-    { transport:0, rv:13000, insurance:1800, accomm:Math.round(accommSch*0.85), fuel:Math.round(schNights*fpd+schNights*tollCarday), living:Math.round(dailyLiving), flights:fl_other, unavail:false, note:null },
-    { transport:0, rv:Math.round(schNights*40*sm2.car+1800), insurance:1100, accomm:Math.round(totalNights*105*sm2.hotel), fuel:Math.round(schNights*35*(9/100)*diesel*0.55+schNights*tollCarday), living:Math.round(totalNights*(resto*1.75+activ+misc+laundry)), flights:fl_other, unavail:false, note:null },
-    { transport:0, rv:Math.round(schNights*130*sm2.p2p+Math.round((schNights/90)*800)), insurance:1100, accomm:Math.round(accommSch*0.92), fuel:Math.round(schNights*fpd*0.85+schNights*tollCarday), living:Math.round(dailyLiving), flights:fl_other, unavail:false, note:schNights>60?Lc['p2p-warn']:null },
+    {transport:roro,rv:0,insurance:ins1,accomm:Math.round(accommAll),fuel:Math.round(totalNights*fpd+totalNights*tollRV),living:Math.round(dl),flights:3700,unavail:false,note:roroSurcharge>0?Lc['surcharge-active'](roroSurcharge):null},
+    {transport:0,rv:Math.round(schNights*200*sm.rental+700),insurance:1100,accomm:Math.round(accommSch*0.92),fuel:Math.round(schNights*fpd*0.85+schNights*tollRV),living:Math.round(dl),flights:2450,unavail:false,note:null},
+    {transport:0,rv:tsU?null:Math.round(5800+tsKm+600),insurance:tsU?null:1100,accomm:tsU?null:Math.round(accommSch*0.45),fuel:tsU?null:Math.round(schNights*fpd*0.72),living:tsU?null:Math.round(dl*(schNights/Math.max(totalNights,1))),flights:tsU?null:2450,unavail:tsU,note:tsU?Lc['ts-unavail'](tsW):(schNights>28?Lc['ts-warn'](tsKm):Lc['ts-ok'])},
+    {transport:0,rv:13000,insurance:1800,accomm:Math.round(accommSch*0.85),fuel:Math.round(schNights*fpd+schNights*tollCar),living:Math.round(dl),flights:2450,unavail:false,note:null},
+    {transport:0,rv:Math.round(schNights*40*sm.car+1800),insurance:1100,accomm:Math.round(totalNights*105*sm.hotel),fuel:Math.round(schNights*35*(9/100)*diesel*0.55+schNights*tollCar),living:Math.round(totalNights*(resto*1.75+activ+misc+laundry)),flights:2450,unavail:false,note:null},
+    {transport:0,rv:Math.round(schNights*130*sm.p2p+Math.round((schNights/90)*800)),insurance:1100,accomm:Math.round(accommSch*0.92),fuel:Math.round(schNights*fpd*0.85+schNights*tollCar),living:Math.round(dl),flights:2450,unavail:false,note:schNights>60?Lc['p2p-warn']:null},
   ];
 
-  function total(o){ if(o.unavail) return Infinity; return (o.transport||0)+(o.rv||0)+(o.insurance||0)+(o.accomm||0)+(o.fuel||0)+(o.living||0)+(o.flights||0); }
-  const totals=opts.map(total);
+  function tot(o){if(o.unavail)return Infinity;return(o.transport||0)+(o.rv||0)+(o.insurance||0)+(o.accomm||0)+(o.fuel||0)+(o.living||0)+(o.flights||0);}
+  const totals=opts.map(tot);
   const avail=totals.filter(t=>t!==Infinity);
-  const minT=Math.min(...avail);
-  const minIdx=totals.indexOf(minT);
+  const minT=Math.min(...avail),minIdx=totals.indexOf(minT);
   const optNames=Lc.opts;
 
-  // Result cards
+  // Results cards (full width)
   document.getElementById('resultsGrid').innerHTML=opts.map((o,i)=>{
-    const t=totals[i];const isW=i===minIdx;const isU=o.unavail;
-    const sLabel=season!=='mid'?`<span class="opt-season">${season==='low'?'❄️ winter':'☀️ peak'}</span>`:'';
+    const t=totals[i],isW=i===minIdx,isU=o.unavail;
+    const sL=season!=='mid'?`<span class="opt-season">${season==='low'?'❄️':'☀️'} ${season==='low'?'winter':'peak'}</span>`:'';
     return `<div class="result-card${isW?' winner':''}${isU?' unavailable':''}" style="background:${COLORS_BG[i]};${isW?'border-color:'+COLORS[i]+';border-width:2px;':''}">
       <div class="opt-name" style="color:${COLORS[i]}">${optNames[i]}</div>
       <div class="opt-total" style="color:${COLORS[i]}">${isU?'—':fmt(t)}</div>
       <div class="opt-daily" style="color:${COLORS[i]}">${isU?'N/A':'€'+Math.round(t/Math.max(schNights,1))+'/night'}</div>
       ${isW?`<div class="opt-badge" style="background:${COLORS[i]};color:#fff">${Lc.winner}</div>`:''}
-      ${isU?`<div class="opt-unavail">Not available</div>`:''}${sLabel}
+      ${isU?`<div class="opt-unavail">Not available</div>`:''}${sL}
     </div>`;
   }).join('');
 
-  // Bar chart
+  // Bar chart (right col)
   const maxT=Math.max(...avail);
   document.getElementById('barChart').innerHTML=opts.map((o,i)=>{
-    const t=totals[i];const isU=o.unavail;
-    const h=isU?5:Math.round((t/maxT)*85);
+    const t=totals[i],isU=o.unavail,h=isU?4:Math.round((t/maxT)*85);
     return `<div class="bar-item">
       <div class="bar-val" style="color:${COLORS[i]}">${isU?'—':fmt(t)}</div>
-      <div class="bar" style="height:${h}%;background:${COLORS[i]};opacity:${isU?0.2:0.85}"></div>
+      <div class="bar" style="height:${h}%;background:${COLORS[i]};opacity:${isU?0.18:0.85}"></div>
       <div class="bar-label" style="color:${COLORS[i]}">${optNames[i].split(' ').slice(0,2).join(' ')}</div>
     </div>`;
   }).join('');
@@ -789,50 +711,46 @@ function compute(){
   const avgD=Math.round(avail.reduce((a,b)=>a+b,0)/avail.length/Math.max(schNights,1));
   document.getElementById('noteBox').textContent=Lc.note(totalNights,avgD,minT,optNames[minIdx]);
 
-  // Interpretation box
+  // Interpretation
   const lines=[];
-  if(tsUnavail) lines.push(Lc['ts-unavail'](tsWeeks));
+  if(tsU) lines.push(Lc['ts-unavail'](tsW));
   else if(opts[2].note&&opts[2].note!==Lc['ts-ok']) lines.push(opts[2].note);
-  if(opts[5].note) lines.push(Lc['p2p-warn']);
-  if(opts[0].note) lines.push(opts[0].note);
+  if(schNights>60) lines.push(Lc['p2p-warn']);
+  if(roroSurcharge>0) lines.push(Lc['surcharge-active'](roroSurcharge));
   if(season==='high') lines.push(Lc['season-high-note']);
   if(season==='low')  lines.push(Lc['season-low-note']);
   if(schNights>=160)  lines.push(Lc['long-trip-note']);
-  const interpBox=document.getElementById('interpBox');
-  interpBox.style.display=lines.length>0?'block':'none';
-  interpBox.innerHTML=lines.map(l=>`<div style="margin-bottom:4px">${l}</div>`).join('');
+  const ib=document.getElementById('interpBox');
+  ib.style.display=lines.length?'block':'none';
+  ib.innerHTML=lines.map(l=>`<div style="margin-bottom:3px">${l}</div>`).join('');
 
-  // Breakdown table
-  const rowLabels=Lc.rows;
-  const rowKeys=['transport','rv','insurance','accomm','fuel','living','flights'];
+  // Breakdown table (full width)
+  const rk=['transport','rv','insurance','accomm','fuel','living','flights'];
   document.getElementById('breakdownTable').innerHTML=`<thead><tr>
     <th>Category</th>
     ${optNames.map((n,i)=>`<th class="num" style="color:${COLORS[i]}">${n.split(' ').slice(0,2).join('<br>')}</th>`).join('')}
   </tr></thead><tbody>
-  ${rowKeys.map((key,ri)=>`<tr>
-    <td>${rowLabels[ri]}</td>
+  ${rk.map((key,ri)=>`<tr>
+    <td>${Lc.rows[ri]}</td>
     ${opts.map((o,i)=>{
-      if(o.unavail) return `<td class="na-cell">—</td>`;
+      if(o.unavail)return`<td class="na-cell">—</td>`;
       const val=o[key];
-      return `<td class="num">${(val!=null&&val>0)?fmt(val):'—'}</td>`;
+      return`<td class="num">${val!=null&&val>0?fmt(val):'—'}</td>`;
     }).join('')}
   </tr>`).join('')}
-  <tr>
-    <td>${rowLabels[rowLabels.length-1]}</td>
+  <tr><td>${Lc.rows[Lc.rows.length-1]}</td>
     ${opts.map((o,i)=>o.unavail?`<td class="na-cell" style="color:${COLORS[i]}">N/A</td>`:`<td class="num" style="color:${COLORS[i]}">${fmt(totals[i])}</td>`).join('')}
   </tr></tbody>`;
 
   // Break-even chart
-  drawBev(params, schNights, totalNights);
+  drawBev(params,schNights);
 }
 
-// ── Bind all inputs ───────────────────────────────────────────────────────────
+// ── Init ──────────────────────────────────────────────────────────────────────
 ['nights1','nights2','nonsch','diesel','paire','pcamp','grocery','resto','activ','roroval','surcharge'].forEach(id=>{
   document.getElementById(id).addEventListener('input',compute);
 });
-
 window.addEventListener('resize',compute);
-
 initBev();
 compute();
 </script>
