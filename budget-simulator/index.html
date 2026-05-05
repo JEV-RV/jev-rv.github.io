@@ -311,7 +311,7 @@ a{color:var(--blue);text-decoration:none}
  <div class="card">
  <div class="card-header"><span>📈</span><h2 id="bev-title">Break-even — cost by trip duration</h2></div>
  <div class="card-body">
- <div class="bev-wrap"><canvas id="bevCanvas"></canvas></div>
+ <div class="bev-wrap" style="position:relative"><canvas id="bevCanvas"></canvas><div id="bevTooltip" style="display:none;position:absolute;background:#fff;border:0.5px solid #ddd;border-radius:8px;padding:8px 11px;box-shadow:0 2px 12px rgba(0,0,0,0.12);pointer-events:none;z-index:10;min-width:160px"></div></div>
  <div class="bev-legend" id="bevLegend"></div>
  <div class="bev-note" id="bev-note">Sliders update curves in real time. Dot = your current config. Click legend to hide/show a curve.</div>
  </div>
@@ -601,7 +601,8 @@ function drawBev(params,curSch){
   bevCanvas.style.width=W+'px'; bevCanvas.style.height=H+'px';
   const ctx=bevCtx;
   ctx.setTransform(dpr,0,0,dpr,0,0);
-  const PAD={top:20,right:14,bottom:42,left:62};
+  // Extra right padding for end-of-curve labels
+  const PAD={top:20,right:88,bottom:42,left:62};
   const pw=W-PAD.left-PAD.right, ph=H-PAD.top-PAD.bottom;
   const days=[];
   for(let d=BEV_MIN;d<=BEV_MAX;d++) days.push(d);
@@ -611,7 +612,9 @@ function drawBev(params,curSch){
   const xPx=d=>PAD.left+((d-BEV_MIN)/(BEV_MAX-BEV_MIN))*pw;
   const yPx=val=>PAD.top+ph-(val/yMax)*ph;
   ctx.clearRect(0,0,W,H);
-  ctx.font=`${Math.max(9,Math.round(W/60))}px DM Sans,sans-serif`;
+  // Grid + Y labels
+  const fs=Math.max(9,Math.round(W/60));
+  ctx.font=fs+'px DM Sans,sans-serif';
   ctx.textAlign='right';
   for(let i=0;i<=6;i++){
     const val=Math.round((yMax/6)*i);
@@ -620,6 +623,7 @@ function drawBev(params,curSch){
     ctx.beginPath(); ctx.moveTo(PAD.left,y); ctx.lineTo(PAD.left+pw,y); ctx.stroke();
     if(val>0){ctx.fillStyle='#9c9890'; ctx.fillText((val/1000).toFixed(0)+'k',PAD.left-5,y+3.5);}
   }
+  // X ticks
   const xTicks=[14,30,49,60,90,120,150,180,200];
   ctx.textAlign='center';
   xTicks.forEach(d=>{
@@ -629,23 +633,23 @@ function drawBev(params,curSch){
     ctx.strokeStyle='rgba(0,0,0,0.05)'; ctx.lineWidth=0.5;
     ctx.beginPath(); ctx.moveTo(x,PAD.top); ctx.lineTo(x,PAD.top+ph); ctx.stroke();
   });
+  // Axes
   ctx.strokeStyle='rgba(0,0,0,0.15)'; ctx.lineWidth=0.5;
   ctx.beginPath();
   ctx.moveTo(PAD.left,PAD.top); ctx.lineTo(PAD.left,PAD.top+ph);
   ctx.moveTo(PAD.left,PAD.top+ph); ctx.lineTo(PAD.left+pw,PAD.top+ph);
   ctx.stroke();
+  // Reference verticals
   [{d:49,lbl:'7-wk cap',c:'#a02020'},{d:90,lbl:'90d',c:'#1a5fa8'}].forEach(r=>{
     const x=xPx(r.d);
     ctx.strokeStyle=r.c; ctx.lineWidth=1; ctx.setLineDash([4,4]);
     ctx.beginPath(); ctx.moveTo(x,PAD.top); ctx.lineTo(x,PAD.top+ph); ctx.stroke();
     ctx.setLineDash([]); ctx.fillStyle=r.c;
-    ctx.font=`9px DM Sans,sans-serif`; ctx.textAlign='center';
+    ctx.font='9px DM Sans,sans-serif'; ctx.textAlign='center';
     ctx.fillText(r.lbl,x,H-PAD.bottom+27);
   });
-  const curves=[
-    {si:0,oi:0},{si:1,oi:1},{si:2,oi:2},
-    {si:4,oi:3},{si:5,oi:4},{si:6,oi:5}
-  ];
+  // Curves
+  const curves=[{si:0,oi:0},{si:1,oi:1},{si:2,oi:2},{si:4,oi:3},{si:5,oi:4},{si:6,oi:5}];
   curves.forEach(({si,oi})=>{
     if(bevHidden[oi]) return;
     ctx.strokeStyle=COLORS[oi]; ctx.lineWidth=1.8; ctx.setLineDash([]);
@@ -657,6 +661,7 @@ function drawBev(params,curSch){
     });
     ctx.stroke();
   });
+  // TS dashed extension
   if(!bevHidden[2]){
     ctx.strokeStyle=COLORS[2]; ctx.lineWidth=1.2; ctx.setLineDash([5,4]); ctx.globalAlpha=0.42;
     ctx.beginPath(); let go=false;
@@ -668,6 +673,28 @@ function drawBev(params,curSch){
     });
     ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=1;
   }
+  // Option D: end-of-curve labels (collision-resolved)
+  const optShort=['RoRo','Rental','T-Share','Buy&Sell','Car+Htl','P2P'];
+  const endLabels=[];
+  curves.forEach(({si,oi})=>{
+    if(bevHidden[oi]) return;
+    const lastVal=series[series.length-1][si];
+    if(lastVal==null) return;
+    endLabels.push({oi,y:yPx(lastVal),label:optShort[oi]});
+  });
+  endLabels.sort((a,b)=>a.y-b.y);
+  const MIN_GAP=13;
+  for(let i=1;i<endLabels.length;i++){
+    if(endLabels[i].y-endLabels[i-1].y<MIN_GAP)
+      endLabels[i].y=endLabels[i-1].y+MIN_GAP;
+  }
+  const xEnd=PAD.left+pw+6;
+  ctx.font='9px DM Sans,sans-serif'; ctx.textAlign='left';
+  endLabels.forEach(({oi,y,label})=>{
+    ctx.fillStyle=COLORS[oi];
+    ctx.fillText(label,xEnd,y+3.5);
+  });
+  // Current-config dots — no text labels (tooltip handles values)
   const cs=Math.min(Math.max(curSch,BEV_MIN),BEV_MAX);
   const cr=calcOpts(cs,cs,params);
   const dotMap=[
@@ -679,16 +706,18 @@ function drawBev(params,curSch){
     if(bevHidden[oi]||val==null) return;
     const x=xPx(cs),y=yPx(val);
     ctx.fillStyle='#fff'; ctx.strokeStyle=COLORS[oi]; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.arc(x,y,5,0,Math.PI*2); ctx.fill(); ctx.stroke();
-    ctx.fillStyle=COLORS[oi];
-    ctx.font=`9px DM Sans,sans-serif`; ctx.textAlign='center';
-    ctx.fillText(fmt(val),x,y-9);
+    ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fill(); ctx.stroke();
   });
+  // Axis labels
   ctx.save(); ctx.translate(11,PAD.top+ph/2); ctx.rotate(-Math.PI/2);
-  ctx.fillStyle='#9c9890'; ctx.font=`10px DM Sans,sans-serif`; ctx.textAlign='center';
-  ctx.fillText('Total (€)',0,0); ctx.restore();
-  ctx.fillStyle='#9c9890'; ctx.font=`10px DM Sans,sans-serif`; ctx.textAlign='center';
+  ctx.fillStyle='#9c9890'; ctx.font='10px DM Sans,sans-serif'; ctx.textAlign='center';
+  ctx.fillText('Total (euros)',0,0); ctx.restore();
+  ctx.fillStyle='#9c9890'; ctx.font='10px DM Sans,sans-serif'; ctx.textAlign='center';
   ctx.fillText('Schengen nights',PAD.left+pw/2,H-2);
+  // Store geometry for mousemove tooltip
+  bevCanvas._geo={xPx,yPx,xPxInv:x=>(x-PAD.left)/pw*(BEV_MAX-BEV_MIN)+BEV_MIN,
+    days,series,PAD,pw,ph,H,W,params,cs,dotMap,yMax};
+  // Legend
   document.getElementById('bevLegend').innerHTML=L[lang].opts.map((n,i)=>`
     <div class="bev-leg-item" style="opacity:${bevHidden[i]?0.32:1}" onclick="toggleBevLine(${i})">
       <div class="bev-leg-dot" style="${i===2?'border-top:2px dashed '+COLORS[i]+';background:none':'background:'+COLORS[i]}"></div>
@@ -696,6 +725,7 @@ function drawBev(params,curSch){
     </div>`).join('');
   document.getElementById('bev-note').textContent=L[lang]['bev-note'];
 }
+
 function toggleBevLine(i){bevHidden[i]=!bevHidden[i];compute();}
 function compute(){
   const n1=v('nights1'),n2=v('nights2'),ns=v('nonsch');
@@ -1000,7 +1030,48 @@ function renderIntangibles(minCostIdx, minCostTotal, totals, opts) {
   document.getElementById(id).addEventListener('input',compute);
 });
 window.addEventListener('resize',compute);
+
+function initBevTooltip(){
+  const tip=document.getElementById('bevTooltip');
+  const canvas=bevCanvas;
+  function showTooltip(clientX,clientY){
+    const geo=canvas._geo; if(!geo) return;
+    const rect=canvas.getBoundingClientRect();
+    const mx=clientX-rect.left;
+    const rawDay=geo.xPxInv(mx);
+    const day=Math.round(Math.min(Math.max(rawDay,BEV_MIN),BEV_MAX));
+    if(day<BEV_MIN||day>BEV_MAX||mx<geo.PAD.left||mx>geo.PAD.left+geo.pw){tip.style.display='none';return;}
+    const dayIdx=day-BEV_MIN;
+    const s=geo.series[dayIdx];
+    const curves=[{si:0,oi:0},{si:1,oi:1},{si:2,oi:2},{si:4,oi:3},{si:5,oi:4},{si:6,oi:5}];
+    const optShort=['RoRo','Rental','T-Share','Buy&Sell','Car+Htl','P2P'];
+    const rows=curves
+      .filter(({si,oi})=>!bevHidden[oi]&&s[si]!=null)
+      .sort((a,b)=>s[a.si]-s[b.si])
+      .map(({si,oi})=>`<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;padding:1px 0">
+        <span style="display:flex;align-items:center;gap:5px">
+          <span style="width:7px;height:7px;border-radius:50%;background:${COLORS[oi]};flex-shrink:0;display:inline-block"></span>
+          <span style="font-size:11px;color:#555">${optShort[oi]}</span>
+        </span>
+        <span style="font-size:11px;font-weight:500;color:${COLORS[oi]}">${fmt(s[si])}</span>
+      </div>`).join('');
+    tip.innerHTML='<div style="font-size:10px;color:#999;margin-bottom:5px;font-weight:500;border-bottom:0.5px solid #eee;padding-bottom:4px">'+day+(lang==="fr"?" nuits":" nights")+'</div>'+rows;
+    tip.style.display='block';
+    const tipW=172,tipH=tip.offsetHeight||130;
+    let left=mx+14,top=(clientY-rect.top)-tipH/2;
+    if(left+tipW>geo.W-8) left=mx-tipW-14;
+    if(top<4) top=4;
+    if(top+tipH>geo.H-4) top=geo.H-tipH-4;
+    tip.style.left=left+'px'; tip.style.top=top+'px';
+  }
+  canvas.addEventListener('mousemove',e=>showTooltip(e.clientX,e.clientY));
+  canvas.addEventListener('mouseleave',()=>{tip.style.display='none';});
+  canvas.addEventListener('touchmove',e=>{e.preventDefault();showTooltip(e.touches[0].clientX,e.touches[0].clientY);},{passive:false});
+  canvas.addEventListener('touchend',()=>{tip.style.display='none';});
+  canvas.style.cursor='crosshair';
+}
 initBev();
+initBevTooltip();
 compute();</script>
 <script>document.getElementById("nav-budget").classList.add("active");</script>
 </body>
