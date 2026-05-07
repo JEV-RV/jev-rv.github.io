@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Water Quality & Ozone Treatment — North American RV Europe</title>
-<meta name="description" content="European water quality guide for North American RV travellers. Multi-barrier treatment strategy, ozone SOP, system installation for LTV Unity and Wonder, interactive protocol selector.">
+<meta name="description" content="European water quality guide for North American RV travellers. Multi-barrier treatment strategy, interactive ozone protocol selector with heatmaps and SOP.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -28,6 +28,15 @@
   --teal-bg: #e0f4f7;
   --radius: 10px;
   --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  /* heatmap level colors */
+  --hm-opti: #1a7a4a; --hm-opti-bg: #c8f0dc;
+  --hm-bas: #4a8a20; --hm-bas-bg: #dff0c0;
+  --hm-mod: #8a6a00; --hm-mod-bg: #f5e8a0;
+  --hm-modp: #a04800; --hm-modp-bg: #fcd8a8;
+  --hm-elev: #b03010; --hm-elev-bg: #fcc0a0;
+  --hm-fort: #a01818; --hm-fort-bg: #f8a8a8;
+  --hm-crit: #880010; --hm-crit-bg: #f09090;
+  --hm-dang: #600008; --hm-dang-bg: #e07070;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
@@ -36,56 +45,80 @@ a:hover { text-decoration: underline; }
 
 /* ── NAV ── */
 .tool-nav{position:sticky;top:0;z-index:100;background:rgba(26,25,21,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.1);padding:0 1rem}
-.tool-nav-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.tool-nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
 .tool-nav-inner::-webkit-scrollbar{display:none}
 .tool-nav-inner a{display:flex;flex-direction:column;align-items:center;padding:8px 10px;color:rgba(255,255,255,0.55);text-decoration:none;font-size:9px;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;gap:3px;flex-shrink:0}
 .tool-nav-inner a:hover{color:#fff;text-decoration:none}
 .tool-nav-inner a.active{color:#fff;border-bottom-color:#fff}
 .tool-nav-inner .nav-icon{font-size:16px;line-height:1}
 
-/* ── PAGE HEADER ── */
-.page-header {
-  background: var(--text);
-  color: #fff;
-  padding: 3rem 2rem 2.5rem;
-  text-align: center;
-}
+/* ── HEADER ── */
+.page-header { background: var(--text); color: #fff; padding: 3rem 2rem 2.5rem; text-align: center; }
 .header-flag { display: flex; justify-content: center; gap: 8px; margin-bottom: 1.25rem; font-size: 28px; }
 .page-header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.6rem,4vw,2.4rem); font-weight: 400; line-height: 1.2; margin-bottom: 0.75rem; }
 .page-header h1 em { font-style: italic; color: #fde68a; }
 .page-header p { font-size: 14px; color: rgba(255,255,255,0.7); max-width: 600px; margin: 0 auto; line-height: 1.6; }
 .header-badges { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 1.25rem; }
 .header-badge { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.85); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+.lang-toggle { display: inline-flex; background: rgba(255,255,255,0.12); border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); margin-top: 1.25rem; }
+.lang-btn { background: none; border: none; color: rgba(255,255,255,0.6); padding: 6px 16px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all .15s; }
+.lang-btn.active { background: rgba(255,255,255,0.2); color: #fff; font-weight: 500; }
 
 /* ── LAYOUT ── */
-.main { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
-.section-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+.main { max-width: 960px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+.section-block { margin-bottom: 2.5rem; }
 .section-label { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 0.4rem; }
-.section-intro { font-size: 14px; color: var(--text2); line-height: 1.65; margin-bottom: 1.75rem; max-width: 680px; }
+.section-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+.section-intro { font-size: 14px; color: var(--text2); line-height: 1.65; margin-bottom: 1.5rem; max-width: 720px; }
 .divider { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
 
 /* ── CARDS ── */
-.card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; }
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.75rem; }
-.card h3 { font-size: 14px; font-weight: 500; margin-bottom: 0.4rem; }
+.card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+.card-grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.card-grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.card-grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.card h3 { font-size: 13px; font-weight: 500; margin-bottom: 0.4rem; }
 .card p { font-size: 13px; color: var(--text2); line-height: 1.55; }
-.card .icon { font-size: 24px; margin-bottom: 0.6rem; }
-
+.card .icon { font-size: 22px; margin-bottom: 0.5rem; }
 .card.blue  { border-color: #bbd0f0; background: var(--blue-bg); }
 .card.green { border-color: #b3dfc8; background: var(--green-bg); }
 .card.amber { border-color: #f0d89a; background: var(--amber-bg); }
 .card.red   { border-color: #f0b3b3; background: var(--red-bg); }
 .card.teal  { border-color: #9fd9e3; background: var(--teal-bg); }
-.card.dark  { background: var(--text); color: #fff; border-color: #333; }
-.card.dark p { color: rgba(255,255,255,0.7); }
+.card.dark  { background: #1a1915; color: #fff; border-color: #333; }
+.card.dark p { color: rgba(255,255,255,0.65); }
 .card.dark h3 { color: #fff; }
+
+/* ── VISUAL STAT CARDS ── */
+.stat-card { text-align: center; padding: 1rem; }
+.stat-val { font-size: 2rem; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--text3); }
+.stat-sub { font-size: 12px; color: var(--text2); margin-top: 4px; line-height: 1.4; }
+
+/* ── BARRIER FLOW ── */
+.barrier-flow { display: flex; align-items: stretch; gap: 0; overflow-x: auto; margin: 1rem 0 1.5rem; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+.barrier-step { flex: 1; min-width: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem 0.5rem; text-align: center; font-size: 11px; font-weight: 500; line-height: 1.3; border-right: 1px solid var(--border); background: var(--surface); position: relative; }
+.barrier-step:last-child { border-right: none; }
+.barrier-step .b-icon { font-size: 20px; margin-bottom: 4px; }
+.barrier-step .b-name { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+.barrier-step .b-detail { font-size: 10px; color: var(--text3); }
+.barrier-step.b-inlet { background: #e8f0fa; }
+.barrier-step.b-tank  { background: #e0f4f7; }
+.barrier-step.b-c1    { background: #f5f5f0; }
+.barrier-step.b-pump  { background: #fde8e8; }
+.barrier-step.b-c2    { background: #f5f5f0; }
+.barrier-step.b-ro    { background: #e4f5ec; }
+.barrier-step.b-uv    { background: #dff0c0; }
+.barrier-step.b-remin { background: #fdf0d5; }
+.barrier-step.b-tap   { background: #e8f0fa; }
+.barrier-arrow { display: flex; align-items: center; color: var(--text3); font-size: 14px; padding: 0 2px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); }
+.b-warn-badge { position: absolute; top: 4px; right: 4px; font-size: 9px; background: #fde8e8; color: #a02020; border-radius: 3px; padding: 1px 3px; font-weight: 600; }
 
 /* ── COMPARISON TABLE ── */
 .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.compare-table th { text-align: left; padding: 8px 12px; background: var(--surface2); font-weight: 500; color: var(--text2); border-bottom: 1px solid var(--border); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
-.compare-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+.compare-table th { text-align: left; padding: 8px 12px; background: var(--surface2); font-weight: 500; color: var(--text2); border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+.compare-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; font-size: 13px; }
 .compare-table tr:last-child td { border-bottom: none; }
-.compare-table tr:hover td { background: var(--surface2); }
 .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
 .badge-green { background: var(--green-bg); color: var(--green); }
 .badge-amber { background: var(--amber-bg); color: var(--amber); }
@@ -93,81 +126,114 @@ a:hover { text-decoration: underline; }
 .badge-blue  { background: var(--blue-bg); color: var(--blue); }
 .badge-teal  { background: var(--teal-bg); color: var(--teal); }
 
-/* ── FLOW DIAGRAM ── */
-.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin: 1rem 0; }
-.flow-step { display: flex; flex-direction: column; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 12px; font-weight: 500; text-align: center; min-width: 90px; line-height: 1.35; }
-.flow-step .step-icon { font-size: 20px; margin-bottom: 4px; }
-.flow-step.warn { border-color: #f0b3b3; background: var(--red-bg); color: var(--red); }
-.flow-step.ok   { border-color: #b3dfc8; background: var(--green-bg); color: var(--green); }
-.flow-step.key  { border-color: #bbd0f0; background: var(--blue-bg); color: var(--blue); }
-.flow-arrow { font-size: 18px; color: var(--text3); flex-shrink: 0; }
+/* ── STAGNATION VISUAL ── */
+.stag-bar { display: flex; gap: 4px; margin: 1rem 0; }
+.stag-seg { flex: 1; border-radius: 6px; padding: 10px 6px; text-align: center; font-size: 11px; font-weight: 600; line-height: 1.3; }
 
-/* ── PROTOCOL SELECTOR ── */
-.proto-selector { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.75rem; }
-.proto-selector h3 { font-size: 15px; font-weight: 500; margin-bottom: 1rem; }
-.q-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 1.25rem; }
-.q-block label { display: block; font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .05em; }
-.q-block select { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface2); font-family: inherit; font-size: 13px; color: var(--text); cursor: pointer; }
-.proto-result { display: none; border-radius: 8px; padding: 1.25rem; }
-.proto-result.visible { display: block; }
-.proto-result h4 { font-size: 16px; font-weight: 600; margin-bottom: 0.6rem; }
-.proto-result ul { margin: 0.5rem 0 0 1.1rem; font-size: 13px; line-height: 1.8; }
-.proto-result .duration { font-size: 22px; font-weight: 700; margin-right: 6px; }
-.proto-result .note { font-size: 12px; color: var(--text2); margin-top: 0.75rem; font-style: italic; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 0.75rem; }
-
-/* ── INSTALLATION DIAGRAM ── */
-.install-diagram { background: #1a1915; color: #e8e5de; border-radius: var(--radius); padding: 1.5rem; font-family: 'DM Sans', monospace; font-size: 13px; overflow-x: auto; margin: 1rem 0 1.75rem; line-height: 2; }
-.install-diagram .node { color: #fde68a; font-weight: 600; }
-.install-diagram .arrow { color: #6b9fd4; }
-.install-diagram .label { color: #9fca9f; font-size: 11px; }
-.install-diagram .warn-label { color: #f4a261; font-size: 11px; }
-
-/* ── TOGGLE TABS ── */
+/* ── TABS ── */
 .tabs { display: flex; gap: 4px; margin-bottom: 0; border-bottom: 1px solid var(--border); }
 .tab-btn { background: none; border: none; padding: 8px 16px; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all .15s; }
 .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
 .tab-panel { display: none; padding: 1.25rem 0; }
 .tab-panel.active { display: block; }
 
-/* ── HEATMAP ── */
-.heatmap-wrap { overflow-x: auto; margin: 0.75rem 0 1.5rem; }
-.heatmap { border-collapse: collapse; font-size: 12px; min-width: 400px; }
-.heatmap th { padding: 6px 10px; text-align: center; background: var(--surface2); font-weight: 500; font-size: 11px; color: var(--text2); border: 1px solid var(--border); }
-.heatmap td { padding: 7px 10px; text-align: center; border: 1px solid var(--border); font-weight: 500; font-size: 12px; transition: filter .1s; cursor: default; }
-.hm-0 { background:#e4f5ec; color:#1a7a4a; }
-.hm-1 { background:#f0f7d5; color:#4a6a00; }
-.hm-2 { background:#fdf0d5; color:#8a5a00; }
-.hm-3 { background:#fde8d0; color:#a04000; }
-.hm-4 { background:#fde8e8; color:#a02020; }
+/* ── INSTALL DIAGRAM ── */
+.install-diagram { background: #1a1915; color: #e8e5de; border-radius: var(--radius); padding: 1.25rem; font-family: monospace; font-size: 12px; overflow-x: auto; margin: 1rem 0; line-height: 2; }
+.install-diagram .node { color: #fde68a; font-weight: 600; }
+.install-diagram .arrow { color: #6b9fd4; }
+.install-diagram .label { color: #9fca9f; font-size: 11px; }
+.install-diagram .warn-label { color: #f4a261; font-size: 11px; }
+
+/* ── HEATMAP INTERACTIVE ── */
+.hm-section { background: #16181d; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; color: #e0ddd8; }
+.hm-section-title { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: #fde68a; margin-bottom: 4px; }
+.hm-section-sub { font-size: 12px; color: #8a8880; margin-bottom: 1.25rem; }
+.hm-layout { display: flex; gap: 1rem; align-items: flex-start; }
+
+/* Vertical slider (Y axis = temperature) */
+.hm-y-control { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+.hm-y-label { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: #6a8aaa; margin-bottom: 4px; writing-mode: vertical-rl; transform: rotate(180deg); }
+.hm-y-slider { writing-mode: vertical-lr; direction: rtl; -webkit-appearance: slider-vertical; width: 28px; cursor: pointer; accent-color: #4a9fd4; flex: 1; min-height: 160px; }
+
+/* Grid + X slider container */
+.hm-grid-wrap { flex: 1; min-width: 0; }
+.hm-x-label { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: #6a8aaa; margin-bottom: 6px; text-align: center; }
+.hm-grid { display: grid; border-radius: 6px; overflow: hidden; gap: 2px; background: #0a0c10; padding: 2px; margin-bottom: 8px; }
+.hm-cell { border-radius: 3px; padding: 5px 4px; text-align: center; font-size: 10px; font-weight: 600; transition: all .25s; cursor: default; line-height: 1.2; min-height: 38px; display: flex; align-items: center; justify-content: center; position: relative; }
+.hm-cell.active-cell { outline: 3px solid #fff; outline-offset: -2px; z-index: 2; transform: scale(1.05); box-shadow: 0 0 12px rgba(255,255,255,0.35); }
+.hm-cell .pion { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 2px solid #1a1915; top: 3px; right: 3px; display: none; box-shadow: 0 0 6px rgba(255,255,255,0.8); }
+.hm-cell.active-cell .pion { display: block; }
+.hm-row-label { font-size: 10px; color: #8a8880; display: flex; align-items: center; padding-right: 4px; white-space: nowrap; justify-content: flex-end; min-width: 52px; }
+.hm-x-ticks { display: flex; gap: 2px; font-size: 9px; color: #8a8880; margin-bottom: 4px; }
+.hm-x-ticks span { flex: 1; text-align: center; line-height: 1.2; }
+.hm-x-slider-wrap { display: flex; gap: 2px; align-items: center; }
+.hm-x-slider { width: 100%; cursor: pointer; accent-color: #4a9fd4; }
+
+/* Level badge */
+.level-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; margin-top: 8px; }
+
+/* ── SOP DISPLAY ── */
+.sop-display { background: #1e2128; border-radius: 10px; padding: 1.25rem; margin-top: 1rem; border: 1px solid #2a3040; }
+.sop-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+.sop-protocol-badge { padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+.sop-duration { font-size: 13px; color: #a0c8e8; margin-left: auto; }
+.sop-steps { list-style: none; margin: 0; padding: 0; }
+.sop-steps li { display: flex; gap: 10px; margin-bottom: 0.6rem; font-size: 13px; color: #c8c4bc; line-height: 1.5; }
+.sop-steps li .sop-num { min-width: 22px; height: 22px; border-radius: 50%; background: #2a4060; color: #6ab0e8; font-weight: 700; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.sop-warning { background: #2a1a10; border: 1px solid #503010; border-radius: 6px; padding: 8px 12px; font-size: 12px; color: #f4a261; margin-top: 0.75rem; }
+.sop-info { background: #0a1a2a; border: 1px solid #0a3050; border-radius: 6px; padding: 8px 12px; font-size: 12px; color: #6ab0e8; margin-top: 0.5rem; }
+.sop-empty { color: #4a5060; font-size: 13px; text-align: center; padding: 1rem; font-style: italic; }
+
+/* Checklist */
+.sop-checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; margin-top: 0.75rem; }
+.sop-check { display: flex; align-items: flex-start; gap: 6px; font-size: 12px; color: #a0c8a0; line-height: 1.4; }
+.sop-check::before { content: '☐'; color: #4a8060; flex-shrink: 0; }
 
 /* ── ACCORDION ── */
-.accordion { border: 0.5px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem; }
-.acc-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; cursor: pointer; background: var(--surface); user-select: none; gap: 10px; }
-.acc-header:hover { background: var(--surface2); }
-.acc-header h3 { font-size: 14px; font-weight: 500; flex: 1; }
-.acc-header .acc-icon { font-size: 18px; color: var(--text3); transition: transform .2s; flex-shrink: 0; }
-.acc-header.open .acc-icon { transform: rotate(180deg); }
-.acc-body { display: none; padding: 0 1.25rem 1.25rem; background: var(--surface); font-size: 13px; color: var(--text2); line-height: 1.65; }
+.accordion { border: 1px solid #2a3040; border-radius: 10px; overflow: hidden; margin-bottom: 10px; background: #16181d; }
+.acc-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; cursor: pointer; user-select: none; gap: 10px; }
+.acc-header:hover { background: #1e2128; }
+.acc-header h3 { font-size: 14px; font-weight: 500; color: #e0ddd8; flex: 1; display: flex; align-items: center; gap: 8px; }
+.acc-header .acc-chevron { font-size: 14px; color: #6a8aaa; transition: transform .2s; flex-shrink: 0; }
+.acc-header.open .acc-chevron { transform: rotate(180deg); }
+.acc-header .acc-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+.acc-body { display: none; padding: 0 1.25rem 1.25rem; }
 .acc-body.open { display: block; }
-.acc-body ul { margin: 0.5rem 0 0 1.1rem; }
-.acc-body li { margin-bottom: 0.3rem; }
-.acc-body strong { color: var(--text); }
-.acc-body .step-list { counter-reset: step; list-style: none; margin-left: 0; }
-.acc-body .step-list li { counter-increment: step; display: flex; gap: 10px; margin-bottom: 0.6rem; }
-.acc-body .step-list li::before { content: counter(step); min-width: 22px; height: 22px; border-radius: 50%; background: var(--blue); color: #fff; font-weight: 600; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+/* ── EPDM BUDGET ── */
+.epdm-bar-wrap { margin: 1rem 0; }
+.epdm-bar-bg { background: #2a3040; border-radius: 4px; height: 10px; overflow: hidden; margin-bottom: 4px; }
+.epdm-bar-fill { height: 100%; border-radius: 4px; transition: width .4s; }
+.epdm-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 12px; color: #c8c4bc; }
+.epdm-row .epdm-label { min-width: 100px; font-weight: 600; }
+.epdm-row .epdm-num { min-width: 60px; text-align: right; }
+
+/* ── PRODUCT EXAMPLE BOX ── */
+.product-example { background: #1e2128; border: 1px solid #2a4060; border-radius: 10px; padding: 1.25rem; margin-top: 1.5rem; }
+.product-example-title { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: #4a9fd4; font-weight: 600; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 6px; }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.product-item { background: #16181d; border: 1px solid #2a3040; border-radius: 6px; padding: 8px 10px; font-size: 12px; }
+.product-item a { color: #4a9fd4; text-decoration: none; display: flex; align-items: flex-start; gap: 6px; }
+.product-item a:hover { color: #7ac8f8; text-decoration: underline; }
+.product-item .p-role { font-size: 10px; color: #6a8888; display: block; margin-top: 2px; }
 
 /* ── DISCLAIMER ── */
 .disclaimer { background: var(--surface2); border: 1px dashed var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; font-size: 12px; color: var(--text3); line-height: 1.6; margin-top: 2rem; }
-.disclaimer strong { color: var(--text2); }
 
 /* ── FOOTER ── */
-.footer { border-top: 0.5px solid var(--border); padding: 2rem 1.5rem; max-width: 900px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--text3); }
+.footer { border-top: 0.5px solid var(--border); padding: 1.5rem; max-width: 960px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--text3); }
 
-@media (max-width: 600px) {
-  .card-grid { grid-template-columns: 1fr; }
-  .q-grid { grid-template-columns: 1fr; }
-  .flow { gap: 3px; }
-  .flow-step { min-width: 70px; font-size: 11px; padding: 8px 10px; }
+@media (max-width: 700px) {
+  .card-grid-4 { grid-template-columns: 1fr 1fr; }
+  .card-grid-3 { grid-template-columns: 1fr; }
+  .card-grid-2 { grid-template-columns: 1fr; }
+  .hm-y-slider { min-height: 120px; }
+  .sop-checklist { grid-template-columns: 1fr; }
+  .barrier-flow { flex-wrap: wrap; }
+  .product-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .card-grid-4 { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -195,571 +261,548 @@ a:hover { text-decoration: underline; }
 <!-- ── HEADER ── -->
 <div class="page-header">
   <div class="header-flag">💧 🇪🇺 🚐</div>
-  <h1>Water Quality &amp; Treatment<br><em>in Europe for North American RVers</em></h1>
-  <p>Why European tap water is different, how to protect your RV systems, and a complete ozone SOP for the Skøl multi-barrier approach — adaptable to any LTV or North American RV.</p>
+  <h1 id="h-title">Water Quality &amp; Treatment<br><em>in Europe for North American RVers</em></h1>
+  <p id="h-sub">Why European water differs, how to protect your RV, and an interactive ozone protocol selector with full SOP — adaptable to any RV setup.</p>
   <div class="header-badges">
-    <span class="header-badge">🔬 Science-based</span>
-    <span class="header-badge">LTV Unity &amp; Wonder</span>
-    <span class="header-badge">Multi-barrier strategy</span>
-    <span class="header-badge">Ozone SOP included</span>
+    <span class="header-badge" id="b1">🔬 Science-based</span>
+    <span class="header-badge" id="b2">Any RV</span>
+    <span class="header-badge" id="b3">Multi-barrier strategy</span>
+    <span class="header-badge" id="b4">Interactive SOP</span>
+  </div>
+  <div class="lang-toggle" style="margin-top:1.25rem;">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
   </div>
 </div>
 
 <!-- ── MAIN ── -->
 <div class="main">
 
-  <!-- ─── SECTION 1: EUROPE VS NORTH AMERICA ─── -->
-  <div class="section-label">Section 1</div>
-  <div class="section-title">Europe vs. North America — Water is Different</div>
-  <p class="section-intro">North American municipal water is typically heavily chlorinated at source and delivered through modern, regularly inspected infrastructure. In Europe, standards vary dramatically by country, region, and even campsite. Understanding what you're dealing with is the first step.</p>
+  <!-- ─── SECTION 1 ─── -->
+  <div class="section-block">
+    <div class="section-label" id="s1-label">Section 1</div>
+    <div class="section-title" id="s1-title">Europe vs. North America — Water is Different</div>
+    <p class="section-intro" id="s1-intro">North American municipal water is heavily chlorinated and delivered through modern infrastructure. In Europe, standards vary dramatically by country, region, and campsite. Your RV was designed and tested with North American water.</p>
 
-  <div class="card-grid">
-    <div class="card amber">
-      <div class="icon">🇪🇺</div>
-      <h3>European Municipal Water</h3>
-      <p>Generally safe to drink by EU standards, but hardness (CaCO₃) varies from 50 mg/L (soft, Atlantic arc) to 400+ mg/L (hard, central Europe). Lower chlorine residual than North America — bacteria can survive in low-flow campsite lines. pH ranges from 6.5 to 8.5 depending on source.</p>
-    </div>
-    <div class="card blue">
-      <div class="icon">🇨🇦 🇺🇸</div>
-      <h3>North American Municipal Water</h3>
-      <p>Standardized chlorination at 0.2–4 mg/L free chlorine residual throughout distribution. Stricter turbidity limits (&lt;0.3 NTU at treatment). Your RV was designed around this profile — its seals, membranes, and tanks were tested with this type of water.</p>
-    </div>
-    <div class="card red">
-      <div class="icon">⛺</div>
-      <h3>Campsite &amp; Rural Sources</h3>
-      <p>Campsite taps often have long, low-flow lines with seasonal stagnation. Rural well water can contain iron, manganese, or biological contamination. Boondocking sources (rivers, cisterns) are untested. Turbidity &gt;1 NTU reduces UV and chlorine effectiveness significantly (EPA threshold).</p>
-    </div>
-    <div class="card teal">
-      <div class="icon">🦠</div>
-      <h3>Legionella Risk</h3>
-      <p>Legionella optimally grows at 32–35°C and survives at 20–45°C (CDC 2025, WHO 2022). A parked RV in summer Europe, with stagnant water in tanks and hoses warmed by sun, is a near-ideal environment. Risk increases sharply after &gt;7 days stagnation above 20°C.</p>
-    </div>
-  </div>
-
-  <!-- Water Hardness Table -->
-  <div class="card" style="margin-bottom:1.75rem;">
-    <h3 style="margin-bottom:1rem;">💧 Typical Water Hardness by European Region</h3>
-    <div class="heatmap-wrap">
-      <table class="compare-table">
-        <thead>
-          <tr>
-            <th>Region / Country</th>
-            <th>Typical Hardness</th>
-            <th>pH Range</th>
-            <th>Scale Impact</th>
-            <th>RO Membrane Load</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>🇵🇹 Portugal — Atlantic coast</td>
-            <td><span class="badge badge-green">Soft (50–120 mg/L)</span></td>
-            <td>6.8–7.4</td>
-            <td>Low</td>
-            <td><span class="badge badge-green">Low</span></td>
-          </tr>
-          <tr>
-            <td>🇪🇸 Spain — Mediterranean coast</td>
-            <td><span class="badge badge-amber">Moderate–Hard (150–350 mg/L)</span></td>
-            <td>7.2–8.2</td>
-            <td>Moderate–High</td>
-            <td><span class="badge badge-amber">Moderate</span></td>
-          </tr>
-          <tr>
-            <td>🇫🇷 France — Atlantic / Brittany</td>
-            <td><span class="badge badge-green">Soft–Moderate (80–180 mg/L)</span></td>
-            <td>7.0–7.8</td>
-            <td>Low–Moderate</td>
-            <td><span class="badge badge-green">Low–Moderate</span></td>
-          </tr>
-          <tr>
-            <td>🇫🇷 France — Paris basin / Southeast</td>
-            <td><span class="badge badge-amber">Hard (200–400 mg/L)</span></td>
-            <td>7.4–8.0</td>
-            <td>High</td>
-            <td><span class="badge badge-amber">Moderate–High</span></td>
-          </tr>
-          <tr>
-            <td>🇩🇪 Germany / 🇦🇹 Austria</td>
-            <td><span class="badge badge-red">Very Hard (300–500 mg/L)</span></td>
-            <td>7.5–8.5</td>
-            <td>Very High</td>
-            <td><span class="badge badge-red">High</span></td>
-          </tr>
-          <tr>
-            <td>🇳🇱 Netherlands / 🇧🇪 Belgium</td>
-            <td><span class="badge badge-blue">Variable (100–300 mg/L)</span></td>
-            <td>7.2–7.9</td>
-            <td>Moderate</td>
-            <td><span class="badge badge-blue">Moderate</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <hr class="divider">
-
-  <!-- ─── SECTION 2: THE 20% RULE ─── -->
-  <div class="section-label">Section 2</div>
-  <div class="section-title">The 20% Tank Rule in Transit</div>
-  <p class="section-intro">One of the most effective practices for keeping your fresh tank clean during European travel has nothing to do with chemistry.</p>
-
-  <div class="card-grid">
-    <div class="card green">
-      <div class="icon">📏</div>
-      <h3>Why Keep the Tank Low?</h3>
-      <p>Travelling with &gt;80% water creates sloshing that generates biofilm-detaching turbulence, potentially resuspending contaminants. More importantly, a near-empty tank dries faster after flushing, reducing bacterial colonization. The "20% rule" — keep ≤20% during driving — minimizes weight, slosh, and stagnation surface area.</p>
-    </div>
-    <div class="card blue">
-      <div class="icon">🗓️</div>
-      <h3>Stagnation Window</h3>
-      <p>At summer European temperatures (25–35°C), Legionella and coliforms can reach concerning levels within 3–7 days in a partially filled stagnant tank. Refill from a fresh source every 2–3 days when parked in heat. In cool weather (&lt;15°C), risk is much lower — Legionella is inactive below 20°C.</p>
-    </div>
-    <div class="card amber">
-      <div class="icon">💡</div>
-      <h3>Practical Strategy</h3>
-      <p>Fill to 100% only at verified quality sources before a static stay. During driving days, carry only what you need that day. At new campsites, flush the campsite tap for 30–60 seconds before connecting. Never connect directly to a hose that's been baking in the sun for hours.</p>
-    </div>
-  </div>
-
-  <hr class="divider">
-
-  <!-- ─── SECTION 3: MULTI-BARRIER SYSTEM ─── -->
-  <div class="section-label">Section 3</div>
-  <div class="section-title">The Skøl Multi-Barrier System</div>
-  <p class="section-intro">No single treatment is sufficient for all European conditions. The Skøl approach stacks multiple independent barriers — each compensating for the weaknesses of the others. This architecture was validated against CDC, WHO, EPA, and peer-reviewed sources (Hoigné &amp; Bader 1976–83, Langlais et al. 1991).</p>
-
-  <!-- Flow diagram -->
-  <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.75rem;overflow-x:auto;">
-    <p style="font-size:12px;color:var(--text3);margin-bottom:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;">Complete Water Flow — Skøl (LTV Unity FX)</p>
-    <div class="flow" style="flex-wrap:nowrap;min-width:600px;">
-      <div class="flow-step key"><div class="step-icon">🚰</div>Campsite tap</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step key"><div class="step-icon">🔵</div>BLUTEC AR3<div style="font-size:10px;color:var(--blue);">5µm+0.2µm+UVC</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step ok"><div class="step-icon">🪣</div>Fresh Tank<div style="font-size:10px;color:var(--green);">97L + O₃ optional</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step"><div class="step-icon">♦️</div>Carbon #1<div style="font-size:10px;">O₃ neutralizer</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step warn"><div class="step-icon">⚙️</div>Shurflo Pump<div style="font-size:10px;color:var(--red);">NEVER run during O₃</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step"><div class="step-icon">♦️</div>Carbon #2<div style="font-size:10px;">pre-RO safety</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step key"><div class="step-icon">💎</div>NOVO RO<div style="font-size:10px;color:var(--blue);">CRO-800UX6</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step ok"><div class="step-icon">🔆</div>ACUVA UV<div style="font-size:10px;color:var(--green);">1.2 LED</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step"><div class="step-icon">🏔️</div>Remineralize<div style="font-size:10px;">ALK35 + pH↑</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step key"><div class="step-icon">🚿</div>VS888 tap</div>
-    </div>
-  </div>
-
-  <div class="card-grid">
-    <div class="card blue">
-      <div class="icon">🔵</div>
-      <h3>Barrier 1 — BLUTEC AR3 at Inlet</h3>
-      <p>Campsite-tap pre-filter (5µm sediment + 0.2µm ceramic + UV-LED). Removes particulates and inactivates bacteria before water enters the tank. <em>Only usable at pressurized campsite connections — not compatible with boondocking bucket fill.</em></p>
-    </div>
-    <div class="card teal">
-      <div class="icon">⚡</div>
-      <h3>Barrier 2 — Ozone Shock Treatment (Optional)</h3>
-      <p>Airthereal AH1000 (1000 mg/h) injected into tank for 45–75 min depending on protocol. Destroys bacteria, viruses, and biofilm. Ozone reverts to O₂ — no residue. Carbon #1 neutralizes any residual before the pump. <em>NEVER combined with Aquatabs in same cycle.</em></p>
-    </div>
-    <div class="card green">
-      <div class="icon">💎</div>
-      <h3>Barrier 3 — Reverse Osmosis (NOVO CRO-800UX6)</h3>
-      <p>Tankless RO at point-of-use (kitchen). Removes dissolved solids, heavy metals, nitrates, and any residual chemical contamination. Protects from hard water scaling at the most critical consumption point.</p>
-    </div>
-    <div class="card amber">
-      <div class="icon">🔆</div>
-      <h3>Barrier 4 — UV LED (ACUVA 1.2)</h3>
-      <p>Final UV sterilization post-RO. Pure RO water (TDS &lt;50) is ideal for UV — zero turbidity means maximum photon penetration efficiency. Positioned after RO and before remineralization: treats the most vulnerable stage of the water path.</p>
-    </div>
-  </div>
-
-  <hr class="divider">
-
-  <!-- ─── SECTION 4: INTERACTIVE PROTOCOL SELECTOR ─── -->
-  <div class="section-label">Section 4</div>
-  <div class="section-title">Ozone Protocol Selector</div>
-  <p class="section-intro">Answer 3 questions to get the right ozone protocol for your situation. Based on water temperature kinetics (Hoigné &amp; Bader 1976–83) and biological contamination risk.</p>
-
-  <div class="proto-selector">
-    <h3>🔬 Find Your Protocol</h3>
-    <div class="q-grid">
-      <div class="q-block">
-        <label>Water Temperature</label>
-        <select id="q-temp">
-          <option value="">— select —</option>
-          <option value="cold">Cold (&lt;15°C)</option>
-          <option value="warm">Warm (15–25°C)</option>
-          <option value="hot">Hot (&gt;25°C)</option>
-        </select>
+    <div class="card-grid-4">
+      <div class="card blue stat-card">
+        <div class="icon">🇨🇦🇺🇸</div>
+        <div class="stat-val" style="color:var(--blue);font-size:1.3rem;" id="s1-na-val">0.2–4 mg/L</div>
+        <div class="stat-label" id="s1-na-label">Free chlorine (NA)</div>
+        <div class="stat-sub" id="s1-na-sub">Consistent throughout distribution. Your RV seals and membranes are calibrated for this.</div>
       </div>
-      <div class="q-block">
-        <label>Stagnation Time</label>
-        <select id="q-stag">
-          <option value="">— select —</option>
-          <option value="fresh">Fresh (&lt;3 days)</option>
-          <option value="week">3–7 days</option>
-          <option value="long">7–14 days</option>
-          <option value="very-long">&gt;14 days</option>
-        </select>
+      <div class="card amber stat-card">
+        <div class="icon">🇪🇺</div>
+        <div class="stat-val" style="color:var(--amber);font-size:1.3rem;" id="s1-eu-val">~0.05 mg/L</div>
+        <div class="stat-label" id="s1-eu-label">Free chlorine (EU)</div>
+        <div class="stat-sub" id="s1-eu-sub">Low residual at campsite tap after long distribution lines. Bacteria can survive.</div>
       </div>
-      <div class="q-block">
-        <label>Water Source</label>
-        <select id="q-source">
-          <option value="">— select —</option>
-          <option value="municipal">Municipal campsite tap</option>
-          <option value="well">Well / rural / unknown</option>
-          <option value="wild">River / cistern / wild source</option>
-        </select>
+      <div class="card red stat-card">
+        <div class="icon">🦠</div>
+        <div class="stat-val" style="color:var(--red);font-size:1.3rem;" id="s1-leg-val">32–35°C</div>
+        <div class="stat-label" id="s1-leg-label">Legionella optimum</div>
+        <div class="stat-sub" id="s1-leg-sub">A parked RV in summer sun is a near-ideal Legionella environment above 20°C.</div>
+      </div>
+      <div class="card teal stat-card">
+        <div class="icon">💎</div>
+        <div class="stat-val" style="color:var(--teal);font-size:1.3rem;" id="s1-hard-val">50–500+</div>
+        <div class="stat-label" id="s1-hard-label">Hardness mg/L range</div>
+        <div class="stat-sub" id="s1-hard-sub">Soft in Portugal/Brittany. Extremely hard in Germany/Austria/Spain Med coast.</div>
       </div>
     </div>
-    <div id="proto-result" class="proto-result"></div>
-  </div>
 
-  <!-- EPDM Budget -->
-  <div class="card amber" style="margin-bottom:1.75rem;">
-    <h3 style="margin-bottom:0.75rem;">⚠️ Annual EPDM Seal Budget — 800 min/year max</h3>
-    <div class="heatmap-wrap">
-      <table class="compare-table">
-        <thead>
-          <tr><th>Protocol</th><th>Duration per cycle</th><th>Max frequency</th><th>Annual total</th><th>Budget status</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>STD</strong> — Standard</td><td>45 min</td><td>Monthly (×12)</td>
-            <td>540 min</td><td><span class="badge badge-green">✓ Safe</span></td>
-          </tr>
-          <tr>
-            <td><strong>VAR</strong> — Variable risk</td><td>60 min</td><td>Max 2×/month (×24)</td>
-            <td>720 min</td><td><span class="badge badge-green">✓ Safe</span></td>
-          </tr>
-          <tr>
-            <td><strong>CHOC</strong> — Shock</td><td>75 min</td><td>Monthly (×12)</td>
-            <td>900 min</td><td><span class="badge badge-red">⚠ Over budget</span></td>
-          </tr>
-          <tr>
-            <td><strong>2×VOL</strong> — Double volumetric</td><td>2×60 min = 120 min</td><td>Max 1×/month (×8)</td>
-            <td>960 min (if ×8)</td><td><span class="badge badge-amber">⚠ Use sparingly</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p style="font-size:12px;color:var(--amber);margin-top:0.5rem;">O₃ attacks EPDM rubber seals over time. Track cumulative ozone minutes annually. Replace seals showing cracking or swelling.</p>
-  </div>
-
-  <hr class="divider">
-
-  <!-- ─── SECTION 5: INSTALLATION ─── -->
-  <div class="section-label">Section 5</div>
-  <div class="section-title">Installation Guide — Unity vs. Wonder</div>
-  <p class="section-intro">The LTV Unity (Sprinter chassis) and Wonder (Transit chassis) have different plumbing architectures. The Unity already has an inline carbon filter; the Wonder does not. Installation scenarios also differ between campsite (pressurized) and boondocking (tank fill).</p>
-
-  <!-- Tabs for vehicle type -->
-  <div class="card" style="margin-bottom:1.75rem;padding:0;">
-    <div class="tabs" style="padding:0 1.5rem;">
-      <button class="tab-btn active" onclick="switchTab('unity')">🚐 LTV Unity FX (Sprinter)</button>
-      <button class="tab-btn" onclick="switchTab('wonder')">🚌 LTV Wonder (Transit)</button>
-    </div>
-    <div id="tab-unity" class="tab-panel active" style="padding:1.25rem 1.5rem;">
-      <p style="font-size:13px;color:var(--text2);margin-bottom:1rem;">The Unity has a <strong>Sprinter inline carbon filter</strong> (part of the stock plumbing). The Skøl system adds BLUTEC at the inlet, ozone in the tank, and a NOVO RO+ACUVA+remineralizer at the kitchen point-of-use.</p>
-      <div class="install-diagram">
-<span class="node">CAMPSITE MODE (pressurized tap)</span><br>
-<span class="arrow">  Campsite tap</span> → <span class="node">BLUTEC AR3</span> <span class="label">[5µm + 0.2µm + UVC]</span><br>
-<span class="arrow">               </span> → <span class="node">Fresh Tank (97L)</span> <span class="label">[O₃ optional: 45–75 min]</span><br>
-<span class="arrow">               </span> → <span class="node">Sprinter Carbon</span> <span class="label">[factory inline — neutralizes O₃ residual]</span><br>
-<span class="arrow">               </span> → <span class="warn-label">Shurflo Pump ⚠ NEVER run during O₃</span><br>
-<span class="arrow">               </span> → <span class="node">Carbon #2</span> <span class="label">[pre-RO safety filter]</span><br>
-<span class="arrow">               </span> → <span class="node">NOVO CRO-800UX6 RO</span> <span class="label">[tankless, kitchen]</span><br>
-<span class="arrow">               </span> → <span class="node">ACUVA 1.2 UV-LED</span> <span class="label">[post-RO sterilization]</span><br>
-<span class="arrow">               </span> → <span class="node">Waterdrop ALK35</span> <span class="label">[remineralization + pH↑]</span><br>
-<span class="arrow">               </span> → <span class="node">VS888 Faucet</span>
-
-<br><br>
-<span class="node">BOONDOCKING MODE (bucket fill)</span><br>
-<span class="arrow">  Water source</span> → <span class="warn-label">BLUTEC NOT USABLE (no pressure)</span><br>
-<span class="arrow">               </span> → <span class="node">Manual fill via tank hatch</span><br>
-<span class="arrow">               </span> → <span class="node">O₃ mandatory</span> <span class="label">[VAR or CHOC protocol]</span><br>
-<span class="arrow">               </span> → <span class="label">rest of system unchanged</span>
-      </div>
-      <p style="font-size:12px;color:var(--text2);">Key note: The Sprinter factory carbon filter counts as Carbon #1 in the Skøl architecture. Do not remove it — it is essential for O₃ neutralization before the pump.</p>
-    </div>
-    <div id="tab-wonder" class="tab-panel" style="padding:1.25rem 1.5rem;">
-      <p style="font-size:13px;color:var(--text2);margin-bottom:1rem;">The Wonder (Transit chassis) does <strong>not</strong> include a factory inline carbon filter. You must add Carbon #1 manually between tank output and pump.</p>
-      <div class="install-diagram">
-<span class="node">CAMPSITE MODE (pressurized tap)</span><br>
-<span class="arrow">  Campsite tap</span> → <span class="node">BLUTEC AR3</span> <span class="label">[5µm + 0.2µm + UVC]</span><br>
-<span class="arrow">               </span> → <span class="node">Fresh Tank</span> <span class="label">[O₃ optional]</span><br>
-<span class="arrow">               </span> → <span class="node">Carbon #1</span> <span class="warn-label">⚠ ADD THIS — not factory-installed on Wonder</span><br>
-<span class="arrow">               </span> → <span class="warn-label">Water Pump ⚠ NEVER run during O₃</span><br>
-<span class="arrow">               </span> → <span class="node">Carbon #2</span> <span class="label">[pre-RO safety]</span><br>
-<span class="arrow">               </span> → <span class="node">NOVO RO → ACUVA UV → ALK35 → Faucet</span>
-
-<br><br>
-<span class="node">BOONDOCKING MODE</span><br>
-<span class="arrow">  Same as Unity boondocking</span> → <span class="node">O₃ mandatory</span><br>
-<span class="arrow">               </span> → <span class="warn-label">Verify Carbon #1 installed before proceeding</span>
-      </div>
-      <p style="font-size:12px;color:var(--text2);">Carbon #1 recommendation for Wonder: Watts WH-LD or equivalent 10" whole-house GAC block filter, installed between tank drain port and pump inlet. Use NSF/ANSI 42 certified media.</p>
-    </div>
-  </div>
-
-  <!-- Tank vent verification -->
-  <div class="accordion">
-    <div class="acc-header" onclick="toggleAcc(this)">
-      <h3>🔧 Tank Vent Verification Procedure</h3>
-      <span class="acc-icon">▼</span>
-    </div>
-    <div class="acc-body">
-      <p style="margin-bottom:0.75rem;">The tank vent must be functional for ozone treatment to work correctly. If sealed, O₃ pressure buildup risks damaging fittings. Verify before first ozone use:</p>
-      <ol class="step-list">
-        <li><strong>Overfill method:</strong> Fill tank completely until water drains from the vent outlet underneath the RV. Confirms vent is open and draining correctly.</li>
-        <li><strong>Soapy water test:</strong> Apply soapy water to all tank fittings while O₃ generator is running. No bubbles = no leaks.</li>
-        <li><strong>Visual inspection:</strong> Check vent screen for wasp nests, debris, or ice plug (if stored in cold).</li>
-        <li><strong>After vent confirmation:</strong> Mark date on tank maintenance log. Repeat annually or after winterization.</li>
-      </ol>
-      <p style="margin-top:0.75rem;color:var(--text3);font-size:12px;">Note: This vent procedure is specific to the ozone context. No other LTV community member currently uses ozone — there is no established precedent to reference.</p>
-    </div>
-  </div>
-
-  <hr class="divider">
-
-  <!-- ─── SECTION 6: RISK HEATMAPS ─── -->
-  <div class="section-label">Section 6</div>
-  <div class="section-title">Risk &amp; Effectiveness Reference</div>
-  <p class="section-intro">Two reference tables to guide field decisions — bacterial risk by conditions, and ozone half-life by water quality. Data from CDC, Hoigné &amp; Bader, and EPA.</p>
-
-  <div class="card-grid">
-    <div class="card" style="overflow:hidden;">
-      <h3 style="margin-bottom:0.75rem;">🦠 Bacterial Risk: Temperature × Stagnation</h3>
-      <div class="heatmap-wrap">
-        <table class="heatmap">
-          <thead>
-            <tr>
-              <th>Temp \ Stag.</th>
-              <th>&lt;1 day</th>
-              <th>1–3 days</th>
-              <th>3–7 days</th>
-              <th>&gt;7 days</th>
-            </tr>
-          </thead>
+    <!-- Hardness table condensed -->
+    <div class="card" style="overflow:hidden;margin-bottom:0;">
+      <h3 style="margin-bottom:0.75rem;" id="s1-htable-title">💧 Water Hardness & pH by Region</h3>
+      <div style="overflow-x:auto;">
+        <table class="compare-table">
+          <thead><tr>
+            <th id="th-region">Region</th>
+            <th id="th-hard">Hardness</th>
+            <th id="th-ph">pH</th>
+            <th id="th-ro">RO load</th>
+          </tr></thead>
           <tbody>
-            <tr>
-              <th>&lt;15°C</th>
-              <td class="hm-0">Minimal</td>
-              <td class="hm-0">Low</td>
-              <td class="hm-1">Low</td>
-              <td class="hm-1">Low–Mod</td>
-            </tr>
-            <tr>
-              <th>15–25°C</th>
-              <td class="hm-0">Low</td>
-              <td class="hm-1">Moderate</td>
-              <td class="hm-2">Moderate</td>
-              <td class="hm-3">High</td>
-            </tr>
-            <tr>
-              <th>25–35°C</th>
-              <td class="hm-1">Moderate</td>
-              <td class="hm-3">High</td>
-              <td class="hm-4">Very High</td>
-              <td class="hm-4">Critical</td>
-            </tr>
-            <tr>
-              <th>&gt;35°C</th>
-              <td class="hm-2">Moderate</td>
-              <td class="hm-3">High</td>
-              <td class="hm-4">Critical</td>
-              <td class="hm-4">Critical</td>
-            </tr>
+            <tr><td>🇵🇹 Portugal — Atlantic</td><td><span class="badge badge-green" id="hard-pt">Soft (50–120)</span></td><td>6.8–7.4</td><td><span class="badge badge-green" id="ro-pt">Low</span></td></tr>
+            <tr><td>🇫🇷 France — Atlantic / Brittany</td><td><span class="badge badge-green" id="hard-fr1">Soft–Mod (80–180)</span></td><td>7.0–7.8</td><td><span class="badge badge-green" id="ro-fr1">Low–Mod</span></td></tr>
+            <tr><td>🇫🇷 France — Paris / Southeast</td><td><span class="badge badge-amber" id="hard-fr2">Hard (200–400)</span></td><td>7.4–8.0</td><td><span class="badge badge-amber" id="ro-fr2">Moderate</span></td></tr>
+            <tr><td>🇪🇸 Spain — Med coast</td><td><span class="badge badge-amber" id="hard-es">Mod–Hard (150–350)</span></td><td>7.2–8.2</td><td><span class="badge badge-amber" id="ro-es">Moderate</span></td></tr>
+            <tr><td>🇩🇪 Germany / 🇦🇹 Austria</td><td><span class="badge badge-red" id="hard-de">Very Hard (300–500)</span></td><td>7.5–8.5</td><td><span class="badge badge-red" id="ro-de">High</span></td></tr>
+            <tr><td>🇳🇱 Netherlands / 🇧🇪 Belgium</td><td><span class="badge badge-blue" id="hard-nlbe">Variable (100–300)</span></td><td>7.2–7.9</td><td><span class="badge badge-blue" id="ro-nlbe">Moderate</span></td></tr>
           </tbody>
         </table>
       </div>
-      <p style="font-size:11px;color:var(--text3);margin-top:8px;">Legionella grows optimally at 32–35°C. Inactive below 20°C. Source: CDC 2025, WHO 2022.</p>
     </div>
-    <div class="card" style="overflow:hidden;">
-      <h3 style="margin-bottom:0.75rem;">⚡ O₃ Half-life: Temperature × Water Quality</h3>
-      <div class="heatmap-wrap">
-        <table class="heatmap">
-          <thead>
-            <tr>
-              <th>Temp \ Quality</th>
-              <th>Clean<br><small>(clear, low OM)</small></th>
-              <th>Moderate<br><small>(slight turbidity)</small></th>
-              <th>Difficult<br><small>(turbid, high OM)</small></th>
-            </tr>
-          </thead>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ─── SECTION 2 ─── -->
+  <div class="section-block">
+    <div class="section-label" id="s2-label">Section 2</div>
+    <div class="section-title" id="s2-title">The 20% Rule & Stagnation Risk</div>
+    <p class="section-intro" id="s2-intro">One of the most effective practices costs nothing. Keep your tank ≤20% full while driving. The stagnation window is the most important variable for bacterial risk in summer Europe.</p>
+
+    <!-- Stagnation visual bar -->
+    <div class="card" style="margin-bottom:1.25rem;">
+      <div id="s2-stag-title" style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Stagnation Risk — Temperature × Time</div>
+      <div class="stag-bar">
+        <div class="stag-seg" style="background:#c8f0dc;color:#1a7a4a;" id="stag-0"><span id="stag-0-t">&lt;24h</span><br><span id="stag-0-l">✓ Low</span></div>
+        <div class="stag-seg" style="background:#dff0c0;color:#4a8a20;" id="stag-1"><span id="stag-1-t">1–3d</span><br><span id="stag-1-l">Low–Mod</span></div>
+        <div class="stag-seg" style="background:#f5e8a0;color:#8a6a00;" id="stag-2"><span id="stag-2-t">3–7d</span><br><span id="stag-2-l">⚠ Mod</span></div>
+        <div class="stag-seg" style="background:#fcc0a0;color:#a04800;" id="stag-3"><span id="stag-3-t">7–14d</span><br><span id="stag-3-l">High</span></div>
+        <div class="stag-seg" style="background:#f09090;color:#880010;" id="stag-4"><span id="stag-4-t">&gt;14d</span><br><span id="stag-4-l">🔴 Critical</span></div>
+      </div>
+      <p style="font-size:11px;color:var(--text3);margin-top:8px;" id="stag-note">At 25–35°C (summer RV tank in sun), Legionella enters critical growth zone after 3–7 days. Below 20°C, risk is minimal — bacteria inactive. Source: CDC 2025, WHO 2022.</p>
+    </div>
+
+    <div class="card-grid-3">
+      <div class="card green">
+        <div class="icon">📏</div>
+        <h3 id="s2-c1-title">Why ≤20% while driving?</h3>
+        <p id="s2-c1-body">Sloshing during driving resuspends biofilm. A near-empty tank dries faster after flushing, reducing bacterial colonization surface area. Less weight, less slosh, less risk.</p>
+      </div>
+      <div class="card amber">
+        <div class="icon">♨️</div>
+        <h3 id="s2-c2-title">Summer threshold</h3>
+        <p id="s2-c2-body">At 25–35°C, refill from a verified source every 2–3 days when parked. Fill to 100% only just before use, not days in advance.</p>
+      </div>
+      <div class="card blue">
+        <div class="icon">💡</div>
+        <h3 id="s2-c3-title">Campsite tap hygiene</h3>
+        <p id="s2-c3-body">Flush the campsite tap 30–60 sec before connecting. Never use a hose that's been baking in the sun. The campsite line itself can be the contamination source.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ─── SECTION 3 ─── -->
+  <div class="section-block">
+    <div class="section-label" id="s3-label">Section 3</div>
+    <div class="section-title" id="s3-title">Multi-Barrier Treatment Strategy</div>
+    <p class="section-intro" id="s3-intro">No single treatment handles all European conditions. The multi-barrier approach stacks independent barriers — each compensating for the others' weaknesses. You can implement one, two, or all layers depending on your system and risk tolerance.</p>
+
+    <!-- Generic barrier flow -->
+    <div style="overflow-x:auto;margin-bottom:1.5rem;">
+      <div style="min-width:640px;">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:8px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;" id="s3-flow-label">Generic multi-barrier flow — any RV</div>
+        <div class="barrier-flow">
+          <div class="barrier-step b-inlet"><div class="b-icon">🚰</div><div class="b-name" id="bf-tap">Tap</div><div class="b-detail" id="bf-tap-d">Campsite / source</div></div>
+          <div class="barrier-arrow">›</div>
+          <div class="barrier-step b-inlet"><div class="b-icon">🔵</div><div class="b-name" id="bf-pre">Pre-filter</div><div class="b-detail" id="bf-pre-d">Sediment + UVC<br>at inlet (optional)</div></div>
+          <div class="barrier-arrow">›</div>
+          <div class="barrier-step b-tank"><div class="b-icon">🪣</div><div class="b-name" id="bf-tank">Fresh tank</div><div class="b-detail" id="bf-tank-d">O₃ or Aquatabs<br>treatment</div></div>
+          <div class="barrier-arrow">›</div>
+          <div class="barrier-step b-c1"><div class="b-icon">♦️</div><div class="b-name" id="bf-c1">Carbon #1</div><div class="b-detail" id="bf-c1-d">Neutralizes O₃<br>before pump</div></div>
+          <div class="barrier-arrow">›</div>
+          <div class="barrier-step b-pump"><div class="b-icon">⚙️</div><div class="b-name" id="bf-pump">Pump</div><div class="b-detail" id="bf-pump-d">Never run<br>during O₃</div><div class="b-warn-badge">⚠</div></div>
+          <div class="barrier-arrow">›</div>
+          <div class="barrier-step b-c2"><div class="b-icon">♦️</div><div class="b-name" id="bf-c2">Carbon #2</div><div class="b-detail" id="bf-c2-d">Pre-RO safety<br>(optional)</div></div>
+          <div class="barrier-arrow">›</div>
+          <div class="barrier-step b-ro"><div class="b-icon">💎</div><div class="b-name" id="bf-ro">RO filter</div><div class="b-detail" id="bf-ro-d">Kitchen POU<br>(optional)</div></div>
+          <div class="barrier-arrow">›</div>
+          <div class="barrier-step b-uv"><div class="b-icon">🔆</div><div class="b-name" id="bf-uv">UV-LED</div><div class="b-detail" id="bf-uv-d">Final sterilization<br>(optional)</div></div>
+          <div class="barrier-arrow">›</div>
+          <div class="barrier-step b-tap"><div class="b-icon">🚿</div><div class="b-name" id="bf-out">Tap</div><div class="b-detail" id="bf-out-d">Drinking water</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-grid-2">
+      <div class="card blue">
+        <div class="icon">🔵</div>
+        <h3 id="s3-b1-title">Barrier 1 — Inlet pre-filter</h3>
+        <p id="s3-b1-body">A sediment + ceramic or UVC filter at the campsite tap removes particulates and inactivates bacteria before water enters your tank. Only usable at pressurized campsite taps — not compatible with boondocking bucket fill.</p>
+      </div>
+      <div class="card teal">
+        <div class="icon">⚡</div>
+        <h3 id="s3-b2-title">Barrier 2 — Tank treatment (O₃ or Aquatabs)</h3>
+        <p id="s3-b2-body">Ozone (O₃) or Aquatabs NaDCC tablets treat the tank itself. O₃ destroys bacteria, viruses, and biofilm and reverts to O₂ with no residue. <strong>Never combine O₃ + Aquatabs</strong> in the same cycle — this produces chlorates.</p>
+      </div>
+      <div class="card green">
+        <div class="icon">💎</div>
+        <h3 id="s3-b3-title">Barrier 3 — Reverse osmosis (kitchen POU)</h3>
+        <p id="s3-b3-body">A point-of-use tankless RO at the kitchen faucet removes dissolved solids, heavy metals, nitrates, and chemical contamination. Protects from hard water scaling at the most critical consumption point.</p>
+      </div>
+      <div class="card amber">
+        <div class="icon">🔆</div>
+        <h3 id="s3-b4-title">Barrier 4 — UV-LED (final sterilization)</h3>
+        <p id="s3-b4-body">Post-RO UV sterilization eliminates residual pathogens at the point of use. Requires clear water (&lt;1 NTU) — turbidity blocks UV penetration. Positioned last in the chain for maximum effectiveness.</p>
+      </div>
+    </div>
+
+    <!-- Real-world example box -->
+    <div class="product-example">
+      <div class="product-example-title">🛠️ <span id="pe-title">Real-world example: Skøl (LTV Unity FX 2025) — complete implementation</span></div>
+      <p style="font-size:12px;color:#8a9898;margin-bottom:0.75rem;" id="pe-sub">All 4 barriers deployed. Products listed as reference — adapt to your RV and budget.</p>
+      <div class="product-grid">
+        <div class="product-item"><a href="https://www.goblutech.com/blutec-ar3" target="_blank">🔵 BLUTEC AR3<span class="p-role" id="p-blutec-role">Inlet filter — 5µm + 0.2µm + UVC-LED</span></a></div>
+        <div class="product-item"><a href="https://www.amazon.com/dp/B09C2XD6YK" target="_blank">⚡ Airthereal AH1000<span class="p-role" id="p-ah1000-role">O₃ generator, 1000 mg/h — tank treatment</span></a></div>
+        <div class="product-item"><a href="https://www.amazon.com/s?k=aquatabs+334mg" target="_blank">💊 Aquatabs 334 mg<span class="p-role" id="p-aquatabs-role">NaDCC tablets — alternative to O₃</span></a></div>
+        <div class="product-item"><a href="https://www.novowater.ca/product/cro-800ux6/" target="_blank">💎 NOVO CRO-800UX6<span class="p-role" id="p-novo-role">Tankless RO — kitchen point-of-use</span></a></div>
+        <div class="product-item"><a href="https://www.thecabindepot.ca/acuva-arrow-1-2" target="_blank">🔆 ACUVA Arrow 1.2<span class="p-role" id="p-acuva-role">UV-LED sterilizer — post-RO</span></a></div>
+        <div class="product-item"><a href="https://www.amazon.com/s?k=ds18b20+waterproof+probe" target="_blank">🌡️ DS18B20 + Tuya WiFi<span class="p-role" id="p-tuya-role">Tank temp monitor — key for protocol selection</span></a></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ─── SECTION 4 ─── -->
+  <div class="section-block">
+    <div class="section-label" id="s4-label">Section 4</div>
+    <div class="section-title" id="s4-title">Installation — Unity vs. Wonder</div>
+    <p class="section-intro" id="s4-intro">The LTV Unity (Sprinter chassis) and Wonder (Transit chassis) have different plumbing architectures. The Unity already has an inline carbon filter from the factory; the Wonder does not.</p>
+
+    <div class="card" style="padding:0;overflow:hidden;margin-bottom:1.5rem;">
+      <div class="tabs" style="padding:0 1.5rem;">
+        <button class="tab-btn active" onclick="switchTab('unity',event)" id="tab-unity-btn">🚐 LTV Unity FX (Sprinter)</button>
+        <button class="tab-btn" onclick="switchTab('wonder',event)" id="tab-wonder-btn">🚌 LTV Wonder (Transit)</button>
+      </div>
+      <div id="tab-unity" class="tab-panel active" style="padding:1.25rem 1.5rem;">
+        <p style="font-size:13px;color:var(--text2);margin-bottom:1rem;" id="unity-desc">The Unity has a <strong>Sprinter inline carbon filter</strong> (factory). It counts as Carbon #1 in the multi-barrier architecture. Do not remove it — it neutralizes O₃ residual before the pump.</p>
+        <div class="install-diagram">
+<span class="node" id="id-camp-mode">CAMPSITE MODE (pressurized tap)</span><br>
+<span class="arrow">  Campsite tap </span>→ <span class="node">BLUTEC AR3</span> <span class="label">[5µm + 0.2µm + UVC-LED]</span><br>
+<span class="arrow">               </span>→ <span class="node">Fresh Tank (97L)</span> <span class="label">[O₃: 45–75 min depending on protocol]</span><br>
+<span class="arrow">               </span>→ <span class="node">Sprinter Carbon</span> <span class="label">[factory inline = Carbon #1 — O₃ neutralizer]</span><br>
+<span class="arrow">               </span>→ <span class="warn-label" id="id-pump-warn">Shurflo Pump ⚠ NEVER run during O₃ injection</span><br>
+<span class="arrow">               </span>→ <span class="node">Carbon #2</span> <span class="label">[pre-RO safety]</span><br>
+<span class="arrow">               </span>→ <span class="node">NOVO CRO-800UX6</span> <span class="label">[tankless RO, kitchen]</span><br>
+<span class="arrow">               </span>→ <span class="node">ACUVA 1.2 UV-LED</span> <span class="label">[post-RO sterilization]</span><br>
+<span class="arrow">               </span>→ <span class="node">Remineralization</span> <span class="label">[ALK35 + pH↑]</span><br>
+<span class="arrow">               </span>→ <span class="node">VS888 Faucet</span><br>
+<br>
+<span class="node" id="id-boon-mode">BOONDOCKING MODE (bucket fill)</span><br>
+<span class="arrow">  Water source  </span>→ <span class="warn-label" id="id-blutec-warn">BLUTEC NOT USABLE (requires pressure)</span><br>
+<span class="arrow">               </span>→ <span class="node" id="id-manual-fill">Manual fill via tank hatch</span><br>
+<span class="arrow">               </span>→ <span class="node" id="id-o3-mand">O₃ mandatory</span> <span class="label" id="id-o3-proto">[VAR or CHOC protocol — see Section 5]</span><br>
+<span class="arrow">               </span>→ <span class="label" id="id-rest-sys">rest of system unchanged</span>
+        </div>
+      </div>
+      <div id="tab-wonder" class="tab-panel" style="padding:1.25rem 1.5rem;">
+        <p style="font-size:13px;color:var(--text2);margin-bottom:1rem;" id="wonder-desc">The Wonder (Transit chassis) does <strong>not</strong> include a factory carbon filter. You must add Carbon #1 manually between tank output and pump — this is essential if using ozone.</p>
+        <div class="install-diagram">
+<span class="node" id="id-camp-mode-w">CAMPSITE MODE (pressurized tap)</span><br>
+<span class="arrow">  Campsite tap </span>→ <span class="node">BLUTEC AR3</span> <span class="label">[or equivalent inlet filter]</span><br>
+<span class="arrow">               </span>→ <span class="node">Fresh Tank</span> <span class="label">[O₃ optional]</span><br>
+<span class="arrow">               </span>→ <span class="node">Carbon #1</span> <span class="warn-label" id="id-c1-warn"> ⚠ ADD THIS — not factory on Wonder</span><br>
+<span class="arrow">               </span>→ <span class="warn-label" id="id-pump-warn-w">Water Pump ⚠ NEVER run during O₃</span><br>
+<span class="arrow">               </span>→ <span class="node">Carbon #2</span> <span class="label">[pre-RO]</span><br>
+<span class="arrow">               </span>→ <span class="node" id="id-rest-w">RO → UV-LED → Remineralization → Faucet</span>
+        </div>
+        <p style="font-size:12px;color:var(--text2);margin-top:0.75rem;" id="wonder-note">Carbon #1 for Wonder: Watts WH-LD or equivalent 10" whole-house GAC block filter, between tank drain and pump inlet. NSF/ANSI 42 certified recommended.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ─── SECTION 5: INTERACTIVE HEATMAPS + SOP ─── -->
+  <div class="section-block">
+    <div class="section-label" id="s5-label">Section 5</div>
+    <div class="section-title" id="s5-title">Interactive Protocol Selector — Heatmaps + SOP</div>
+    <p class="section-intro" id="s5-intro">Use the sliders to position yourself on each heatmap. The coloured marker shows your current risk/effectiveness level. <strong>HM04 is the key output</strong> — it recommends your protocol and displays the full step-by-step SOP below.</p>
+
+    <!-- HM01 -->
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <h3><span>🦠</span> <span id="hm01-acc-title">HM01 — Bacterial Risk: Temperature × Stagnation</span></h3>
+        <span class="acc-tag" id="hm01-tag" style="background:#2a3040;color:#8a9898;">—</span>
+        <span class="acc-chevron">▼</span>
+      </div>
+      <div class="acc-body">
+        <div class="hm-section">
+          <div class="hm-section-title" id="hm01-title">Bacterial growth risk in your tank</div>
+          <div class="hm-section-sub" id="hm01-sub">Source: CDC 2025 · WHO 2022 — Legionella optimal 32–35°C · inactive &lt;20°C · destroyed &gt;55°C</div>
+          <div class="hm-layout">
+            <!-- Y: temperature, vertical slider -->
+            <div class="hm-y-control">
+              <span class="hm-y-label" id="hm01-y-label">Temperature</span>
+              <input type="range" class="hm-y-slider" id="hm01-y" min="0" max="4" value="2" step="1" oninput="updateHM(1)">
+            </div>
+            <div class="hm-grid-wrap">
+              <div class="hm-x-label" id="hm01-x-label">← Stagnation duration →</div>
+              <div style="display:flex;gap:2px;align-items:stretch;">
+                <!-- Row labels -->
+                <div style="display:flex;flex-direction:column;gap:2px;margin-top:0;">
+                  <div class="hm-row-label" id="hm01-r4">&gt;35°C</div>
+                  <div class="hm-row-label" id="hm01-r3">25–35°C</div>
+                  <div class="hm-row-label" id="hm01-r2">15–25°C</div>
+                  <div class="hm-row-label" id="hm01-r1">5–15°C</div>
+                  <div class="hm-row-label" id="hm01-r0">&lt;5°C</div>
+                </div>
+                <!-- Grid 5×5 -->
+                <div class="hm-grid" style="grid-template-columns:repeat(5,1fr);flex:1;" id="hm01-grid">
+                  <!-- populated by JS -->
+                </div>
+              </div>
+              <div class="hm-x-ticks" id="hm01-xticks" style="margin-left:54px;">
+                <span id="hm01-x0">&lt;24h</span><span id="hm01-x1">1–3d</span><span id="hm01-x2">3–7d</span><span id="hm01-x3">7–14d</span><span id="hm01-x4">&gt;14d</span>
+              </div>
+              <div style="margin-left:54px;display:flex;align-items:center;gap:8px;">
+                <input type="range" class="hm-x-slider" id="hm01-x" min="0" max="4" value="0" step="1" oninput="updateHM(1)">
+              </div>
+              <div style="margin-left:54px;margin-top:8px;">
+                <span class="level-badge" id="hm01-badge">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HM02 -->
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <h3><span>⚡</span> <span id="hm02-acc-title">HM02 — O₃ Effectiveness: Temperature × Water Quality</span></h3>
+        <span class="acc-tag" id="hm02-tag" style="background:#2a3040;color:#8a9898;">—</span>
+        <span class="acc-chevron">▼</span>
+      </div>
+      <div class="acc-body">
+        <div class="hm-section">
+          <div class="hm-section-title" id="hm02-title">O₃ half-life in your water</div>
+          <div class="hm-section-sub" id="hm02-sub">Source: Hoigné &amp; Bader 1976–83 · Langlais et al. 1991 — natural water half-life 1–20 min depending on organic matter</div>
+          <div class="hm-layout">
+            <div class="hm-y-control">
+              <span class="hm-y-label" id="hm02-y-label">Temperature</span>
+              <input type="range" class="hm-y-slider" id="hm02-y" min="0" max="4" value="2" step="1" oninput="updateHM(2)">
+            </div>
+            <div class="hm-grid-wrap">
+              <div class="hm-x-label" id="hm02-x-label">← Water quality (ozone demand) →</div>
+              <div style="display:flex;gap:2px;align-items:stretch;">
+                <div style="display:flex;flex-direction:column;gap:2px;">
+                  <div class="hm-row-label" id="hm02-r4">&gt;35°C</div>
+                  <div class="hm-row-label" id="hm02-r3">25–35°C</div>
+                  <div class="hm-row-label" id="hm02-r2">15–25°C</div>
+                  <div class="hm-row-label" id="hm02-r1">5–15°C</div>
+                  <div class="hm-row-label" id="hm02-r0">&lt;5°C</div>
+                </div>
+                <div class="hm-grid" style="grid-template-columns:repeat(5,1fr);flex:1;" id="hm02-grid"></div>
+              </div>
+              <div class="hm-x-ticks" style="margin-left:54px;">
+                <span id="hm02-x0">Munic.<br>clear</span><span id="hm02-x1">Munic.<br>loaded</span><span id="hm02-x2">Well<br>moderate</span><span id="hm02-x3">Well<br>loaded</span><span id="hm02-x4">Very<br>loaded</span>
+              </div>
+              <div style="margin-left:54px;display:flex;align-items:center;gap:8px;">
+                <input type="range" class="hm-x-slider" id="hm02-x" min="0" max="4" value="0" step="1" oninput="updateHM(2)">
+              </div>
+              <div style="margin-left:54px;margin-top:8px;">
+                <span class="level-badge" id="hm02-badge">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HM03 -->
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <h3><span>🧪</span> <span id="hm03-acc-title">HM03 — Treatment Resistance: pH × Turbidity</span></h3>
+        <span class="acc-tag" id="hm03-tag" style="background:#2a3040;color:#8a9898;">—</span>
+        <span class="acc-chevron">▼</span>
+      </div>
+      <div class="acc-body">
+        <div class="hm-section">
+          <div class="hm-section-title" id="hm03-title">Chemical &amp; UV treatment resistance</div>
+          <div class="hm-section-sub" id="hm03-sub">Source: WHO/EPA Turbidity Review 2017 · EPA UV Manual — &gt;1 NTU reduces UV/chlorine · EPA threshold &lt;1 NTU</div>
+          <div class="hm-layout">
+            <div class="hm-y-control">
+              <span class="hm-y-label" id="hm03-y-label">pH</span>
+              <input type="range" class="hm-y-slider" id="hm03-y" min="0" max="4" value="2" step="1" oninput="updateHM(3)">
+            </div>
+            <div class="hm-grid-wrap">
+              <div class="hm-x-label" id="hm03-x-label">← Turbidity / organic matter (NTU) →</div>
+              <div style="display:flex;gap:2px;align-items:stretch;">
+                <div style="display:flex;flex-direction:column;gap:2px;">
+                  <div class="hm-row-label" id="hm03-r4">pH &gt;8.5</div>
+                  <div class="hm-row-label" id="hm03-r3">7.5–8.5</div>
+                  <div class="hm-row-label" id="hm03-r2">6.5–7.5</div>
+                  <div class="hm-row-label" id="hm03-r1">5.5–6.5</div>
+                  <div class="hm-row-label" id="hm03-r0">pH &lt;5.5</div>
+                </div>
+                <div class="hm-grid" style="grid-template-columns:repeat(5,1fr);flex:1;" id="hm03-grid"></div>
+              </div>
+              <div class="hm-x-ticks" style="margin-left:54px;">
+                <span id="hm03-x0">&lt;0.5<br>Crystal</span><span id="hm03-x1">0.5–2<br>Clear</span><span id="hm03-x2">2–5<br>Hazy</span><span id="hm03-x3">5–15<br>Turbid</span><span id="hm03-x4">&gt;15<br>Opaque</span>
+              </div>
+              <div style="margin-left:54px;display:flex;align-items:center;gap:8px;">
+                <input type="range" class="hm-x-slider" id="hm03-x" min="0" max="4" value="0" step="1" oninput="updateHM(3)">
+              </div>
+              <div style="margin-left:54px;margin-top:8px;">
+                <span class="level-badge" id="hm03-badge">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HM04 — open by default -->
+    <div class="accordion">
+      <div class="acc-header open" onclick="toggleAcc(this)">
+        <h3><span>📋</span> <span id="hm04-acc-title">HM04 — Recommended Protocol: Temperature × Context</span> <small style="color:#4a9fd4;font-size:10px;font-weight:400;" id="hm04-key-label">KEY</small></h3>
+        <span class="acc-tag" id="hm04-tag" style="background:#1a3050;color:#4a9fd4;" id="hm04-protocol-badge">STD</span>
+        <span class="acc-chevron" style="transform:rotate(180deg);">▼</span>
+      </div>
+      <div class="acc-body open">
+        <div class="hm-section">
+          <div class="hm-section-title" id="hm04-title">Protocol recommendation + SOP</div>
+          <div class="hm-section-sub" id="hm04-sub">Source: SOP Skøl v3.0 · EPDM budget max 800 min O₃/year · STD=45 min · CHOC=75 min · 2×CHOC=150 min</div>
+          <div class="hm-layout">
+            <div class="hm-y-control">
+              <span class="hm-y-label" id="hm04-y-label">Temperature</span>
+              <input type="range" class="hm-y-slider" id="hm04-y" min="0" max="4" value="2" step="1" oninput="updateHM(4)">
+            </div>
+            <div class="hm-grid-wrap">
+              <div class="hm-x-label" id="hm04-x-label">← Source &amp; usage context →</div>
+              <div style="display:flex;gap:2px;align-items:stretch;">
+                <div style="display:flex;flex-direction:column;gap:2px;">
+                  <div class="hm-row-label" id="hm04-r4">&gt;35°C</div>
+                  <div class="hm-row-label" id="hm04-r3">25–35°C</div>
+                  <div class="hm-row-label" id="hm04-r2">15–25°C</div>
+                  <div class="hm-row-label" id="hm04-r1">5–15°C</div>
+                  <div class="hm-row-label" id="hm04-r0">&lt;5°C</div>
+                </div>
+                <div class="hm-grid" style="grid-template-columns:repeat(5,1fr);flex:1;" id="hm04-grid"></div>
+              </div>
+              <div class="hm-x-ticks" style="margin-left:54px;">
+                <span id="hm04-x0">Munic.<br>camping</span><span id="hm04-x1">Frequent<br>refill</span><span id="hm04-x2">Boon.<br>normal</span><span id="hm04-x3">Boon.<br>hot</span><span id="hm04-x4">Long<br>stagnation</span>
+              </div>
+              <div style="margin-left:54px;display:flex;align-items:center;gap:8px;">
+                <input type="range" class="hm-x-slider" id="hm04-x" min="0" max="4" value="0" step="1" oninput="updateHM(4)">
+              </div>
+              <div style="margin-left:54px;margin-top:8px;">
+                <span class="level-badge" id="hm04-badge">STD</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SOP display -->
+          <div class="sop-display" id="sop-panel">
+            <div class="sop-header">
+              <span class="sop-protocol-badge" id="sop-badge" style="background:#1a4a1a;color:#6adf6a;">STD</span>
+              <span style="font-size:14px;font-weight:600;color:#e0ddd8;" id="sop-name">Standard Protocol</span>
+              <span class="sop-duration" id="sop-duration">45–60 min O₃</span>
+            </div>
+            <ol class="sop-steps" id="sop-steps"></ol>
+            <div id="sop-warning-box"></div>
+            <div id="sop-info-box"></div>
+          </div>
+        </div>
+
+        <!-- EPDM Budget -->
+        <div class="hm-section" style="margin-top:1rem;">
+          <div class="hm-section-title" id="epdm-title">⚖️ Annual EPDM Budget — max 800 min/year</div>
+          <div class="hm-section-sub" id="epdm-sub">O₃ attacks EPDM rubber seals over time. Track cumulative ozone minutes. Replace seals showing cracks or swelling.</div>
+          <div style="margin-top:0.75rem;">
+            <div class="epdm-row">
+              <span class="epdm-label">STD ×12/year</span>
+              <div style="flex:1;"><div class="epdm-bar-bg"><div class="epdm-bar-fill" style="width:67.5%;background:#4a9a4a;"></div></div></div>
+              <span class="epdm-num" style="color:#4a9a4a;">540 min ✓</span>
+            </div>
+            <div class="epdm-row">
+              <span class="epdm-label">VAR ×2/mo ×6mo</span>
+              <div style="flex:1;"><div class="epdm-bar-bg"><div class="epdm-bar-fill" style="width:90%;background:#9ab040;"></div></div></div>
+              <span class="epdm-num" style="color:#9ab040;">720 min ✓</span>
+            </div>
+            <div class="epdm-row">
+              <span class="epdm-label">CHOC ×12/year</span>
+              <div style="flex:1;"><div class="epdm-bar-bg"><div class="epdm-bar-fill" style="width:100%;background:#c05020;"></div></div></div>
+              <span class="epdm-num" style="color:#c05020;">900 min ⚠</span>
+            </div>
+            <div class="epdm-row">
+              <span class="epdm-label">2×VOL ×1/mo ×8</span>
+              <div style="flex:1;"><div class="epdm-bar-bg"><div class="epdm-bar-fill" style="width:100%;background:#a02828;"></div></div></div>
+              <span class="epdm-num" style="color:#a02828;">960 min !</span>
+            </div>
+          </div>
+          <p style="font-size:11px;color:#6a7880;margin-top:8px;" id="epdm-note">≥1000 min/year → inspect EPDM seals. Never activate pump during O₃ injection — pump elastomers are the critical weak point.</p>
+        </div>
+
+        <!-- Safety rules -->
+        <div class="hm-section" style="margin-top:1rem;">
+          <div class="hm-section-title" id="safety-title">🛡️ Safety Rules — Always Apply</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:0.75rem;" id="safety-grid">
+            <div style="background:#1e2128;border-radius:6px;padding:8px 10px;font-size:12px;color:#f4a261;" id="safe-1">⚠ NEVER run the pump during O₃ injection</div>
+            <div style="background:#1e2128;border-radius:6px;padding:8px 10px;font-size:12px;color:#f4a261;" id="safe-2">⚠ NEVER combine O₃ + Aquatabs same cycle</div>
+            <div style="background:#1e2128;border-radius:6px;padding:8px 10px;font-size:12px;color:#c8c4bc;" id="safe-3">✓ Wait 2× half-life before pumping (STD)</div>
+            <div style="background:#1e2128;border-radius:6px;padding:8px 10px;font-size:12px;color:#c8c4bc;" id="safe-4">✓ Wait 3× half-life after CHOC / biofilm</div>
+            <div style="background:#1e2128;border-radius:6px;padding:8px 10px;font-size:12px;color:#c8c4bc;" id="safe-5">✓ Keep AquaGo/water heater OFF during O₃</div>
+            <div style="background:#1e2128;border-radius:6px;padding:8px 10px;font-size:12px;color:#c8c4bc;" id="safe-6">✓ Ensure tank vent is open before injection</div>
+            <div style="background:#1e2128;border-radius:6px;padding:8px 10px;font-size:12px;color:#c8c4bc;" id="safe-7">✓ Maximum ventilation — never inhale O₃</div>
+            <div style="background:#1e2128;border-radius:6px;padding:8px 10px;font-size:12px;color:#c8c4bc;" id="safe-8">✓ Carbon #1 must be in-line before pump</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Troubleshooting -->
+    <div style="margin-top:1rem;">
+      <div style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;" id="trouble-label">🔧 Quick Troubleshooting</div>
+      <div style="overflow-x:auto;">
+        <table class="compare-table" style="background:var(--surface);border-radius:var(--radius);overflow:hidden;">
+          <thead><tr>
+            <th id="th-prob">Problem</th>
+            <th id="th-cause">Cause</th>
+            <th id="th-fix">Solution</th>
+          </tr></thead>
           <tbody>
-            <tr>
-              <th>&lt;15°C</th>
-              <td class="hm-0">~30 min</td>
-              <td class="hm-1">~20 min</td>
-              <td class="hm-2">~10 min</td>
-            </tr>
-            <tr>
-              <th>15–25°C</th>
-              <td class="hm-1">~15 min</td>
-              <td class="hm-2">~10 min</td>
-              <td class="hm-3">~5 min</td>
-            </tr>
-            <tr>
-              <th>25–35°C</th>
-              <td class="hm-2">~8 min</td>
-              <td class="hm-3">~5 min</td>
-              <td class="hm-4">~2 min</td>
-            </tr>
+            <tr><td id="tr-p1">No bubbles from diffuser</td><td id="tr-c1">Clogged line / dirty diffuser / generator off</td><td id="tr-s1">Clean stainless diffuser · check air line · restart generator</td></tr>
+            <tr><td id="tr-p2">Persistent O₃ smell at tap</td><td id="tr-c2">Insufficient purge / rest too short</td><td id="tr-s2">Purge until odour gone · respect 2× half-life</td></tr>
+            <tr><td id="tr-p3">Turbid water after treatment</td><td id="tr-c3">Fe²⁺→Fe³⁺ oxidation (well water) / disturbed sediment</td><td id="tr-s3">Normal for well water · let settle · check inlet filter</td></tr>
+            <tr><td id="tr-p4">Persistent taste/odour</td><td id="tr-c4">Established biofilm / saturated filter / long stagnation</td><td id="tr-s4">Double spore cycle + drain · replace carbon cartridges</td></tr>
+            <tr><td id="tr-p5">Low pump flow after O₃</td><td id="tr-c5">O₃ residual in circuit / clogged filter</td><td id="tr-s5">Wait full rest time · check Carbon #1 and #2</td></tr>
+            <tr><td id="tr-p6">UV alarm / lamp out</td><td id="tr-c6">End-of-life lamp / dirty quartz sleeve / 12V issue</td><td id="tr-s6">Replace lamp · clean quartz · check 12V supply</td></tr>
           </tbody>
         </table>
       </div>
-      <p style="font-size:11px;color:var(--text3);margin-top:8px;">OM = organic matter. Wait 2× half-life (STD) or 3× (CHOC) before restarting pump. Source: Hoigné &amp; Bader 1976–83, Langlais et al. 1991.</p>
     </div>
   </div>
 
   <hr class="divider">
 
-  <!-- ─── SECTION 7: DETAILED PROTOCOLS ─── -->
-  <div class="section-label">Section 7</div>
-  <div class="section-title">Complete Protocol Reference</div>
-  <p class="section-intro">Detailed step-by-step for each ozone protocol. Click to expand.</p>
+  <!-- ─── SECTION 6 ─── -->
+  <div class="section-block">
+    <div class="section-label" id="s6-label">Section 6</div>
+    <div class="section-title" id="s6-title">Resources &amp; Verification</div>
+    <p class="section-intro" id="s6-intro">Field resources for water testing, quality data, and temperature monitoring in Europe.</p>
+    <div class="card-grid-2">
+      <div class="card">
+        <div class="icon">🗺️</div>
+        <h3 id="r1-title">EU Water Quality Database</h3>
+        <p id="r1-body">Check local municipality water quality reports. Most EU countries publish annual reports at commune level. Search "[commune name] qualité eau potable" (France) or "[municipality] drinking water quality" (NL/BE/DE).</p>
+      </div>
+      <div class="card">
+        <div class="icon">📍</div>
+        <h3 id="r2-title">Park4Night — Potable Water Filter</h3>
+        <p id="r2-body">Use the <strong>Eau potable</strong> filter to find verified potable water points near your route. Community-validated — not a substitute for treatment, but helps avoid suspect sources.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🔬</div>
+        <h3 id="r3-title">Local Lab Testing</h3>
+        <p id="r3-body">France: LDA (Laboratoires départementaux d'analyse) €30–80. Spain: LABAQUA. Portugal: LNEC. Test for coliforms, Legionella, nitrates, turbidity.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🌡️</div>
+        <h3 id="r4-title">Tank Temperature Monitoring</h3>
+        <p id="r4-body">A Tuya-compatible DS18B20 waterproof probe (~€15) gives real-time temperature on your phone. Temperature is the <strong>single most important variable</strong> for protocol selection — consider it essential for summer travel above 25°C.</p>
+      </div>
+    </div>
 
-  <div class="accordion">
-    <div class="acc-header" onclick="toggleAcc(this)">
-      <h3>🟢 STD — Standard Protocol (Municipal, T&lt;25°C, &lt;7 days)</h3>
-      <span class="acc-icon">▼</span>
+    <div class="disclaimer">
+      <strong id="disc-label">⚗️ Field use disclaimer:</strong> <span id="disc-body">All ozone protocols are empirically derived field best practices, not NSF/ANSI 60 laboratory-certified procedures. This is a decision-support tool only — adapt to your actual conditions, equipment, and water sources. Not a substitute for professional water testing. EPDM budget figures are estimates based on material compatibility literature; monitor your seals and replace at first sign of degradation.</span>
     </div>
-    <div class="acc-body">
-      <ul>
-        <li><strong>Pre-conditions:</strong> Verified municipal water, &lt;7 days stagnation, temperature &lt;25°C</li>
-        <li><strong>Ozone duration:</strong> 30–45 min if T&lt;15°C / 45–60 min if 15–25°C</li>
-        <li><strong>Timer note:</strong> Airthereal AH1000 max timer = 60 min. Use single cycle for STD.</li>
-        <li><strong>Pump safety wait:</strong> 30–60 min after O₃ stops (2× half-life at 15°C ≈ 60 min)</li>
-        <li><strong>Purge:</strong> Light purge 1–2 min at each tap before use</li>
-        <li><strong>Max frequency:</strong> Once per month recommended</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="accordion">
-    <div class="acc-header" onclick="toggleAcc(this)">
-      <h3>🟡 VAR — Variable Risk Protocol (Well / Unknown, 3–14 days)</h3>
-      <span class="acc-icon">▼</span>
-    </div>
-    <div class="acc-body">
-      <ul>
-        <li><strong>Pre-conditions:</strong> Well, rural, or unknown source; OR municipal water with 3–14 days stagnation</li>
-        <li><strong>Ozone duration:</strong> 45–60 min</li>
-        <li><strong>Pump safety wait:</strong> 45–90 min (2–3× half-life depending on T)</li>
-        <li><strong>Purge:</strong> Partial purge — run all taps 2–3 min</li>
-        <li><strong>Max frequency:</strong> Maximum 2× per month</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="accordion">
-    <div class="acc-header" onclick="toggleAcc(this)">
-      <h3>🔴 CHOC — Shock Protocol (T&gt;25°C, &gt;7 days stagnation, hot boondocking)</h3>
-      <span class="acc-icon">▼</span>
-    </div>
-    <div class="acc-body">
-      <ul>
-        <li><strong>Pre-conditions:</strong> T&gt;25°C AND stagnation &gt;7 days, OR summer boondocking in hot climate</li>
-        <li><strong>Ozone duration:</strong> 60–75 min MAX (EPDM budget concern above 75 min)</li>
-        <li><strong>Pump safety wait:</strong> 30 min minimum after O₃ stops, then <strong>complete drain + rinse + refill</strong> with fresh source</li>
-        <li><strong>Complete drain required:</strong> Do not reuse the treated water. Drain, rinse tank, refill from clean source.</li>
-        <li><strong>Max frequency:</strong> Sparingly — budget impact high</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="accordion">
-    <div class="acc-header" onclick="toggleAcc(this)">
-      <h3>⚪ 2×VOL — Double Volumetric (Full 97L tank with 60 min timer limit)</h3>
-      <span class="acc-icon">▼</span>
-    </div>
-    <div class="acc-body">
-      <p style="margin-bottom:0.75rem;"><strong>Purpose:</strong> This is NOT a biological protocol — it is a logistics solution. The Airthereal AH1000 has a maximum 60-minute electronic timer. For a full 97L tank, one 60-min cycle may not achieve sufficient O₃ contact. The double volumetric protocol covers the full tank.</p>
-      <ol class="step-list">
-        <li>Run O₃ generator for 60 min (timer limit)</li>
-        <li>Pause 15–20 min to allow timer reset</li>
-        <li>Run second 60 min cycle</li>
-        <li>Wait pump safety time per STD protocol</li>
-      </ol>
-      <p style="color:var(--amber);font-size:12px;margin-top:0.75rem;">⚠ This is 2×60 = 120 min of ozone — significant EPDM budget impact. Use maximum once per month.</p>
-    </div>
-  </div>
-
-  <div class="accordion">
-    <div class="acc-header" onclick="toggleAcc(this)">
-      <h3>🔴 2×BIO — Double Biological (Forest / Mold / &gt;14 days stagnation)</h3>
-      <span class="acc-icon">▼</span>
-    </div>
-    <div class="acc-body">
-      <p style="margin-bottom:0.75rem;"><strong>Purpose:</strong> Biological protocol targeting spore-forming organisms. Spores can survive O₃ in dry form — the rest period allows rehydration, making them vulnerable to the second cycle.</p>
-      <ol class="step-list">
-        <li><strong>Cycle 1:</strong> Run O₃ 60–75 min</li>
-        <li><strong>Rest 1–2 hours</strong> — spores rehydrate</li>
-        <li><strong>Complete drain</strong> of tank</li>
-        <li><strong>Refill</strong> with fresh clean water</li>
-        <li><strong>Cycle 2:</strong> Run O₃ 45 min</li>
-        <li>Full rest period, then purge all taps</li>
-      </ol>
-      <p style="color:var(--red);font-size:12px;margin-top:0.75rem;">⚠ Use only when biological contamination is suspected (forest source, standing water, visible discoloration or odor). High EPDM budget impact.</p>
-    </div>
-  </div>
-
-  <!-- Critical warning -->
-  <div class="card red" style="margin-top:1.5rem;margin-bottom:1.75rem;">
-    <h3 style="margin-bottom:0.5rem;">🚫 NEVER Combine O₃ and Aquatabs</h3>
-    <p>Mixing ozone and chlorine (Aquatabs = NaDCC) in the same water produces <strong>chlorates and chlorites</strong> — disinfection byproducts that are potentially harmful. Always ensure complete water renewal (drain + refill) between ozone and chlorine treatments. These two methods are <strong>mutually exclusive</strong> in the same treatment cycle.</p>
-  </div>
-
-  <hr class="divider">
-
-  <!-- ─── SECTION 8: RESOURCES ─── -->
-  <div class="section-label">Section 8</div>
-  <div class="section-title">Resources &amp; Verification</div>
-
-  <div class="card-grid">
-    <div class="card">
-      <div class="icon">🗺️</div>
-      <h3>EU Water Quality Database</h3>
-      <p>Check local municipality water quality reports. Most EU countries publish annual reports at the commune level. Search "[commune name] qualité eau potable" (France) or "[municipality] drinking water quality" (NL/BE/DE).</p>
-    </div>
-    <div class="card">
-      <div class="icon">📍</div>
-      <h3>Park4Night — Potable Water Filter</h3>
-      <p>Use the <strong>Eau potable</strong> filter in Park4Night to find verified potable water points near your route. Community-validated — not a substitute for treatment, but helps avoid obviously suspect sources.</p>
-    </div>
-    <div class="card">
-      <div class="icon">🔬</div>
-      <h3>Local Lab Testing</h3>
-      <p>In France: <strong>Laboratoires départementaux d'analyse (LDA)</strong> offer field water testing for €30–80. In Spain: LABAQUA. In Portugal: Laboratório Nacional de Engenharia Civil (LNEC). Test for: coliforms, Legionella, nitrates, turbidity.</p>
-    </div>
-    <div class="card">
-      <div class="icon">🌡️</div>
-      <h3>Water Temperature Monitor</h3>
-      <p>A Tuya-compatible DS18B20 waterproof probe (≈€15) placed in the tank gives real-time temperature data on your phone. Recommended for summer travel — temperature is the single most important variable for protocol selection.</p>
-    </div>
-  </div>
-
-  <!-- Disclaimer -->
-  <div class="disclaimer">
-    <strong>⚗️ Field use disclaimer:</strong> All ozone duration values and treatment protocols are empirically derived field best practices, not NSF/ANSI 60 laboratory-certified procedures. This guide is a decision-support tool only — adapt to your actual conditions, equipment, and water sources. Not a substitute for professional water testing when safety is uncertain. The EPDM seal budget figures are estimates based on material compatibility literature; monitor your seals and replace at first sign of degradation.
   </div>
 
 </div><!-- /main -->
 
-<!-- ── FOOTER ── -->
-<footer class="footer" style="max-width:900px;">
+<footer class="footer">
   <span>© 2026 Jack-Éric Vandenbroucke — Skøl / LTV Europe Project</span>
-  <span>Field-validated · Not lab-certified · Adapt to your conditions</span>
+  <span id="foot-right">Field-validated · Not lab-certified · Adapt to your conditions</span>
 </footer>
 
-<!-- ── SCRIPTS ── -->
 <script>
 // ── ACTIVE NAV ──
 document.getElementById("nav-water").classList.add("active");
@@ -769,90 +812,597 @@ function toggleAcc(header) {
   header.classList.toggle("open");
   const body = header.nextElementSibling;
   body.classList.toggle("open");
+  const chevron = header.querySelector('.acc-chevron');
+  if (chevron) chevron.style.transform = header.classList.contains('open') ? 'rotate(180deg)' : '';
 }
 
 // ── TABS ──
-function switchTab(id) {
+function switchTab(id, e) {
   document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
   document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
   document.getElementById("tab-" + id).classList.add("active");
-  event.target.classList.add("active");
+  if (e && e.target) e.target.classList.add("active");
 }
 
-// ── PROTOCOL SELECTOR ──
-const PROTOCOLS = {
-  // [temp][stag][source] -> protocol
-  "cold-fresh-municipal":   { name:"No Treatment Required", color:"green", duration:"—", steps:["Fresh municipal water at cold temperature: minimal risk","Standard Aquatabs dose if desired for peace of mind","No ozone needed — save your EPDM budget"], note:"O₃ half-life at &lt;15°C is ~30 min — treatments are effective but unnecessary for fresh municipal water." },
-  "cold-fresh-well":        { name:"STD Protocol", color:"blue", duration:"30–45 min", steps:["Well source requires minimum treatment regardless of freshness","STD protocol: 30–45 min ozone at cold temp","Wait 60 min before restarting pump (2× half-life at 15°C)","Light purge 1–2 min per tap"], note:"Cold water means slower O₃ decay — a shorter cycle is still effective." },
-  "cold-fresh-wild":        { name:"VAR Protocol", color:"amber", duration:"45–60 min", steps:["Wild/cistern source: unknown contamination, use VAR protocol","45–60 min ozone","Wait 90 min before pump (3× half-life)","Partial purge all taps"], note:"For river/cistern water, also consider visual inspection (turbidity). If &gt;1 NTU, turbidity reduces O₃ effectiveness significantly." },
-  "cold-week-municipal":    { name:"STD Protocol", color:"blue", duration:"45–60 min", steps:["Municipal water but 3–7 days stagnation: apply STD","45–60 min ozone","Wait 60–90 min before pump","Light purge"], note:"" },
-  "cold-week-well":         { name:"VAR Protocol", color:"amber", duration:"60 min", steps:["Well water + 3–7 days: VAR protocol","60 min ozone","Wait 90 min before pump","Partial purge all taps"], note:"" },
-  "cold-week-wild":         { name:"VAR Protocol", color:"amber", duration:"60 min", steps:["Wild source + 3–7 days: VAR mandatory","60 min ozone + complete drain after treatment","Refill from clean source if possible"], note:"" },
-  "cold-long-municipal":    { name:"VAR Protocol", color:"amber", duration:"60 min", steps:["7–14 days stagnation, even municipal: use VAR","60 min ozone","Wait 90 min", "Partial purge"], note:"At cold temps, risk is lower, but &gt;7 days justifies VAR regardless of source." },
-  "cold-long-well":         { name:"CHOC Protocol", color:"red", duration:"60–75 min", steps:["Well + long stagnation at any temperature: CHOC","60–75 min ozone","Complete drain + refill from clean source","Do not reuse treated water"], note:"EPDM budget: 75 min = significant. Use sparingly." },
-  "cold-long-wild":         { name:"2×BIO Protocol", color:"red", duration:"2 cycles", steps:["Wild source + &gt;7 days: 2×BIO protocol","Cycle 1: 60–75 min ozone","Rest 1–2 hours (spore rehydration)","Complete drain + refill","Cycle 2: 45 min ozone","Full rest + purge all taps"], note:"This is the most intensive protocol. Reserve for suspected biological contamination." },
-  "cold-very-long-municipal": { name:"CHOC Protocol", color:"red", duration:"60–75 min", steps:["&gt;14 days even in municipal: CHOC + complete drain","60–75 min ozone","Complete drain + refill","Fresh water before use"], note:"" },
-  "cold-very-long-well":    { name:"2×BIO Protocol", color:"red", duration:"2 cycles", steps:["Well + &gt;14 days: 2×BIO mandatory"], note:"" },
-  "cold-very-long-wild":    { name:"2×BIO Protocol", color:"red", duration:"2 cycles", steps:["Wild + &gt;14 days: 2×BIO mandatory","Consider professional testing before use"], note:"" },
+// ── HEATMAP DATA ──
+// Rows: temp index 0=<5°C … 4=>35°C
+// Cols: context index 0=lowest … 4=highest
 
-  "warm-fresh-municipal":   { name:"STD Protocol", color:"blue", duration:"45–60 min", steps:["Warm temperature (15–25°C): O₃ decays faster","STD protocol: 45–60 min","Wait 30–60 min before pump (2× half-life ~15 min at 25°C = 30 min)","Light purge"], note:"At 25°C, O₃ half-life is ~15 min. Shorter wait time needed vs cold." },
-  "warm-fresh-well":        { name:"VAR Protocol", color:"amber", duration:"60 min", steps:["Well + warm temperature: VAR mandatory","60 min ozone","Wait 60–90 min","Partial purge"], note:"" },
-  "warm-fresh-wild":        { name:"VAR Protocol", color:"amber", duration:"60 min", steps:["Wild source + warm: VAR","60 min ozone + drain after","Refill from clean source"], note:"" },
-  "warm-week-municipal":    { name:"VAR Protocol", color:"amber", duration:"60 min", steps:["Municipal + 3–7 days + warm temp: VAR","60 min ozone","Wait 60 min","Partial purge"], note:"At 20–25°C, 3–7 days stagnation enters Legionella growth window." },
-  "warm-week-well":         { name:"CHOC Protocol", color:"red", duration:"60–75 min", steps:["Well + 3–7 days + warm: CHOC","60–75 min ozone","Complete drain + refill","Fresh water mandatory"], note:"" },
-  "warm-week-wild":         { name:"CHOC Protocol", color:"red", duration:"60–75 min", steps:["Wild + 3–7 days + warm: CHOC mandatory","60–75 min + complete drain + refill"], note:"" },
-  "warm-long-municipal":    { name:"CHOC Protocol", color:"red", duration:"60–75 min", steps:["7–14 days warm municipal: CHOC","Complete drain + refill from clean source","Do not reuse treated water"], note:"" },
-  "warm-long-well":         { name:"CHOC Protocol", color:"red", duration:"60–75 min + 2×BIO consider", steps:["Well + 7–14 days + warm: consider 2×BIO","Minimum: CHOC + complete drain","For high-risk: full 2×BIO protocol"], note:"" },
-  "warm-long-wild":         { name:"2×BIO Protocol", color:"red", duration:"2 cycles", steps:["Wild + &gt;7 days + warm: 2×BIO mandatory"], note:"" },
-  "warm-very-long-municipal": { name:"CHOC + drain", color:"red", duration:"60–75 min", steps:["&gt;14 days warm municipal: treat as contaminated","CHOC + complete drain + refill","Consider professional testing"], note:"" },
-  "warm-very-long-well":    { name:"2×BIO Protocol", color:"red", duration:"2 cycles", steps:["2×BIO mandatory + professional testing recommended"], note:"" },
-  "warm-very-long-wild":    { name:"2×BIO + Test", color:"red", duration:"2 cycles", steps:["2×BIO + professional lab test before consumption","This is a high-risk scenario"], note:"" },
+// Level system: 0=OPTI,1=BAS,2=MOD,3=MOD+,4=ELEV,5=FORT,6=CRIT,7=DANG
+const LVL_COLORS = [
+  { bg:'#1a5a30', fg:'#80e8a0', label_en:'Optimal', label_fr:'Optimal' },
+  { bg:'#2a5a10', fg:'#a0d860', label_en:'Low',     label_fr:'Bas' },
+  { bg:'#5a4800', fg:'#e8c840', label_en:'Moderate',label_fr:'Modéré' },
+  { bg:'#6a2c00', fg:'#f0a040', label_en:'Mod+',    label_fr:'Mod+' },
+  { bg:'#6a1800', fg:'#f07050', label_en:'Elevated', label_fr:'Élevé' },
+  { bg:'#600808', fg:'#e84040', label_en:'High',    label_fr:'Fort' },
+  { bg:'#500004', fg:'#e02020', label_en:'Critical', label_fr:'Critique' },
+  { bg:'#380002', fg:'#c01010', label_en:'Danger',  label_fr:'Danger' },
+];
 
-  "hot-fresh-municipal":    { name:"STD Protocol", color:"amber", duration:"60 min (monitor)", steps:["Hot water + municipal: O₃ decays very fast","60 min ozone (at &gt;25°C, half-life ~8 min — treat aggressively)","Wait 30 min before pump","Light purge","Consider Aquatabs for tank maintenance between O₃ treatments"], note:"At &gt;35°C, O₃ half-life drops to ~8 min. You are in the Legionella optimal growth zone." },
-  "hot-fresh-well":         { name:"CHOC Protocol", color:"red", duration:"60–75 min", steps:["Hot + well: CHOC mandatory even when fresh","60–75 min ozone","Complete drain + refill","Use for day's consumption only — no long storage"], note:"" },
-  "hot-fresh-wild":         { name:"CHOC + 2×BIO consider", color:"red", duration:"60–75 min", steps:["Hot + wild source: maximum treatment","CHOC + complete drain + 2×BIO if any biological concern","Professional testing strongly recommended"], note:"" },
-  "hot-week-municipal":     { name:"CHOC Protocol", color:"red", duration:"60–75 min", steps:["Hot + 3–7 days: critical zone","CHOC mandatory","Complete drain + refill","Never store hot stagnant water — use immediately after treatment"], note:"This is the peak Legionella risk scenario. Do not delay treatment." },
-  "hot-week-well":          { name:"2×BIO Protocol", color:"red", duration:"2 cycles", steps:["Hot + well + 3–7 days: 2×BIO protocol","Complete drain between cycles","Professional testing recommended"], note:"" },
-  "hot-week-wild":          { name:"2×BIO + Test", color:"red", duration:"2 cycles", steps:["2×BIO + professional testing mandatory","This source should not be used for potable water without lab confirmation"], note:"" },
-  "hot-long-municipal":     { name:"CHOC + drain", color:"red", duration:"60–75 min", steps:["Hot + 7–14 days: maximum alert","CHOC + complete drain + fresh refill","ACUVA UV provides final safety net at point of use"], note:"" },
-  "hot-long-well":          { name:"2×BIO + Test", color:"red", duration:"2 cycles", steps:["2×BIO mandatory + professional testing","Use ACUVA UV as final barrier"], note:"" },
-  "hot-long-wild":          { name:"Do NOT use", color:"red", duration:"N/A", steps:["⛔ This scenario: &gt;7 days stagnation in hot wild water","Do not treat — replace entirely from clean source","No ozone protocol compensates for this risk level"], note:"Find an alternative source. Municipal campsite connection or bottled water." },
-  "hot-very-long-municipal": { name:"CHOC + drain + retest", color:"red", duration:"60–75 min", steps:["&gt;14 days hot municipal: worst-case scenario","CHOC + complete drain + refill from fresh municipal","Test with field kit (coliform strips) if available"], note:"" },
-  "hot-very-long-well":     { name:"Do NOT use", color:"red", duration:"N/A", steps:["⛔ Hot + well + &gt;14 days: do not use for drinking","Replace from clean municipal source","Professional decontamination may be needed"], note:"" },
-  "hot-very-long-wild":     { name:"Do NOT use", color:"red", duration:"N/A", steps:["⛔ Do not use this water for any potable purpose"], note:"" },
+// HM01: Bacterial risk [row=temp 4..0 top-to-bottom, col=stagnation 0..4]
+// Stored row 4 (>35) first, row 0 (<5) last — displayed top-to-bottom
+const HM01 = [
+  [4,5,6,7,7], // >35°C
+  [3,4,5,6,7], // 25-35°C
+  [1,2,3,4,5], // 15-25°C
+  [0,1,2,3,4], // 5-15°C
+  [0,0,1,2,3], // <5°C
+];
+
+// HM02: O3 half-life effectiveness [row=temp, col=water quality]
+// Higher = worse (shorter half-life = less effective)
+const HM02 = [
+  [4,5,6,7,7], // >35°C
+  [3,4,5,6,7], // 25-35°C
+  [1,2,3,5,6], // 15-25°C
+  [0,1,2,4,5], // 5-15°C
+  [0,0,1,3,4], // <5°C
+];
+
+// HM03: Treatment resistance [row=pH 4..0, col=turbidity 0..4]
+const HM03 = [
+  [4,5,6,7,7], // pH>8.5 (alkaline+)
+  [3,4,5,6,7], // pH 7.5-8.5
+  [0,1,2,4,6], // pH 6.5-7.5 (neutral = optimal)
+  [1,2,3,5,6], // pH 5.5-6.5
+  [3,4,4,6,7], // pH<5.5
+];
+
+// HM04: Protocol recommendation [row=temp, col=context]
+// Values: 0=TABS,1=STD,2=VAR,3=CHOC,4=2xCHOC
+const HM04 = [
+  [3,3,4,4,4], // >35°C
+  [2,2,3,4,4], // 25-35°C
+  [1,1,2,3,3], // 15-25°C
+  [0,1,1,2,3], // 5-15°C
+  [0,0,0,1,2], // <5°C
+];
+
+const HM04_PROTO = ['TABS','STD','VAR','CHOC','2×CHOC'];
+const HM04_COLORS = [
+  { bg:'#1a4a20', fg:'#60d880' }, // TABS
+  { bg:'#1a3a60', fg:'#60a8e8' }, // STD
+  { bg:'#4a3800', fg:'#e0b040' }, // VAR
+  { bg:'#580808', fg:'#e06060' }, // CHOC
+  { bg:'#400008', fg:'#e04040' }, // 2×CHOC
+];
+
+// Map HM04 protocol to risk level for coloring
+const HM04_RISK = [0,1,3,5,7];
+
+// State
+const state = { 1:{y:2,x:0}, 2:{y:2,x:0}, 3:{y:2,x:0}, 4:{y:2,x:0} };
+
+function getLang() { return document.querySelector('.lang-btn.active').textContent.toLowerCase(); }
+
+function getHMData(n) {
+  if (n===1) return HM01;
+  if (n===2) return HM02;
+  if (n===3) return HM03;
+  if (n===4) return HM04;
+}
+
+function buildGrid(n) {
+  const grid = document.getElementById('hm0'+n+'-grid');
+  if (!grid) return;
+  const data = getHMData(n);
+  const rows = 5; const cols = 5;
+  let html = '';
+  for (let r=0; r<rows; r++) { // r=0 is top row (highest temp)
+    for (let c=0; c<cols; c++) {
+      const val = data[r][c];
+      let bg, fg, text;
+      if (n === 4) {
+        const pc = HM04_COLORS[val];
+        bg = pc.bg; fg = pc.fg;
+        text = HM04_PROTO[val];
+      } else {
+        const lc = LVL_COLORS[val];
+        bg = lc.bg; fg = lc.fg;
+        text = getLang()==='fr' ? lc.label_fr : lc.label_en;
+      }
+      html += `<div class="hm-cell" id="hm${n}c-${r}-${c}" style="background:${bg};color:${fg};" data-r="${r}" data-c="${c}">${text}<div class="pion"></div></div>`;
+    }
+  }
+  grid.innerHTML = html;
+}
+
+function updateHM(n) {
+  const ySlider = document.getElementById('hm0'+n+'-y');
+  const xSlider = document.getElementById('hm0'+n+'-x');
+  if (!ySlider || !xSlider) return;
+
+  // y slider: 0=cold top, 4=hot bottom — but we display row 0=hot, row 4=cold
+  // slider value 0 = <5°C (bottom), 4 = >35°C (top)
+  // grid row 0 = >35°C, row 4 = <5°C
+  const yVal = parseInt(ySlider.value); // 0-4, 4=hottest
+  const xVal = parseInt(xSlider.value); // 0-4
+  state[n].y = yVal; state[n].x = xVal;
+
+  const gridRow = 4 - yVal; // invert: hot = top row
+  const gridCol = xVal;
+
+  // Remove all active
+  document.querySelectorAll('#hm0'+n+'-grid .hm-cell').forEach(c => c.classList.remove('active-cell'));
+
+  // Set active
+  const activeCell = document.getElementById('hm'+n+'c-'+gridRow+'-'+gridCol);
+  if (activeCell) activeCell.classList.add('active-cell');
+
+  // Update badge
+  const data = getHMData(n);
+  const val = data[gridRow][gridCol];
+  const badge = document.getElementById('hm0'+n+'-badge');
+  const tagBadge = document.getElementById('hm0'+n+'-tag');
+
+  if (n === 4) {
+    const pc = HM04_COLORS[val];
+    const proto = HM04_PROTO[val];
+    if (badge) { badge.style.background = pc.bg; badge.style.color = pc.fg; badge.textContent = proto; }
+    if (tagBadge) { tagBadge.style.background = pc.bg; tagBadge.style.color = pc.fg; tagBadge.textContent = proto; }
+    // Update header badge too
+    const hdrBadge = document.getElementById('hm04-tag');
+    if (hdrBadge) { hdrBadge.style.background = pc.bg; hdrBadge.style.color = pc.fg; hdrBadge.textContent = proto; }
+    updateSOP(val, yVal, xVal);
+  } else {
+    const lc = LVL_COLORS[val];
+    const lbl = getLang()==='fr' ? lc.label_fr : lc.label_en;
+    if (badge) { badge.style.background = lc.bg; badge.style.color = lc.fg; badge.textContent = lbl; }
+    if (tagBadge) { tagBadge.style.background = lc.bg; tagBadge.style.color = lc.fg; tagBadge.textContent = lbl; }
+  }
+}
+
+// ── SOP DATA ──
+const SOP = {
+  en: {
+    0: { // TABS
+      name: 'No ozone — Aquatabs only',
+      duration: '—',
+      badgeBg: '#1a3020', badgeFg: '#50c870',
+      steps: [
+        'Verify tank is clean and fresh water source is municipal.',
+        'Aquatabs 334 mg: add 4–5 tablets per 97L tank (scale proportionally for your tank size).',
+        'Let dissolve 30 min before use.',
+        'No ozone needed at cold temperatures with fresh municipal water — save your EPDM budget.',
+        'Light purge at each tap before drinking.'
+      ],
+      warning: null,
+      info: '❄️ Cold water + fresh municipal = minimal bacterial risk. Aquatabs provide adequate residual disinfection without ozone.'
+    },
+    1: { // STD
+      name: 'Standard Protocol',
+      duration: '30–60 min O₃',
+      badgeBg: '#1a3a60', badgeFg: '#60a8e8',
+      steps: [
+        'Read water temperature (Tuya sensor or thermometer). Partial tank recommended (40–60% full).',
+        'Verify diffuser is submerged and clean. Ensure ventilation. Nobody inside RV during treatment.',
+        'Turn OFF water heater (AquaGo or equivalent) and let cool completely.',
+        'Start O₃ generator: 30–45 min if T&lt;15°C · 45–60 min if 15–25°C.',
+        'Wait 2× half-life before activating pump: ~60 min at 15°C · ~30 min at 25°C.',
+        'Light purge: run all taps 1–2 min (cold + hot).',
+        'Maximum frequency: once per month.'
+      ],
+      warning: null,
+      info: '⏱ Shurflo / pump safety wait: at &lt;15°C, half-life ~30 min → wait minimum 60 min. At 25°C, half-life ~15 min → wait 30 min.'
+    },
+    2: { // VAR
+      name: 'Variable Risk Protocol',
+      duration: '45–60 min O₃',
+      badgeBg: '#4a3800', badgeFg: '#e0b040',
+      steps: [
+        'Read Tuya temperature. Partial tank recommended.',
+        'Inspect water visually — if turbid, allow to decant before treatment.',
+        'Ventilation maximum. Turn OFF water heater.',
+        'Start O₃ generator: 45–60 min.',
+        'Wait 2–3× half-life before activating pump.',
+        'Partial purge: run all taps 2–3 min.',
+        'Monitor water quality and odour for 24h following treatment.',
+        'Maximum frequency: 2× per month — watch EPDM budget.'
+      ],
+      warning: '⚠ If odour or visual turbidity persists after purge, escalate to CHOC protocol.',
+      info: null
+    },
+    3: { // CHOC
+      name: 'Shock Protocol',
+      duration: '60–75 min O₃ MAX',
+      badgeBg: '#580808', badgeFg: '#e06060',
+      steps: [
+        'Read Tuya temperature. Partial tank if possible — do not treat a full tank with CHOC.',
+        'Turn OFF water heater — must be cold. Maximum ventilation.',
+        'Start O₃ generator: 60–75 min MAXIMUM. Never exceed 75 min (EPDM budget critical).',
+        'Wait minimum 30 min after O₃ stops.',
+        'Complete drain: empty tank entirely.',
+        'Rinse tank with fresh water, then refill from clean source.',
+        'Purge hot water circuit at all taps before use.',
+        'Never exceed 75 min per cycle. Continuous mode FORBIDDEN.'
+      ],
+      warning: '🔴 Do NOT reuse the treated water — drain and refill. CHOC = full cycle replacement.',
+      info: null
+    },
+    4: { // 2×CHOC
+      name: 'Double Cycle Protocol',
+      duration: '2 cycles · 60–75 + 45 min',
+      badgeBg: '#400008', badgeFg: '#e04040',
+      steps: [
+        'Cycle 1: inject O₃ for 60–75 min.',
+        'Rest 1–2 hours: spores rehydrate and become vulnerable to O₃.',
+        'Complete drain: evacuate debris and biofilm residue.',
+        'Refill with fresh clean water.',
+        'Cycle 2: inject O₃ for 45 min — destroys rehydrated spores.',
+        'Full rest period (2× half-life minimum), then purge all taps.',
+        'Discard treated water — use only the post-Cycle-2 fresh fill.',
+        'Maximum: 2 complete cycles without full water renewal.'
+      ],
+      warning: '☣️ Reserve for: forest/wild source, mould, stagnation &gt;14 days, post-winterisation. Highest EPDM budget impact.',
+      info: '📋 Full-tank variant (97L with 60 min timer): 2 × 60 min with 15–20 min pause to reset timer. Different from spore cycle (no 1–2h rest, no drain between).'
+    }
+  },
+  fr: {
+    0: {
+      name: 'Sans ozone — Aquatabs seulement',
+      duration: '—',
+      badgeBg: '#1a3020', badgeFg: '#50c870',
+      steps: [
+        'Vérifier que le réservoir est propre et la source est eau municipale.',
+        'Aquatabs 334 mg : ajouter 4–5 comprimés par réservoir de 97L (adapter à votre taille).',
+        'Laisser dissoudre 30 min avant utilisation.',
+        'Pas d\'ozone nécessaire en eau froide municipale fraîche — économiser le budget EPDM.',
+        'Purge légère à chaque robinet avant consommation.'
+      ],
+      warning: null,
+      info: '❄️ Eau froide + municipal frais = risque bactérien minimal. Les Aquatabs fournissent une désinfection résiduelle suffisante.'
+    },
+    1: {
+      name: 'Protocole Standard',
+      duration: '30–60 min O₃',
+      badgeBg: '#1a3a60', badgeFg: '#60a8e8',
+      steps: [
+        'Lire la température (sonde Tuya ou thermomètre). Réservoir partiel recommandé (40–60% plein).',
+        'Vérifier diffuseur immergé et propre. Ventilation assurée. Personne dans le VR.',
+        'Éteindre le chauffe-eau (AquaGo ou équivalent) et laisser refroidir complètement.',
+        'Lancer le générateur O₃ : 30–45 min si T&lt;15°C · 45–60 min si 15–25°C.',
+        'Attendre 2× demi-vie avant d\'activer la pompe : ~60 min à 15°C · ~30 min à 25°C.',
+        'Purge légère : faire couler tous les robinets 1–2 min (froid + chaud).',
+        'Fréquence maximale : une fois par mois.'
+      ],
+      warning: null,
+      info: '⏱ Repos pompe : à &lt;15°C, demi-vie ~30 min → attendre minimum 60 min. À 25°C, demi-vie ~15 min → attendre 30 min.'
+    },
+    2: {
+      name: 'Protocole Variable / Risque',
+      duration: '45–60 min O₃',
+      badgeBg: '#4a3800', badgeFg: '#e0b040',
+      steps: [
+        'Lire la température Tuya. Réservoir partiel recommandé.',
+        'Inspecter l\'eau visuellement — si trouble, laisser décanter avant traitement.',
+        'Ventilation maximale. Éteindre le chauffe-eau.',
+        'Lancer le générateur O₃ : 45–60 min.',
+        'Attendre 2–3× demi-vie avant d\'activer la pompe.',
+        'Purge partielle : faire couler tous les robinets 2–3 min.',
+        'Surveiller la qualité et l\'odeur de l\'eau dans les 24h suivantes.',
+        'Fréquence max : 2× par mois — surveiller le budget EPDM.'
+      ],
+      warning: '⚠ Si odeur ou turbidité persiste après purge, passer au protocole CHOC.',
+      info: null
+    },
+    3: {
+      name: 'Protocole Choc',
+      duration: '60–75 min O₃ MAX',
+      badgeBg: '#580808', badgeFg: '#e06060',
+      steps: [
+        'Lire la température Tuya. Réservoir partiel si possible — ne pas traiter en CHOC un réservoir plein.',
+        'Éteindre le chauffe-eau — doit être froid. Ventilation maximale.',
+        'Lancer le générateur O₃ : 60–75 min MAXIMUM. Ne jamais dépasser 75 min.',
+        'Attendre minimum 30 min après arrêt du générateur.',
+        'Vidange complète : vider entièrement le réservoir.',
+        'Rincer le réservoir, puis remplir d\'eau fraîche propre.',
+        'Purger le circuit eau chaude à tous les robinets avant utilisation.',
+        'Mode continu INTERDIT. Ne jamais dépasser 75 min par cycle.'
+      ],
+      warning: '🔴 Ne PAS réutiliser l\'eau traitée — vider et remplir. CHOC = remplacement complet du cycle.',
+      info: null
+    },
+    4: {
+      name: 'Protocole Double Cycle',
+      duration: '2 cycles · 60–75 + 45 min',
+      badgeBg: '#400008', badgeFg: '#e04040',
+      steps: [
+        'Cycle 1 : injection O₃ pendant 60–75 min.',
+        'Repos 1–2h : les spores se réhydratent et deviennent vulnérables à l\'O₃.',
+        'Vidange complète : évacuer les débris et résidus de biofilm.',
+        'Remplir d\'eau fraîche et propre.',
+        'Cycle 2 : injection O₃ pendant 45 min — achève les spores réhydratées.',
+        'Repos complet (2× demi-vie minimum), puis purge à tous les robinets.',
+        'Jeter l\'eau traitée — utiliser uniquement le remplissage frais post-Cycle 2.',
+        'Maximum : 2 cycles complets sans renouvellement complet de l\'eau.'
+      ],
+      warning: '☣️ Réserver pour : source forêt/sauvage, moisissures, stagnation &gt;14j, post-hivernage. Impact EPDM le plus élevé.',
+      info: '📋 Variante réservoir plein (97L avec timer 60 min) : 2 × 60 min avec pause 15–20 min pour réinitialiser le timer. Différent du cycle spores (pas de repos 1–2h, pas de vidange entre les cycles).'
+    }
+  }
 };
 
-function getProto() {
-  const t = document.getElementById("q-temp").value;
-  const s = document.getElementById("q-stag").value;
-  const src = document.getElementById("q-source").value;
-  if (!t || !s || !src) { document.getElementById("proto-result").style.display="none"; return; }
+function updateSOP(protoIdx, yVal, xVal) {
+  const lang = getLang();
+  const sop = SOP[lang][protoIdx];
+  if (!sop) return;
 
-  const key = `${t}-${s}-${src}`;
-  const p = PROTOCOLS[key] || { name:"VAR Protocol (default)", color:"amber", duration:"60 min", steps:["Use VAR protocol when uncertain","60 min ozone, wait 90 min, partial purge"], note:"No exact match found — VAR is the safe default." };
+  // Badge
+  const badge = document.getElementById('sop-badge');
+  badge.style.background = sop.badgeBg;
+  badge.style.color = sop.badgeFg;
+  badge.textContent = HM04_PROTO[protoIdx];
 
-  const colorMap = { green:"#e4f5ec", blue:"#e8f0fa", amber:"#fdf0d5", red:"#fde8e8" };
-  const textMap  = { green:"#1a7a4a", blue:"#1a5fa8", amber:"#8a5a00", red:"#a02020" };
-  const bg = colorMap[p.color] || colorMap.amber;
-  const fg = textMap[p.color] || textMap.amber;
+  document.getElementById('sop-name').textContent = sop.name;
+  document.getElementById('sop-duration').textContent = sop.duration;
 
-  const el = document.getElementById("proto-result");
-  el.style.display = "block";
-  el.style.background = bg;
-  el.style.border = `1px solid ${fg}33`;
+  // Steps
+  const stepsEl = document.getElementById('sop-steps');
+  stepsEl.innerHTML = sop.steps.map((s,i) =>
+    `<li><span class="sop-num">${i+1}</span>${s}</li>`
+  ).join('');
 
-  let html = `<h4 style="color:${fg}">${p.name}</h4>`;
-  if (p.duration && p.duration !== "—") html += `<p style="font-size:13px;margin-bottom:0.5rem;color:${fg}"><span class="duration">${p.duration}</span>ozone treatment</p>`;
-  html += `<ul style="color:#3a3835;">`;
-  p.steps.forEach(s => { html += `<li>${s}</li>`; });
-  html += `</ul>`;
-  if (p.note) html += `<p class="note">${p.note}</p>`;
-  el.innerHTML = html;
+  // Warning
+  const warnBox = document.getElementById('sop-warning-box');
+  warnBox.innerHTML = sop.warning ? `<div class="sop-warning">${sop.warning}</div>` : '';
+
+  // Info
+  const infoBox = document.getElementById('sop-info-box');
+  infoBox.innerHTML = sop.info ? `<div class="sop-info">${sop.info}</div>` : '';
 }
 
-["q-temp","q-stag","q-source"].forEach(id => {
-  document.getElementById(id).addEventListener("change", getProto);
-});
+function initHeatmaps() {
+  [1,2,3,4].forEach(n => { buildGrid(n); updateHM(n); });
+}
+
+// ── LANGUAGE ──
+const LANG = {
+  en: {
+    'h-title': 'Water Quality &amp; Treatment<br><em>in Europe for North American RVers</em>',
+    'h-sub': 'Why European water differs, how to protect your RV, and an interactive ozone protocol selector with full SOP — adaptable to any RV setup.',
+    'b1':'🔬 Science-based','b2':'Any RV','b3':'Multi-barrier strategy','b4':'Interactive SOP',
+    's1-label':'Section 1','s1-title':'Europe vs. North America — Water is Different',
+    's1-intro':'North American municipal water is heavily chlorinated and delivered through modern infrastructure. In Europe, standards vary dramatically by country, region, and campsite. Your RV was designed and tested with North American water.',
+    's1-na-label':'Free chlorine (NA)','s1-na-sub':'Consistent throughout distribution. Your RV seals and membranes are calibrated for this.',
+    's1-eu-label':'Free chlorine (EU)','s1-eu-sub':'Low residual at campsite tap after long distribution lines. Bacteria can survive.',
+    's1-leg-label':'Legionella optimum','s1-leg-sub':'A parked RV in summer sun is a near-ideal Legionella environment above 20°C.',
+    's1-hard-label':'Hardness mg/L range','s1-hard-sub':'Soft in Portugal/Brittany. Extremely hard in Germany/Austria/Spain Med coast.',
+    's1-htable-title':'💧 Water Hardness & pH by Region',
+    'th-region':'Region','th-hard':'Hardness','th-ph':'pH','th-ro':'RO load',
+    'hard-pt':'Soft (50–120)','ro-pt':'Low','hard-fr1':'Soft–Mod (80–180)','ro-fr1':'Low–Mod',
+    'hard-fr2':'Hard (200–400)','ro-fr2':'Moderate','hard-es':'Mod–Hard (150–350)','ro-es':'Moderate',
+    'hard-de':'Very Hard (300–500)','ro-de':'High','hard-nlbe':'Variable (100–300)','ro-nlbe':'Moderate',
+    's2-label':'Section 2','s2-title':'The 20% Rule & Stagnation Risk',
+    's2-intro':'One of the most effective practices costs nothing. Keep your tank ≤20% full while driving. The stagnation window is the most important variable for bacterial risk in summer Europe.',
+    's2-stag-title':'Stagnation Risk — Temperature × Time',
+    'stag-0-t':'&lt;24h','stag-0-l':'✓ Low','stag-1-t':'1–3d','stag-1-l':'Low–Mod',
+    'stag-2-t':'3–7d','stag-2-l':'⚠ Mod','stag-3-t':'7–14d','stag-3-l':'High',
+    'stag-4-t':'&gt;14d','stag-4-l':'🔴 Critical',
+    'stag-note':'At 25–35°C (summer RV tank in sun), Legionella enters critical growth zone after 3–7 days. Below 20°C, risk is minimal. Source: CDC 2025, WHO 2022.',
+    's2-c1-title':'Why ≤20% while driving?','s2-c1-body':'Sloshing resuspends biofilm. A near-empty tank dries faster after flushing, reducing colonization. Less weight, less slosh, less risk.',
+    's2-c2-title':'Summer threshold','s2-c2-body':'At 25–35°C, refill from a verified source every 2–3 days when parked. Fill to 100% only just before use.',
+    's2-c3-title':'Campsite tap hygiene','s2-c3-body':'Flush the campsite tap 30–60 sec before connecting. Never use a hose baking in the sun. The campsite line itself can be the contamination source.',
+    's3-label':'Section 3','s3-title':'Multi-Barrier Treatment Strategy',
+    's3-intro':'No single treatment handles all European conditions. The multi-barrier approach stacks independent barriers — each compensating for the others. You can implement one, two, or all layers depending on your system.',
+    's3-flow-label':'Generic multi-barrier flow — any RV',
+    'bf-tap':'Tap','bf-tap-d':'Campsite / source','bf-pre':'Pre-filter','bf-pre-d':'Sediment + UVC<br>at inlet (optional)',
+    'bf-tank':'Fresh tank','bf-tank-d':'O₃ or Aquatabs<br>treatment','bf-c1':'Carbon #1','bf-c1-d':'Neutralizes O₃<br>before pump',
+    'bf-pump':'Pump','bf-pump-d':'Never run<br>during O₃','bf-c2':'Carbon #2','bf-c2-d':'Pre-RO safety<br>(optional)',
+    'bf-ro':'RO filter','bf-ro-d':'Kitchen POU<br>(optional)','bf-uv':'UV-LED','bf-uv-d':'Final sterilization<br>(optional)',
+    'bf-out':'Tap','bf-out-d':'Drinking water',
+    's3-b1-title':'Barrier 1 — Inlet pre-filter','s3-b1-body':'A sediment + ceramic or UVC filter at the campsite tap removes particulates and inactivates bacteria before water enters your tank. Only usable at pressurized campsite taps.',
+    's3-b2-title':'Barrier 2 — Tank treatment (O₃ or Aquatabs)','s3-b2-body':'Ozone or Aquatabs NaDCC tablets treat the tank. O₃ destroys bacteria, viruses, biofilm and reverts to O₂ with no residue. <strong>Never combine O₃ + Aquatabs</strong> in the same cycle.',
+    's3-b3-title':'Barrier 3 — Reverse osmosis (kitchen POU)','s3-b3-body':'A point-of-use tankless RO at the kitchen faucet removes dissolved solids, heavy metals, nitrates, and chemical contamination. Protects from hard water scaling.',
+    's3-b4-title':'Barrier 4 — UV-LED (final sterilization)','s3-b4-body':'Post-RO UV sterilization eliminates residual pathogens. Requires clear water (&lt;1 NTU) — turbidity blocks UV penetration. Positioned last in chain.',
+    'pe-title':'Real-world example: Skøl (LTV Unity FX 2025) — complete implementation',
+    'pe-sub':'All 4 barriers deployed. Products listed as reference — adapt to your RV and budget.',
+    'p-blutec-role':'Inlet filter — 5µm + 0.2µm + UVC-LED',
+    'p-ah1000-role':'O₃ generator, 1000 mg/h — tank treatment',
+    'p-aquatabs-role':'NaDCC tablets — alternative to O₃',
+    'p-novo-role':'Tankless RO — kitchen point-of-use',
+    'p-acuva-role':'UV-LED sterilizer — post-RO',
+    'p-tuya-role':'Tank temp monitor — key for protocol selection',
+    's4-label':'Section 4','s4-title':'Installation — Unity vs. Wonder',
+    's4-intro':'The LTV Unity (Sprinter chassis) and Wonder (Transit chassis) have different plumbing architectures. The Unity already has an inline carbon filter from the factory; the Wonder does not.',
+    'tab-unity-btn':'🚐 LTV Unity FX (Sprinter)','tab-wonder-btn':'🚌 LTV Wonder (Transit)',
+    'unity-desc':'The Unity has a <strong>Sprinter inline carbon filter</strong> (factory). It counts as Carbon #1. Do not remove it — it neutralizes O₃ residual before the pump.',
+    'wonder-desc':'The Wonder (Transit) does <strong>not</strong> include a factory carbon filter. You must add Carbon #1 between tank output and pump.',
+    'wonder-note':'Carbon #1 for Wonder: Watts WH-LD or equivalent 10" whole-house GAC block filter, between tank drain and pump inlet. NSF/ANSI 42 certified recommended.',
+    's5-label':'Section 5','s5-title':'Interactive Protocol Selector — Heatmaps + SOP',
+    's5-intro':'Use the sliders to position yourself on each heatmap. The white marker shows your position. <strong>HM04 is the key output</strong> — it recommends your protocol and shows the full step-by-step SOP below.',
+    'hm01-acc-title':'HM01 — Bacterial Risk: Temperature × Stagnation',
+    'hm01-title':'Bacterial growth risk in your tank',
+    'hm01-sub':'Source: CDC 2025 · WHO 2022 — Legionella optimal 32–35°C · inactive &lt;20°C · destroyed &gt;55°C',
+    'hm01-y-label':'Temperature','hm01-x-label':'← Stagnation duration →',
+    'hm01-r4':'&gt;35°C','hm01-r3':'25–35°C','hm01-r2':'15–25°C','hm01-r1':'5–15°C','hm01-r0':'&lt;5°C',
+    'hm01-x0':'&lt;24h','hm01-x1':'1–3d','hm01-x2':'3–7d','hm01-x3':'7–14d','hm01-x4':'&gt;14d',
+    'hm02-acc-title':'HM02 — O₃ Effectiveness: Temperature × Water Quality',
+    'hm02-title':'O₃ half-life in your water',
+    'hm02-sub':'Source: Hoigné &amp; Bader 1976–83 · Langlais et al. 1991',
+    'hm02-y-label':'Temperature','hm02-x-label':'← Water quality (ozone demand) →',
+    'hm02-r4':'&gt;35°C','hm02-r3':'25–35°C','hm02-r2':'15–25°C','hm02-r1':'5–15°C','hm02-r0':'&lt;5°C',
+    'hm02-x0':'Munic.<br>clear','hm02-x1':'Munic.<br>loaded','hm02-x2':'Well<br>moderate','hm02-x3':'Well<br>loaded','hm02-x4':'Very<br>loaded',
+    'hm03-acc-title':'HM03 — Treatment Resistance: pH × Turbidity',
+    'hm03-title':'Chemical &amp; UV treatment resistance',
+    'hm03-sub':'Source: WHO/EPA Turbidity Review 2017 · EPA UV Manual',
+    'hm03-y-label':'pH','hm03-x-label':'← Turbidity / organic matter (NTU) →',
+    'hm03-r4':'pH &gt;8.5','hm03-r3':'7.5–8.5','hm03-r2':'6.5–7.5','hm03-r1':'5.5–6.5','hm03-r0':'pH &lt;5.5',
+    'hm03-x0':'&lt;0.5<br>Crystal','hm03-x1':'0.5–2<br>Clear','hm03-x2':'2–5<br>Hazy','hm03-x3':'5–15<br>Turbid','hm03-x4':'&gt;15<br>Opaque',
+    'hm04-acc-title':'HM04 — Recommended Protocol: Temperature × Context',
+    'hm04-key-label':'KEY','hm04-title':'Protocol recommendation + SOP',
+    'hm04-sub':'Source: SOP v3.0 · EPDM budget max 800 min O₃/year · STD=45 min · CHOC=75 min',
+    'hm04-y-label':'Temperature','hm04-x-label':'← Source &amp; usage context →',
+    'hm04-r4':'&gt;35°C','hm04-r3':'25–35°C','hm04-r2':'15–25°C','hm04-r1':'5–15°C','hm04-r0':'&lt;5°C',
+    'hm04-x0':'Munic.<br>camping','hm04-x1':'Frequent<br>refill','hm04-x2':'Boon.<br>normal','hm04-x3':'Boon.<br>hot','hm04-x4':'Long<br>stagnation',
+    'epdm-title':'⚖️ Annual EPDM Budget — max 800 min/year',
+    'epdm-sub':'O₃ attacks EPDM rubber seals over time. Track cumulative ozone minutes. Replace seals showing cracks or swelling.',
+    'epdm-note':'≥1000 min/year → inspect EPDM seals. Never activate pump during O₃ injection — pump elastomers are the critical weak point.',
+    'safety-title':'🛡️ Safety Rules — Always Apply',
+    'safe-1':'⚠ NEVER run the pump during O₃ injection','safe-2':'⚠ NEVER combine O₃ + Aquatabs same cycle',
+    'safe-3':'✓ Wait 2× half-life before pumping (STD)','safe-4':'✓ Wait 3× half-life after CHOC / biofilm',
+    'safe-5':'✓ Keep water heater OFF during O₃','safe-6':'✓ Ensure tank vent is open before injection',
+    'safe-7':'✓ Maximum ventilation — never inhale O₃','safe-8':'✓ Carbon #1 must be in-line before pump',
+    'trouble-label':'🔧 Quick Troubleshooting',
+    'th-prob':'Problem','th-cause':'Cause','th-fix':'Solution',
+    'tr-p1':'No bubbles from diffuser','tr-c1':'Clogged line / dirty diffuser / generator off','tr-s1':'Clean stainless diffuser · check air line · restart generator',
+    'tr-p2':'Persistent O₃ smell at tap','tr-c2':'Insufficient purge / rest too short','tr-s2':'Purge until odour gone · respect 2× half-life',
+    'tr-p3':'Turbid water after treatment','tr-c3':'Fe²⁺→Fe³⁺ oxidation (well) / disturbed sediment','tr-s3':'Normal for well water · let settle · check inlet filter',
+    'tr-p4':'Persistent taste/odour','tr-c4':'Established biofilm / saturated filter / long stagnation','tr-s4':'Double spore cycle + drain · replace carbon cartridges',
+    'tr-p5':'Low pump flow after O₃','tr-c5':'O₃ residual in circuit / clogged filter','tr-s5':'Wait full rest time · check Carbon #1 and #2',
+    'tr-p6':'UV alarm / lamp out','tr-c6':'End-of-life lamp / dirty quartz / 12V issue','tr-s6':'Replace lamp · clean quartz · check 12V supply',
+    's6-label':'Section 6','s6-title':'Resources &amp; Verification',
+    's6-intro':'Field resources for water testing, quality data, and temperature monitoring in Europe.',
+    'r1-title':'EU Water Quality Database','r1-body':'Check local municipality water quality reports. Most EU countries publish annual reports at commune level. Search "[commune] qualité eau potable" (France) or "[municipality] drinking water quality" (NL/BE/DE).',
+    'r2-title':'Park4Night — Potable Water','r2-body':'Use the <strong>Eau potable</strong> filter to find verified potable water points. Community-validated — not a substitute for treatment, but helps avoid suspect sources.',
+    'r3-title':'Local Lab Testing','r3-body':'France: LDA €30–80. Spain: LABAQUA. Portugal: LNEC. Test for coliforms, Legionella, nitrates, turbidity.',
+    'r4-title':'Tank Temperature Monitor','r4-body':'A Tuya DS18B20 probe (~€15) gives real-time temperature. Temperature is the <strong>single most important variable</strong> for protocol selection — essential for summer travel above 25°C.',
+    'disc-label':'⚗️ Field use disclaimer:','disc-body':'All ozone protocols are empirically derived field best practices, not NSF/ANSI 60 lab-certified procedures. Decision-support tool only — adapt to your conditions. Not a substitute for professional water testing.',
+    'foot-right':'Field-validated · Not lab-certified · Adapt to your conditions'
+  },
+  fr: {
+    'h-title': 'Qualité &amp; Traitement de l\'eau<br><em>en Europe pour les VRistes nord-américains</em>',
+    'h-sub': 'Pourquoi l\'eau européenne diffère, comment protéger votre VR, et un sélecteur de protocole ozone interactif avec SOP complet — adaptable à tout VR.',
+    'b1':'🔬 Basé sur la science','b2':'Tout VR','b3':'Stratégie multi-barrières','b4':'SOP interactif',
+    's1-label':'Section 1','s1-title':'Europe vs. Amérique du Nord — L\'eau est différente',
+    's1-intro':'L\'eau municipale nord-américaine est fortement chlorée et distribuée via une infrastructure moderne. En Europe, les normes varient dramatiquement selon le pays, la région et le camping. Votre VR a été conçu et testé avec l\'eau nord-américaine.',
+    's1-na-label':'Chlore libre (AN)','s1-na-sub':'Constant dans la distribution. Joints et membranes de votre VR calibrés pour ce profil.',
+    's1-eu-label':'Chlore libre (UE)','s1-eu-sub':'Résiduel faible au robinet du camping après de longues lignes. Les bactéries peuvent survivre.',
+    's1-leg-label':'Optimum Legionella','s1-leg-sub':'Un VR stationné au soleil d\'été est un environnement presque idéal pour la Legionella au-dessus de 20°C.',
+    's1-hard-label':'Plage dureté mg/L','s1-hard-sub':'Douce au Portugal/Bretagne. Extrêmement dure en Allemagne/Autriche/Espagne côte méditerranéenne.',
+    's1-htable-title':'💧 Dureté de l\'eau et pH par région',
+    'th-region':'Région','th-hard':'Dureté','th-ph':'pH','th-ro':'Charge RO',
+    'hard-pt':'Douce (50–120)','ro-pt':'Faible','hard-fr1':'Douce–Mod (80–180)','ro-fr1':'Faible–Mod',
+    'hard-fr2':'Dure (200–400)','ro-fr2':'Modérée','hard-es':'Mod–Dure (150–350)','ro-es':'Modérée',
+    'hard-de':'Très dure (300–500)','ro-de':'Élevée','hard-nlbe':'Variable (100–300)','ro-nlbe':'Modérée',
+    's2-label':'Section 2','s2-title':'La règle des 20% et le risque de stagnation',
+    's2-intro':'L\'une des pratiques les plus efficaces ne coûte rien. Gardez votre réservoir à ≤20% pendant le trajet. La durée de stagnation est la variable la plus importante pour le risque bactérien en Europe en été.',
+    's2-stag-title':'Risque de stagnation — Température × Durée',
+    'stag-0-t':'&lt;24h','stag-0-l':'✓ Bas','stag-1-t':'1–3j','stag-1-l':'Bas–Mod',
+    'stag-2-t':'3–7j','stag-2-l':'⚠ Mod','stag-3-t':'7–14j','stag-3-l':'Élevé',
+    'stag-4-t':'&gt;14j','stag-4-l':'🔴 Critique',
+    'stag-note':'À 25–35°C (réservoir VR au soleil d\'été), la Legionella entre en zone de croissance critique après 3–7 jours. En dessous de 20°C, risque minimal. Source : CDC 2025, WHO 2022.',
+    's2-c1-title':'Pourquoi ≤20% en route ?','s2-c1-body':'Les secousses de conduite remettent le biofilm en suspension. Un réservoir quasi vide sèche plus vite après rinçage. Moins de poids, moins de mouvement, moins de risque.',
+    's2-c2-title':'Seuil estival','s2-c2-body':'À 25–35°C, refaire le plein depuis une source vérifiée tous les 2–3 jours en stationnement. Remplir à 100% seulement juste avant usage.',
+    's2-c3-title':'Hygiène du robinet de camping','s2-c3-body':'Laisser couler le robinet du camping 30–60 sec avant de connecter. Ne jamais utiliser un tuyau qui a cuit au soleil. La ligne du camping peut être la source de contamination.',
+    's3-label':'Section 3','s3-title':'Stratégie de traitement multi-barrières',
+    's3-intro':'Aucun traitement unique ne couvre toutes les conditions européennes. L\'approche multi-barrières empile des barrières indépendantes — chacune compensant les failles des autres. Vous pouvez implémenter une, deux ou toutes les couches selon votre système.',
+    's3-flow-label':'Flux multi-barrières générique — tout VR',
+    'bf-tap':'Robinet','bf-tap-d':'Camping / source','bf-pre':'Pré-filtre','bf-pre-d':'Sédiments + UVC<br>à l\'entrée (optionnel)',
+    'bf-tank':'Réservoir','bf-tank-d':'Traitement O₃<br>ou Aquatabs','bf-c1':'Charbon #1','bf-c1-d':'Neutralise O₃<br>avant pompe',
+    'bf-pump':'Pompe','bf-pump-d':'Jamais pendant<br>l\'O₃','bf-c2':'Charbon #2','bf-c2-d':'Sécurité pré-RO<br>(optionnel)',
+    'bf-ro':'Filtre RO','bf-ro-d':'Cuisine PDU<br>(optionnel)','bf-uv':'UV-LED','bf-uv-d':'Stérilisation finale<br>(optionnel)',
+    'bf-out':'Robinet','bf-out-d':'Eau potable',
+    's3-b1-title':'Barrière 1 — Pré-filtre à l\'entrée','s3-b1-body':'Un filtre sédiments + céramique ou UVC au robinet du camping élimine les particules et inactive les bactéries avant que l\'eau entre dans le réservoir. Uniquement utilisable sous pression.',
+    's3-b2-title':'Barrière 2 — Traitement réservoir (O₃ ou Aquatabs)','s3-b2-body':'L\'ozone ou les comprimés Aquatabs NaDCC traitent le réservoir. L\'O₃ détruit bactéries, virus, biofilm et se décompose en O₂ sans résidu. <strong>Ne jamais combiner O₃ + Aquatabs</strong> dans le même cycle.',
+    's3-b3-title':'Barrière 3 — Osmose inverse (cuisine PDU)','s3-b3-body':'Un RO sans réservoir au point d\'utilisation élimine les solides dissous, métaux lourds, nitrates et contamination chimique. Protège contre le calcaire.',
+    's3-b4-title':'Barrière 4 — UV-LED (stérilisation finale)','s3-b4-body':'La stérilisation UV post-RO élimine les pathogènes résiduels. Nécessite une eau claire (&lt;1 NTU) — la turbidité bloque la pénétration UV. Positionné en dernier dans la chaîne.',
+    'pe-title':'Exemple concret : Skøl (LTV Unity FX 2025) — implémentation complète',
+    'pe-sub':'Les 4 barrières déployées. Produits donnés en référence — adaptez à votre VR et votre budget.',
+    'p-blutec-role':'Filtre entrée — 5µm + 0,2µm + UVC-LED',
+    'p-ah1000-role':'Générateur O₃, 1000 mg/h — traitement réservoir',
+    'p-aquatabs-role':'Comprimés NaDCC — alternative à l\'O₃',
+    'p-novo-role':'RO sans réservoir — point d\'utilisation cuisine',
+    'p-acuva-role':'Stérilisateur UV-LED — post-RO',
+    'p-tuya-role':'Sonde temp. réservoir — clé pour la sélection du protocole',
+    's4-label':'Section 4','s4-title':'Installation — Unity vs. Wonder',
+    's4-intro':'Le LTV Unity (châssis Sprinter) et le Wonder (châssis Transit) ont des architectures de plomberie différentes. L\'Unity dispose déjà d\'un filtre à charbon en ligne d\'usine ; pas le Wonder.',
+    'tab-unity-btn':'🚐 LTV Unity FX (Sprinter)','tab-wonder-btn':'🚌 LTV Wonder (Transit)',
+    'unity-desc':'L\'Unity dispose d\'un <strong>filtre à charbon Sprinter en ligne</strong> (d\'usine). Il compte comme Charbon #1. Ne pas le retirer — il neutralise le résidu d\'O₃ avant la pompe.',
+    'wonder-desc':'Le Wonder (Transit) ne comprend <strong>pas</strong> de filtre à charbon d\'usine. Vous devez ajouter le Charbon #1 entre la sortie du réservoir et la pompe.',
+    'wonder-note':'Charbon #1 pour Wonder : Watts WH-LD ou équivalent filtre GAC 10" en bloc, entre le drain du réservoir et l\'entrée pompe. Certifié NSF/ANSI 42 recommandé.',
+    's5-label':'Section 5','s5-title':'Sélecteur de protocole interactif — Heatmaps + SOP',
+    's5-intro':'Utilisez les curseurs pour vous positionner sur chaque heatmap. Le marqueur blanc indique votre position. <strong>HM04 est la sortie principale</strong> — il recommande votre protocole et affiche le SOP complet étape par étape.',
+    'hm01-acc-title':'HM01 — Risque bactérien : Température × Stagnation',
+    'hm01-title':'Risque de croissance bactérienne dans votre réservoir',
+    'hm01-sub':'Source : CDC 2025 · WHO 2022 — Legionella optimal 32–35°C · inactif &lt;20°C · détruit &gt;55°C',
+    'hm01-y-label':'Température','hm01-x-label':'← Durée de stagnation →',
+    'hm01-r4':'&gt;35°C','hm01-r3':'25–35°C','hm01-r2':'15–25°C','hm01-r1':'5–15°C','hm01-r0':'&lt;5°C',
+    'hm01-x0':'&lt;24h','hm01-x1':'1–3j','hm01-x2':'3–7j','hm01-x3':'7–14j','hm01-x4':'&gt;14j',
+    'hm02-acc-title':'HM02 — Efficacité O₃ : Température × Qualité de l\'eau',
+    'hm02-title':'Demi-vie de l\'O₃ dans votre eau',
+    'hm02-sub':'Source : Hoigné &amp; Bader 1976–83 · Langlais et al. 1991',
+    'hm02-y-label':'Température','hm02-x-label':'← Qualité de l\'eau (demande en ozone) →',
+    'hm02-r4':'&gt;35°C','hm02-r3':'25–35°C','hm02-r2':'15–25°C','hm02-r1':'5–15°C','hm02-r0':'&lt;5°C',
+    'hm02-x0':'Munic.<br>claire','hm02-x1':'Munic.<br>chargée','hm02-x2':'Puits<br>mod.','hm02-x3':'Puits<br>chargé','hm02-x4':'Très<br>chargée',
+    'hm03-acc-title':'HM03 — Résistance aux traitements : pH × Turbidité',
+    'hm03-title':'Résistance aux traitements chimiques &amp; UV',
+    'hm03-sub':'Source : WHO/EPA Turbidity Review 2017 · EPA UV Manual',
+    'hm03-y-label':'pH','hm03-x-label':'← Turbidité / matières organiques (NTU) →',
+    'hm03-r4':'pH &gt;8,5','hm03-r3':'7,5–8,5','hm03-r2':'6,5–7,5','hm03-r1':'5,5–6,5','hm03-r0':'pH &lt;5,5',
+    'hm03-x0':'&lt;0,5<br>Cristal','hm03-x1':'0,5–2<br>Claire','hm03-x2':'2–5<br>Voilée','hm03-x3':'5–15<br>Trouble','hm03-x4':'&gt;15<br>Opaque',
+    'hm04-acc-title':'HM04 — Protocole recommandé : Température × Contexte',
+    'hm04-key-label':'CLÉ','hm04-title':'Recommandation de protocole + SOP',
+    'hm04-sub':'Source : SOP v3.0 · Budget EPDM max 800 min O₃/an · STD=45 min · CHOC=75 min',
+    'hm04-y-label':'Température','hm04-x-label':'← Source &amp; contexte d\'utilisation →',
+    'hm04-r4':'&gt;35°C','hm04-r3':'25–35°C','hm04-r2':'15–25°C','hm04-r1':'5–15°C','hm04-r0':'&lt;5°C',
+    'hm04-x0':'Camping<br>munic.','hm04-x1':'Renouvell.<br>fréquent','hm04-x2':'Boondock.<br>normal','hm04-x3':'Boondock.<br>chaud','hm04-x4':'Stagnation<br>prolongée',
+    'epdm-title':'⚖️ Budget EPDM annuel — max 800 min/an',
+    'epdm-sub':'L\'O₃ attaque les joints EPDM au fil du temps. Suivre les minutes d\'ozone cumulées. Remplacer les joints fissurés ou gonflés.',
+    'epdm-note':'≥1000 min/an → inspecter les joints EPDM. Ne jamais activer la pompe pendant l\'injection O₃ — les élastomères de pompe sont le maillon faible.',
+    'safety-title':'🛡️ Règles de sécurité — Toujours appliquer',
+    'safe-1':'⚠ NE JAMAIS activer la pompe pendant l\'injection O₃','safe-2':'⚠ NE JAMAIS combiner O₃ + Aquatabs même cycle',
+    'safe-3':'✓ Attendre 2× demi-vie avant de pomper (STD)','safe-4':'✓ Attendre 3× demi-vie après CHOC / biofilm',
+    'safe-5':'✓ Éteindre le chauffe-eau pendant l\'O₃','safe-6':'✓ Vérifier que l\'évent du réservoir est ouvert',
+    'safe-7':'✓ Ventilation maximale — ne jamais inhaler l\'O₃','safe-8':'✓ Charbon #1 doit être en ligne avant la pompe',
+    'trouble-label':'🔧 Dépannage rapide',
+    'th-prob':'Problème','th-cause':'Cause','th-fix':'Solution',
+    'tr-p1':'Aucune bulle du diffuseur','tr-c1':'Ligne bouchée / diffuseur colmaté / générateur éteint','tr-s1':'Nettoyer diffuseur inox · vérifier ligne air · rallumer',
+    'tr-p2':'Odeur O₃ persistante au robinet','tr-c2':'Purge insuffisante / repos trop court','tr-s2':'Purger jusqu\'à disparition · respecter 2× demi-vie',
+    'tr-p3':'Eau trouble après traitement','tr-c3':'Oxydation Fe²⁺→Fe³⁺ (puits) / sédiments remués','tr-s3':'Normal pour eau de puits · laisser décanter · vérifier filtre',
+    'tr-p4':'Goût/odeur persistant','tr-c4':'Biofilm établi / filtre saturé / longue stagnation','tr-s4':'Double cycle spores + vidange · remplacer charbons',
+    'tr-p5':'Faible débit pompe après O₃','tr-c5':'Résiduel O₃ dans circuit / filtre colmaté','tr-s5':'Attendre repos complet · vérifier Charbon #1 et #2',
+    'tr-p6':'Alarme UV / lampe éteinte','tr-c6':'Fin de vie lampe / encrassement quartz / alimentation 12V','tr-s6':'Remplacer lampe · nettoyer quartz · vérifier 12V',
+    's6-label':'Section 6','s6-title':'Ressources &amp; Vérification',
+    's6-intro':'Ressources terrain pour les tests d\'eau, données de qualité et surveillance de température en Europe.',
+    'r1-title':'Base de données qualité eau UE','r1-body':'Consulter les rapports de qualité de la municipalité locale. La plupart des pays UE publient des rapports annuels à l\'échelle de la commune. Chercher "[commune] qualité eau potable" (France).',
+    'r2-title':'Park4Night — Eau potable','r2-body':'Utiliser le filtre <strong>Eau potable</strong> pour trouver des points d\'eau vérifiés. Validé par la communauté — pas un substitut au traitement.',
+    'r3-title':'Tests en laboratoire local','r3-body':'France : LDA 30–80€. Espagne : LABAQUA. Portugal : LNEC. Tester : coliformes, Legionella, nitrates, turbidité.',
+    'r4-title':'Surveillance température réservoir','r4-body':'Une sonde DS18B20 Tuya (~15€) donne la température en temps réel. La température est la <strong>variable la plus importante</strong> pour le choix du protocole — indispensable en été au-dessus de 25°C.',
+    'disc-label':'⚗️ Avertissement terrain :','disc-body':'Tous les protocoles ozone sont des bonnes pratiques terrain empiriques, non certifiées NSF/ANSI 60. Outil d\'aide à la décision uniquement — adapter à vos conditions réelles. Non substitut à des tests d\'eau professionnels.',
+    'foot-right':'Validé sur le terrain · Non certifié labo · Adapter à vos conditions'
+  }
+};
+
+function setLang(l) {
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === l.toUpperCase()));
+  const L = LANG[l];
+  for (const [id, val] of Object.entries(L)) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = val;
+  }
+  // Rebuild heatmap grids (labels change)
+  [1,2,3,4].forEach(n => { buildGrid(n); updateHM(n); });
+  // Update SOP for current HM04 state
+  const gridRow = 4 - state[4].y;
+  const proto = HM04[gridRow][state[4].x];
+  updateSOP(proto, state[4].y, state[4].x);
+}
+
+// ── INIT ──
+initHeatmaps();
+// Update SOP for default state
+updateSOP(HM04[4-2][0], 2, 0);
 </script>
 </body>
 </html>
