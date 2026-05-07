@@ -738,6 +738,10 @@ a:hover { text-decoration: underline; }
               </div>
               <div style="margin-left:96px;margin-top:8px;"><span class="level-badge" id="hm03-badge">—</span>
               </div>
+              <!-- pH warning callout — shown when pH is alkaline -->
+              <div id="ph-warning" style="display:none;margin-top:10px;background:#2a1a00;border:1px solid #c07010;border-radius:7px;padding:9px 13px;font-size:12px;color:#f0a030;line-height:1.5;">
+                <strong id="ph-warn-title">⚠ Alkaline water detected</strong> — <span id="ph-warn-body">pH above 7.5 reduces chlorine effectiveness (OCl⁻ dominates at high pH) and slightly reduces O₃ stability. Consider moving up one protocol level in <strong>HM04</strong> ↓</span>
+              </div>
             </div>
         </div>
       </div>
@@ -1107,6 +1111,8 @@ function updateHM(n) {
     const lbl = getLang()==='fr' ? lc.label_fr : lc.label_en;
     if (badge) { badge.style.background = lc.bg; badge.style.color = lc.fg; badge.textContent = lbl; }
     if (tagBadge) { tagBadge.style.background = lc.bg; tagBadge.style.color = lc.fg; tagBadge.textContent = lbl; }
+    // pH cross-link: HM03 Y axis = pH (4=alkaline+, 0=acid)
+    if (n === 3) updatePhWarning(yVal);
   }
 }
 
@@ -1529,6 +1535,8 @@ function setLang(l) {
     var grid = document.getElementById('hm0'+n+'-grid');
     if (grid && grid.innerHTML.trim() !== '') { buildGrid(n); updateHM(n); }
   });
+  // Re-apply pH warning in current lang
+  updatePhWarning(currentPhLevel);
   // Update map prompt
   const mp = document.getElementById('map-prompt-text');
   if (mp && !currentSelectedCountry) mp.textContent = l==='fr' ? '← Cliquez un pays sur la carte' : '← Click a country on the map';
@@ -1885,6 +1893,48 @@ function selectCountry(code) {
     <div style="background:var(--red-bg);border:1px solid #f0c0c0;border-radius:6px;padding:7px 10px;font-size:11px;color:var(--red);margin-bottom:8px;">🦠 <strong>Legionella:</strong> ${legNotes}</div>
     <div style="background:var(--blue-bg);border:1px solid #bbd0f0;border-radius:6px;padding:7px 10px;font-size:11px;color:var(--blue);">📋 <strong>${t?'Protocole conseillé':'Recommended protocol'}:</strong> ${rec}</div>
   `;
+}
+
+// ── PH WARNING ──
+// HM03 Y slider: 4=>8.5 (most alkaline), 3=7.5-8.5, 2=neutral(ok), 1=slightly acid, 0=acid
+var currentPhLevel = 2; // default neutral
+
+function updatePhWarning(phYVal) {
+  currentPhLevel = phYVal;
+  var isAlkaline = phYVal >= 3; // 3=7.5-8.5, 4=>8.5
+  var isStronglyAlk = phYVal === 4;
+  var lang = getLang();
+
+  var warn = document.getElementById('ph-warning');
+  var sopNote = document.getElementById('sop-ph-note');
+
+  if (warn) warn.style.display = isAlkaline ? 'block' : 'none';
+  if (sopNote) sopNote.style.display = isAlkaline ? 'block' : 'none';
+
+  if (isAlkaline && warn) {
+    var title = lang === 'fr' ? '⚠ Eau alcaline détectée' : '⚠ Alkaline water detected';
+    var body = isStronglyAlk
+      ? (lang === 'fr'
+          ? 'pH > 8,5 : le chlore (Aquatabs) est quasi inactif à ce pH (OCl⁻ dominant). L\'ozone reste efficace mais sa demi-vie diminue. <strong>Montez d\'un niveau dans HM04</strong> et préférez l\'O₃ aux Aquatabs.'
+          : 'pH > 8.5: chlorine (Aquatabs) is nearly inactive at this pH (OCl⁻ dominant). O₃ remains effective but half-life decreases. <strong>Move up one level in HM04</strong> and prefer O₃ over Aquatabs.')
+      : (lang === 'fr'
+          ? 'pH 7,5–8,5 : légèrement alcalin — efficacité chlore réduite (~50% vs pH 7). L\'ozone reste bon. Envisagez de <strong>monter d\'un niveau dans HM04</strong> si vous utilisez des Aquatabs.'
+          : 'pH 7.5–8.5: slightly alkaline — chlorine effectiveness reduced (~50% vs pH 7). O₃ remains good. Consider <strong>moving up one level in HM04</strong> if using Aquatabs.');
+
+    var titleEl = document.getElementById('ph-warn-title');
+    var bodyEl = document.getElementById('ph-warn-body');
+    if (titleEl) titleEl.textContent = isStronglyAlk
+      ? (lang === 'fr' ? '⚠ pH très alcalin' : '⚠ Strongly alkaline water')
+      : (lang === 'fr' ? '⚠ Eau alcaline détectée' : '⚠ Alkaline water detected');
+    if (bodyEl) bodyEl.innerHTML = body;
+  }
+
+  if (isAlkaline && sopNote) {
+    var ph_label = isStronglyAlk ? (lang === 'fr' ? 'pH >8,5' : 'pH >8.5') : (lang === 'fr' ? 'pH 7,5–8,5' : 'pH 7.5–8.5');
+    sopNote.innerHTML = lang === 'fr'
+      ? '🧪 <strong>Correction pH (HM03) :</strong> ' + ph_label + ' détecté — considérez de monter d\'un niveau de protocole (ex. STD→VAR, VAR→CHOC). Préférez l\'O₃ aux Aquatabs en eau alcaline.'
+      : '🧪 <strong>pH correction (HM03):</strong> ' + ph_label + ' detected — consider upgrading one protocol level (e.g. STD→VAR, VAR→CHOC). Prefer O₃ over Aquatabs in alkaline water.';
+  }
 }
 
 // ── INIT ──
