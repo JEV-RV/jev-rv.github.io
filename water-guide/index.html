@@ -158,12 +158,12 @@ a:hover { text-decoration: underline; }
 /* Grid + X slider container */
 .hm-grid-wrap { flex: 1; min-width: 0; }
 .hm-x-label { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: #6a8aaa; margin-bottom: 6px; text-align: center; }
-.hm-grid { display: grid; border-radius: 6px; overflow: hidden; gap: 2px; background: #0a0c10; padding: 2px; margin-bottom: 8px; }
+.hm-grid { display: grid; border-radius: 6px; overflow: hidden; gap: 2px; background: #0a0c10; padding: 2px; margin-bottom: 0; }
 .hm-cell { border-radius: 3px; padding: 5px 4px; text-align: center; font-size: 10px; font-weight: 600; transition: all .25s; cursor: default; line-height: 1.2; min-height: 38px; display: flex; align-items: center; justify-content: center; position: relative; }
 .hm-cell.active-cell { outline: 3px solid #fff; outline-offset: -2px; z-index: 2; transform: scale(1.05); box-shadow: 0 0 12px rgba(255,255,255,0.35); }
 .hm-cell .pion { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 2px solid #1a1915; top: 3px; right: 3px; display: none; box-shadow: 0 0 6px rgba(255,255,255,0.8); }
 .hm-cell.active-cell .pion { display: block; }
-.hm-row-label { font-size: 10px; color: #8a8880; display: flex; align-items: center; padding-right: 4px; white-space: nowrap; justify-content: flex-end; min-width: 52px; }
+.hm-row-label { font-size: 10px; color: #8a8880; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; white-space: nowrap; height: 38px; flex-shrink: 0; min-width: 52px; }
 .hm-x-ticks { display: flex; gap: 2px; font-size: 9px; color: #8a8880; margin-bottom: 4px; }
 .hm-x-ticks span { flex: 1; text-align: center; line-height: 1.2; }
 .hm-x-slider-wrap { display: flex; gap: 2px; align-items: center; }
@@ -635,38 +635,31 @@ a:hover { text-decoration: underline; }
           <div class="hm-section-title" id="hm01-title">Bacterial growth risk in your tank</div>
           <div class="hm-section-sub" id="hm01-sub">Legionella optimal 32–35°C · inactive &lt;20°C · destroyed &gt;55°C <span class="ref-sup" title="CDC 2025 · WHO 2022 Legionellosis">[1,2]</span></div>
           <div class="hm-layout">
-            <!-- Y: temperature, vertical slider -->
-            <div class="hm-y-control">
-              <span class="hm-y-label" id="hm01-y-label">Temperature</span>
-              <input type="range" class="hm-y-slider" id="hm01-y" min="0" max="4" value="2" step="1" oninput="updateHM(1)">
-            </div>
-            <div class="hm-grid-wrap">
               <div class="hm-x-label" id="hm01-x-label">← Stagnation duration →</div>
-              <div style="display:flex;gap:2px;align-items:stretch;">
-                <!-- Row labels -->
-                <div style="display:flex;flex-direction:column;gap:2px;margin-top:0;">
+              <div class="hm-axis-row">
+                <div class="hm-y-col">
+                  <span class="hm-y-label" id="hm01-y-label">Temperature</span>
+                  <input type="range" class="hm-y-slider" id="hm01-y" min="0" max="4" value="2" step="1" oninput="updateHM(1)">
+                </div>
+                <div class="hm-row-labels">
                   <div class="hm-row-label" id="hm01-r4">&gt;35°C</div>
                   <div class="hm-row-label" id="hm01-r3">25–35°C</div>
                   <div class="hm-row-label" id="hm01-r2">15–25°C</div>
                   <div class="hm-row-label" id="hm01-r1">5–15°C</div>
                   <div class="hm-row-label" id="hm01-r0">&lt;5°C</div>
                 </div>
-                <!-- Grid 5×5 -->
-                <div class="hm-grid" style="grid-template-columns:repeat(5,1fr);flex:1;" id="hm01-grid">
-                  <!-- populated by JS -->
-                </div>
+                <div class="hm-grid" style="grid-template-columns:repeat(5,1fr);flex:1;" id="hm01-grid"></div>
               </div>
-              <div class="hm-x-ticks" id="hm01-xticks" style="margin-left:54px;">
+              <div class="hm-x-ticks" id="hm01-xticks">
                 <span id="hm01-x0">&lt;24h</span><span id="hm01-x1">1–3d</span><span id="hm01-x2">3–7d</span><span id="hm01-x3">7–14d</span><span id="hm01-x4">&gt;14d</span>
               </div>
-              <div style="margin-left:54px;display:flex;align-items:center;gap:8px;">
+              <div style="margin-top:4px;">
                 <input type="range" class="hm-x-slider" id="hm01-x" min="0" max="4" value="0" step="1" oninput="updateHM(1)">
               </div>
-              <div style="margin-left:54px;margin-top:8px;">
+              <div style="margin-top:8px;">
                 <span class="level-badge" id="hm01-badge">—</span>
               </div>
             </div>
-          </div>
         </div>
       </div>
     </div>
@@ -683,14 +676,13 @@ a:hover { text-decoration: underline; }
           <div class="hm-section-title" id="hm02-title">O₃ half-life in your water</div>
           <div class="hm-section-sub" id="hm02-sub">Natural water half-life 1–20 min depending on organic matter <span class="ref-sup" title="Hoigné & Bader 1976–83 · Langlais et al. 1991">[3,4]</span></div>
           <div class="hm-layout">
-            <div class="hm-y-control">
-              <span class="hm-y-label" id="hm02-y-label">Temperature</span>
-              <input type="range" class="hm-y-slider" id="hm02-y" min="0" max="4" value="2" step="1" oninput="updateHM(2)">
-            </div>
-            <div class="hm-grid-wrap">
               <div class="hm-x-label" id="hm02-x-label">← Water quality (ozone demand) →</div>
-              <div style="display:flex;gap:2px;align-items:stretch;">
-                <div style="display:flex;flex-direction:column;gap:2px;">
+              <div class="hm-axis-row">
+                <div class="hm-y-col">
+                  <span class="hm-y-label" id="hm02-y-label">Temperature</span>
+                  <input type="range" class="hm-y-slider" id="hm02-y" min="0" max="4" value="2" step="1" oninput="updateHM(2)">
+                </div>
+                <div class="hm-row-labels">
                   <div class="hm-row-label" id="hm02-r4">&gt;35°C</div>
                   <div class="hm-row-label" id="hm02-r3">25–35°C</div>
                   <div class="hm-row-label" id="hm02-r2">15–25°C</div>
@@ -699,17 +691,16 @@ a:hover { text-decoration: underline; }
                 </div>
                 <div class="hm-grid" style="grid-template-columns:repeat(5,1fr);flex:1;" id="hm02-grid"></div>
               </div>
-              <div class="hm-x-ticks" style="margin-left:54px;">
+              <div class="hm-x-ticks">
                 <span id="hm02-x0">Munic.<br>clear</span><span id="hm02-x1">Munic.<br>loaded</span><span id="hm02-x2">Well<br>moderate</span><span id="hm02-x3">Well<br>loaded</span><span id="hm02-x4">Very<br>loaded</span>
               </div>
-              <div style="margin-left:54px;display:flex;align-items:center;gap:8px;">
+              <div style="margin-top:4px;">
                 <input type="range" class="hm-x-slider" id="hm02-x" min="0" max="4" value="0" step="1" oninput="updateHM(2)">
               </div>
-              <div style="margin-left:54px;margin-top:8px;">
+              <div style="margin-top:8px;">
                 <span class="level-badge" id="hm02-badge">—</span>
               </div>
             </div>
-          </div>
         </div>
       </div>
     </div>
@@ -726,14 +717,13 @@ a:hover { text-decoration: underline; }
           <div class="hm-section-title" id="hm03-title">Chemical &amp; UV treatment resistance</div>
           <div class="hm-section-sub" id="hm03-sub">&gt;1 NTU reduces UV/chlorine effectiveness · EPA threshold &lt;1 NTU <span class="ref-sup" title="WHO/EPA Turbidity Review 2017 · EPA UV Disinfection Guidance Manual">[5,6]</span></div>
           <div class="hm-layout">
-            <div class="hm-y-control">
-              <span class="hm-y-label" id="hm03-y-label">pH</span>
-              <input type="range" class="hm-y-slider" id="hm03-y" min="0" max="4" value="2" step="1" oninput="updateHM(3)">
-            </div>
-            <div class="hm-grid-wrap">
               <div class="hm-x-label" id="hm03-x-label">← Turbidity / organic matter (NTU) →</div>
-              <div style="display:flex;gap:2px;align-items:stretch;">
-                <div style="display:flex;flex-direction:column;gap:2px;">
+              <div class="hm-axis-row">
+                <div class="hm-y-col">
+                  <span class="hm-y-label" id="hm03-y-label">pH</span>
+                  <input type="range" class="hm-y-slider" id="hm03-y" min="0" max="4" value="2" step="1" oninput="updateHM(3)">
+                </div>
+                <div class="hm-row-labels">
                   <div class="hm-row-label" id="hm03-r4">pH &gt;8.5</div>
                   <div class="hm-row-label" id="hm03-r3">7.5–8.5</div>
                   <div class="hm-row-label" id="hm03-r2">6.5–7.5</div>
@@ -742,17 +732,16 @@ a:hover { text-decoration: underline; }
                 </div>
                 <div class="hm-grid" style="grid-template-columns:repeat(5,1fr);flex:1;" id="hm03-grid"></div>
               </div>
-              <div class="hm-x-ticks" style="margin-left:54px;">
+              <div class="hm-x-ticks">
                 <span id="hm03-x0">&lt;0.5<br>Crystal</span><span id="hm03-x1">0.5–2<br>Clear</span><span id="hm03-x2">2–5<br>Hazy</span><span id="hm03-x3">5–15<br>Turbid</span><span id="hm03-x4">&gt;15<br>Opaque</span>
               </div>
-              <div style="margin-left:54px;display:flex;align-items:center;gap:8px;">
+              <div style="margin-top:4px;">
                 <input type="range" class="hm-x-slider" id="hm03-x" min="0" max="4" value="0" step="1" oninput="updateHM(3)">
               </div>
-              <div style="margin-left:54px;margin-top:8px;">
+              <div style="margin-top:8px;">
                 <span class="level-badge" id="hm03-badge">—</span>
               </div>
             </div>
-          </div>
         </div>
       </div>
     </div>
@@ -769,14 +758,13 @@ a:hover { text-decoration: underline; }
           <div class="hm-section-title" id="hm04-title">Protocol recommendation + SOP</div>
           <div class="hm-section-sub" id="hm04-sub">EPDM budget max 800 min O₃/year · STD=45 min · CHOC=75 min · 2×CHOC=150 min <span class="ref-sup" title="SOP Skøl v3.0 · field-validated">[7]</span></div>
           <div class="hm-layout">
-            <div class="hm-y-control">
-              <span class="hm-y-label" id="hm04-y-label">Temperature</span>
-              <input type="range" class="hm-y-slider" id="hm04-y" min="0" max="4" value="2" step="1" oninput="updateHM(4)">
-            </div>
-            <div class="hm-grid-wrap">
               <div class="hm-x-label" id="hm04-x-label">← Source &amp; usage context →</div>
-              <div style="display:flex;gap:2px;align-items:stretch;">
-                <div style="display:flex;flex-direction:column;gap:2px;">
+              <div class="hm-axis-row">
+                <div class="hm-y-col">
+                  <span class="hm-y-label" id="hm04-y-label">Temperature</span>
+                  <input type="range" class="hm-y-slider" id="hm04-y" min="0" max="4" value="2" step="1" oninput="updateHM(4)">
+                </div>
+                <div class="hm-row-labels">
                   <div class="hm-row-label" id="hm04-r4">&gt;35°C</div>
                   <div class="hm-row-label" id="hm04-r3">25–35°C</div>
                   <div class="hm-row-label" id="hm04-r2">15–25°C</div>
@@ -785,17 +773,16 @@ a:hover { text-decoration: underline; }
                 </div>
                 <div class="hm-grid" style="grid-template-columns:repeat(5,1fr);flex:1;" id="hm04-grid"></div>
               </div>
-              <div class="hm-x-ticks" style="margin-left:54px;">
+              <div class="hm-x-ticks">
                 <span id="hm04-x0">Munic.<br>camping</span><span id="hm04-x1">Frequent<br>refill</span><span id="hm04-x2">Boon.<br>normal</span><span id="hm04-x3">Boon.<br>hot</span><span id="hm04-x4">Long<br>stagnation</span>
               </div>
-              <div style="margin-left:54px;display:flex;align-items:center;gap:8px;">
+              <div style="margin-top:4px;">
                 <input type="range" class="hm-x-slider" id="hm04-x" min="0" max="4" value="0" step="1" oninput="updateHM(4)">
               </div>
-              <div style="margin-left:54px;margin-top:8px;">
+              <div style="margin-top:8px;">
                 <span class="level-badge" id="hm04-badge">STD</span>
               </div>
             </div>
-          </div>
 
           <!-- SOP display -->
           <div class="sop-display" id="sop-panel">
