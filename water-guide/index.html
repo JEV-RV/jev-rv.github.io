@@ -312,25 +312,115 @@ a:hover { text-decoration: underline; }
     </div>
 
     <!-- Hardness table condensed -->
-    <div class="card" style="overflow:hidden;margin-bottom:0;">
-      <h3 style="margin-bottom:0.75rem;" id="s1-htable-title">💧 Water Hardness & pH by Region</h3>
-      <div style="overflow-x:auto;">
-        <table class="compare-table">
-          <thead><tr>
-            <th id="th-region">Region</th>
-            <th id="th-hard">Hardness</th>
-            <th id="th-ph">pH</th>
-            <th id="th-ro">RO load</th>
-          </tr></thead>
-          <tbody>
-            <tr><td>🇵🇹 Portugal — Atlantic</td><td><span class="badge badge-green" id="hard-pt">Soft (50–120)</span></td><td>6.8–7.4</td><td><span class="badge badge-green" id="ro-pt">Low</span></td></tr>
-            <tr><td>🇫🇷 France — Atlantic / Brittany</td><td><span class="badge badge-green" id="hard-fr1">Soft–Mod (80–180)</span></td><td>7.0–7.8</td><td><span class="badge badge-green" id="ro-fr1">Low–Mod</span></td></tr>
-            <tr><td>🇫🇷 France — Paris / Southeast</td><td><span class="badge badge-amber" id="hard-fr2">Hard (200–400)</span></td><td>7.4–8.0</td><td><span class="badge badge-amber" id="ro-fr2">Moderate</span></td></tr>
-            <tr><td>🇪🇸 Spain — Med coast</td><td><span class="badge badge-amber" id="hard-es">Mod–Hard (150–350)</span></td><td>7.2–8.2</td><td><span class="badge badge-amber" id="ro-es">Moderate</span></td></tr>
-            <tr><td>🇩🇪 Germany / 🇦🇹 Austria</td><td><span class="badge badge-red" id="hard-de">Very Hard (300–500)</span></td><td>7.5–8.5</td><td><span class="badge badge-red" id="ro-de">High</span></td></tr>
-            <tr><td>🇳🇱 Netherlands / 🇧🇪 Belgium</td><td><span class="badge badge-blue" id="hard-nlbe">Variable (100–300)</span></td><td>7.2–7.9</td><td><span class="badge badge-blue" id="ro-nlbe">Moderate</span></td></tr>
-          </tbody>
-        </table>
+    <!-- Interactive Europe Map -->
+    <div class="card" style="overflow:hidden;margin-bottom:0;padding:1.25rem;">
+      <h3 style="margin-bottom:0.4rem;" id="s1-htable-title">💧 Water Hardness & pH — Click a Country</h3>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:1rem;" id="s1-map-hint">Click any highlighted country for its water spec sheet.</p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-start;">
+        <!-- SVG Map -->
+        <div style="flex:1;min-width:260px;max-width:480px;">
+          <svg id="europe-map" viewBox="0 0 520 440" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;cursor:pointer;">
+            <!-- Color legend gradient bg -->
+            <defs>
+              <style>
+                .cmap { stroke:#fff; stroke-width:0.8; transition:opacity .15s; }
+                .cmap:hover { opacity:0.75; }
+                .cmap.selected { stroke:#1a1915; stroke-width:2; opacity:1; }
+                /* hardness colors: soft=green, mod=amber, hard=orange, vhard=red */
+                .h-soft    { fill:#b3dfc8; }
+                .h-mod     { fill:#fdf0d5; }
+                .h-hard    { fill:#fcd8a8; }
+                .h-vhard   { fill:#f0b3b3; }
+                .h-variable{ fill:#bbd0f0; }
+                .h-na      { fill:#e8e5de; }
+              </style>
+            </defs>
+            <!-- Simplified country shapes — approximate polygons optimized for clickability -->
+            <!-- Norway -->
+            <path id="cm-NO" class="cmap h-soft" d="M238,20 L268,18 L285,28 L292,50 L278,70 L268,90 L255,105 L248,120 L238,130 L225,120 L218,100 L215,80 L220,55 L228,35 Z" onclick="selectCountry('NO')"/>
+            <!-- Sweden -->
+            <path id="cm-SE" class="cmap h-mod" d="M268,18 L292,22 L308,35 L315,55 L310,80 L300,100 L292,120 L282,140 L272,155 L262,145 L255,130 L255,105 L268,90 L278,70 L292,50 L285,28 Z" onclick="selectCountry('SE')"/>
+            <!-- Finland -->
+            <path id="cm-FI" class="cmap h-soft" d="M308,20 L335,18 L355,28 L360,50 L352,75 L342,95 L328,110 L315,100 L310,80 L315,55 L308,35 Z" onclick="selectCountry('FI')"/>
+            <!-- Denmark -->
+            <path id="cm-DK" class="cmap h-mod" d="M255,140 L272,135 L280,148 L272,160 L258,162 L250,155 L252,145 Z" onclick="selectCountry('DK')"/>
+            <!-- UK (England+Scotland+Wales) -->
+            <path id="cm-GB" class="cmap h-variable" d="M158,80 L178,72 L192,80 L198,95 L195,115 L188,130 L178,145 L168,155 L158,148 L148,135 L145,118 L148,100 Z" onclick="selectCountry('GB')"/>
+            <!-- Ireland -->
+            <path id="cm-IE" class="cmap h-mod" d="M138,108 L152,103 L158,115 L155,130 L145,138 L133,132 L128,120 L132,110 Z" onclick="selectCountry('IE')"/>
+            <!-- Netherlands -->
+            <path id="cm-NL" class="cmap h-variable" d="M218,148 L235,143 L242,153 L238,165 L225,168 L215,160 L215,152 Z" onclick="selectCountry('NL')"/>
+            <!-- Belgium -->
+            <path id="cm-BE" class="cmap h-hard" d="M215,168 L238,165 L245,175 L240,185 L222,186 L212,178 Z" onclick="selectCountry('BE')"/>
+            <!-- Luxembourg -->
+            <path id="cm-LU" class="cmap h-hard" d="M238,182 L245,180 L248,188 L242,194 L236,190 Z" onclick="selectCountry('LU')"/>
+            <!-- France -->
+            <path id="cm-FR" class="cmap h-variable" d="M162,168 L190,162 L215,168 L222,186 L240,185 L248,200 L252,220 L242,242 L225,255 L205,260 L185,252 L170,240 L158,222 L155,202 L158,182 Z" onclick="selectCountry('FR')"/>
+            <!-- Spain -->
+            <path id="cm-ES" class="cmap h-hard" d="M155,262 L178,255 L205,260 L228,258 L245,265 L248,285 L238,305 L218,318 L195,320 L172,312 L155,298 L148,280 L150,268 Z" onclick="selectCountry('ES')"/>
+            <!-- Portugal -->
+            <path id="cm-PT" class="cmap h-soft" d="M148,268 L162,265 L168,280 L165,298 L155,308 L143,302 L138,285 L140,272 Z" onclick="selectCountry('PT')"/>
+            <!-- Germany -->
+            <path id="cm-DE" class="cmap h-vhard" d="M240,148 L270,143 L292,148 L298,165 L295,185 L282,200 L265,208 L250,205 L240,195 L236,180 L238,165 L242,153 Z" onclick="selectCountry('DE')"/>
+            <!-- Switzerland -->
+            <path id="cm-CH" class="cmap h-mod" d="M240,210 L262,208 L272,218 L268,230 L252,232 L240,228 L238,218 Z" onclick="selectCountry('CH')"/>
+            <!-- Austria -->
+            <path id="cm-AT" class="cmap h-vhard" d="M270,200 L298,195 L318,200 L322,212 L308,222 L285,225 L272,220 L268,210 Z" onclick="selectCountry('AT')"/>
+            <!-- Italy -->
+            <path id="cm-IT" class="cmap h-hard" d="M240,232 L265,228 L285,235 L295,250 L298,270 L292,295 L280,315 L268,330 L260,320 L255,300 L252,278 L248,258 L242,242 Z" onclick="selectCountry('IT')"/>
+            <!-- Poland -->
+            <path id="cm-PL" class="cmap h-hard" d="M295,148 L325,143 L348,150 L355,165 L348,182 L332,192 L315,195 L300,188 L295,172 L295,158 Z" onclick="selectCountry('PL')"/>
+            <!-- Czech Republic -->
+            <path id="cm-CZ" class="cmap h-hard" d="M270,188 L298,183 L318,190 L320,202 L305,210 L282,208 L268,200 Z" onclick="selectCountry('CZ')"/>
+            <!-- Hungary -->
+            <path id="cm-HU" class="cmap h-hard" d="M305,218 L330,213 L348,218 L352,232 L340,242 L318,245 L302,238 L298,225 Z" onclick="selectCountry('HU')"/>
+            <!-- Croatia / Slovenia -->
+            <path id="cm-HR" class="cmap h-hard" d="M280,240 L308,235 L320,245 L318,258 L302,265 L282,260 L275,250 Z" onclick="selectCountry('HR')"/>
+            <!-- Romania -->
+            <path id="cm-RO" class="cmap h-hard" d="M330,210 L358,205 L375,215 L378,235 L368,252 L348,258 L328,252 L318,238 L320,220 Z" onclick="selectCountry('RO')"/>
+            <!-- Greece -->
+            <path id="cm-GR" class="cmap h-vhard" d="M310,295 L332,288 L345,298 L342,318 L328,328 L312,325 L302,312 L305,300 Z" onclick="selectCountry('GR')"/>
+            <!-- Estonia / Latvia / Lithuania -->
+            <path id="cm-EE" class="cmap h-mod" d="M318,105 L342,100 L355,110 L352,125 L335,130 L318,125 L312,115 Z" onclick="selectCountry('EE')"/>
+            <!-- Country labels (small, for orientation) -->
+            <text x="248" y="75" font-size="8" fill="#4a5a6a" text-anchor="middle" pointer-events="none">NO</text>
+            <text x="288" y="85" font-size="8" fill="#4a5a6a" text-anchor="middle" pointer-events="none">SE</text>
+            <text x="335" y="65" font-size="8" fill="#4a5a6a" text-anchor="middle" pointer-events="none">FI</text>
+            <text x="264" y="155" font-size="7" fill="#4a5a6a" text-anchor="middle" pointer-events="none">DK</text>
+            <text x="172" y="115" font-size="8" fill="#4a5a6a" text-anchor="middle" pointer-events="none">GB</text>
+            <text x="143" y="122" font-size="7" fill="#4a5a6a" text-anchor="middle" pointer-events="none">IE</text>
+            <text x="228" y="158" font-size="7" fill="#4a5a6a" text-anchor="middle" pointer-events="none">NL</text>
+            <text x="226" y="178" font-size="7" fill="#4a5a6a" text-anchor="middle" pointer-events="none">BE</text>
+            <text x="265" y="170" font-size="7" fill="#4a5a6a" text-anchor="middle" pointer-events="none">DE</text>
+            <text x="188" y="215" font-size="9" fill="#4a5a6a" text-anchor="middle" pointer-events="none">FR</text>
+            <text x="193" y="292" font-size="9" fill="#4a5a6a" text-anchor="middle" pointer-events="none">ES</text>
+            <text x="152" y="290" font-size="7" fill="#4a5a6a" text-anchor="middle" pointer-events="none">PT</text>
+            <text x="255" y="220" font-size="7" fill="#4a5a6a" text-anchor="middle" pointer-events="none">CH</text>
+            <text x="296" y="212" font-size="7" fill="#4a5a6a" text-anchor="middle" pointer-events="none">AT</text>
+            <text x="268" y="278" font-size="8" fill="#4a5a6a" text-anchor="middle" pointer-events="none">IT</text>
+            <text x="322" y="170" font-size="7" fill="#4a5a6a" text-anchor="middle" pointer-events="none">PL</text>
+            <text x="292" y="198" font-size="7" fill="#4a5a6a" text-anchor="middle" pointer-events="none">CZ</text>
+            <text x="326" y="232" font-size="7" fill="#4a5a6a" text-anchor="middle" pointer-events="none">HU</text>
+            <text x="350" y="232" font-size="7" fill="#4a5a6a" text-anchor="middle" pointer-events="none">RO</text>
+            <text x="325" y="312" font-size="7" fill="#4a5a6a" text-anchor="middle" pointer-events="none">GR</text>
+            <text x="333" y="116" font-size="7" fill="#4a5a6a" text-anchor="middle" pointer-events="none">EE/LV/LT</text>
+            <!-- Legend -->
+            <rect x="10" y="385" width="12" height="10" fill="#b3dfc8" stroke="#aaa" stroke-width="0.5"/>
+            <text x="26" y="394" font-size="9" fill="#4a5a6a">Soft (&lt;150)</text>
+            <rect x="85" y="385" width="12" height="10" fill="#fdf0d5" stroke="#aaa" stroke-width="0.5"/>
+            <text x="101" y="394" font-size="9" fill="#4a5a6a">Moderate (150–250)</text>
+            <rect x="215" y="385" width="12" height="10" fill="#fcd8a8" stroke="#aaa" stroke-width="0.5"/>
+            <text x="231" y="394" font-size="9" fill="#4a5a6a">Hard (250–400)</text>
+            <rect x="320" y="385" width="12" height="10" fill="#f0b3b3" stroke="#aaa" stroke-width="0.5"/>
+            <text x="336" y="394" font-size="9" fill="#4a5a6a">Very Hard (&gt;400)</text>
+            <rect x="420" y="385" width="12" height="10" fill="#bbd0f0" stroke="#aaa" stroke-width="0.5"/>
+            <text x="436" y="394" font-size="9" fill="#4a5a6a">Variable</text>
+          </svg>
+        </div>
+        <!-- Spec sheet panel -->
+        <div id="country-panel" style="flex:1;min-width:220px;background:var(--surface2);border-radius:var(--radius);padding:1.1rem;border:1px solid var(--border);">
+          <p style="font-size:13px;color:var(--text3);font-style:italic;text-align:center;padding:1rem 0;" id="map-prompt-text">← Click a country on the map</p>
+        </div>
       </div>
     </div>
   </div>
@@ -437,12 +527,18 @@ a:hover { text-decoration: underline; }
       <div class="product-example-title">🛠️ <span id="pe-title">Real-world example: Skøl (LTV Unity FX 2025) — complete implementation</span></div>
       <p style="font-size:12px;color:#8a9898;margin-bottom:0.75rem;" id="pe-sub">All 4 barriers deployed. Products listed as reference — adapt to your RV and budget.</p>
       <div class="product-grid">
-        <div class="product-item"><a href="https://www.goblutech.com/blutec-ar3" target="_blank">🔵 BLUTEC AR3<span class="p-role" id="p-blutec-role">Inlet filter — 5µm + 0.2µm + UVC-LED</span></a></div>
-        <div class="product-item"><a href="https://www.amazon.com/dp/B09C2XD6YK" target="_blank">⚡ Airthereal AH1000<span class="p-role" id="p-ah1000-role">O₃ generator, 1000 mg/h — tank treatment</span></a></div>
-        <div class="product-item"><a href="https://www.amazon.com/s?k=aquatabs+334mg" target="_blank">💊 Aquatabs 334 mg<span class="p-role" id="p-aquatabs-role">NaDCC tablets — alternative to O₃</span></a></div>
-        <div class="product-item"><a href="https://www.novowater.ca/product/cro-800ux6/" target="_blank">💎 NOVO CRO-800UX6<span class="p-role" id="p-novo-role">Tankless RO — kitchen point-of-use</span></a></div>
-        <div class="product-item"><a href="https://www.thecabindepot.ca/acuva-arrow-1-2" target="_blank">🔆 ACUVA Arrow 1.2<span class="p-role" id="p-acuva-role">UV-LED sterilizer — post-RO</span></a></div>
-        <div class="product-item"><a href="https://www.amazon.com/s?k=ds18b20+waterproof+probe" target="_blank">🌡️ DS18B20 + Tuya WiFi<span class="p-role" id="p-tuya-role">Tank temp monitor — key for protocol selection</span></a></div>
+        <div class="product-item"><a href="https://goblutech.com/products/ar3-led-uvc-rv-water-filtration-purification-system" target="_blank">🔵 BLUTEC AR3<span class="p-role" id="p-blutec-role">Inlet filter — 5µm + 0.2µm + UVC-LED (NSF-certified)</span></a></div>
+        <div class="product-item"><a href="https://goblutech.com/products/offgrid-plus-filter-recharge-pack" target="_blank">🔵 BLUTEC Offgrid+ Pack<span class="p-role">Filter recharge pack (5-inch)</span></a></div>
+        <div class="product-item"><a href="https://goblutech.com/products/water-softener-with-smart-cap" target="_blank">💧 BLUTEC Water Softener<span class="p-role">Smart Cap water softener</span></a></div>
+        <div class="product-item"><a href="https://novowater.com/tankless-ro-cro-800ux6/" target="_blank">💎 NOVO CRO-800UX6<span class="p-role" id="p-novo-role">Tankless RO — kitchen POU (St-Jean Filtration)</span></a></div>
+        <div class="product-item"><a href="https://thecabindepot.ca/fr/products/acuva-arrowmax-1-2-uv-led-water-purifier-with-smart-faucet" target="_blank">🔆 ACUVA Arrow 1.2<span class="p-role" id="p-acuva-role">UV-LED sterilizer — post-RO (with smart faucet)</span></a></div>
+        <div class="product-item"><a href="https://a.co/d/3ppxq14" target="_blank">💊 Aquatabs 334 mg<span class="p-role" id="p-aquatabs-role">NaDCC tablets — fresh tank sanitizing</span></a></div>
+        <div class="product-item"><a href="https://woder.com/products/wd-g4-210-jg/" target="_blank">♦️ WODER WD-G4-210-JG<span class="p-role">Carbon pre-filter (NSF-42) — Carbon #1 or #2</span></a></div>
+        <div class="product-item"><a href="https://a.co/d/07pBMdwt" target="_blank">♦️ Carbon filter (alt.)<span class="p-role">Activated carbon inline — NSF-42 alternative</span></a></div>
+        <div class="product-item"><a href="https://www.sheret.com/account/catalog/product/1754531" target="_blank">🚿 Robinet VS888<span class="p-role">Matte black non-air gap faucet</span></a></div>
+        <div class="product-item"><a href="https://a.co/d/eV4gexq" target="_blank">🔧 SharkBite ½ PEX × ⅜<span class="p-role">Push valve — tie-in existing water line</span></a></div>
+        <div class="product-item"><a href="https://a.co/d/0xg5GXC" target="_blank">🏔️ Remineralization filter<span class="p-role">Alkaline + pH balancer — replace every 6 months</span></a></div>
+        <div class="product-item"><a href="https://www.amazon.com/s?k=ds18b20+waterproof+tuya+wifi" target="_blank">🌡️ DS18B20 + Tuya WiFi<span class="p-role" id="p-tuya-role">Tank temp monitor — key for protocol selection</span></a></div>
       </div>
     </div>
   </div>
@@ -1188,11 +1284,7 @@ const LANG = {
     's1-eu-label':'Free chlorine (EU)','s1-eu-sub':'Low residual at campsite tap after long distribution lines. Bacteria can survive.',
     's1-leg-label':'Legionella optimum','s1-leg-sub':'A parked RV in summer sun is a near-ideal Legionella environment above 20°C.',
     's1-hard-label':'Hardness mg/L range','s1-hard-sub':'Soft in Portugal/Brittany. Extremely hard in Germany/Austria/Spain Med coast.',
-    's1-htable-title':'💧 Water Hardness & pH by Region',
-    'th-region':'Region','th-hard':'Hardness','th-ph':'pH','th-ro':'RO load',
-    'hard-pt':'Soft (50–120)','ro-pt':'Low','hard-fr1':'Soft–Mod (80–180)','ro-fr1':'Low–Mod',
-    'hard-fr2':'Hard (200–400)','ro-fr2':'Moderate','hard-es':'Mod–Hard (150–350)','ro-es':'Moderate',
-    'hard-de':'Very Hard (300–500)','ro-de':'High','hard-nlbe':'Variable (100–300)','ro-nlbe':'Moderate',
+    's1-htable-title':'💧 Water Hardness & pH — Click a Country','s1-map-hint':'Click any highlighted country for its water spec sheet.',
     's2-label':'Section 2','s2-title':'The 20% Rule & Stagnation Risk',
     's2-intro':'One of the most effective practices costs nothing. Keep your tank ≤20% full while driving. The stagnation window is the most important variable for bacterial risk in summer Europe.',
     's2-stag-title':'Stagnation Risk — Temperature × Time',
@@ -1218,7 +1310,6 @@ const LANG = {
     'pe-title':'Real-world example: Skøl (LTV Unity FX 2025) — complete implementation',
     'pe-sub':'All 4 barriers deployed. Products listed as reference — adapt to your RV and budget.',
     'p-blutec-role':'Inlet filter — 5µm + 0.2µm + UVC-LED',
-    'p-ah1000-role':'O₃ generator, 1000 mg/h — tank treatment',
     'p-aquatabs-role':'NaDCC tablets — alternative to O₃',
     'p-novo-role':'Tankless RO — kitchen point-of-use',
     'p-acuva-role':'UV-LED sterilizer — post-RO',
@@ -1291,10 +1382,6 @@ const LANG = {
     's1-leg-label':'Optimum Legionella','s1-leg-sub':'Un VR stationné au soleil d\'été est un environnement presque idéal pour la Legionella au-dessus de 20°C.',
     's1-hard-label':'Plage dureté mg/L','s1-hard-sub':'Douce au Portugal/Bretagne. Extrêmement dure en Allemagne/Autriche/Espagne côte méditerranéenne.',
     's1-htable-title':'💧 Dureté de l\'eau et pH par région',
-    'th-region':'Région','th-hard':'Dureté','th-ph':'pH','th-ro':'Charge RO',
-    'hard-pt':'Douce (50–120)','ro-pt':'Faible','hard-fr1':'Douce–Mod (80–180)','ro-fr1':'Faible–Mod',
-    'hard-fr2':'Dure (200–400)','ro-fr2':'Modérée','hard-es':'Mod–Dure (150–350)','ro-es':'Modérée',
-    'hard-de':'Très dure (300–500)','ro-de':'Élevée','hard-nlbe':'Variable (100–300)','ro-nlbe':'Modérée',
     's2-label':'Section 2','s2-title':'La règle des 20% et le risque de stagnation',
     's2-intro':'L\'une des pratiques les plus efficaces ne coûte rien. Gardez votre réservoir à ≤20% pendant le trajet. La durée de stagnation est la variable la plus importante pour le risque bactérien en Europe en été.',
     's2-stag-title':'Risque de stagnation — Température × Durée',
@@ -1320,7 +1407,6 @@ const LANG = {
     'pe-title':'Exemple concret : Skøl (LTV Unity FX 2025) — implémentation complète',
     'pe-sub':'Les 4 barrières déployées. Produits donnés en référence — adaptez à votre VR et votre budget.',
     'p-blutec-role':'Filtre entrée — 5µm + 0,2µm + UVC-LED',
-    'p-ah1000-role':'Générateur O₃, 1000 mg/h — traitement réservoir',
     'p-aquatabs-role':'Comprimés NaDCC — alternative à l\'O₃',
     'p-novo-role':'RO sans réservoir — point d\'utilisation cuisine',
     'p-acuva-role':'Stérilisateur UV-LED — post-RO',
@@ -1393,14 +1479,352 @@ function setLang(l) {
   }
   // Rebuild heatmap grids (labels change)
   [1,2,3,4].forEach(n => { buildGrid(n); updateHM(n); });
+  // Update map prompt
+  const mp = document.getElementById('map-prompt-text');
+  if (mp && !currentSelectedCountry) mp.textContent = l==='fr' ? '← Cliquez un pays sur la carte' : '← Click a country on the map';
+  // Re-render country panel if one is selected
+  if (currentSelectedCountry) selectCountry(currentSelectedCountry);
   // Update SOP for current HM04 state
   const gridRow = 4 - state[4].y;
   const proto = HM04[gridRow][state[4].x];
   updateSOP(proto, state[4].y, state[4].x);
 }
 
-// ── INIT ──
-initHeatmaps();
+
+// ── COUNTRY WATER DATA ──
+const COUNTRY_DATA = {
+  NO: {
+    flag:'🇳🇴', name_en:'Norway', name_fr:'Norvège',
+    hardness:'20–80 mg/L', hardness_class:'soft', ph:'6.8–7.5', chlorine:'~0.05–0.1 mg/L',
+    turbidity:'Very low (granite bedrock, surface water dominant)',
+    notes_en:'Some of the softest water in Europe — largely sourced from surface runoff over granite. Very low mineral content. Virtually no scaling risk. RO load minimal. Low O₃ demand.',
+    notes_fr:'Parmi les eaux les plus douces d\'Europe — principalement eau de surface sur granite. Très faible teneur en minéraux. Risque de calcaire quasi nul. Charge RO minimale.',
+    ro_load:'Very Low', bacteria_risk:'Low', legionella_notes_en:'Low risk — cold water most of the year.',
+    legionella_notes_fr:'Risque faible — eau froide la majeure partie de l\'année.',
+    recommend_en:'Aquatabs sufficient for short stays. O₃ STD for extended storage.',
+    recommend_fr:'Aquatabs suffisants pour les courts séjours. O₃ STD pour stockage prolongé.'
+  },
+  SE: {
+    flag:'🇸🇪', name_en:'Sweden', name_fr:'Suède',
+    hardness:'50–200 mg/L (varies: soft N/W, harder S/E)',
+    hardness_class:'mod', ph:'7.0–7.8', chlorine:'~0.05–0.15 mg/L',
+    turbidity:'Generally low',
+    notes_en:'Significant regional variation. Northern/western Sweden very soft (like Norway). Southern Sweden (Skåne, Gothenburg) moderately hard. Stockholm area moderate. UV drinking water treatment common — lower chlorine residual.',
+    notes_fr:'Variation régionale importante. Nord/ouest très doux (comme Norvège). Sud (Skåne, Göteborg) modérément dur. Stockholm modéré. Traitement UV courant — résiduel chlore faible.',
+    ro_load:'Low–Moderate', bacteria_risk:'Low–Moderate',
+    legionella_notes_en:'Summer camping: watch stagnation above 20°C.',
+    legionella_notes_fr:'Camping estival : surveiller stagnation au-dessus de 20°C.',
+    recommend_en:'STD protocol for most regions. VAR if well source.',
+    recommend_fr:'Protocole STD pour la plupart des régions. VAR si source puits.'
+  },
+  FI: {
+    flag:'🇫🇮', name_en:'Finland', name_fr:'Finlande',
+    hardness:'20–100 mg/L', hardness_class:'soft', ph:'6.5–7.5', chlorine:'~0.05–0.1 mg/L',
+    turbidity:'Very low (lake/groundwater, extensive treatment)',
+    notes_en:'Finland has exceptionally high quality drinking water — among the best in Europe. Very soft, low minerals. Vast lake and groundwater systems, extensively treated. Very low RO load and O₃ demand.',
+    notes_fr:'Qualité d\'eau exceptionnelle — parmi les meilleures d\'Europe. Très douce, faibles minéraux. Vastes systèmes lacustres et souterrains, traitement extensif. Très faible charge RO.',
+    ro_load:'Very Low', bacteria_risk:'Low',
+    legionella_notes_en:'Short summer season limits risk. Standard precautions apply.',
+    legionella_notes_fr:'Courte saison estivale limite le risque. Précautions standards.',
+    recommend_en:'Aquatabs or STD sufficient. Excellent source water.',
+    recommend_fr:'Aquatabs ou STD suffisants. Excellente eau source.'
+  },
+  DK: {
+    flag:'🇩🇰', name_en:'Denmark', name_fr:'Danemark',
+    hardness:'100–350 mg/L (mostly hard)', hardness_class:'hard', ph:'7.2–8.0', chlorine:'~0.05–0.1 mg/L',
+    turbidity:'Low — 100% groundwater nationally',
+    notes_en:'Denmark uses 100% groundwater — unusual in Europe. Hard to very hard in most areas (limestone aquifers). Copenhagen area: ~200–300 mg/L. Jutland varies. Low bacteria risk but scaling significant. RO highly recommended.',
+    notes_fr:'Danemark utilise 100% eau souterraine — inhabituel en Europe. Dure à très dure (aquifères calcaires). Région de Copenhague : ~200–300 mg/L. Risque bactérien faible mais calcaire significatif. RO très recommandé.',
+    ro_load:'Moderate–High', bacteria_risk:'Low',
+    legionella_notes_en:'Low Legionella risk. Scale buildup in RO and pipes is the main concern.',
+    legionella_notes_fr:'Risque Legionella faible. L\'entartrage est la principale préoccupation.',
+    recommend_en:'STD sufficient bacterially. RO essential for hard water protection.',
+    recommend_fr:'STD suffisant bactériologiquement. RO essentiel pour protection calcaire.'
+  },
+  GB: {
+    flag:'🇬🇧', name_en:'United Kingdom', name_fr:'Royaume-Uni',
+    hardness:'England: 120–330 mg/L hard (SE) · Scotland: 30–80 mg/L soft',
+    hardness_class:'variable', ph:'7.0–8.0', chlorine:'0.1–0.5 mg/L (higher than EU average)',
+    turbidity:'Low — well treated',
+    notes_en:'Huge regional variation. Scotland: very soft, granite geology. England: South East/East Midlands very hard (chalk/limestone). UK maintains higher chlorine residuals than continental Europe. Wales moderately soft.',
+    notes_fr:'Variation régionale énorme. Écosse : très douce, géologie granitique. Angleterre du Sud-Est/East Midlands très dure (craie/calcaire). Royaume-Uni maintient des résidus chlore plus élevés. Pays de Galles modérément doux.',
+    ro_load:'Variable (Low Scotland / High SE England)', bacteria_risk:'Low (higher chlorine residual)',
+    legionella_notes_en:'Lower Legionella risk than EU due to higher chlorine. Still apply stagnation precautions.',
+    legionella_notes_fr:'Risque Legionella plus faible qu\'UE grâce au chlore plus élevé. Précautions stagnation maintenues.',
+    recommend_en:'Scotland: Aquatabs. SE England: STD + RO essential for hard water.',
+    recommend_fr:'Écosse : Aquatabs. SE Angleterre : STD + RO essentiel pour eau dure.'
+  },
+  IE: {
+    flag:'🇮🇪', name_en:'Ireland', name_fr:'Irlande',
+    hardness:'80–250 mg/L (variable by region)', hardness_class:'mod', ph:'7.0–7.8', chlorine:'~0.1–0.3 mg/L',
+    turbidity:'Generally low',
+    notes_en:'Mixed geology — limestone in central/eastern Ireland produces moderate hardness. Atlantic coast areas (Connaught) softer. Irish Water does not soften water. Dublin area moderately hard.',
+    notes_fr:'Géologie mixte — calcaire dans le centre/est produit une dureté modérée. Côtes atlantiques (Connacht) plus douces. Irish Water ne traite pas la dureté. Dublin modérément dur.',
+    ro_load:'Low–Moderate', bacteria_risk:'Low',
+    legionella_notes_en:'Mild climate limits summer risk. Standard precautions.',
+    legionella_notes_fr:'Climat doux limite le risque estival. Précautions standards.',
+    recommend_en:'STD protocol. RO beneficial in central/eastern Ireland.',
+    recommend_fr:'Protocole STD. RO bénéfique dans le centre/est de l\'Irlande.'
+  },
+  NL: {
+    flag:'🇳🇱', name_en:'Netherlands', name_fr:'Pays-Bas',
+    hardness:'100–300 mg/L (varies by province)', hardness_class:'variable', ph:'7.2–7.9', chlorine:'0.05–0.15 mg/L',
+    turbidity:'Very low — advanced treatment',
+    notes_en:'Strong regional variation: Amsterdam ~150 mg/L, Rotterdam ~250 mg/L, some provinces softer. Netherlands has excellent water quality — one of Europe\'s best. Low chlorine (often uses UV + ozone treatment at plants).',
+    notes_fr:'Variation régionale forte : Amsterdam ~150 mg/L, Rotterdam ~250 mg/L, certaines provinces plus douces. Excellente qualité d\'eau — parmi les meilleures d\'Europe. Chlore faible (souvent UV + ozone en usine).',
+    ro_load:'Moderate', bacteria_risk:'Low',
+    legionella_notes_en:'Low risk. Low chlorine residual — apply stagnation precautions in summer.',
+    legionella_notes_fr:'Risque faible. Résiduel chlore bas — précautions stagnation en été.',
+    recommend_en:'STD sufficient. RO useful in harder provinces.',
+    recommend_fr:'STD suffisant. RO utile dans les provinces plus dures.'
+  },
+  BE: {
+    flag:'🇧🇪', name_en:'Belgium', name_fr:'Belgique',
+    hardness:'150–350 mg/L (moderate to hard)', hardness_class:'hard', ph:'7.2–8.0', chlorine:'0.1–0.2 mg/L',
+    turbidity:'Low',
+    notes_en:'Variable by region: Flanders (chalk/limestone) generally harder than Wallonia (Ardennes). Brussels area moderate. Generally good quality but harder than Scandinavia/Atlantic zone.',
+    notes_fr:'Variable par région : Flandre (craie/calcaire) généralement plus dure que Wallonie (Ardennes). Région de Bruxelles modérée. Bonne qualité mais plus dure que Scandinavie/zone atlantique.',
+    ro_load:'Moderate–High', bacteria_risk:'Low',
+    legionella_notes_en:'Standard summer stagnation precautions.',
+    legionella_notes_fr:'Précautions standard de stagnation estivale.',
+    recommend_en:'STD + RO recommended especially in Flemish campgrounds.',
+    recommend_fr:'STD + RO recommandés, surtout dans les campings flamands.'
+  },
+  LU: {
+    flag:'🇱🇺', name_en:'Luxembourg', name_fr:'Luxembourg',
+    hardness:'200–350 mg/L', hardness_class:'hard', ph:'7.3–7.9', chlorine:'0.05–0.15 mg/L',
+    turbidity:'Low',
+    notes_en:'Hard water from limestone aquifers in the south. Good quality, low bacteria risk. Scaling concern for hot water systems and RO membrane.',
+    notes_fr:'Eau dure d\'aquifères calcaires au sud. Bonne qualité, faible risque bactérien. Entartrage préoccupant pour les systèmes eau chaude et membrane RO.',
+    ro_load:'Moderate–High', bacteria_risk:'Low',
+    legionella_notes_en:'Standard precautions. Hard water is the primary concern.',
+    legionella_notes_fr:'Précautions standards. L\'eau dure est la principale préoccupation.',
+    recommend_en:'STD + RO. Watch RO membrane longevity in hard water.',
+    recommend_fr:'STD + RO. Surveiller la longévité membrane RO en eau dure.'
+  },
+  FR: {
+    flag:'🇫🇷', name_en:'France', name_fr:'France',
+    hardness:'Atlantic/Brittany: 50–150 · Paris/SE: 200–400 mg/L',
+    hardness_class:'variable', ph:'7.0–8.0', chlorine:'0.05–0.2 mg/L',
+    turbidity:'Generally low (variable by source)',
+    notes_en:'Extreme regional variation. Atlantic arc (Brittany, Loire, Charente) very soft and excellent quality. Paris basin, Île-de-France, Alps, Nord extremely hard limestone water. Mediterranean coast moderate–hard. Always check local commune reports.',
+    notes_fr:'Variation régionale extrême. Arc atlantique (Bretagne, Loire, Charente) très doux et excellente qualité. Bassin parisien, Île-de-France, Alpes, Nord : eau très dure calcaire. Côte méditerranéenne modérée–dure. Toujours vérifier les rapports communaux.',
+    ro_load:'Variable — Low (Atlantic) to High (Paris basin)', bacteria_risk:'Low–Moderate',
+    legionella_notes_en:'Summer stagnation risk in hot inland areas (Midi, Provence). Atlantic coast lower risk.',
+    legionella_notes_fr:'Risque stagnation estival dans les zones chaudes intérieures (Midi, Provence). Côte atlantique risque plus faible.',
+    recommend_en:'Atlantic: STD or Aquatabs. Paris/SE/Provence: STD + RO essential.',
+    recommend_fr:'Atlantique : STD ou Aquatabs. Paris/SE/Provence : STD + RO indispensable.'
+  },
+  ES: {
+    flag:'🇪🇸', name_en:'Spain', name_fr:'Espagne',
+    hardness:'100–450+ mg/L (huge variation)', hardness_class:'hard', ph:'7.2–8.5', chlorine:'0.1–0.5 mg/L',
+    turbidity:'Variable (can be high in well/rural areas)',
+    notes_en:'Very high variation. Atlantic coast (Galicia, Basque Country) softer. Mediterranean coast (Catalonia, Valencia, Murcia, Balearics) extremely hard (300–450+ mg/L). Madrid area very hard. Summer heat + hard water = significant Legionella risk. Scale buildup severe on Med coast.',
+    notes_fr:'Variation très élevée. Côte atlantique (Galice, Pays Basque) plus douce. Côte méditerranéenne (Catalogne, Valence, Murcie, Baléares) extrêmement dure (300–450+ mg/L). Madrid très dur. Chaleur estivale + eau dure = risque Legionella significatif.',
+    ro_load:'High–Very High (Med coast)', bacteria_risk:'Moderate–High (summer)',
+    legionella_notes_en:'HIGH RISK in summer: T>30°C common + hard calcium-rich water accelerates biofilm. Prioritize RO + stagnation management.',
+    legionella_notes_fr:'RISQUE ÉLEVÉ en été : T>30°C courant + eau dure calcaire accélère biofilm. Prioriser RO + gestion stagnation.',
+    recommend_en:'Med coast: CHOC or VAR + RO mandatory. Galicia: STD sufficient.',
+    recommend_fr:'Côte Med : CHOC ou VAR + RO obligatoire. Galice : STD suffisant.'
+  },
+  PT: {
+    flag:'🇵🇹', name_en:'Portugal', name_fr:'Portugal',
+    hardness:'30–120 mg/L (mostly soft)', hardness_class:'soft', ph:'6.8–7.5', chlorine:'0.1–0.3 mg/L',
+    turbidity:'Generally low',
+    notes_en:'Mostly soft water — Atlantic climate, granite-dominated geology. Algarve slightly harder than north. Excellent municipal water quality. Low scaling risk. RO overkill for most. Good O₃ effectiveness (low organic demand).',
+    notes_fr:'Eau principalement douce — climat atlantique, géologie granitique dominante. Algarve légèrement plus dur que le nord. Excellente qualité eau municipale. Faible risque de calcaire. RO superflu pour la plupart.',
+    ro_load:'Very Low–Low', bacteria_risk:'Low',
+    legionella_notes_en:'Summer south (Algarve): watch tank stagnation >25°C. North: low risk.',
+    legionella_notes_fr:'Été au sud (Algarve) : surveiller stagnation réservoir >25°C. Nord : risque faible.',
+    recommend_en:'Aquatabs or STD. RO optional. Excellent base water quality.',
+    recommend_fr:'Aquatabs ou STD. RO optionnel. Excellente qualité eau de base.'
+  },
+  DE: {
+    flag:'🇩🇪', name_en:'Germany', name_fr:'Allemagne',
+    hardness:'150–500+ mg/L (mostly very hard)', hardness_class:'vhard', ph:'7.4–8.5', chlorine:'0.05–0.2 mg/L',
+    turbidity:'Low — excellent treatment infrastructure',
+    notes_en:'One of Europe\'s hardest water countries. Bavaria extremely hard (400–500+ mg/L). Rhine valley/Frankfurt area very hard. Hamburg/North moderate–hard. Germany has excellent water safety standards — bacteria risk low, but scaling is severe. RO membrane will work hard.',
+    notes_fr:'Un des pays aux eaux les plus dures d\'Europe. Bavière extrêmement dure (400–500+ mg/L). Vallée du Rhin/Francfort très dure. Hambourg/Nord modérément dur. Excellentes normes sanitaires — risque bactérien faible, mais calcaire sévère.',
+    ro_load:'High–Very High', bacteria_risk:'Low',
+    legionella_notes_en:'Low bacterial risk — high-quality infrastructure. Scaling is primary concern.',
+    legionella_notes_fr:'Risque bactérien faible — infrastructure de haute qualité. Calcaire est la principale préoccupation.',
+    recommend_en:'STD or Aquatabs (bacteria low). RO essential — change membranes more frequently.',
+    recommend_fr:'STD ou Aquatabs (bactéries faibles). RO indispensable — changer membranes plus fréquemment.'
+  },
+  CH: {
+    flag:'🇨🇭', name_en:'Switzerland', name_fr:'Suisse',
+    hardness:'80–300 mg/L (variable: Alps soft, Plateau hard)', hardness_class:'mod', ph:'7.0–7.8', chlorine:'0.05–0.15 mg/L',
+    turbidity:'Very low — world-class treatment',
+    notes_en:'World-class water quality. Alpine regions softer (glacial meltwater). Central Plateau (Zurich, Bern) moderate–hard limestone water. Lake Geneva area moderate. Overall excellent safety and clarity.',
+    notes_fr:'Qualité d\'eau de niveau mondial. Régions alpines plus douces (fonte des glaciers). Plateau central (Zurich, Berne) eau calcaire modérée–dure. Région Lac Léman modérée. Excellente sécurité et clarté globale.',
+    ro_load:'Low–Moderate', bacteria_risk:'Very Low',
+    legionella_notes_en:'Very low risk. Excellent water quality and infrastructure.',
+    legionella_notes_fr:'Risque très faible. Excellente qualité d\'eau et infrastructure.',
+    recommend_en:'Aquatabs or STD. RO optional but beneficial in Plateau regions.',
+    recommend_fr:'Aquatabs ou STD. RO optionnel mais bénéfique dans les régions du Plateau.'
+  },
+  AT: {
+    flag:'🇦🇹', name_en:'Austria', name_fr:'Autriche',
+    hardness:'250–500 mg/L (very hard)', hardness_class:'vhard', ph:'7.5–8.5', chlorine:'0.05–0.15 mg/L',
+    turbidity:'Low — excellent Alpine source water',
+    notes_en:'Vienna and most of Austria supplied by exceptionally clean Alpine spring water — but very hard due to limestone geology. Very high calcium content. Low bacteria risk but severe scaling. Vienna: ~280–350 mg/L. Tyrol/Salzburg can reach 400–500+ mg/L.',
+    notes_fr:'Vienne et la plupart de l\'Autriche alimentées par une eau de source alpine exceptionnellement propre — mais très dure (géologie calcaire). Très haute teneur en calcium. Faible risque bactérien mais calcaire sévère.',
+    ro_load:'Very High', bacteria_risk:'Very Low',
+    legionella_notes_en:'Negligible bacterial risk. Scale management is the main issue.',
+    legionella_notes_fr:'Risque bactérien négligeable. La gestion du calcaire est le principal enjeu.',
+    recommend_en:'RO essential. STD or Aquatabs sufficient for bacteria. Change RO membrane more often.',
+    recommend_fr:'RO essentiel. STD ou Aquatabs suffisant pour bactéries. Changer membrane RO plus souvent.'
+  },
+  IT: {
+    flag:'🇮🇹', name_en:'Italy', name_fr:'Italie',
+    hardness:'150–400+ mg/L (variable N to S)', hardness_class:'hard', ph:'7.0–8.2', chlorine:'0.1–0.5 mg/L',
+    turbidity:'Variable — higher in rural south',
+    notes_en:'Northern Italy (Po Valley, Alps) moderate–hard. Rome area hard (~300 mg/L). Southern Italy and Sicily very hard, sometimes poor quality in rural areas. Sicily/Sardinia: watch turbidity and bacteria. Campania/Calabria: rural water less reliable.',
+    notes_fr:'Italie du Nord (Plaine du Pô, Alpes) modérément dure. Région de Rome dure (~300 mg/L). Italie du Sud et Sicile très dures, qualité parfois médiocre en zones rurales.',
+    ro_load:'Moderate–High', bacteria_risk:'Moderate (higher in rural south/islands)',
+    legionella_notes_en:'Summer heat (>35°C in south) + old infrastructure = elevated risk. Apply VAR/CHOC in rural south.',
+    legionella_notes_fr:'Chaleur estivale (>35°C au sud) + ancienne infrastructure = risque élevé. Appliquer VAR/CHOC dans le sud rural.',
+    recommend_en:'North: STD + RO. South/Sicily: VAR or CHOC + RO mandatory in summer.',
+    recommend_fr:'Nord : STD + RO. Sud/Sicile : VAR ou CHOC + RO obligatoire en été.'
+  },
+  PL: {
+    flag:'🇵🇱', name_en:'Poland', name_fr:'Pologne',
+    hardness:'150–350 mg/L (moderate to hard)', hardness_class:'hard', ph:'7.2–8.0', chlorine:'0.1–0.3 mg/L',
+    turbidity:'Low in cities, variable in rural areas',
+    notes_en:'Generally moderate–hard. Warsaw ~200–250 mg/L. Kraków harder (~300 mg/L). Rural areas can have higher iron/manganese content from groundwater. City water well-treated; rural/well water needs more attention.',
+    notes_fr:'Généralement modérée–dure. Varsovie ~200–250 mg/L. Cracovie plus dure (~300 mg/L). Zones rurales peuvent avoir une teneur plus élevée en fer/manganèse.',
+    ro_load:'Moderate', bacteria_risk:'Low (city) / Moderate (rural)',
+    legionella_notes_en:'Standard precautions. Rural well water: apply VAR protocol.',
+    legionella_notes_fr:'Précautions standard. Eau de puits rurale : appliquer protocole VAR.',
+    recommend_en:'City: STD. Rural/well: VAR. RO beneficial.',
+    recommend_fr:'Ville : STD. Rural/puits : VAR. RO bénéfique.'
+  },
+  CZ: {
+    flag:'🇨🇿', name_en:'Czech Republic', name_fr:'République tchèque',
+    hardness:'150–300 mg/L', hardness_class:'hard', ph:'7.2–7.9', chlorine:'0.1–0.3 mg/L',
+    turbidity:'Low in cities',
+    notes_en:'Moderate–hard generally. Prague ~200 mg/L. Bohemia varies. Good urban water quality. Rural areas occasionally harder with iron content.',
+    notes_fr:'Généralement modérée–dure. Prague ~200 mg/L. Bohème variable. Bonne qualité eau urbaine. Zones rurales parfois plus dures avec teneur en fer.',
+    ro_load:'Moderate', bacteria_risk:'Low',
+    legionella_notes_en:'Standard precautions sufficient.',
+    legionella_notes_fr:'Précautions standards suffisantes.',
+    recommend_en:'STD + RO for extended stays.',
+    recommend_fr:'STD + RO pour les longs séjours.'
+  },
+  HU: {
+    flag:'🇭🇺', name_en:'Hungary', name_fr:'Hongrie',
+    hardness:'200–400 mg/L (hard)', hardness_class:'hard', ph:'7.3–8.2', chlorine:'0.1–0.3 mg/L',
+    turbidity:'Low–moderate',
+    notes_en:'Danube basin — generally hard water. Budapest ~250–350 mg/L. Great Plain (Alföld) groundwater can have high iron/arsenic in some areas. Summer heat intensifies stagnation risk.',
+    notes_fr:'Bassin du Danube — eau généralement dure. Budapest ~250–350 mg/L. Grande Plaine (Alföld) : eau souterraine peut avoir un taux élevé de fer/arsenic dans certaines zones.',
+    ro_load:'Moderate–High', bacteria_risk:'Moderate (summer heat)',
+    legionella_notes_en:'Hot summers (>30°C) + hard water. Apply VAR in summer.',
+    legionella_notes_fr:'Étés chauds (>30°C) + eau dure. Appliquer VAR en été.',
+    recommend_en:'STD (spring/autumn). VAR + RO (summer).',
+    recommend_fr:'STD (printemps/automne). VAR + RO (été).'
+  },
+  HR: {
+    flag:'🇭🇷', name_en:'Croatia / Slovenia', name_fr:'Croatie / Slovénie',
+    hardness:'150–350 mg/L (karst limestone)', hardness_class:'hard', ph:'7.3–8.2', chlorine:'0.1–0.3 mg/L',
+    turbidity:'Generally low (karst filtration)',
+    notes_en:'Karst limestone geology — naturally hard water, naturally filtered. Coastal Croatia/Dalmatia moderate–hard. Slovenia varies. Good quality generally. Summer Adriatic coast hot.',
+    notes_fr:'Géologie karstique calcaire — eau naturellement dure et filtrée. Côte croate/Dalmatie modérément dure. Slovénie variable. Bonne qualité en général. Côte adriatique chaude en été.',
+    ro_load:'Moderate', bacteria_risk:'Low–Moderate',
+    legionella_notes_en:'Adriatic summer heat: stagnation risk. Apply STD/VAR.',
+    legionella_notes_fr:'Chaleur estivale adriatique : risque de stagnation. Appliquer STD/VAR.',
+    recommend_en:'STD + RO. VAR in summer on coast.',
+    recommend_fr:'STD + RO. VAR en été sur la côte.'
+  },
+  RO: {
+    flag:'🇷🇴', name_en:'Romania', name_fr:'Roumanie',
+    hardness:'150–350 mg/L', hardness_class:'hard', ph:'7.2–8.0', chlorine:'0.1–0.5 mg/L',
+    turbidity:'Variable — Danube delta higher',
+    notes_en:'Moderate–hard. Bucharest area moderate (~200 mg/L). Danube delta and rural areas: watch turbidity, higher bacteria potential. Mountain regions (Carpathians) softer and cleaner.',
+    notes_fr:'Modérée–dure. Région de Bucarest modérée (~200 mg/L). Delta du Danube et zones rurales : surveiller turbidité, potentiel bactérien plus élevé. Régions montagneuses (Carpates) plus douces.',
+    ro_load:'Moderate', bacteria_risk:'Moderate (rural/delta areas)',
+    legionella_notes_en:'Rural and delta areas: apply VAR. Urban: STD.',
+    legionella_notes_fr:'Zones rurales et delta : appliquer VAR. Urbain : STD.',
+    recommend_en:'Urban: STD + RO. Rural: VAR + RO.',
+    recommend_fr:'Urbain : STD + RO. Rural : VAR + RO.'
+  },
+  GR: {
+    flag:'🇬🇷', name_en:'Greece', name_fr:'Grèce',
+    hardness:'150–450+ mg/L (very hard on islands)', hardness_class:'vhard', ph:'7.2–8.5', chlorine:'0.2–0.5 mg/L',
+    turbidity:'Variable (higher on islands/rural)',
+    notes_en:'Athens area moderately hard. Greek islands very hard (300–450+ mg/L, limestone geology) with sometimes limited supply infrastructure. Summer heat >35°C common. Aegean islands: highest scaling AND bacteria risk. Ionian coast slightly better.',
+    notes_fr:'Région d\'Athènes modérément dure. Îles grecques très dures (300–450+ mg/L, géologie calcaire) avec infrastructure parfois limitée. Chaleur estivale >35°C courante. Îles égéennes : risque calcaire ET bactérien le plus élevé.',
+    ro_load:'High–Very High', bacteria_risk:'High (islands, summer)',
+    legionella_notes_en:'HIGH RISK on islands in summer: T>35°C + stagnation + hard water. CHOC protocol mandatory.',
+    legionella_notes_fr:'RISQUE ÉLEVÉ sur les îles en été : T>35°C + stagnation + eau dure. Protocole CHOC obligatoire.',
+    recommend_en:'CHOC + RO mandatory on islands/summer. Mainland: VAR + RO.',
+    recommend_fr:'CHOC + RO obligatoire sur les îles/en été. Continent : VAR + RO.'
+  },
+  EE: {
+    flag:'🇪🇪', name_en:'Estonia / Latvia / Lithuania', name_fr:'Estonie / Lettonie / Lituanie',
+    hardness:'100–300 mg/L (moderate, varies)', hardness_class:'mod', ph:'7.0–7.8', chlorine:'0.1–0.3 mg/L',
+    turbidity:'Variable — some groundwater with iron',
+    notes_en:'Baltic states: generally moderate quality. Groundwater common — sometimes higher iron/manganese. Estonia softer in north. Lithuania harder in some areas. Good municipal water quality in capitals.',
+    notes_fr:'États baltes : qualité généralement modérée. Eau souterraine courante — parfois teneur plus élevée en fer/manganèse. Estonie plus douce au nord. Lituanie plus dure dans certaines zones.',
+    ro_load:'Low–Moderate', bacteria_risk:'Low–Moderate',
+    legionella_notes_en:'Short summer. Standard precautions.',
+    legionella_notes_fr:'Été court. Précautions standards.',
+    recommend_en:'STD + RO. VAR if well/rural source.',
+    recommend_fr:'STD + RO. VAR si source puits/rurale.'
+  }
+};
+
+const HARD_BADGE = {
+  soft:   { cls:'badge-green', en:'Soft',      fr:'Douce' },
+  mod:    { cls:'badge-blue',  en:'Moderate',  fr:'Modérée' },
+  variable:{ cls:'badge-blue', en:'Variable',  fr:'Variable' },
+  hard:   { cls:'badge-amber', en:'Hard',      fr:'Dure' },
+  vhard:  { cls:'badge-red',   en:'Very Hard', fr:'Très dure' },
+};
+const BACT_BADGE = {
+  'Very Low':    'badge-green', 'Low': 'badge-green',
+  'Low–Moderate':'badge-blue',  'Moderate':'badge-amber',
+  'Moderate (rural/delta areas)':'badge-amber', 'Moderate (summer heat)':'badge-amber',
+  'Low–Moderate':'badge-blue',  'Moderate (rural/well water)':'badge-amber',
+  'Low (city) / Moderate (rural)':'badge-blue',
+  'High (islands, summer)':'badge-red', 'Moderate–High (summer)':'badge-amber',
+  'High':'badge-red',
+};
+
+function selectCountry(code) {
+  const d = COUNTRY_DATA[code];
+  if (!d) return;
+  currentSelectedCountry = code;
+  const l = getLang();
+  // Update map selection
+  document.querySelectorAll('.cmap').forEach(p => p.classList.remove('selected'));
+  const el = document.getElementById('cm-' + code);
+  if (el) el.classList.add('selected');
+
+  const hb = HARD_BADGE[d.hardness_class] || HARD_BADGE.mod;
+  const hardLabel = l === 'fr' ? hb.fr : hb.en;
+  const bactCls = BACT_BADGE[d.bacteria_risk] || 'badge-blue';
+  const notes = l === 'fr' ? d.notes_fr : d.notes_en;
+  const legNotes = l === 'fr' ? d.legionella_notes_fr : d.legionella_notes_en;
+  const rec = l === 'fr' ? d.recommend_fr : d.recommend_en;
+  const name = l === 'fr' ? d.name_fr : d.name_en;
+  const t = l === 'fr';
+
+  document.getElementById('country-panel').innerHTML = `
+    <div style="font-size:18px;margin-bottom:4px;">${d.flag} <strong style="font-size:15px;">${name}</strong></div>
+    <table style="width:100%;font-size:12px;border-collapse:collapse;margin-bottom:10px;">
+      <tr><td style="color:var(--text3);padding:3px 0;width:45%;">${t?'Dureté':'Hardness'}</td><td><span class="badge ${hb.cls}">${hardLabel}</span> <span style="color:var(--text2);">${d.hardness}</span></td></tr>
+      <tr><td style="color:var(--text3);padding:3px 0;">pH</td><td style="color:var(--text2);">${d.ph}</td></tr>
+      <tr><td style="color:var(--text3);padding:3px 0;">${t?'Chlore libre':'Free chlorine'}</td><td style="color:var(--text2);">${d.chlorine}</td></tr>
+      <tr><td style="color:var(--text3);padding:3px 0;">${t?'Turbidité':'Turbidity'}</td><td style="color:var(--text2);font-size:11px;">${d.turbidity}</td></tr>
+      <tr><td style="color:var(--text3);padding:3px 0;">${t?'Charge RO':'RO load'}</td><td style="color:var(--text2);">${d.ro_load}</td></tr>
+      <tr><td style="color:var(--text3);padding:3px 0;">${t?'Risque bactérien':'Bacteria risk'}</td><td><span class="badge ${bactCls}">${d.bacteria_risk}</span></td></tr>
+    </table>
+    <p style="font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:8px;">${notes}</p>
+    <div style="background:var(--red-bg);border:1px solid #f0c0c0;border-radius:6px;padding:7px 10px;font-size:11px;color:var(--red);margin-bottom:8px;">🦠 <strong>Legionella:</strong> ${legNotes}</div>
+    <div style="background:var(--blue-bg);border:1px solid #bbd0f0;border-radius:6px;padding:7px 10px;font-size:11px;color:var(--blue);">📋 <strong>${t?'Protocole conseillé':'Recommended protocol'}:</strong> ${rec}</div>
+  `;
+}
+
 // Update SOP for default state
 updateSOP(HM04[4-2][0], 2, 0);
 </script>
