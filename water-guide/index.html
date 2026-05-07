@@ -625,7 +625,7 @@ a:hover { text-decoration: underline; }
 
     <!-- HM01 -->
     <div class="accordion">
-      <div class="acc-header" onclick="toggleAcc(this)">
+      <div class="acc-header" data-hm="1" onclick="toggleAcc(this)">
         <h3><span>🦠</span> <span id="hm01-acc-title">HM01 — Bacterial Risk: Temperature × Stagnation</span></h3>
         <span class="acc-tag" id="hm01-tag" style="background:#2a3040;color:#8a9898;">—</span>
         <span class="acc-chevron">▼</span>
@@ -673,7 +673,7 @@ a:hover { text-decoration: underline; }
 
     <!-- HM02 -->
     <div class="accordion">
-      <div class="acc-header" onclick="toggleAcc(this)">
+      <div class="acc-header" data-hm="2" onclick="toggleAcc(this)">
         <h3><span>⚡</span> <span id="hm02-acc-title">HM02 — O₃ Effectiveness: Temperature × Water Quality</span></h3>
         <span class="acc-tag" id="hm02-tag" style="background:#2a3040;color:#8a9898;">—</span>
         <span class="acc-chevron">▼</span>
@@ -716,7 +716,7 @@ a:hover { text-decoration: underline; }
 
     <!-- HM03 -->
     <div class="accordion">
-      <div class="acc-header" onclick="toggleAcc(this)">
+      <div class="acc-header" data-hm="3" onclick="toggleAcc(this)">
         <h3><span>🧪</span> <span id="hm03-acc-title">HM03 — Treatment Resistance: pH × Turbidity</span></h3>
         <span class="acc-tag" id="hm03-tag" style="background:#2a3040;color:#8a9898;">—</span>
         <span class="acc-chevron">▼</span>
@@ -759,7 +759,7 @@ a:hover { text-decoration: underline; }
 
     <!-- HM04 — open by default -->
     <div class="accordion">
-      <div class="acc-header open" onclick="toggleAcc(this)">
+      <div class="acc-header open" data-hm="4" onclick="toggleAcc(this)">
         <h3><span>📋</span> <span id="hm04-acc-title">HM04 — Recommended Protocol: Temperature × Context</span> <small style="color:#4a9fd4;font-size:10px;font-weight:400;" id="hm04-key-label">KEY</small></h3>
         <span class="acc-tag" id="hm04-tag" style="background:#1a3050;color:#4a9fd4;" id="hm04-protocol-badge">STD</span>
         <span class="acc-chevron" style="transform:rotate(180deg);">▼</span>
@@ -948,14 +948,20 @@ function toggleAcc(header) {
   body.classList.toggle("open");
   const chevron = header.querySelector('.acc-chevron');
   if (chevron) chevron.style.transform = header.classList.contains('open') ? 'rotate(180deg)' : '';
-  // Rebuild heatmap grids when accordion opens (they were display:none at init)
+  // Build this accordion's heatmap grid on first open
   if (body.classList.contains('open')) {
-    [1,2,3,4].forEach(function(n) {
-      var grid = document.getElementById('hm0'+n+'-grid');
-      if (grid && grid.innerHTML.trim() === '') { buildGrid(n); updateHM(n); }
-    });
+    var n = parseInt(header.getAttribute('data-hm'));
+    if (n >= 1 && n <= 4) {
+      var grid = document.getElementById('hm0' + n + '-grid');
+      if (grid && grid.innerHTML.trim() === '') {
+        buildGrid(n);
+        updateHM(n);
+      }
+    }
   }
 }
+
+
 
 // ── TABS ──
 function switchTab(id, e) {
@@ -1535,10 +1541,10 @@ function setLang(l) {
     const el = document.getElementById(id);
     if (el) el.innerHTML = val;
   }
-  // Rebuild heatmap grids (only those currently visible/open)
-  [1,2,3,4].forEach(n => {
-    const grid = document.getElementById('hm0'+n+'-grid');
-    if (grid && grid.children.length > 0) { buildGrid(n); updateHM(n); }
+  // Rebuild only grids that are already built (visible)
+  [1,2,3,4].forEach(function(n) {
+    var grid = document.getElementById('hm0'+n+'-grid');
+    if (grid && grid.innerHTML.trim() !== '') { buildGrid(n); updateHM(n); }
   });
   // Update map prompt
   const mp = document.getElementById('map-prompt-text');
@@ -1898,6 +1904,11 @@ function selectCountry(code) {
   `;
 }
 
+// ── INIT ──
+var currentSelectedCountry = null;
+// Build HM04 immediately (open by default)
+buildGrid(4);
+updateHM(4);
 // Update SOP for default state
 updateSOP(HM04[4-2][0], 2, 0);
 </script>
