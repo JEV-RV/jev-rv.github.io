@@ -937,6 +937,13 @@ function toggleAcc(header) {
   body.classList.toggle("open");
   const chevron = header.querySelector('.acc-chevron');
   if (chevron) chevron.style.transform = header.classList.contains('open') ? 'rotate(180deg)' : '';
+  // Rebuild heatmap grids when accordion opens (they were display:none at init)
+  if (body.classList.contains('open')) {
+    [1,2,3,4].forEach(n => {
+      const grid = body.querySelector('#hm0'+n+'-grid');
+      if (grid && grid.children.length === 0) { buildGrid(n); updateHM(n); }
+    });
+  }
 }
 
 // ── TABS ──
@@ -1296,7 +1303,9 @@ function updateSOP(protoIdx, yVal, xVal) {
 }
 
 function initHeatmaps() {
-  [1,2,3,4].forEach(n => { buildGrid(n); updateHM(n); });
+  // Only build HM04 at init — it's open by default
+  // HM01/02/03 will be built when their accordion opens (see toggleAcc)
+  buildGrid(4); updateHM(4);
 }
 
 // ── LANGUAGE ──
@@ -1351,25 +1360,25 @@ const LANG = {
     's5-intro':'Use the sliders to position yourself on each heatmap. The white marker shows your position. <strong>HM04 is the key output</strong> — it recommends your protocol and shows the full step-by-step SOP below.',
     'hm01-acc-title':'HM01 — Bacterial Risk: Temperature × Stagnation',
     'hm01-title':'Bacterial growth risk in your tank',
-    'hm01-sub':'Legionella optimal 32–35°C · inactive &lt;20°C · destroyed &gt;55°C <span class='ref-sup' title='CDC 2025 · WHO 2022'>[1,2]</span>',
+    'hm01-sub':'Legionella optimal 32–35°C · inactive &lt;20°C · destroyed &gt;55°C <span class="ref-sup" title="CDC 2025 · WHO 2022">[1,2]</span>',
     'hm01-y-label':'Temperature','hm01-x-label':'← Stagnation duration →',
     'hm01-r4':'&gt;35°C','hm01-r3':'25–35°C','hm01-r2':'15–25°C','hm01-r1':'5–15°C','hm01-r0':'&lt;5°C',
     'hm01-x0':'&lt;24h','hm01-x1':'1–3d','hm01-x2':'3–7d','hm01-x3':'7–14d','hm01-x4':'&gt;14d',
     'hm02-acc-title':'HM02 — O₃ Effectiveness: Temperature × Water Quality',
     'hm02-title':'O₃ half-life in your water',
-    'hm02-sub':'Natural water half-life 1–20 min depending on organic matter <span class='ref-sup' title='Hoigné &amp; Bader 1976–83 · Langlais et al. 1991'>[3,4]</span>',
+    'hm02-sub':'Natural water half-life 1–20 min depending on organic matter <span class="ref-sup" title="Hoigné &amp; Bader 1976–83 · Langlais et al. 1991">[3,4]</span>',
     'hm02-y-label':'Temperature','hm02-x-label':'← Water quality (ozone demand) →',
     'hm02-r4':'&gt;35°C','hm02-r3':'25–35°C','hm02-r2':'15–25°C','hm02-r1':'5–15°C','hm02-r0':'&lt;5°C',
     'hm02-x0':'Munic.<br>clear','hm02-x1':'Munic.<br>loaded','hm02-x2':'Well<br>moderate','hm02-x3':'Well<br>loaded','hm02-x4':'Very<br>loaded',
     'hm03-acc-title':'HM03 — Treatment Resistance: pH × Turbidity',
     'hm03-title':'Chemical &amp; UV treatment resistance',
-    'hm03-sub':'&gt;1 NTU reduces UV/chlorine effectiveness · EPA threshold &lt;1 NTU <span class='ref-sup' title='WHO/EPA Turbidity Review 2017 · EPA UV Manual'>[5,6]</span>',
+    'hm03-sub':'&gt;1 NTU reduces UV/chlorine effectiveness · EPA threshold &lt;1 NTU <span class="ref-sup" title="WHO/EPA Turbidity Review 2017 · EPA UV Manual">[5,6]</span>',
     'hm03-y-label':'pH','hm03-x-label':'← Turbidity / organic matter (NTU) →',
     'hm03-r4':'pH &gt;8.5','hm03-r3':'7.5–8.5','hm03-r2':'6.5–7.5','hm03-r1':'5.5–6.5','hm03-r0':'pH &lt;5.5',
     'hm03-x0':'&lt;0.5<br>Crystal','hm03-x1':'0.5–2<br>Clear','hm03-x2':'2–5<br>Hazy','hm03-x3':'5–15<br>Turbid','hm03-x4':'&gt;15<br>Opaque',
     'hm04-acc-title':'HM04 — Recommended Protocol: Temperature × Context',
     'hm04-key-label':'KEY','hm04-title':'Protocol recommendation + SOP',
-    'hm04-sub':'EPDM budget max 800 min O₃/year · STD=45 min · CHOC=75 min <span class='ref-sup' title='SOP Skøl v3.0'>[7]</span>',
+    'hm04-sub':'EPDM budget max 800 min O₃/year · STD=45 min · CHOC=75 min <span class="ref-sup" title="SOP Skøl v3.0">[7]</span>',
     'hm04-y-label':'Temperature','hm04-x-label':'← Source &amp; usage context →',
     'hm04-r4':'&gt;35°C','hm04-r3':'25–35°C','hm04-r2':'15–25°C','hm04-r1':'5–15°C','hm04-r0':'&lt;5°C',
     'hm04-x0':'Munic.<br>camping','hm04-x1':'Frequent<br>refill','hm04-x2':'Boon.<br>normal','hm04-x3':'Boon.<br>hot','hm04-x4':'Long<br>stagnation',
@@ -1413,7 +1422,7 @@ const LANG = {
     's1-htable-title':'💧 Dureté de l\'eau et pH par région',
     's2-label':'Section 2','s2-title':'La règle des 20% et le risque de stagnation',
     's2-intro':'L\'une des pratiques les plus efficaces ne coûte rien. Gardez votre réservoir à ≤20% pendant le trajet. La durée de stagnation est la variable la plus importante pour le risque bactérien en Europe en été.',
-    's2-stag-title':'Risque de stagnation — Température × Durée<span class='ref-sup' title='CDC 2025 · WHO 2022'> [1,2]</span>',
+    's2-stag-title':'Risque de stagnation — Température × Durée<span class="ref-sup" title="CDC 2025 · WHO 2022"> [1,2]</span>',
     'stag-0-t':'&lt;24h','stag-0-l':'✓ Bas','stag-1-t':'1–3j','stag-1-l':'Bas–Mod',
     'stag-2-t':'3–7j','stag-2-l':'⚠ Mod','stag-3-t':'7–14j','stag-3-l':'Élevé',
     'stag-4-t':'&gt;14j','stag-4-l':'🔴 Critique',
@@ -1450,25 +1459,25 @@ const LANG = {
     's5-intro':'Utilisez les curseurs pour vous positionner sur chaque heatmap. Le marqueur blanc indique votre position. <strong>HM04 est la sortie principale</strong> — il recommande votre protocole et affiche le SOP complet étape par étape.',
     'hm01-acc-title':'HM01 — Risque bactérien : Température × Stagnation',
     'hm01-title':'Risque de croissance bactérienne dans votre réservoir',
-    'hm01-sub':'Legionella optimal 32–35°C · inactif &lt;20°C · détruit &gt;55°C <span class='ref-sup' title='CDC 2025 · WHO 2022'>[1,2]</span>',
+    'hm01-sub':'Legionella optimal 32–35°C · inactif &lt;20°C · détruit &gt;55°C <span class="ref-sup" title="CDC 2025 · WHO 2022">[1,2]</span>',
     'hm01-y-label':'Température','hm01-x-label':'← Durée de stagnation →',
     'hm01-r4':'&gt;35°C','hm01-r3':'25–35°C','hm01-r2':'15–25°C','hm01-r1':'5–15°C','hm01-r0':'&lt;5°C',
     'hm01-x0':'&lt;24h','hm01-x1':'1–3j','hm01-x2':'3–7j','hm01-x3':'7–14j','hm01-x4':'&gt;14j',
     'hm02-acc-title':'HM02 — Efficacité O₃ : Température × Qualité de l\'eau',
     'hm02-title':'Demi-vie de l\'O₃ dans votre eau',
-    'hm02-sub':'Demi-vie eau naturelle 1–20 min selon matières organiques <span class='ref-sup' title='Hoigné &amp; Bader 1976–83 · Langlais et al. 1991'>[3,4]</span>',
+    'hm02-sub':'Demi-vie eau naturelle 1–20 min selon matières organiques <span class="ref-sup" title="Hoigné &amp; Bader 1976–83 · Langlais et al. 1991">[3,4]</span>',
     'hm02-y-label':'Température','hm02-x-label':'← Qualité de l\'eau (demande en ozone) →',
     'hm02-r4':'&gt;35°C','hm02-r3':'25–35°C','hm02-r2':'15–25°C','hm02-r1':'5–15°C','hm02-r0':'&lt;5°C',
     'hm02-x0':'Munic.<br>claire','hm02-x1':'Munic.<br>chargée','hm02-x2':'Puits<br>mod.','hm02-x3':'Puits<br>chargé','hm02-x4':'Très<br>chargée',
     'hm03-acc-title':'HM03 — Résistance aux traitements : pH × Turbidité',
     'hm03-title':'Résistance aux traitements chimiques &amp; UV',
-    'hm03-sub':'&gt;1 NTU réduit UV/chlore · seuil EPA &lt;1 NTU <span class='ref-sup' title='WHO/EPA 2017 · EPA UV Manual'>[5,6]</span>',
+    'hm03-sub':'&gt;1 NTU réduit UV/chlore · seuil EPA &lt;1 NTU <span class="ref-sup" title="WHO/EPA 2017 · EPA UV Manual">[5,6]</span>',
     'hm03-y-label':'pH','hm03-x-label':'← Turbidité / matières organiques (NTU) →',
     'hm03-r4':'pH &gt;8,5','hm03-r3':'7,5–8,5','hm03-r2':'6,5–7,5','hm03-r1':'5,5–6,5','hm03-r0':'pH &lt;5,5',
     'hm03-x0':'&lt;0,5<br>Cristal','hm03-x1':'0,5–2<br>Claire','hm03-x2':'2–5<br>Voilée','hm03-x3':'5–15<br>Trouble','hm03-x4':'&gt;15<br>Opaque',
     'hm04-acc-title':'HM04 — Protocole recommandé : Température × Contexte',
     'hm04-key-label':'CLÉ','hm04-title':'Recommandation de protocole + SOP',
-    'hm04-sub':'Budget EPDM max 800 min O₃/an · STD=45 min · CHOC=75 min <span class='ref-sup' title='SOP Skøl v3.0'>[7]</span>',
+    'hm04-sub':'Budget EPDM max 800 min O₃/an · STD=45 min · CHOC=75 min <span class="ref-sup" title="SOP Skøl v3.0">[7]</span>',
     'hm04-y-label':'Température','hm04-x-label':'← Source &amp; contexte d\'utilisation →',
     'hm04-r4':'&gt;35°C','hm04-r3':'25–35°C','hm04-r2':'15–25°C','hm04-r1':'5–15°C','hm04-r0':'&lt;5°C',
     'hm04-x0':'Camping<br>munic.','hm04-x1':'Renouvell.<br>fréquent','hm04-x2':'Boondock.<br>normal','hm04-x3':'Boondock.<br>chaud','hm04-x4':'Stagnation<br>prolongée',
@@ -1508,8 +1517,11 @@ function setLang(l) {
     const el = document.getElementById(id);
     if (el) el.innerHTML = val;
   }
-  // Rebuild heatmap grids (labels change)
-  [1,2,3,4].forEach(n => { buildGrid(n); updateHM(n); });
+  // Rebuild heatmap grids (only those currently visible/open)
+  [1,2,3,4].forEach(n => {
+    const grid = document.getElementById('hm0'+n+'-grid');
+    if (grid && grid.children.length > 0) { buildGrid(n); updateHM(n); }
+  });
   // Update map prompt
   const mp = document.getElementById('map-prompt-text');
   if (mp && !currentSelectedCountry) mp.textContent = l==='fr' ? '← Cliquez un pays sur la carte' : '← Click a country on the map';
