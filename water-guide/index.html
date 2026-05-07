@@ -148,12 +148,12 @@ a:hover { text-decoration: underline; }
 .hm-section { background: #16181d; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; color: #e0ddd8; }
 .hm-section-title { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: #fde68a; margin-bottom: 4px; }
 .hm-section-sub { font-size: 12px; color: #8a8880; margin-bottom: 1.25rem; }
-.hm-layout { display: flex; gap: 1rem; align-items: flex-start; }
-
-/* Vertical slider (Y axis = temperature) */
-.hm-y-control { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
-.hm-y-label { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: #6a8aaa; margin-bottom: 4px; writing-mode: vertical-rl; transform: rotate(180deg); }
-.hm-y-slider { writing-mode: vertical-lr; direction: rtl; -webkit-appearance: slider-vertical; width: 28px; cursor: pointer; accent-color: #4a9fd4; flex: 1; min-height: 160px; }
+.hm-layout { display: block; }
+.hm-axis-row { display: flex; align-items: flex-start; gap: 0; }
+.hm-y-col { display: flex; flex-direction: column; align-items: center; width: 32px; flex-shrink: 0; }
+.hm-y-label { font-size: 9px; text-transform: uppercase; letter-spacing: .06em; color: #6a8aaa; writing-mode: vertical-rl; transform: rotate(180deg); margin-bottom: 6px; }
+.hm-y-slider { -webkit-appearance: slider-vertical; appearance: slider-vertical; width: 20px; height: 198px; cursor: pointer; accent-color: #4a9fd4; }
+.hm-row-labels { display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; margin-right: 4px; }
 
 /* Grid + X slider container */
 .hm-grid-wrap { flex: 1; min-width: 0; }
@@ -164,10 +164,10 @@ a:hover { text-decoration: underline; }
 .hm-cell .pion { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 2px solid #1a1915; top: 3px; right: 3px; display: none; box-shadow: 0 0 6px rgba(255,255,255,0.8); }
 .hm-cell.active-cell .pion { display: block; }
 .hm-row-label { font-size: 10px; color: #8a8880; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; white-space: nowrap; height: 38px; flex-shrink: 0; min-width: 52px; }
-.hm-x-ticks { display: flex; gap: 2px; font-size: 9px; color: #8a8880; margin-bottom: 4px; }
+.hm-x-ticks { display: flex; gap: 2px; font-size: 9px; color: #8a8880; margin-bottom: 4px; margin-left: 96px; }
 .hm-x-ticks span { flex: 1; text-align: center; line-height: 1.2; }
 .hm-x-slider-wrap { display: flex; gap: 2px; align-items: center; }
-.hm-x-slider { width: 100%; cursor: pointer; accent-color: #4a9fd4; }
+.hm-x-slider { width: 100%; cursor: pointer; accent-color: #4a9fd4; display: block; }
 
 /* Level badge */
 .level-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; margin-top: 8px; }
@@ -656,8 +656,7 @@ a:hover { text-decoration: underline; }
               <div style="margin-top:4px;">
                 <input type="range" class="hm-x-slider" id="hm01-x" min="0" max="4" value="0" step="1" oninput="updateHM(1)">
               </div>
-              <div style="margin-top:8px;">
-                <span class="level-badge" id="hm01-badge">—</span>
+              <div style="margin-left:96px;margin-top:8px;"><span class="level-badge" id="hm01-badge">—</span>
               </div>
             </div>
         </div>
@@ -697,8 +696,7 @@ a:hover { text-decoration: underline; }
               <div style="margin-top:4px;">
                 <input type="range" class="hm-x-slider" id="hm02-x" min="0" max="4" value="0" step="1" oninput="updateHM(2)">
               </div>
-              <div style="margin-top:8px;">
-                <span class="level-badge" id="hm02-badge">—</span>
+              <div style="margin-left:96px;margin-top:8px;"><span class="level-badge" id="hm02-badge">—</span>
               </div>
             </div>
         </div>
@@ -738,8 +736,7 @@ a:hover { text-decoration: underline; }
               <div style="margin-top:4px;">
                 <input type="range" class="hm-x-slider" id="hm03-x" min="0" max="4" value="0" step="1" oninput="updateHM(3)">
               </div>
-              <div style="margin-top:8px;">
-                <span class="level-badge" id="hm03-badge">—</span>
+              <div style="margin-left:96px;margin-top:8px;"><span class="level-badge" id="hm03-badge">—</span>
               </div>
             </div>
         </div>
@@ -779,8 +776,7 @@ a:hover { text-decoration: underline; }
               <div style="margin-top:4px;">
                 <input type="range" class="hm-x-slider" id="hm04-x" min="0" max="4" value="0" step="1" oninput="updateHM(4)">
               </div>
-              <div style="margin-top:8px;">
-                <span class="level-badge" id="hm04-badge">STD</span>
+              <div style="margin-left:96px;margin-top:8px;"><span class="level-badge" id="hm04-badge">STD</span>
               </div>
             </div>
 
