@@ -220,6 +220,16 @@ a:hover { text-decoration: underline; }
 /* ── DISCLAIMER ── */
 .disclaimer { background: var(--surface2); border: 1px dashed var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; font-size: 12px; color: var(--text3); line-height: 1.6; margin-top: 2rem; }
 
+/* ── REFERENCES ── */
+.ref-sup { font-size: 9px; color: var(--text3); vertical-align: super; line-height: 0; font-weight: 500; letter-spacing: 0; cursor: default; border-bottom: 1px dotted var(--text3); padding-bottom: 0; }
+.ref-sup:hover { color: var(--blue); border-color: var(--blue); }
+.ref-block { background: #16181d; border-radius: 10px; padding: 1.1rem 1.4rem; margin: 0 1.5rem 2rem; }
+.ref-block-title { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: #4a9fd4; font-weight: 600; margin-bottom: 0.65rem; }
+.ref-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 5px; }
+.ref-list li { font-size: 11px; color: #8a9898; line-height: 1.5; display: flex; gap: 8px; }
+.ref-list li .ref-num { color: #4a9fd4; font-weight: 700; min-width: 18px; flex-shrink: 0; font-size: 10px; }
+.ref-list li em { color: #6a8888; font-style: normal; }
+
 /* ── FOOTER ── */
 .footer { border-top: 0.5px solid var(--border); padding: 1.5rem; max-width: 960px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--text3); }
 
@@ -282,7 +292,7 @@ a:hover { text-decoration: underline; }
   <div class="section-block">
     <div class="section-label" id="s1-label">Section 1</div>
     <div class="section-title" id="s1-title">Europe vs. North America — Water is Different</div>
-    <p class="section-intro" id="s1-intro">North American municipal water is heavily chlorinated and delivered through modern infrastructure. In Europe, standards vary dramatically by country, region, and campsite. Your RV was designed and tested with North American water.</p>
+    <p class="section-intro" id="s1-intro">North American municipal water is heavily chlorinated and delivered through modern infrastructure. In Europe, standards vary dramatically by country, region, and campsite. Your RV was designed and tested with North American water.<span class="ref-sup" title="WHO 2022 · CDC 2025 · EPA drinking water standards"> [1,2,6]</span></p>
 
     <div class="card-grid-4">
       <div class="card blue stat-card">
@@ -435,7 +445,7 @@ a:hover { text-decoration: underline; }
 
     <!-- Stagnation visual bar -->
     <div class="card" style="margin-bottom:1.25rem;">
-      <div id="s2-stag-title" style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Stagnation Risk — Temperature × Time</div>
+      <div id="s2-stag-title" style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Stagnation Risk — Temperature × Time<span class="ref-sup" title="CDC 2025 · WHO 2022"> [1,2]</span></div>
       <div class="stag-bar">
         <div class="stag-seg" style="background:#c8f0dc;color:#1a7a4a;" id="stag-0"><span id="stag-0-t">&lt;24h</span><br><span id="stag-0-l">✓ Low</span></div>
         <div class="stag-seg" style="background:#dff0c0;color:#4a8a20;" id="stag-1"><span id="stag-1-t">1–3d</span><br><span id="stag-1-l">Low–Mod</span></div>
@@ -471,7 +481,7 @@ a:hover { text-decoration: underline; }
   <div class="section-block">
     <div class="section-label" id="s3-label">Section 3</div>
     <div class="section-title" id="s3-title">Multi-Barrier Treatment Strategy</div>
-    <p class="section-intro" id="s3-intro">No single treatment handles all European conditions. The multi-barrier approach stacks independent barriers — each compensating for the others' weaknesses. You can implement one, two, or all layers depending on your system and risk tolerance.</p>
+    <p class="section-intro" id="s3-intro">No single treatment handles all European conditions. The multi-barrier approach stacks independent barriers — each compensating for the others' weaknesses. You can implement one, two, or all layers depending on your system and risk tolerance.<span class="ref-sup" title="Hoigné & Bader 1976–83 · Langlais et al. 1991 · WHO/EPA 2017 · EPA UV Manual"> [3,4,5,6]</span></p>
 
     <!-- Generic barrier flow -->
     <div style="overflow-x:auto;margin-bottom:1.5rem;">
@@ -528,6 +538,8 @@ a:hover { text-decoration: underline; }
       <p style="font-size:12px;color:#8a9898;margin-bottom:0.75rem;" id="pe-sub">All 4 barriers deployed. Products listed as reference — adapt to your RV and budget.</p>
       <div class="product-grid">
         <div class="product-item"><a href="https://goblutech.com/products/ar3-led-uvc-rv-water-filtration-purification-system" target="_blank">🔵 BLUTEC AR3<span class="p-role" id="p-blutec-role">Inlet filter — 5µm + 0.2µm + UVC-LED (NSF-certified)</span></a></div>
+        <div class="product-item"><a href="https://airthereal.com/products/ah1000-water-ozone-generator" target="_blank">⚡ Airthereal AH1000<span class="p-role" id="p-ah1000-role">O₃ generator 1000 mg/h — tank treatment, negative ion + timer</span></a></div>
+        <div class="product-item"><a href="https://www.walmart.com/ip/Acuva-Technologies-ACU600-1379-Advanced-Prefilter-for-Water-Purification-Systems/1445225699" target="_blank">🔆 ACUVA ACU600-1379<span class="p-role">Advanced pre-filter for ACUVA UV systems</span></a></div>
         <div class="product-item"><a href="https://goblutech.com/products/offgrid-plus-filter-recharge-pack" target="_blank">🔵 BLUTEC Offgrid+ Pack<span class="p-role">Filter recharge pack (5-inch)</span></a></div>
         <div class="product-item"><a href="https://goblutech.com/products/water-softener-with-smart-cap" target="_blank">💧 BLUTEC Water Softener<span class="p-role">Smart Cap water softener</span></a></div>
         <div class="product-item"><a href="https://novowater.com/tankless-ro-cro-800ux6/" target="_blank">💎 NOVO CRO-800UX6<span class="p-role" id="p-novo-role">Tankless RO — kitchen POU (St-Jean Filtration)</span></a></div>
@@ -611,7 +623,7 @@ a:hover { text-decoration: underline; }
       <div class="acc-body">
         <div class="hm-section">
           <div class="hm-section-title" id="hm01-title">Bacterial growth risk in your tank</div>
-          <div class="hm-section-sub" id="hm01-sub">Source: CDC 2025 · WHO 2022 — Legionella optimal 32–35°C · inactive &lt;20°C · destroyed &gt;55°C</div>
+          <div class="hm-section-sub" id="hm01-sub">Legionella optimal 32–35°C · inactive &lt;20°C · destroyed &gt;55°C <span class="ref-sup" title="CDC 2025 · WHO 2022 Legionellosis">[1,2]</span></div>
           <div class="hm-layout">
             <!-- Y: temperature, vertical slider -->
             <div class="hm-y-control">
@@ -659,7 +671,7 @@ a:hover { text-decoration: underline; }
       <div class="acc-body">
         <div class="hm-section">
           <div class="hm-section-title" id="hm02-title">O₃ half-life in your water</div>
-          <div class="hm-section-sub" id="hm02-sub">Source: Hoigné &amp; Bader 1976–83 · Langlais et al. 1991 — natural water half-life 1–20 min depending on organic matter</div>
+          <div class="hm-section-sub" id="hm02-sub">Natural water half-life 1–20 min depending on organic matter <span class="ref-sup" title="Hoigné & Bader 1976–83 · Langlais et al. 1991">[3,4]</span></div>
           <div class="hm-layout">
             <div class="hm-y-control">
               <span class="hm-y-label" id="hm02-y-label">Temperature</span>
@@ -702,7 +714,7 @@ a:hover { text-decoration: underline; }
       <div class="acc-body">
         <div class="hm-section">
           <div class="hm-section-title" id="hm03-title">Chemical &amp; UV treatment resistance</div>
-          <div class="hm-section-sub" id="hm03-sub">Source: WHO/EPA Turbidity Review 2017 · EPA UV Manual — &gt;1 NTU reduces UV/chlorine · EPA threshold &lt;1 NTU</div>
+          <div class="hm-section-sub" id="hm03-sub">&gt;1 NTU reduces UV/chlorine effectiveness · EPA threshold &lt;1 NTU <span class="ref-sup" title="WHO/EPA Turbidity Review 2017 · EPA UV Disinfection Guidance Manual">[5,6]</span></div>
           <div class="hm-layout">
             <div class="hm-y-control">
               <span class="hm-y-label" id="hm03-y-label">pH</span>
@@ -745,7 +757,7 @@ a:hover { text-decoration: underline; }
       <div class="acc-body open">
         <div class="hm-section">
           <div class="hm-section-title" id="hm04-title">Protocol recommendation + SOP</div>
-          <div class="hm-section-sub" id="hm04-sub">Source: SOP Skøl v3.0 · EPDM budget max 800 min O₃/year · STD=45 min · CHOC=75 min · 2×CHOC=150 min</div>
+          <div class="hm-section-sub" id="hm04-sub">EPDM budget max 800 min O₃/year · STD=45 min · CHOC=75 min · 2×CHOC=150 min <span class="ref-sup" title="SOP Skøl v3.0 · field-validated">[7]</span></div>
           <div class="hm-layout">
             <div class="hm-y-control">
               <span class="hm-y-label" id="hm04-y-label">Temperature</span>
@@ -893,6 +905,21 @@ a:hover { text-decoration: underline; }
   </div>
 
 </div><!-- /main -->
+
+<!-- ── REFERENCES ── -->
+<div class="ref-block">
+  <div class="ref-block-title" id="ref-title">References</div>
+  <ol class="ref-list">
+    <li><span class="ref-num">[1]</span><span>CDC (2025). <em>Controlling Legionella in Potable Water Systems.</em> Centers for Disease Control and Prevention. Growth zone 20–45°C, optimal 32–35°C.</span></li>
+    <li><span class="ref-num">[2]</span><span>WHO (2022). <em>Legionellosis Fact Sheet.</em> World Health Organization. Inactivation below 20°C; destruction above 55°C.</span></li>
+    <li><span class="ref-num">[3]</span><span>Hoigné, J. &amp; Bader, H. (1976–1983). <em>Ozone Science &amp; Engineering.</em> O₃ half-life kinetics: ~30 min at 15°C · ~15 min at 25°C · ~5–8 min at 35°C.</span></li>
+    <li><span class="ref-num">[4]</span><span>Langlais, B., Reckhow, D.A. &amp; Brink, D.R. (1991). <em>Ozone in Water Treatment: Application and Engineering.</em> Lewis Publishers. Natural water half-life 1–20 min depending on organic demand.</span></li>
+    <li><span class="ref-num">[5]</span><span>WHO/EPA (2017). <em>Turbidity Review.</em> Turbidity &gt;1 NTU reduces UV and chlorine effectiveness; EPA threshold &lt;1 NTU for treated water.</span></li>
+    <li><span class="ref-num">[6]</span><span>U.S. EPA (2006). <em>Ultraviolet Disinfection Guidance Manual.</em> EPA 815-R-06-007. Max 2 NTU for effective UV; &gt;10 NTU critical failure threshold.</span></li>
+    <li><span class="ref-num">[7]</span><span>Vandenbroucke, J.-É. (2026). <em>SOP Skøl v3.0 — Ozone Water Treatment, LTV Unity FX / North American RVs in Europe.</em> Field-validated. Not NSF/ANSI 60 certified.</span></li>
+  </ol>
+  <p style="font-size:10px;color:#4a5a5a;margin-top:0.65rem;font-style:italic;" id="ref-note">Protocol thresholds interpolated for a static RV tank context. Decision-support tool only — not lab-certified.</p>
+</div>
 
 <footer class="footer">
   <span>© 2026 Jack-Éric Vandenbroucke — Skøl / LTV Europe Project</span>
@@ -1324,25 +1351,25 @@ const LANG = {
     's5-intro':'Use the sliders to position yourself on each heatmap. The white marker shows your position. <strong>HM04 is the key output</strong> — it recommends your protocol and shows the full step-by-step SOP below.',
     'hm01-acc-title':'HM01 — Bacterial Risk: Temperature × Stagnation',
     'hm01-title':'Bacterial growth risk in your tank',
-    'hm01-sub':'Source: CDC 2025 · WHO 2022 — Legionella optimal 32–35°C · inactive &lt;20°C · destroyed &gt;55°C',
+    'hm01-sub':'Legionella optimal 32–35°C · inactive &lt;20°C · destroyed &gt;55°C <span class='ref-sup' title='CDC 2025 · WHO 2022'>[1,2]</span>',
     'hm01-y-label':'Temperature','hm01-x-label':'← Stagnation duration →',
     'hm01-r4':'&gt;35°C','hm01-r3':'25–35°C','hm01-r2':'15–25°C','hm01-r1':'5–15°C','hm01-r0':'&lt;5°C',
     'hm01-x0':'&lt;24h','hm01-x1':'1–3d','hm01-x2':'3–7d','hm01-x3':'7–14d','hm01-x4':'&gt;14d',
     'hm02-acc-title':'HM02 — O₃ Effectiveness: Temperature × Water Quality',
     'hm02-title':'O₃ half-life in your water',
-    'hm02-sub':'Source: Hoigné &amp; Bader 1976–83 · Langlais et al. 1991',
+    'hm02-sub':'Natural water half-life 1–20 min depending on organic matter <span class='ref-sup' title='Hoigné &amp; Bader 1976–83 · Langlais et al. 1991'>[3,4]</span>',
     'hm02-y-label':'Temperature','hm02-x-label':'← Water quality (ozone demand) →',
     'hm02-r4':'&gt;35°C','hm02-r3':'25–35°C','hm02-r2':'15–25°C','hm02-r1':'5–15°C','hm02-r0':'&lt;5°C',
     'hm02-x0':'Munic.<br>clear','hm02-x1':'Munic.<br>loaded','hm02-x2':'Well<br>moderate','hm02-x3':'Well<br>loaded','hm02-x4':'Very<br>loaded',
     'hm03-acc-title':'HM03 — Treatment Resistance: pH × Turbidity',
     'hm03-title':'Chemical &amp; UV treatment resistance',
-    'hm03-sub':'Source: WHO/EPA Turbidity Review 2017 · EPA UV Manual',
+    'hm03-sub':'&gt;1 NTU reduces UV/chlorine effectiveness · EPA threshold &lt;1 NTU <span class='ref-sup' title='WHO/EPA Turbidity Review 2017 · EPA UV Manual'>[5,6]</span>',
     'hm03-y-label':'pH','hm03-x-label':'← Turbidity / organic matter (NTU) →',
     'hm03-r4':'pH &gt;8.5','hm03-r3':'7.5–8.5','hm03-r2':'6.5–7.5','hm03-r1':'5.5–6.5','hm03-r0':'pH &lt;5.5',
     'hm03-x0':'&lt;0.5<br>Crystal','hm03-x1':'0.5–2<br>Clear','hm03-x2':'2–5<br>Hazy','hm03-x3':'5–15<br>Turbid','hm03-x4':'&gt;15<br>Opaque',
     'hm04-acc-title':'HM04 — Recommended Protocol: Temperature × Context',
     'hm04-key-label':'KEY','hm04-title':'Protocol recommendation + SOP',
-    'hm04-sub':'Source: SOP v3.0 · EPDM budget max 800 min O₃/year · STD=45 min · CHOC=75 min',
+    'hm04-sub':'EPDM budget max 800 min O₃/year · STD=45 min · CHOC=75 min <span class='ref-sup' title='SOP Skøl v3.0'>[7]</span>',
     'hm04-y-label':'Temperature','hm04-x-label':'← Source &amp; usage context →',
     'hm04-r4':'&gt;35°C','hm04-r3':'25–35°C','hm04-r2':'15–25°C','hm04-r1':'5–15°C','hm04-r0':'&lt;5°C',
     'hm04-x0':'Munic.<br>camping','hm04-x1':'Frequent<br>refill','hm04-x2':'Boon.<br>normal','hm04-x3':'Boon.<br>hot','hm04-x4':'Long<br>stagnation',
@@ -1369,7 +1396,9 @@ const LANG = {
     'r3-title':'Local Lab Testing','r3-body':'France: LDA €30–80. Spain: LABAQUA. Portugal: LNEC. Test for coliforms, Legionella, nitrates, turbidity.',
     'r4-title':'Tank Temperature Monitor','r4-body':'A Tuya DS18B20 probe (~€15) gives real-time temperature. Temperature is the <strong>single most important variable</strong> for protocol selection — essential for summer travel above 25°C.',
     'disc-label':'⚗️ Field use disclaimer:','disc-body':'All ozone protocols are empirically derived field best practices, not NSF/ANSI 60 lab-certified procedures. Decision-support tool only — adapt to your conditions. Not a substitute for professional water testing.',
-    'foot-right':'Field-validated · Not lab-certified · Adapt to your conditions'
+    'foot-right':'Field-validated · Not lab-certified · Adapt to your conditions',
+    'ref-title':'References',
+    'ref-note':'Protocol thresholds interpolated for a static RV tank context. Decision-support tool only — not lab-certified.'
   },
   fr: {
     'h-title': 'Qualité &amp; Traitement de l\'eau<br><em>en Europe pour les VRistes nord-américains</em>',
@@ -1384,7 +1413,7 @@ const LANG = {
     's1-htable-title':'💧 Dureté de l\'eau et pH par région',
     's2-label':'Section 2','s2-title':'La règle des 20% et le risque de stagnation',
     's2-intro':'L\'une des pratiques les plus efficaces ne coûte rien. Gardez votre réservoir à ≤20% pendant le trajet. La durée de stagnation est la variable la plus importante pour le risque bactérien en Europe en été.',
-    's2-stag-title':'Risque de stagnation — Température × Durée',
+    's2-stag-title':'Risque de stagnation — Température × Durée<span class='ref-sup' title='CDC 2025 · WHO 2022'> [1,2]</span>',
     'stag-0-t':'&lt;24h','stag-0-l':'✓ Bas','stag-1-t':'1–3j','stag-1-l':'Bas–Mod',
     'stag-2-t':'3–7j','stag-2-l':'⚠ Mod','stag-3-t':'7–14j','stag-3-l':'Élevé',
     'stag-4-t':'&gt;14j','stag-4-l':'🔴 Critique',
@@ -1421,25 +1450,25 @@ const LANG = {
     's5-intro':'Utilisez les curseurs pour vous positionner sur chaque heatmap. Le marqueur blanc indique votre position. <strong>HM04 est la sortie principale</strong> — il recommande votre protocole et affiche le SOP complet étape par étape.',
     'hm01-acc-title':'HM01 — Risque bactérien : Température × Stagnation',
     'hm01-title':'Risque de croissance bactérienne dans votre réservoir',
-    'hm01-sub':'Source : CDC 2025 · WHO 2022 — Legionella optimal 32–35°C · inactif &lt;20°C · détruit &gt;55°C',
+    'hm01-sub':'Legionella optimal 32–35°C · inactif &lt;20°C · détruit &gt;55°C <span class='ref-sup' title='CDC 2025 · WHO 2022'>[1,2]</span>',
     'hm01-y-label':'Température','hm01-x-label':'← Durée de stagnation →',
     'hm01-r4':'&gt;35°C','hm01-r3':'25–35°C','hm01-r2':'15–25°C','hm01-r1':'5–15°C','hm01-r0':'&lt;5°C',
     'hm01-x0':'&lt;24h','hm01-x1':'1–3j','hm01-x2':'3–7j','hm01-x3':'7–14j','hm01-x4':'&gt;14j',
     'hm02-acc-title':'HM02 — Efficacité O₃ : Température × Qualité de l\'eau',
     'hm02-title':'Demi-vie de l\'O₃ dans votre eau',
-    'hm02-sub':'Source : Hoigné &amp; Bader 1976–83 · Langlais et al. 1991',
+    'hm02-sub':'Demi-vie eau naturelle 1–20 min selon matières organiques <span class='ref-sup' title='Hoigné &amp; Bader 1976–83 · Langlais et al. 1991'>[3,4]</span>',
     'hm02-y-label':'Température','hm02-x-label':'← Qualité de l\'eau (demande en ozone) →',
     'hm02-r4':'&gt;35°C','hm02-r3':'25–35°C','hm02-r2':'15–25°C','hm02-r1':'5–15°C','hm02-r0':'&lt;5°C',
     'hm02-x0':'Munic.<br>claire','hm02-x1':'Munic.<br>chargée','hm02-x2':'Puits<br>mod.','hm02-x3':'Puits<br>chargé','hm02-x4':'Très<br>chargée',
     'hm03-acc-title':'HM03 — Résistance aux traitements : pH × Turbidité',
     'hm03-title':'Résistance aux traitements chimiques &amp; UV',
-    'hm03-sub':'Source : WHO/EPA Turbidity Review 2017 · EPA UV Manual',
+    'hm03-sub':'&gt;1 NTU réduit UV/chlore · seuil EPA &lt;1 NTU <span class='ref-sup' title='WHO/EPA 2017 · EPA UV Manual'>[5,6]</span>',
     'hm03-y-label':'pH','hm03-x-label':'← Turbidité / matières organiques (NTU) →',
     'hm03-r4':'pH &gt;8,5','hm03-r3':'7,5–8,5','hm03-r2':'6,5–7,5','hm03-r1':'5,5–6,5','hm03-r0':'pH &lt;5,5',
     'hm03-x0':'&lt;0,5<br>Cristal','hm03-x1':'0,5–2<br>Claire','hm03-x2':'2–5<br>Voilée','hm03-x3':'5–15<br>Trouble','hm03-x4':'&gt;15<br>Opaque',
     'hm04-acc-title':'HM04 — Protocole recommandé : Température × Contexte',
     'hm04-key-label':'CLÉ','hm04-title':'Recommandation de protocole + SOP',
-    'hm04-sub':'Source : SOP v3.0 · Budget EPDM max 800 min O₃/an · STD=45 min · CHOC=75 min',
+    'hm04-sub':'Budget EPDM max 800 min O₃/an · STD=45 min · CHOC=75 min <span class='ref-sup' title='SOP Skøl v3.0'>[7]</span>',
     'hm04-y-label':'Température','hm04-x-label':'← Source &amp; contexte d\'utilisation →',
     'hm04-r4':'&gt;35°C','hm04-r3':'25–35°C','hm04-r2':'15–25°C','hm04-r1':'5–15°C','hm04-r0':'&lt;5°C',
     'hm04-x0':'Camping<br>munic.','hm04-x1':'Renouvell.<br>fréquent','hm04-x2':'Boondock.<br>normal','hm04-x3':'Boondock.<br>chaud','hm04-x4':'Stagnation<br>prolongée',
@@ -1466,7 +1495,9 @@ const LANG = {
     'r3-title':'Tests en laboratoire local','r3-body':'France : LDA 30–80€. Espagne : LABAQUA. Portugal : LNEC. Tester : coliformes, Legionella, nitrates, turbidité.',
     'r4-title':'Surveillance température réservoir','r4-body':'Une sonde DS18B20 Tuya (~15€) donne la température en temps réel. La température est la <strong>variable la plus importante</strong> pour le choix du protocole — indispensable en été au-dessus de 25°C.',
     'disc-label':'⚗️ Avertissement terrain :','disc-body':'Tous les protocoles ozone sont des bonnes pratiques terrain empiriques, non certifiées NSF/ANSI 60. Outil d\'aide à la décision uniquement — adapter à vos conditions réelles. Non substitut à des tests d\'eau professionnels.',
-    'foot-right':'Validé sur le terrain · Non certifié labo · Adapter à vos conditions'
+    'foot-right':'Validé sur le terrain · Non certifié labo · Adapter à vos conditions',
+    'ref-title':'Références',
+    'ref-note':'Seuils de protocole interpolés pour un réservoir VR statique. Outil d'aide à la décision uniquement — non certifié laboratoire.'
   }
 };
 
