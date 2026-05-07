@@ -218,6 +218,8 @@ a:hover { text-decoration: underline; }
 .product-item .p-role { font-size: 10px; color: #6a8888; display: block; margin-top: 2px; }
 
 /* ── DISCLAIMER ── */
+.map-grid { display: grid; grid-template-columns: 1fr 280px; gap: 1rem; align-items: start; }
+@media (max-width: 780px) { .map-grid { grid-template-columns: 1fr; } }
 .disclaimer { background: var(--surface2); border: 1px dashed var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; font-size: 12px; color: var(--text3); line-height: 1.6; margin-top: 2rem; }
 
 /* ── REFERENCES ── */
@@ -233,6 +235,9 @@ a:hover { text-decoration: underline; }
 /* ── FOOTER ── */
 .footer { border-top: 0.5px solid var(--border); padding: 1.5rem; max-width: 960px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--text3); }
 
+@media (max-width: 800px) {
+  #europe-map ~ div, .map-grid { grid-template-columns: 1fr !important; }
+}
 @media (max-width: 700px) {
   .card-grid-4 { grid-template-columns: 1fr 1fr; }
   .card-grid-3 { grid-template-columns: 1fr; }
@@ -326,10 +331,10 @@ a:hover { text-decoration: underline; }
     <div class="card" style="overflow:hidden;margin-bottom:0;padding:1.25rem;">
       <h3 style="margin-bottom:0.4rem;" id="s1-htable-title">💧 Water Hardness & pH — Click a Country</h3>
       <p style="font-size:12px;color:var(--text3);margin-bottom:1rem;" id="s1-map-hint">Click any highlighted country for its water spec sheet.</p>
-      <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-start;">
+      <div class="map-grid">
         <!-- SVG Map -->
-        <div style="flex:1;min-width:260px;max-width:480px;">
-          <svg id="europe-map" onclick="handleMapClick(event)" viewBox="0 0 520 440" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;cursor:pointer;">
+        <div style="width:100%;">
+          <svg id="europe-map" onclick="handleMapClick(event)" viewBox="120 10 270 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;cursor:pointer;">
             <!-- Color legend gradient bg -->
             <defs>
               <style>
@@ -428,7 +433,7 @@ a:hover { text-decoration: underline; }
           </svg>
         </div>
         <!-- Spec sheet panel -->
-        <div id="country-panel" style="flex:1;min-width:200px;max-width:380px;background:var(--surface2);border-radius:var(--radius);padding:1.1rem;border:1px solid var(--border);height:fit-content;">
+        <div id="country-panel" style="background:var(--surface2);border-radius:var(--radius);padding:1rem;border:1px solid var(--border);">
           <p style="font-size:13px;color:var(--text3);font-style:italic;text-align:center;padding:1rem 0;" id="map-prompt-text">← Click a country on the map</p>
         </div>
       </div>
@@ -1440,7 +1445,7 @@ const LANG = {
     'stag-2-t':'3–7j','stag-2-l':'⚠ Mod','stag-3-t':'7–14j','stag-3-l':'Élevé',
     'stag-4-t':'&gt;14j','stag-4-l':'🔴 Critique',
     'stag-note':'À 25–35°C (réservoir VR au soleil d\'été), la Legionella entre en zone de croissance critique après 3–7 jours. En dessous de 20°C, risque minimal. Source : CDC 2025, WHO 2022.',
-    's2-c1-title':'Pourquoi ≤20% en route ?','s2-c1-body':'Les secousses de conduite remettent le biofilm en suspension. Un réservoir quasi vide sèche plus vite après rinçage. Moins de poids, moins de mouvement, moins de risque. <strong>Toujours vider le réservoir avant de le remplir</strong> — ne jamais faire le plein sur de l'eau stagnante.',
+    's2-c1-title':'Pourquoi ≤20% en route ?','s2-c1-body':'Les secousses de conduite remettent le biofilm en suspension. Un réservoir quasi vide sèche plus vite après rinçage. Moins de poids, moins de mouvement, moins de risque. <strong>Toujours vider le réservoir avant de le remplir</strong> — ne jamais faire le plein sur de l\'eau stagnante.',
     's2-c2-title':'Seuil estival','s2-c2-body':'À 25–35°C, refaire le plein depuis une source vérifiée tous les 2–3 jours en stationnement. Remplir à 100% seulement juste avant usage.',
     's2-c3-title':'Hygiène du robinet de camping','s2-c3-body':'Laisser couler le robinet du camping 30–60 sec avant de connecter. Ne jamais utiliser un tuyau qui a cuit au soleil. La ligne du camping peut être la source de contamination.',
     's3-label':'Section 3','s3-title':'Stratégie de traitement multi-barrières',
@@ -1519,7 +1524,7 @@ const LANG = {
     'disc-label':'⚗️ Avertissement terrain :','disc-body':'Tous les protocoles ozone sont des bonnes pratiques terrain empiriques, non certifiées NSF/ANSI 60. Outil d\'aide à la décision uniquement — adapter à vos conditions réelles. Non substitut à des tests d\'eau professionnels.',
     'foot-right':'Validé sur le terrain · Non certifié labo · Adapter à vos conditions',
     'ref-title':'Références',
-    'ref-note':'Seuils de protocole interpolés pour un réservoir VR statique. Outil d'aide à la décision uniquement — non certifié laboratoire.'
+    'ref-note':'Seuils de protocole interpolés pour un réservoir VR statique. Outil d\'aide à la décision uniquement — non certifié laboratoire.'
   }
 };
 
