@@ -329,7 +329,7 @@ a:hover { text-decoration: underline; }
       <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-start;">
         <!-- SVG Map -->
         <div style="flex:1;min-width:260px;max-width:480px;">
-          <svg id="europe-map" viewBox="0 0 520 440" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;cursor:pointer;">
+          <svg id="europe-map" onclick="handleMapClick(event)" viewBox="0 0 520 440" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;cursor:pointer;">
             <!-- Color legend gradient bg -->
             <defs>
               <style>
@@ -347,51 +347,51 @@ a:hover { text-decoration: underline; }
             </defs>
             <!-- Simplified country shapes — approximate polygons optimized for clickability -->
             <!-- Norway -->
-            <path id="cm-NO" class="cmap h-soft" d="M238,20 L268,18 L285,28 L292,50 L278,70 L268,90 L255,105 L248,120 L238,130 L225,120 L218,100 L215,80 L220,55 L228,35 Z" onclick="selectCountry('NO')"></path>
+            <path id="cm-NO" class="cmap h-soft" d="M238,20 L268,18 L285,28 L292,50 L278,70 L268,90 L255,105 L248,120 L238,130 L225,120 L218,100 L215,80 L220,55 L228,35 Z" data-country="NO"></path>
             <!-- Sweden -->
-            <path id="cm-SE" class="cmap h-mod" d="M268,18 L292,22 L308,35 L315,55 L310,80 L300,100 L292,120 L282,140 L272,155 L262,145 L255,130 L255,105 L268,90 L278,70 L292,50 L285,28 Z" onclick="selectCountry('SE')"></path>
+            <path id="cm-SE" class="cmap h-mod" d="M268,18 L292,22 L308,35 L315,55 L310,80 L300,100 L292,120 L282,140 L272,155 L262,145 L255,130 L255,105 L268,90 L278,70 L292,50 L285,28 Z" data-country="SE"></path>
             <!-- Finland -->
-            <path id="cm-FI" class="cmap h-soft" d="M308,20 L335,18 L355,28 L360,50 L352,75 L342,95 L328,110 L315,100 L310,80 L315,55 L308,35 Z" onclick="selectCountry('FI')"></path>
+            <path id="cm-FI" class="cmap h-soft" d="M308,20 L335,18 L355,28 L360,50 L352,75 L342,95 L328,110 L315,100 L310,80 L315,55 L308,35 Z" data-country="FI"></path>
             <!-- Denmark -->
-            <path id="cm-DK" class="cmap h-mod" d="M255,140 L272,135 L280,148 L272,160 L258,162 L250,155 L252,145 Z" onclick="selectCountry('DK')"></path>
+            <path id="cm-DK" class="cmap h-mod" d="M255,140 L272,135 L280,148 L272,160 L258,162 L250,155 L252,145 Z" data-country="DK"></path>
             <!-- UK (England+Scotland+Wales) -->
-            <path id="cm-GB" class="cmap h-variable" d="M158,80 L178,72 L192,80 L198,95 L195,115 L188,130 L178,145 L168,155 L158,148 L148,135 L145,118 L148,100 Z" onclick="selectCountry('GB')"></path>
+            <path id="cm-GB" class="cmap h-variable" d="M158,80 L178,72 L192,80 L198,95 L195,115 L188,130 L178,145 L168,155 L158,148 L148,135 L145,118 L148,100 Z" data-country="GB"></path>
             <!-- Ireland -->
-            <path id="cm-IE" class="cmap h-mod" d="M138,108 L152,103 L158,115 L155,130 L145,138 L133,132 L128,120 L132,110 Z" onclick="selectCountry('IE')"></path>
+            <path id="cm-IE" class="cmap h-mod" d="M138,108 L152,103 L158,115 L155,130 L145,138 L133,132 L128,120 L132,110 Z" data-country="IE"></path>
             <!-- Netherlands -->
-            <path id="cm-NL" class="cmap h-variable" d="M218,148 L235,143 L242,153 L238,165 L225,168 L215,160 L215,152 Z" onclick="selectCountry('NL')"></path>
+            <path id="cm-NL" class="cmap h-variable" d="M218,148 L235,143 L242,153 L238,165 L225,168 L215,160 L215,152 Z" data-country="NL"></path>
             <!-- Belgium -->
-            <path id="cm-BE" class="cmap h-hard" d="M215,168 L238,165 L245,175 L240,185 L222,186 L212,178 Z" onclick="selectCountry('BE')"></path>
+            <path id="cm-BE" class="cmap h-hard" d="M215,168 L238,165 L245,175 L240,185 L222,186 L212,178 Z" data-country="BE"></path>
             <!-- Luxembourg -->
-            <path id="cm-LU" class="cmap h-hard" d="M238,182 L245,180 L248,188 L242,194 L236,190 Z" onclick="selectCountry('LU')"></path>
+            <path id="cm-LU" class="cmap h-hard" d="M238,182 L245,180 L248,188 L242,194 L236,190 Z" data-country="LU"></path>
             <!-- France -->
-            <path id="cm-FR" class="cmap h-variable" d="M162,168 L190,162 L215,168 L222,186 L240,185 L248,200 L252,220 L242,242 L225,255 L205,260 L185,252 L170,240 L158,222 L155,202 L158,182 Z" onclick="selectCountry('FR')"></path>
+            <path id="cm-FR" class="cmap h-variable" d="M162,168 L190,162 L215,168 L222,186 L240,185 L248,200 L252,220 L242,242 L225,255 L205,260 L185,252 L170,240 L158,222 L155,202 L158,182 Z" data-country="FR"></path>
             <!-- Spain -->
-            <path id="cm-ES" class="cmap h-hard" d="M155,262 L178,255 L205,260 L228,258 L245,265 L248,285 L238,305 L218,318 L195,320 L172,312 L155,298 L148,280 L150,268 Z" onclick="selectCountry('ES')"></path>
+            <path id="cm-ES" class="cmap h-hard" d="M155,262 L178,255 L205,260 L228,258 L245,265 L248,285 L238,305 L218,318 L195,320 L172,312 L155,298 L148,280 L150,268 Z" data-country="ES"></path>
             <!-- Portugal -->
-            <path id="cm-PT" class="cmap h-soft" d="M148,268 L162,265 L168,280 L165,298 L155,308 L143,302 L138,285 L140,272 Z" onclick="selectCountry('PT')"></path>
+            <path id="cm-PT" class="cmap h-soft" d="M148,268 L162,265 L168,280 L165,298 L155,308 L143,302 L138,285 L140,272 Z" data-country="PT"></path>
             <!-- Germany -->
-            <path id="cm-DE" class="cmap h-vhard" d="M240,148 L270,143 L292,148 L298,165 L295,185 L282,200 L265,208 L250,205 L240,195 L236,180 L238,165 L242,153 Z" onclick="selectCountry('DE')"></path>
+            <path id="cm-DE" class="cmap h-vhard" d="M240,148 L270,143 L292,148 L298,165 L295,185 L282,200 L265,208 L250,205 L240,195 L236,180 L238,165 L242,153 Z" data-country="DE"></path>
             <!-- Switzerland -->
-            <path id="cm-CH" class="cmap h-mod" d="M240,210 L262,208 L272,218 L268,230 L252,232 L240,228 L238,218 Z" onclick="selectCountry('CH')"></path>
+            <path id="cm-CH" class="cmap h-mod" d="M240,210 L262,208 L272,218 L268,230 L252,232 L240,228 L238,218 Z" data-country="CH"></path>
             <!-- Austria -->
-            <path id="cm-AT" class="cmap h-vhard" d="M270,200 L298,195 L318,200 L322,212 L308,222 L285,225 L272,220 L268,210 Z" onclick="selectCountry('AT')"></path>
+            <path id="cm-AT" class="cmap h-vhard" d="M270,200 L298,195 L318,200 L322,212 L308,222 L285,225 L272,220 L268,210 Z" data-country="AT"></path>
             <!-- Italy -->
-            <path id="cm-IT" class="cmap h-hard" d="M240,232 L265,228 L285,235 L295,250 L298,270 L292,295 L280,315 L268,330 L260,320 L255,300 L252,278 L248,258 L242,242 Z" onclick="selectCountry('IT')"></path>
+            <path id="cm-IT" class="cmap h-hard" d="M240,232 L265,228 L285,235 L295,250 L298,270 L292,295 L280,315 L268,330 L260,320 L255,300 L252,278 L248,258 L242,242 Z" data-country="IT"></path>
             <!-- Poland -->
-            <path id="cm-PL" class="cmap h-hard" d="M295,148 L325,143 L348,150 L355,165 L348,182 L332,192 L315,195 L300,188 L295,172 L295,158 Z" onclick="selectCountry('PL')"></path>
+            <path id="cm-PL" class="cmap h-hard" d="M295,148 L325,143 L348,150 L355,165 L348,182 L332,192 L315,195 L300,188 L295,172 L295,158 Z" data-country="PL"></path>
             <!-- Czech Republic -->
-            <path id="cm-CZ" class="cmap h-hard" d="M270,188 L298,183 L318,190 L320,202 L305,210 L282,208 L268,200 Z" onclick="selectCountry('CZ')"></path>
+            <path id="cm-CZ" class="cmap h-hard" d="M270,188 L298,183 L318,190 L320,202 L305,210 L282,208 L268,200 Z" data-country="CZ"></path>
             <!-- Hungary -->
-            <path id="cm-HU" class="cmap h-hard" d="M305,218 L330,213 L348,218 L352,232 L340,242 L318,245 L302,238 L298,225 Z" onclick="selectCountry('HU')"></path>
+            <path id="cm-HU" class="cmap h-hard" d="M305,218 L330,213 L348,218 L352,232 L340,242 L318,245 L302,238 L298,225 Z" data-country="HU"></path>
             <!-- Croatia / Slovenia -->
-            <path id="cm-HR" class="cmap h-hard" d="M280,240 L308,235 L320,245 L318,258 L302,265 L282,260 L275,250 Z" onclick="selectCountry('HR')"></path>
+            <path id="cm-HR" class="cmap h-hard" d="M280,240 L308,235 L320,245 L318,258 L302,265 L282,260 L275,250 Z" data-country="HR"></path>
             <!-- Romania -->
-            <path id="cm-RO" class="cmap h-hard" d="M330,210 L358,205 L375,215 L378,235 L368,252 L348,258 L328,252 L318,238 L320,220 Z" onclick="selectCountry('RO')"></path>
+            <path id="cm-RO" class="cmap h-hard" d="M330,210 L358,205 L375,215 L378,235 L368,252 L348,258 L328,252 L318,238 L320,220 Z" data-country="RO"></path>
             <!-- Greece -->
-            <path id="cm-GR" class="cmap h-vhard" d="M310,295 L332,288 L345,298 L342,318 L328,328 L312,325 L302,312 L305,300 Z" onclick="selectCountry('GR')"></path>
+            <path id="cm-GR" class="cmap h-vhard" d="M310,295 L332,288 L345,298 L342,318 L328,328 L312,325 L302,312 L305,300 Z" data-country="GR"></path>
             <!-- Estonia / Latvia / Lithuania -->
-            <path id="cm-EE" class="cmap h-mod" d="M318,105 L342,100 L355,110 L352,125 L335,130 L318,125 L312,115 Z" onclick="selectCountry('EE')"></path>
+            <path id="cm-EE" class="cmap h-mod" d="M318,105 L342,100 L355,110 L352,125 L335,130 L318,125 L312,115 Z" data-country="EE"></path>
             <!-- Country labels (small, for orientation) -->
             <text x="248" y="75" font-size="8" fill="#4a5a6a" text-anchor="middle" pointer-events="none">NO</text>
             <text x="288" y="85" font-size="8" fill="#4a5a6a" text-anchor="middle" pointer-events="none">SE</text>
@@ -428,7 +428,7 @@ a:hover { text-decoration: underline; }
           </svg>
         </div>
         <!-- Spec sheet panel -->
-        <div id="country-panel" style="flex:1;min-width:220px;max-width:420px;background:var(--surface2);border-radius:var(--radius);padding:1.1rem;border:1px solid var(--border);align-self:flex-start;">
+        <div id="country-panel" style="flex:1;min-width:200px;max-width:380px;background:var(--surface2);border-radius:var(--radius);padding:1.1rem;border:1px solid var(--border);height:fit-content;">
           <p style="font-size:13px;color:var(--text3);font-style:italic;text-align:center;padding:1rem 0;" id="map-prompt-text">← Click a country on the map</p>
         </div>
       </div>
@@ -945,22 +945,26 @@ function toggleAcc(header) {
   if (chevron) chevron.style.transform = header.classList.contains('open') ? 'rotate(180deg)' : '';
   // Rebuild heatmap grids when accordion opens (they were display:none at init)
   if (body.classList.contains('open')) {
-    [1,2,3,4].forEach(n => {
-      const grid = document.getElementById('hm0'+n+'-grid');
-      if (grid && grid.children.length === 0) { buildGrid(n); updateHM(n); }
+    [1,2,3,4].forEach(function(n) {
+      var grid = document.getElementById('hm0'+n+'-grid');
+      if (grid && grid.innerHTML.trim() === '') { buildGrid(n); updateHM(n); }
     });
   }
 }
 
 // ── TABS ──
 function switchTab(id, e) {
-  const btn = e ? (e.target.closest('.tab-btn') || e.target) : null;
-  const container = btn ? btn.closest('.card') : document;
-  container.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
-  container.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-  const panel = document.getElementById("tab-" + id);
-  if (panel) panel.classList.add("active");
-  if (btn) btn.classList.add("active");
+  // Scope to unity/wonder tabs only — target by known IDs
+  ['unity','wonder'].forEach(function(tid) {
+    var p = document.getElementById('tab-' + tid);
+    var b = document.getElementById('tab-' + tid + '-btn');
+    if (p) p.classList.remove('active');
+    if (b) b.classList.remove('active');
+  });
+  var panel = document.getElementById('tab-' + id);
+  var btn = document.getElementById('tab-' + id + '-btn');
+  if (panel) panel.classList.add('active');
+  if (btn) btn.classList.add('active');
 }
 
 // ── HEATMAP DATA ──
@@ -1841,6 +1845,18 @@ const BACT_BADGE = {
   'High (islands, summer)':'badge-red', 'Moderate–High (summer)':'badge-amber',
   'High':'badge-red',
 };
+
+function handleMapClick(e) {
+  var el = e.target;
+  // Walk up to find element with data-country
+  while (el && el !== e.currentTarget) {
+    if (el.dataset && el.dataset.country) {
+      selectCountry(el.dataset.country);
+      return;
+    }
+    el = el.parentElement;
+  }
+}
 
 function selectCountry(code) {
   const d = COUNTRY_DATA[code];
