@@ -4,139 +4,102 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pre-Departure Adaptation Checklist — North American RV Europe</title>
-<meta name="description" content="Interactive pre-departure checklist for North American RV owners preparing for Europe. Electricity, propane, water, weight, mandatory equipment and more.">
+<meta name="description" content="Interactive pre-departure checklist for North American RV owners preparing for Europe.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f5f2ec;--surface:#fff;--surface2:#f0ede6;--border:#ddd9d0;--text:#1a1915;--text2:#6b6860;--text3:#9c9890;--blue:#1a5fa8;--blue-bg:#e8f0fa;--green:#1a7a4a;--green-bg:#e4f5ec;--amber:#8a5a00;--amber-bg:#fdf0d5;--red:#a02020;--red-bg:#fde8e8;--teal:#0d6e7a;--teal-bg:#e0f4f7;--radius:10px;--shadow:0 2px 12px rgba(0,0,0,.06)}
+:root{--bg:#f5f2ec;--surface:#fff;--surface2:#f0ede6;--border:#ddd9d0;--text:#1a1915;--text2:#6b6860;--text3:#9c9890;--blue:#1a5fa8;--blue-bg:#e8f0fa;--green:#1a7a4a;--green-bg:#e4f5ec;--amber:#8a5a00;--amber-bg:#fdf0d5;--red:#a02020;--red-bg:#fde8e8;--teal:#0d6e7a;--teal-bg:#e0f4f7;--radius:10px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
 a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
-
-/* NAV */
 .tool-nav{position:sticky;top:0;z-index:100;background:rgba(26,25,21,.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.1);padding:0 1rem}
 .tool-nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none}
 .tool-nav-inner::-webkit-scrollbar{display:none}
 .tool-nav-inner a{display:flex;flex-direction:column;align-items:center;padding:8px 10px;color:rgba(255,255,255,.55);text-decoration:none;font-size:9px;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;gap:3px;flex-shrink:0}
 .tool-nav-inner a:hover{color:#fff}.tool-nav-inner a.active{color:#fff;border-bottom-color:#fff}
 .nav-icon{font-size:16px;line-height:1}
-
-/* HEADER */
 .page-header{background:var(--text);color:#fff;padding:3rem 2rem 2.5rem;text-align:center}
 .page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:400;line-height:1.2;margin-bottom:.75rem}
 .page-header h1 em{font-style:italic;color:#fde68a}
-.page-header p{font-size:14px;color:rgba(255,255,255,.7);max-width:600px;margin:0 auto;line-height:1.6}
+.page-header p{font-size:14px;color:rgba(255,255,255,.7);max-width:600px;margin:0 auto}
 .lang-toggle{display:inline-flex;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.2);margin-top:1.25rem}
-.lang-btn{background:none;border:none;color:rgba(255,255,255,.6);padding:6px 16px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s}
+.lang-btn{background:none;border:none;color:rgba(255,255,255,.6);padding:6px 16px;font-size:13px;font-family:inherit;cursor:pointer;transition:all .15s}
 .lang-btn.active{background:rgba(255,255,255,.2);color:#fff;font-weight:500}
-
-/* MAIN */
 .main{max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem}
-
-/* VIEW TOGGLE */
 .view-bar{display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center}
-.view-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:8px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px}
+.view-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:8px 16px;font-family:inherit;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px}
 .view-btn:hover{border-color:var(--blue);color:var(--blue)}
 .view-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
-.view-btn .vb-count{background:rgba(255,255,255,.25);border-radius:10px;padding:1px 7px;font-size:11px;font-weight:600}
+.vb-count{background:rgba(255,255,255,.25);border-radius:10px;padding:1px 7px;font-size:11px;font-weight:600}
 .view-btn:not(.active) .vb-count{background:var(--surface2);color:var(--text3)}
-
-/* RV FILTER */
 .rv-filter{display:flex;gap:6px;margin-left:auto;align-items:center}
 .rv-label{font-size:12px;color:var(--text3);font-weight:500}
 .rv-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .15s}
 .rv-btn:hover{border-color:var(--teal);color:var(--teal)}
 .rv-btn.active{background:var(--teal-bg);border-color:var(--teal);color:var(--teal)}
-
-/* PROGRESS */
-.progress-bar-wrap{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
-.progress-bar-bg{flex:1;min-width:120px;background:var(--surface2);border-radius:4px;height:8px;overflow:hidden}
-.progress-bar-fill{height:100%;background:var(--green);border-radius:4px;transition:width .4s}
-.progress-text{font-size:13px;font-weight:500;color:var(--text2);min-width:60px}
-.progress-summary{font-size:12px;color:var(--text3)}
-.reset-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;font-size:12px;color:var(--text2);cursor:pointer;transition:all .15s}
+.progress-wrap{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.prog-bg{flex:1;min-width:120px;background:var(--surface2);border-radius:4px;height:8px;overflow:hidden}
+.prog-fill{height:100%;background:var(--green);border-radius:4px;transition:width .4s}
+.prog-text{font-size:13px;font-weight:500;color:var(--text2);min-width:50px}
+.prog-summary{font-size:12px;color:var(--text3)}
+.reset-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;font-size:12px;color:var(--text2);cursor:pointer}
 .reset-btn:hover{border-color:var(--red);color:var(--red)}
-
-/* LEGEND */
 .legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1.5rem;font-size:12px}
 .leg{display:flex;align-items:center;gap:5px;color:var(--text2)}
 .leg-dot{width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
-
-/* CATEGORY ACCORDIONS */
-.cat-block{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden}
-.cat-header{display:flex;align-items:center;gap:10px;padding:1rem 1.25rem;cursor:pointer;user-select:none;border-bottom:1px solid transparent;transition:background .15s}
+.cat-block{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden}
+.cat-header{display:flex;align-items:center;gap:10px;padding:1rem 1.25rem;cursor:pointer;user-select:none;transition:background .15s}
 .cat-header:hover{background:var(--surface2)}
-.cat-header.open{border-bottom-color:var(--border)}
+.cat-header.open{border-bottom:1px solid var(--border)}
 .cat-icon{font-size:20px;flex-shrink:0}
 .cat-title{font-family:'DM Serif Display',serif;font-size:1.05rem;font-weight:400;flex:1}
-.cat-progress{font-size:12px;color:var(--text3);flex-shrink:0}
-.cat-chevron{color:var(--text3);font-size:13px;transition:transform .2s;flex-shrink:0}
-.cat-header.open .cat-chevron{transform:rotate(180deg)}
+.cat-prog{font-size:12px;color:var(--text3);flex-shrink:0}
+.cat-chev{color:var(--text3);font-size:13px;transition:transform .2s;flex-shrink:0}
 .cat-body{display:none;padding:.25rem 0}
 .cat-body.open{display:block}
-
-/* CHECKLIST ITEMS */
 .item-row{display:flex;align-items:flex-start;gap:10px;padding:.65rem 1.25rem;border-bottom:.5px solid var(--border);transition:background .1s}
 .item-row:last-child{border-bottom:none}
 .item-row:hover{background:var(--surface2)}
-.item-row.hidden{display:none}
-
-/* State buttons */
 .state-btns{display:flex;flex-direction:column;gap:3px;flex-shrink:0;margin-top:2px}
-.state-btn{width:22px;height:22px;border-radius:5px;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;font-size:11px;font-weight:700;transition:all .15s;display:flex;align-items:center;justify-content:center}
-.state-btn:hover{border-color:var(--blue)}
-.state-btn.done{background:var(--green);border-color:var(--green);color:#fff}
-.state-btn.na{background:var(--surface2);border-color:var(--border);color:var(--text3)}
-
-/* Tag pill */
-.tag-pill{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:1px 6px;border-radius:3px;flex-shrink:0;margin-top:3px}
-.tag-critical{background:#fde8e8;color:#a02020}
-.tag-mandatory{background:#fdf0d5;color:#8a5a00}
-.tag-recommended{background:#e8f0fa;color:#1a5fa8}
-.tag-optional{background:#f0ede6;color:#6b6860}
-
-/* Item content */
+.s-btn{width:22px;height:22px;border-radius:5px;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;font-size:11px;font-weight:700;transition:all .15s;display:flex;align-items:center;justify-content:center;line-height:1}
+.s-btn:hover{border-color:var(--blue)}
+.s-btn.s-done{background:var(--green);border-color:var(--green);color:#fff}
+.s-btn.s-na{background:var(--surface2);border-color:var(--border);color:var(--text3)}
+.tag-pill{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 6px;border-radius:3px;flex-shrink:0;margin-top:3px}
+.tc{background:#fde8e8;color:#a02020}
+.tm{background:#fdf0d5;color:#8a5a00}
+.tr{background:#e8f0fa;color:#1a5fa8}
+.to{background:#f0ede6;color:#6b6860}
 .item-content{flex:1;min-width:0}
-.item-label{font-size:13px;font-weight:500;line-height:1.45;margin-bottom:2px}
+.item-label{font-size:13px;font-weight:500;line-height:1.45}
 .item-note{font-size:12px;color:var(--text2);line-height:1.5;margin-top:3px}
 .item-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
-.item-link{font-size:11px;background:var(--blue-bg);color:var(--blue);padding:2px 8px;border-radius:4px;text-decoration:none;border:0.5px solid #bbd0f0;white-space:nowrap}
-.item-link:hover{background:var(--blue);color:#fff;text-decoration:none}
-.item-link.link-amazon::before{content:'🛒 '}
-.item-link.link-site::before{content:'🔗 '}
-
-/* FOOTER */
+.ilink{font-size:11px;background:var(--blue-bg);color:var(--blue);padding:2px 8px;border-radius:4px;text-decoration:none;border:.5px solid #bbd0f0;white-space:nowrap}
+.ilink:hover{background:var(--blue);color:#fff;text-decoration:none}
 .footer{border-top:.5px solid var(--border);padding:1.5rem;max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--text3)}
-
-@media(max-width:600px){
-  .view-bar{flex-direction:column;align-items:stretch}
-  .rv-filter{margin-left:0}
-}
+@media(max-width:600px){.view-bar{flex-direction:column;align-items:stretch}.rv-filter{margin-left:0}}
 </style>
 </head>
 <body>
-
-<nav class="tool-nav">
-  <div class="tool-nav-inner">
-    <a href="https://jev-rv.github.io/"><span class="nav-icon">🏠</span>Home</a>
-    <a href="https://jev-rv.github.io/schengen-rv-simulator/"><span class="nav-icon">🗓️</span>Schengen</a>
-    <a href="https://jev-rv.github.io/budget-simulator/"><span class="nav-icon">💶</span>Budget</a>
-    <a href="https://jev-rv.github.io/rv-option-selector/"><span class="nav-icon">🚐</span>Options</a>
-    <a href="https://jev-rv.github.io/port-selector/"><span class="nav-icon">⚠️</span>Port</a>
-    <a href="https://jev-rv.github.io/pre-departure-checklist/" class="active"><span class="nav-icon">✅</span>Checklist</a>
-    <a href="https://jev-rv.github.io/toll-calculator/"><span class="nav-icon">🛣️</span>Tolls</a>
-    <a href="https://jev-rv.github.io/rhythm-planner/"><span class="nav-icon">🚐</span>Rhythm</a>
-    <a href="https://jev-rv.github.io/safety-map/"><span class="nav-icon">🗺️</span>Safety</a>
-    <a href="https://jev-rv.github.io/app-recommender/"><span class="nav-icon">📱</span>Apps</a>
-    <a href="https://jev-rv.github.io/pet-travel-checker/"><span class="nav-icon">🐾</span>Pets</a>
-    <a href="https://jev-rv.github.io/getting-started/"><span class="nav-icon">🤖</span>AI Agents</a>
-    <a href="https://jev-rv.github.io/water-guide/"><span class="nav-icon">💧</span>Water</a>
-  </div>
-</nav>
+<nav class="tool-nav"><div class="tool-nav-inner">
+  <a href="https://jev-rv.github.io/"><span class="nav-icon">🏠</span>Home</a>
+  <a href="https://jev-rv.github.io/schengen-rv-simulator/"><span class="nav-icon">🗓️</span>Schengen</a>
+  <a href="https://jev-rv.github.io/budget-simulator/"><span class="nav-icon">💶</span>Budget</a>
+  <a href="https://jev-rv.github.io/rv-option-selector/"><span class="nav-icon">🚐</span>Options</a>
+  <a href="https://jev-rv.github.io/port-selector/"><span class="nav-icon">⚠️</span>Port</a>
+  <a href="https://jev-rv.github.io/pre-departure-checklist/" class="active"><span class="nav-icon">✅</span>Checklist</a>
+  <a href="https://jev-rv.github.io/toll-calculator/"><span class="nav-icon">🛣️</span>Tolls</a>
+  <a href="https://jev-rv.github.io/rhythm-planner/"><span class="nav-icon">🚐</span>Rhythm</a>
+  <a href="https://jev-rv.github.io/safety-map/"><span class="nav-icon">🗺️</span>Safety</a>
+  <a href="https://jev-rv.github.io/app-recommender/"><span class="nav-icon">📱</span>Apps</a>
+  <a href="https://jev-rv.github.io/pet-travel-checker/"><span class="nav-icon">🐾</span>Pets</a>
+  <a href="https://jev-rv.github.io/getting-started/"><span class="nav-icon">🤖</span>AI&nbsp;Agents</a>
+  <a href="https://jev-rv.github.io/water-guide/"><span class="nav-icon">💧</span>Water</a>
+</div></nav>
 
 <div class="page-header">
-  <h1 id="h-title">Pre-Departure Checklist<br><em>North American RV → Europe</em></h1>
-  <p id="h-sub">Everything your RV needs before shipping to Europe. Filter by urgency, your RV model, and track your progress.</p>
+  <h1 id="h-title">Pre-Departure Checklist<br><em>North American RV &rarr; Europe</em></h1>
+  <p id="h-sub">Everything your RV needs before shipping to Europe. Filter by urgency, your RV model, and track progress.</p>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
     <button class="lang-btn" onclick="setLang('fr')">FR</button>
@@ -144,579 +107,573 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
 </div>
 
 <div class="main">
-
-  <!-- View bar -->
   <div class="view-bar">
     <button class="view-btn active" id="vb-critical" onclick="setView('critical')">
-      🔴 <span id="vb-critical-label">Critical only</span> <span class="vb-count" id="vc-critical">—</span>
+      🔴 <span id="lbl-critical">Critical only</span> <span class="vb-count" id="cnt-critical">—</span>
     </button>
     <button class="view-btn" id="vb-full" onclick="setView('full')">
-      ☑️ <span id="vb-full-label">Full list</span> <span class="vb-count" id="vc-full">—</span>
+      ☑️ <span id="lbl-full">Full list</span> <span class="vb-count" id="cnt-full">—</span>
     </button>
     <button class="view-btn" id="vb-water" onclick="setView('water')">
-      💧 <span id="vb-water-label">Water only</span> <span class="vb-count" id="vc-water">—</span>
+      💧 <span id="lbl-water">Water only</span> <span class="vb-count" id="cnt-water">—</span>
     </button>
     <div class="rv-filter">
-      <span class="rv-label" id="rv-label-txt">My RV:</span>
+      <span class="rv-label" id="lbl-rv">My RV:</span>
       <button class="rv-btn active" id="rv-all" onclick="setRV('all')">All</button>
       <button class="rv-btn" id="rv-unity" onclick="setRV('unity')">Unity</button>
       <button class="rv-btn" id="rv-wonder" onclick="setRV('wonder')">Wonder</button>
     </div>
   </div>
-
-  <!-- Progress -->
-  <div class="progress-bar-wrap">
-    <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-fill" style="width:0%"></div></div>
-    <span class="progress-text" id="prog-text">0%</span>
-    <span class="progress-summary" id="prog-summary">0 / 0 items</span>
-    <button class="reset-btn" onclick="resetAll()" id="reset-btn">↺ Reset</button>
+  <div class="progress-wrap">
+    <div class="prog-bg"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <span class="prog-text" id="prog-pct">0%</span>
+    <span class="prog-summary" id="prog-sum">0 / 0</span>
+    <button class="reset-btn" id="lbl-reset" onclick="resetAll()">↺ Reset</button>
   </div>
-
-  <!-- Legend -->
   <div class="legend">
-    <div class="leg"><span class="leg-dot tag-critical">!</span><span id="leg-critical">Blocks departure</span></div>
-    <div class="leg"><span class="leg-dot tag-mandatory">M</span><span id="leg-mandatory">Strongly recommended</span></div>
-    <div class="leg"><span class="leg-dot tag-recommended">R</span><span id="leg-recommended">Recommended</span></div>
-    <div class="leg"><span class="leg-dot tag-optional">o</span><span id="leg-optional">Optional / if installed</span></div>
+    <div class="leg"><span class="leg-dot tc">!</span><span id="lbl-c">Blocks departure</span></div>
+    <div class="leg"><span class="leg-dot tm">M</span><span id="lbl-m">Strongly recommended</span></div>
+    <div class="leg"><span class="leg-dot tr">R</span><span id="lbl-r">Recommended</span></div>
+    <div class="leg"><span class="leg-dot to">o</span><span id="lbl-o">Optional / if installed</span></div>
   </div>
-
-  <!-- Checklist categories rendered here -->
-  <div id="checklist-root"></div>
-
-  <!-- Source note -->
-  <p style="font-size:12px;color:var(--text3);line-height:1.6;margin-top:1.5rem;" id="source-note">
-    <strong>Source:</strong> Guide 6 — Adapting Your North American Motorhome for Europe (J.-É. Vandenbroucke, 2026). Requirements may change — always verify current regulations before departure. This checklist is for planning purposes only.
+  <div id="root"></div>
+  <p style="font-size:12px;color:var(--text3);line-height:1.6;margin-top:1.5rem" id="lbl-source">
+    <strong>Source:</strong> Guide 6 &mdash; Adapting Your North American Motorhome for Europe (J.-&Eacute;. Vandenbroucke, 2026). Requirements may change &mdash; always verify current regulations before departure.
   </p>
-
 </div>
-
 <footer class="footer">
-  <span>© 2026 Jack-Éric Vandenbroucke</span>
-  <span id="foot-right"><a href="https://creativecommons.org/licenses/by-nc/4.0/" style="color:var(--text3)">CC BY-NC 4.0</a></span>
+  <span>&copy; 2026 Jack-&Eacute;ric Vandenbroucke</span>
+  <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" style="color:var(--text3)">CC BY-NC 4.0</a></span>
 </footer>
 
 <script>
-// ── DATA ──────────────────────────────────────────────────────────────────
-const CATEGORIES = {
-  en: [
-    {
-      id:'elec', icon:'🔌', title:'Electricity',
-      items:[
-        {id:'e1', label:'Chosen ONE shore power strategy (transformer OR Victron charger — not both)', note:'Option 1: Step-down transformer 230V→120V (heavier, cheaper). Option 2: Victron IP43 charger + existing inverter (permanent, lighter). Choose before purchasing anything.', tags:['critical'],
-          links:[]},
-        {id:'e2', label:'[Option 1] Step-down transformer purchased — VEVOR 3000W or equivalent', note:'Max continuous load = 80% rated capacity (2,400W). Not weatherproof — keep dry, ventilate during use.', tags:['optional'],
-          links:[{t:'VEVOR 3000W (Amazon)',u:'https://www.vevor.ca/voltage-converter-transformer-c_12206/vevor-voltage-converter-transformer-3000w',cl:'amazon'}]},
-        {id:'e3', label:'[Option 2] Victron IP43 50A charger installed and configured in VictronConnect', note:'Set input limit to 6A by default (10A if pedestal allows). Does NOT supply 120V — your inverter must handle all 120V loads.', tags:['optional'],
-          links:[{t:'Victron IP43 50A',u:'https://a.co/d/082EkWvF',cl:'amazon'}]},
-        {id:'e4', label:'[Option 2] P17 (CEE) exterior inlet installed — street side if possible', note:'Position on left (street) side to align with European pedestal cable direction.', tags:['optional'],
-          links:[{t:'P17 CEE inlet',u:'https://amzn.eu/d/09J7vggV',cl:'amazon'}]},
-        {id:'e5', label:'CEE 16A cable (25 m minimum) on board', note:'The pedestal can sometimes be far from your pitch. 25 m is the practical minimum.', tags:['critical'],
-          links:[{t:'CEE 16A 25m cable',u:'https://amzn.eu/d/08UpiWo7',cl:'amazon'}]},
-        {id:'e6', label:'[Unity] Victron Orion XS 1400 DC-DC installed (if adding second charger)', note:'Optional upgrade for Sprinter owners needing more charge capacity while driving. Connects to Sprinter busbar.', tags:['optional'],
-          links:[{t:'Orion XS 1400',u:'https://a.co/d/0bEz2szx',cl:'amazon'},{t:'Sprinter busbar',u:'https://agileoffroad.com/product/t-bar-extension-kit-for-sprinter-by-agile-offroad/',cl:'site'}]},
-        {id:'e7', label:'Chassis battery master switch — labelled and accessible for RoRo port staff', note:'Port drivers must find it immediately. Put a sign on the steering wheel. Blue Sea solenoid as backup if battery dies during shipping.', tags:['critical'],
-          links:[{t:'Master switch',u:'https://a.co/d/0hn0QwqK',cl:'amazon'},{t:'Blue Sea 7700 solenoid',u:'https://a.co/d/0ddqm41p',cl:'amazon'}]},
-        {id:'e8', label:'RV-rated GPS installed — Garmin RV 895 or 1095', note:'Google/Apple Maps do NOT account for RV height, weight, or width. Essential in Europe.', tags:['critical'],
-          links:[{t:'Garmin RV 895/1095',u:'https://a.co/d/01kUGHPT',cl:'amazon'}]},
-      ]
-    },
-    {
-      id:'propane', icon:'🔥', title:'Propane',
-      items:[
-        {id:'p1', label:'Full set of European LPG adapters on board (ACME→DISH, Euroconnector, Bayonet, Euronozzle)', note:'Different countries use different fittings. The full set covers all of Western Europe including Spain/Portugal.', tags:['critical'],
-          links:[{t:'Full adapter set',u:'https://amzn.eu/d/0c7XQ5dn',cl:'amazon'},{t:'ACME→UK Bayonet',u:'https://lpggpl.com/products/acme-american-motorhome-to-uk-bayonet-autogas-lpg-filling-adapter',cl:'site'}]},
-        {id:'p2', label:'Familiar with myLPG.eu app — downloaded and tested before departure', note:'48,000+ LPG stations across 70 countries. Filter for motorhomes, connector type, 24/7 availability.', tags:['mandatory'],
-          links:[{t:'myLPG.eu',u:'https://www.mylpg.eu',cl:'site'}]},
-        {id:'p3', label:'Filled up in North America — tank full before shipping', note:'Finland: LPG essentially unavailable — fill up before entering. Rural areas: LPG stations 50–100 km apart.', tags:['mandatory'],links:[]},
-        {id:'p4', label:'Tank clearly marked "FIXED TANK" (not removable cylinder)', note:'Some countries prohibit filling removable cylinders but allow fixed tanks. Clear marking avoids refusal at stations.', tags:['mandatory'],links:[]},
-      ]
-    },
-    {
-      id:'water', icon:'💧', title:'Water Treatment',
-      items:[
-        {id:'w1', label:'European water hose adapters (BSP 3/4" → NPT 3/4") on board', note:'European threads are BSP 3/4". North American pipes use NPT 3/4". You need a BSP Female → NPT Male adapter.', tags:['critical'],
-          links:[{t:'BSP→NPT adapter',u:'https://a.co/d/01oYqoqp',cl:'amazon'},{t:'Universal tap adapter set',u:'https://amzn.eu/d/0eMqEsvs',cl:'amazon'}]},
-        {id:'w2', label:'Know your campsite water protocol: always flush tap 30–60 sec before connecting', note:'Campsite lines can sit stagnant for hours. The first flush clears the deadleg and reduces bacterial load before it enters your hose.', tags:['critical'],links:[]},
-        {id:'w3', label:'Always drain tank completely before refilling from a new source', note:'Never top up a stagnant tank. A full drain + fresh fill is the only reset. Topping up dilutes but does not eliminate biofilm or Legionella.', tags:['critical'],links:[]},
-        {id:'w4', label:'20% rule: travel with ≤20% fresh water while driving', note:'Reduces sloshing (which resuspends biofilm) and keeps weight down. Fill to 100% only just before you need it.', tags:['mandatory'],links:[]},
-        {id:'w5', label:'[Option 1 — All] OEM inline carbon filter cartridges — spares on board', note:'Unity: Pentek/Flow-Pur carbon block (WCBCS-975-RV compatible). Wonder: NSF-certified inline filter. Replace every 3–6 months or when flow drops.', tags:['mandatory'],
-          links:[{t:'Unity carbon filter (4-pack)',u:'https://a.co/d/029D2H9f',cl:'amazon'},{t:'Wonder inline filter',u:'https://a.co/d/03afTfOW',cl:'amazon'}]},
-        {id:'w6', label:'[Option 2 — Recommended] BLUTEC AR3 inlet pre-filter installed or on board', note:'5µm + 0.2µm + UVC-LED NSF-certified prefiltration at the campsite tap. Requires pressurized source — not for boondocking bucket fill.', tags:['recommended'],
-          links:[{t:'BLUTEC AR3',u:'https://goblutech.com/products/ar3-led-uvc-rv-water-filtration-purification-system',cl:'site'},{t:'BLUTEC Offgrid+ recharge',u:'https://goblutech.com/products/offgrid-plus-filter-recharge-pack',cl:'site'}]},
-        {id:'w7', label:'[Option 2] Aquatabs 334 mg on board — for fresh tank treatment', note:'4–5 tablets per 97L tank. Use for tank disinfection when BLUTEC not usable (boondocking, bucket fill). Never combine with ozone in same cycle.', tags:['recommended'],
-          links:[{t:'Aquatabs 334mg',u:'https://a.co/d/3ppxq14',cl:'amazon'}]},
-        {id:'w8', label:'[Option 3 — If installed] NOVO CRO-800UX6 RO system: filters checked, winterization procedure understood', note:'RO membrane is sensitive to freezing — remove before winterization. Air pressure alone will damage it. CAUTION: Air pressure alone = broken RO.', tags:['optional'],
-          links:[{t:'NOVO CRO-800UX6',u:'https://novowater.com/tankless-ro-cro-800ux6/',cl:'site'},{t:'Install diagram',u:'https://novowater.com/wp-content/uploads/2025/04/CRO-800UndersinkDiagram.jpg',cl:'site'}]},
-        {id:'w9', label:'[Option 3 — If installed] ACUVA ArrowMax UV sterilizer: lamp operational, quartz clean', note:'Verify 12V supply. UV is only effective on clear water (<1 NTU). CAUTION: Air pressure alone = broken UV lamp.', tags:['optional'],
-          links:[{t:'ACUVA ArrowMax Explore 2',u:'https://thecabindepot.ca/fr/products/watersprint-arrowmax-explore-2',cl:'site'},{t:'ACUVA prefilter ACU600',u:'https://www.walmart.com/ip/Acuva-Technologies-ACU600-1379-Advanced-Prefilter-for-Water-Purification-Systems/1445225699',cl:'site'}]},
-        {id:'w10', label:'[Option 3 — If installed] Remineralization filter replaced (every 6 months)', note:'RO removes ~95–99% of minerals including Ca and Mg. Long-term daily RO consumption without remineralization can reduce mineral intake (WHO 2004). Replace every 6 months.', tags:['optional'],
-          links:[{t:'Remineralisation + pH filter',u:'https://a.co/d/0xg5GXC',cl:'amazon'}]},
-        {id:'w11', label:'[Option 4 — If installed] Ozone generator (Airthereal AH1000): diffuser clean, silicone tubing intact', note:'Check diffuser stone (0.5 micron) for clogging. EPDM seal budget: max 800 min O₃/year. Never run pump during ozone injection.', tags:['optional'],
-          links:[{t:'Airthereal AH1000',u:'https://airthereal.com/products/ah1000-water-ozone-generator',cl:'site'}]},
-        {id:'w12', label:'[Option 4 — If installed] Tank temperature monitoring (DS18B20 + Tuya WiFi) operational', note:'Temperature is the single most important variable for ozone protocol selection. Above 25°C: Legionella enters critical growth zone in 3–7 days.', tags:['optional'],
-          links:[{t:'Tuya temp controller + DS18B20',u:'https://a.co/d/06hCYdLW',cl:'amazon'}]},
-        {id:'w13', label:'WINTERIZATION reminder: ALL interior filtration systems removed before blowing lines', note:'Air pressure will destroy RO membrane, ACUVA UV lamp, and any in-line ceramic filter. Remove them first. This applies to the BLUTEC too if left in the wet bay.', tags:['critical'],links:[]},
-        {id:'w14', label:'Interactive Water Guide bookmarked for field use', note:'jev-rv.github.io/water-guide — heatmaps for protocol selection by temperature, source, pH, stagnation. Available offline if saved.', tags:['recommended'],
-          links:[{t:'Water Guide',u:'https://jev-rv.github.io/water-guide/',cl:'site'}]},
-      ]
-    },
-    {
-      id:'waste', icon:'🚽', title:'Waste Water',
-      items:[
-        {id:'ww1', label:'Macerator pump installed or portable macerator kit on board', note:'Most European campsites use elevated pay stations — gravity drain alone is often insufficient for black tank emptying.', tags:['critical'],
-          links:[{t:'Portable macerator kit',u:'https://a.co/d/0iqsEmNq',cl:'amazon'},{t:'Shurflo 3200-200 replacement',u:'https://a.co/d/07kwirfy',cl:'amazon'}]},
-        {id:'ww2', label:'Grey/black tanks emptied before driving — keep 10% to avoid sloshing', note:'Empty before driving to save weight. Keep ~10% to prevent odors and biofilm drying. Fill to 0% on arrival at dump station.', tags:['mandatory'],links:[]},
-      ]
-    },
-    {
-      id:'weight', icon:'⚖️', title:'Weight & OCCC',
-      items:[
-        {id:'wt1', label:'RV weighed fully loaded before shipping — axle loads documented', note:'Europe enforces axle-by-axis limits strictly. Austria: 0% tolerance. Front + rear axle ≠ GVWR. Know both numbers.', tags:['critical'],links:[]},
-        {id:'wt2', label:'Travel configuration planned: 30% fresh water, empty grey/black, weight forward', note:'North American RVs often run close to rear axle limit. 30% water = ~30 kg saved on a 97L tank. Distribute gear toward front axle.', tags:['critical'],links:[]},
-        {id:'wt3', label:'Familiar with EU weight fine scale by country (Croatia, Slovenia, Austria, Germany, France…)', note:'Austria = 0% tolerance, fines start at €85. Germany = 5% tolerance for ≤7.5t. France = immobilization possible above +5%.', tags:['mandatory'],links:[]},
-      ]
-    },
-    {
-      id:'mandatory', icon:'🚦', title:'Mandatory Equipment',
-      items:[
-        {id:'m1', label:'Blind-spot stickers (Angles Morts) — 3 stickers, GVWR >3.5t mandatory in France', note:'French regulation Jan 2021 — applies to all vehicles >3.5t GVWR regardless of registration country.', tags:['critical'],
-          links:[{t:'Angles Morts sticker set',u:'https://amzn.eu/d/08oiQ3Tb',cl:'amazon'}]},
-        {id:'m2', label:'Red/white warning board (50×50 cm, reflective) — mandatory Spain and Italy if rear load protrudes', note:'Italy: aluminum mandatory, 5 red + 4 white stripes. Spain: aluminum or plastic, 3+3 stripes. Buy a reversible 2-in-1 board.', tags:['critical'],
-          links:[{t:'2-in-1 Spain+Italy board',u:'https://amzn.eu/d/099qOlWQ',cl:'amazon'}]},
-        {id:'m3', label:'RoRo driver instruction sheet printed and placed on steering wheel', note:'Port driver must see the chassis battery master switch instruction immediately on opening door.', tags:['critical'],
-          links:[{t:'RoRo instruction sheet',u:'https://jev-rv.github.io/images/roro-battery-master-switch.png',cl:'site'}]},
-        {id:'m4', label:'Dashcam removed or covered for Portugal and Austria (possession = fine up to €25,000)', note:'Portugal (Data Protection Act 58/2019) and Austria: illegal to own or use. Remove before entering, not just before parking.', tags:['critical'],links:[]},
-        {id:'m5', label:'E-bike configured in EU mode (≤250W, ≤25 km/h, pedalling required)', note:'North American e-bikes (500–750W, 32 km/h) are reclassified as mopeds in Europe. Configure EU mode or face fines and liability issues.', tags:['mandatory'],links:[]},
-        {id:'m6', label:'Heavy-duty snow chains or HD snow socks on board (LTV Sprinter >3.5t)', note:'Standard car chains are rated to 3.5t — illegal for your LTV. Only TÜV/ÖNORM-certified HD equipment accepted in Alpine countries.', tags:['recommended'],
-          links:[{t:'AutoSock HP698 (HD)',u:'https://autosock.com/products/autosock-hp698',cl:'site'},{t:'Pewag Austro Super HD chains',u:'https://shop.pewag.com/fr/pewag-austro-super-jumelee/4034241',cl:'site'}]},
-        {id:'m7', label:'Environmental zone (LEZ) stickers / apps checked for planned route', note:'France Crit\'Air, German Umweltzone, Italian ZTL — North American RVs generally cannot obtain stickers. Avoid restricted areas.', tags:['mandatory'],links:[]},
-        {id:'m8', label:'Speed camera / radar detector disabled or removed (illegal in France, Germany, Switzerland)', note:'In most EU countries: active radar detectors illegal. Fixed camera location warnings (GPS-based) legal in most countries except FR/DE/CH.', tags:['critical'],links:[]},
-      ]
-    },
-    {
-      id:'docs', icon:'📄', title:'Documents & Admin',
-      items:[
-        {id:'d1', label:'Schengen 90/180 plan validated before departure', note:'North American passport = max 90 days in any 180-day Schengen window. Use the Schengen simulator to validate your dates.', tags:['critical'],
-          links:[{t:'Schengen simulator',u:'https://jev-rv.github.io/schengen-rv-simulator/',cl:'site'}]},
-        {id:'d2', label:'ETIAS authorization obtained (when mandatory)', note:'ETIAS requirement for non-EU nationals. Check current status — progressive rollout ongoing.', tags:['critical'],links:[]},
-        {id:'d3', label:'RV insurance valid for all countries on route — European Green Card obtained', note:'Contact your insurer before departure. Some policies exclude specific countries. Green Card (International Motor Insurance Certificate) required.', tags:['critical'],links:[]},
-        {id:'d4', label:'Vignettes purchased for applicable countries (Austria, Switzerland, etc.)', note:'Austria and Switzerland require vignettes (road tax stickers). Buy digitally before crossing. Some motorways in other countries are toll-based.', tags:['critical'],links:[]},
-      ]
-    },
-  ],
-  fr: [
-    {
-      id:'elec', icon:'🔌', title:'Électricité',
-      items:[
-        {id:'e1', label:'Choisir UNE stratégie d\'alimentation (transformateur OU chargeur Victron — pas les deux)', note:'Option 1 : Transformateur abaisseur 230V→120V (plus lourd, moins cher). Option 2 : Chargeur Victron IP43 + onduleur existant (permanent, plus léger). Choisir avant tout achat.', tags:['critical'],links:[]},
-        {id:'e2', label:'[Option 1] Transformateur abaisseur acheté — VEVOR 3000W ou équivalent', note:'Charge continue max = 80% de la capacité nominale (2 400W). Pas étanche — garder au sec, ventiler pendant l\'utilisation.', tags:['optional'],
-          links:[{t:'VEVOR 3000W (Amazon)',u:'https://www.vevor.ca/voltage-converter-transformer-c_12206/vevor-voltage-converter-transformer-3000w',cl:'amazon'}]},
-        {id:'e3', label:'[Option 2] Chargeur Victron IP43 50A installé et configuré dans VictronConnect', note:'Fixer la limite d\'entrée à 6A par défaut (10A si la borne le permet). Ne fournit PAS le 120V — votre onduleur doit gérer toutes les charges 120V.', tags:['optional'],
-          links:[{t:'Victron IP43 50A',u:'https://a.co/d/082EkWvF',cl:'amazon'}]},
-        {id:'e4', label:'[Option 2] Prise P17 (CEE) extérieure installée — côté rue si possible', note:'Positionner du côté gauche (côté rue en Europe) pour s\'aligner avec la direction des câbles des bornes dans la plupart des campings.', tags:['optional'],
-          links:[{t:'Prise P17 CEE',u:'https://amzn.eu/d/09J7vggV',cl:'amazon'}]},
-        {id:'e5', label:'Câble CEE 16A (minimum 25 m) à bord', note:'La borne peut parfois être loin de votre emplacement. 25 m est le minimum pratique.', tags:['critical'],
-          links:[{t:'Câble CEE 16A 25m',u:'https://amzn.eu/d/08UpiWo7',cl:'amazon'}]},
-        {id:'e6', label:'[Unity] Victron Orion XS 1400 DC-DC installé (si ajout second chargeur)', note:'Mise à niveau optionnelle pour les propriétaires Sprinter ayant besoin de plus de capacité de charge en route. Se connecte au busbar Sprinter.', tags:['optional'],
-          links:[{t:'Orion XS 1400',u:'https://a.co/d/0bEz2szx',cl:'amazon'},{t:'Busbar Sprinter',u:'https://agileoffroad.com/product/t-bar-extension-kit-for-sprinter-by-agile-offroad/',cl:'site'}]},
-        {id:'e7', label:'Interrupteur principal batterie châssis — étiqueté et accessible pour le personnel du port/RoRo', note:'Les conducteurs du port doivent le trouver immédiatement. Mettre un signe visible sur le volant. Solénoïde Blue Sea comme secours si la batterie se décharge pendant l\'expédition.', tags:['critical'],
-          links:[{t:'Interrupteur principal',u:'https://a.co/d/0hn0QwqK',cl:'amazon'},{t:'Blue Sea 7700 solénoïde',u:'https://a.co/d/0ddqm41p',cl:'amazon'}]},
-        {id:'e8', label:'GPS adapté aux VR installé — Garmin RV 895 ou 1095', note:'Google/Apple Maps ne tiennent PAS compte de la hauteur, du poids ou de la largeur du VR. Indispensable en Europe.', tags:['critical'],
-          links:[{t:'Garmin RV 895/1095',u:'https://a.co/d/01kUGHPT',cl:'amazon'}]},
-      ]
-    },
-    {
-      id:'propane', icon:'🔥', title:'Propane / GPL',
-      items:[
-        {id:'p1', label:'Jeu complet d\'adaptateurs GPL européens à bord (ACME→DISH, Euroconnecteur, Bayonet, Euronozzle)', note:'Chaque pays utilise des raccords différents. Le jeu complet couvre toute l\'Europe occidentale incluant Espagne/Portugal.', tags:['critical'],
-          links:[{t:'Jeu complet adaptateurs',u:'https://amzn.eu/d/0c7XQ5dn',cl:'amazon'},{t:'ACME→Bayonet UK',u:'https://lpggpl.com/products/acme-american-motorhome-to-uk-bayonet-autogas-lpg-filling-adapter',cl:'site'}]},
-        {id:'p2', label:'Application myLPG.eu — téléchargée et testée avant le départ', note:'48 000+ stations GPL dans 70 pays. Filtrer par camping-car, type de connecteur, disponibilité 24h/24.', tags:['mandatory'],
-          links:[{t:'myLPG.eu',u:'https://www.mylpg.eu',cl:'site'}]},
-        {id:'p3', label:'Faire le plein en Amérique du Nord — réservoir plein avant l\'expédition', note:'Finlande : GPL pratiquement indisponible — faire le plein avant d\'entrer. Zones rurales : stations GPL à 50–100 km.', tags:['mandatory'],links:[]},
-        {id:'p4', label:'Réservoir clairement marqué "RÉSERVOIR FIXE" (pas bouteille amovible)', note:'Certains pays interdisent le remplissage des bouteilles amovibles mais autorisent les réservoirs fixes. Un marquage clair évite le refus aux stations.', tags:['mandatory'],links:[]},
-      ]
-    },
-    {
-      id:'water', icon:'💧', title:'Traitement de l\'eau',
-      items:[
-        {id:'w1', label:'Adaptateurs eau européens (BSP 3/4" → NPT 3/4") à bord', note:'Les filetages européens sont BSP 3/4". La plomberie nord-américaine utilise NPT 3/4". Adaptateur BSP Femelle → NPT Mâle requis.', tags:['critical'],
-          links:[{t:'Adaptateur BSP→NPT',u:'https://a.co/d/01oYqoqp',cl:'amazon'},{t:'Jeu adaptateurs universels',u:'https://amzn.eu/d/0eMqEsvs',cl:'amazon'}]},
-        {id:'w2', label:'Protocole eau au camping : laisser couler le robinet 30–60 sec avant de connecter', note:'Les lignes du camping peuvent stagner plusieurs heures. La première purge nettoie le deadleg et réduit la charge bactérienne avant qu\'elle n\'entre dans votre tuyau.', tags:['critical'],links:[]},
-        {id:'w3', label:'Toujours vider complètement le réservoir avant de le remplir depuis une nouvelle source', note:'Ne jamais faire le plein sur de l\'eau stagnante. Seul un vidage complet + remplissage frais constitue une remise à zéro réelle. Diluer ne suffit pas — le biofilm et la Legionella restent.', tags:['critical'],links:[]},
-        {id:'w4', label:'Règle des 20% : voyager avec ≤20% d\'eau fraîche pendant le trajet', note:'Réduit le ballottement (qui remet le biofilm en suspension) et économise du poids. Remplir à 100% seulement juste avant d\'en avoir besoin.', tags:['mandatory'],links:[]},
-        {id:'w5', label:'[Option 1 — Tous] Cartouches de filtre à charbon actif OEM — pièces de rechange à bord', note:'Unity : charbon en bloc Pentek/Flow-Pur (compatible WCBCS-975-RV). Wonder : filtre en ligne certifié NSF. Remplacer tous les 3–6 mois ou lorsque le débit chute.', tags:['mandatory'],
-          links:[{t:'Filtre charbon Unity (4-pack)',u:'https://a.co/d/029D2H9f',cl:'amazon'},{t:'Filtre en ligne Wonder',u:'https://a.co/d/03afTfOW',cl:'amazon'}]},
-        {id:'w6', label:'[Option 2 — Recommandé] Préfiltre BLUTEC AR3 installé ou à bord', note:'5µm + 0,2µm + UVC-LED certifié NSF à l\'entrée robinet du camping. Nécessite une source sous pression — pas pour le remplissage manuel/boondocking.', tags:['recommended'],
-          links:[{t:'BLUTEC AR3',u:'https://goblutech.com/products/ar3-led-uvc-rv-water-filtration-purification-system',cl:'site'},{t:'Recharge BLUTEC Offgrid+',u:'https://goblutech.com/products/offgrid-plus-filter-recharge-pack',cl:'site'}]},
-        {id:'w7', label:'[Option 2] Aquatabs 334 mg à bord — pour traitement du réservoir', note:'4–5 comprimés par réservoir de 97L. Utiliser pour la désinfection du réservoir quand le BLUTEC n\'est pas utilisable (boondocking, remplissage manuel). Ne jamais combiner avec l\'ozone dans le même cycle.', tags:['recommended'],
-          links:[{t:'Aquatabs 334mg',u:'https://a.co/d/3ppxq14',cl:'amazon'}]},
-        {id:'w8', label:'[Option 3 — Si installé] Système RO NOVO CRO-800UX6 : filtres vérifiés, procédure d\'hivernisation connue', note:'La membrane RO est sensible au gel — retirer avant l\'hivernisation. La pression d\'air seule la détruira. ATTENTION : air comprimé = membrane cassée.', tags:['optional'],
-          links:[{t:'NOVO CRO-800UX6',u:'https://novowater.com/tankless-ro-cro-800ux6/',cl:'site'},{t:'Schéma installation',u:'https://novowater.com/wp-content/uploads/2025/04/CRO-800UndersinkDiagram.jpg',cl:'site'}]},
-        {id:'w9', label:'[Option 3 — Si installé] Stérilisateur UV ACUVA ArrowMax : lampe opérationnelle, quartz propre', note:'Vérifier l\'alimentation 12V. L\'UV est efficace uniquement sur eau claire (<1 NTU). ATTENTION : air comprimé = lampe UV brisée.', tags:['optional'],
-          links:[{t:'ACUVA ArrowMax Explore 2',u:'https://thecabindepot.ca/fr/products/watersprint-arrowmax-explore-2',cl:'site'},{t:'Préfiltre ACUVA ACU600',u:'https://www.walmart.com/ip/Acuva-Technologies-ACU600-1379-Advanced-Prefilter-for-Water-Purification-Systems/1445225699',cl:'site'}]},
-        {id:'w10', label:'[Option 3 — Si installé] Filtre reminéralisateur remplacé (tous les 6 mois)', note:'L\'OI élimine ~95–99% des minéraux dont Ca et Mg. La consommation quotidienne d\'eau OI à long terme sans reminéralisation peut réduire les apports minéraux (WHO 2004). Remplacer tous les 6 mois.', tags:['optional'],
-          links:[{t:'Filtre reminéralisation + pH',u:'https://a.co/d/0xg5GXC',cl:'amazon'}]},
-        {id:'w11', label:'[Option 4 — Si installé] Générateur d\'ozone (Airthereal AH1000) : diffuseur propre, tuyau silicone intact', note:'Vérifier la pierre diffuseur (0,5 micron) pour les obstructions. Budget joints EPDM : max 800 min O₃/an. Ne jamais activer la pompe pendant l\'injection d\'ozone.', tags:['optional'],
-          links:[{t:'Airthereal AH1000',u:'https://airthereal.com/products/ah1000-water-ozone-generator',cl:'site'}]},
-        {id:'w12', label:'[Option 4 — Si installé] Surveillance température réservoir (DS18B20 + Tuya WiFi) opérationnelle', note:'La température est la variable la plus importante pour le choix du protocole ozone. Au-dessus de 25°C : la Legionella entre en zone de croissance critique en 3–7 jours.', tags:['optional'],
-          links:[{t:'Contrôleur Tuya + DS18B20',u:'https://a.co/d/06hCYdLW',cl:'amazon'}]},
-        {id:'w13', label:'HIVERNISATION : tous les systèmes de filtration intérieurs retirés avant de souffler les lignes', note:'La pression d\'air détruira la membrane RO, la lampe UV ACUVA et tout filtre céramique en ligne. Les retirer en premier. Cela s\'applique aussi au BLUTEC s\'il est laissé dans le compartiment humide.', tags:['critical'],links:[]},
-        {id:'w14', label:'Guide interactif de l\'eau mis en favori pour utilisation terrain', note:'jev-rv.github.io/water-guide — heatmaps pour sélection de protocole par température, source, pH, stagnation. Disponible hors ligne si sauvegardé.', tags:['recommended'],
-          links:[{t:'Guide de l\'eau',u:'https://jev-rv.github.io/water-guide/',cl:'site'}]},
-      ]
-    },
-    {
-      id:'waste', icon:'🚽', title:'Eaux usées',
-      items:[
-        {id:'ww1', label:'Pompe macerator installée ou kit macerator portable à bord', note:'La plupart des campings européens utilisent des stations surélevées — la vidange par gravité seule est souvent insuffisante pour les eaux noires.', tags:['critical'],
-          links:[{t:'Kit macerator portable',u:'https://a.co/d/0iqsEmNq',cl:'amazon'},{t:'Pompe Shurflo 3200-200',u:'https://a.co/d/07kwirfy',cl:'amazon'}]},
-        {id:'ww2', label:'Réservoirs gris/noirs vidangés avant de rouler — garder 10% pour éviter le ballottement', note:'Vider avant de rouler pour économiser le poids. Garder ~10% pour éviter les odeurs et le dessèchement du biofilm. Vider à 0% à l\'arrivée à la station de vidange.', tags:['mandatory'],links:[]},
-      ]
-    },
-    {
-      id:'weight', icon:'⚖️', title:'Poids & OCCC',
-      items:[
-        {id:'wt1', label:'VR pesé pleinement chargé avant l\'expédition — charges par essieu documentées', note:'L\'Europe applique strictement les limites par essieu. Autriche : tolérance 0%. Essieu avant + arrière ≠ PNBV. Connaître les deux chiffres.', tags:['critical'],links:[]},
-        {id:'wt2', label:'Configuration de voyage planifiée : 30% d\'eau fraîche, réservoirs gris/noirs vides, poids vers l\'avant', note:'Les VR nord-américains frisent souvent la limite de l\'essieu arrière. 30% d\'eau = ~30 kg économisés sur un réservoir de 97L. Répartir les équipements vers l\'essieu avant.', tags:['critical'],links:[]},
-        {id:'wt3', label:'Familiarisé avec le barème des amendes UE par pays (Croatie, Slovénie, Autriche, Allemagne, France…)', note:'Autriche = tolérance 0%, amendes dès 85€. Allemagne = tolérance 5% pour ≤7,5t. France = immobilisation possible au-delà de +5%.', tags:['mandatory'],links:[]},
-      ]
-    },
-    {
-      id:'mandatory', icon:'🚦', title:'Équipements obligatoires',
-      items:[
-        {id:'m1', label:'Autocollants angles morts — 3 autocollants, PNBV >3,5t obligatoire en France', note:'Règlement français jan. 2021 — s\'applique à tous les véhicules >3,5t PNBV quel que soit le pays d\'immatriculation.', tags:['critical'],
-          links:[{t:'Set autocollants Angles Morts',u:'https://amzn.eu/d/08oiQ3Tb',cl:'amazon'}]},
-        {id:'m2', label:'Panneau avertisseur rouge/blanc (50×50 cm, réfléchissant) — obligatoire Espagne et Italie si chargement dépasse', note:'Italie : aluminium obligatoire, 5 bandes rouges + 4 blanches. Espagne : aluminium ou plastique, 3+3 bandes. Acheter un panneau 2-en-1 réversible.', tags:['critical'],
-          links:[{t:'Panneau 2-en-1 Espagne+Italie',u:'https://amzn.eu/d/099qOlWQ',cl:'amazon'}]},
-        {id:'m3', label:'Feuille d\'instructions conducteur RoRo imprimée et placée sur le volant', note:'Le conducteur du port doit voir l\'instruction de l\'interrupteur de batterie châssis immédiatement en ouvrant la portière.', tags:['critical'],
-          links:[{t:'Feuille instructions RoRo',u:'https://jev-rv.github.io/images/roro-battery-master-switch.png',cl:'site'}]},
-        {id:'m4', label:'Dashcam retirée ou cachée pour Portugal et Autriche (possession = amende jusqu\'à 25 000€)', note:'Portugal (Loi protection des données 58/2019) et Autriche : illégal de posséder ou utiliser. Retirer avant d\'entrer dans le pays, pas seulement avant de se garer.', tags:['critical'],links:[]},
-        {id:'m5', label:'Vélo électrique configuré en mode UE (≤250W, ≤25 km/h, pédalage obligatoire)', note:'Les vélos électriques nord-américains (500–750W, 32 km/h) sont reclassifiés comme cyclomoteurs en Europe. Configurer le mode UE ou faire face à des amendes et problèmes de responsabilité.', tags:['mandatory'],links:[]},
-        {id:'m6', label:'Chaînes neige lourdes ou chaussettes HD à bord (LTV Sprinter >3,5t)', note:'Les chaînes standard pour voitures sont limitées à 3,5t — illégales pour votre LTV. Seuls les équipements HD certifiés TÜV/ÖNORM acceptés dans les pays alpins.', tags:['recommended'],
-          links:[{t:'AutoSock HP698 (HD)',u:'https://autosock.com/products/autosock-hp698',cl:'site'},{t:'Chaînes Pewag Austro Super HD',u:'https://shop.pewag.com/fr/pewag-austro-super-jumelee/4034241',cl:'site'}]},
-        {id:'m7', label:'Vignettes / applications zones environnementales vérifiées pour l\'itinéraire prévu', note:'Crit\'Air France, Umweltzone allemande, ZTL italienne — les VR nord-américains ne peuvent généralement pas obtenir les vignettes requises. Éviter les zones restreintes.', tags:['mandatory'],links:[]},
-        {id:'m8', label:'Détecteur de radar désactivé ou retiré (illégal en France, Allemagne, Suisse)', note:'Dans la plupart des pays UE : détecteurs radar actifs illégaux. Avertissements de caméras fixes par GPS légaux dans la plupart des pays sauf FR/DE/CH.', tags:['critical'],links:[]},
-      ]
-    },
-    {
-      id:'docs', icon:'📄', title:'Documents & Admin',
-      items:[
-        {id:'d1', label:'Plan Schengen 90/180 validé avant le départ', note:'Passeport nord-américain = max 90 jours dans toute fenêtre Schengen de 180 jours. Utiliser le simulateur Schengen pour valider vos dates.', tags:['critical'],
-          links:[{t:'Simulateur Schengen',u:'https://jev-rv.github.io/schengen-rv-simulator/',cl:'site'}]},
-        {id:'d2', label:'Autorisation ETIAS obtenue (lorsque obligatoire)', note:'Exigence ETIAS pour les ressortissants non-UE. Vérifier le statut actuel — déploiement progressif en cours.', tags:['critical'],links:[]},
-        {id:'d3', label:'Assurance VR valide pour tous les pays de l\'itinéraire — Carte verte internationale obtenue', note:'Contacter votre assureur avant le départ. Certaines polices excluent des pays spécifiques. La carte verte (Certificat international d\'assurance auto) est requise.', tags:['critical'],links:[]},
-        {id:'d4', label:'Vignettes achetées pour les pays applicables (Autriche, Suisse, etc.)', note:'L\'Autriche et la Suisse exigent des vignettes (vignettes de péage routier). Acheter en ligne avant de traverser. Certaines autoroutes dans d\'autres pays sont à péage.', tags:['critical'],links:[]},
-      ]
-    },
-  ]
-};
-
-// ── STATE ─────────────────────────────────────────────────────────────────
-let lang = 'en';
-let view = 'critical'; // 'critical' | 'full' | 'water'
-let rvFilter = 'all';  // 'all' | 'unity' | 'wonder'
-let itemStates = {}; // id → 'done' | 'na' | null
-
-// Tags that count as "critical view"
-const CRITICAL_TAGS = ['critical'];
-const CRITICAL_FULL = ['critical','mandatory'];
-
-// RV-specific items
-const UNITY_ONLY = ['e6']; // Orion XS
-const WONDER_ONLY = ['w5b']; // placeholder if needed
-
-const LANG_STRINGS = {
-  en:{
-    'h-title':'Pre-Departure Checklist<br><em>North American RV → Europe</em>',
-    'h-sub':'Everything your RV needs before shipping to Europe. Filter by urgency, your RV model, and track your progress.',
-    'vb-critical-label':'Critical only',
-    'vb-full-label':'Full list',
-    'vb-water-label':'Water only',
-    'rv-label-txt':'My RV:',
-    'leg-critical':'Blocks departure',
-    'leg-mandatory':'Strongly recommended',
-    'leg-recommended':'Recommended',
-    'leg-optional':'Optional / if installed',
-    'reset-btn':'↺ Reset',
-    'source-note':'<strong>Source:</strong> Guide 6 — Adapting Your North American Motorhome for Europe (J.-É. Vandenbroucke, 2026). Requirements may change — always verify current regulations before departure. This checklist is for planning purposes only.',
-    'foot-right':'<a href="https://creativecommons.org/licenses/by-nc/4.0/" style="color:var(--text3)">CC BY-NC 4.0</a>',
-    'done-label':'✓ Done',
-    'na-label':'— N/A',
-    'todo-label':'□ To do',
+// All FR strings use \' for apostrophes to avoid JS parse errors
+var LANG = {
+  en: {
+    'h-title': 'Pre-Departure Checklist<br><em>North American RV &rarr; Europe</em>',
+    'h-sub': 'Everything your RV needs before shipping to Europe. Filter by urgency, your RV model, and track progress.',
+    'lbl-critical': 'Critical only', 'lbl-full': 'Full list', 'lbl-water': 'Water only',
+    'lbl-rv': 'My RV:', 'lbl-reset': '&#x21BA; Reset',
+    'lbl-c': 'Blocks departure', 'lbl-m': 'Strongly recommended', 'lbl-r': 'Recommended', 'lbl-o': 'Optional / if installed',
+    'lbl-source': '<strong>Source:</strong> Guide 6 &mdash; Adapting Your North American Motorhome for Europe (J.-&Eacute;. Vandenbroucke, 2026). Requirements may change &mdash; always verify current regulations before departure.'
   },
-  fr:{
-    'h-title':'Liste de vérification pré-départ<br><em>VR nord-américain → Europe</em>',
-    'h-sub':'Tout ce que votre VR doit avoir avant l\'expédition vers l\'Europe. Filtrez par urgence, modèle de VR et suivez votre progression.',
-    'vb-critical-label':'Critique uniquement',
-    'vb-full-label':'Liste complète',
-    'vb-water-label':'Eau uniquement',
-    'rv-label-txt':'Mon VR :',
-    'leg-critical':'Bloque le départ',
-    'leg-mandatory':'Fortement recommandé',
-    'leg-recommended':'Recommandé',
-    'leg-optional':'Optionnel / si installé',
-    'reset-btn':'↺ Réinitialiser',
-    'source-note':'<strong>Source :</strong> Guide 6 — Adapter votre VR nord-américain pour l\'Europe (J.-É. Vandenbroucke, 2026). Les exigences peuvent changer — toujours vérifier les réglementations avant le départ. Cette liste est à titre de planification uniquement.',
-    'foot-right':'<a href="https://creativecommons.org/licenses/by-nc/4.0/" style="color:var(--text3)">CC BY-NC 4.0</a>',
-    'done-label':'✓ Fait',
-    'na-label':'— N/A',
-    'todo-label':'□ À faire',
+  fr: {
+    'h-title': 'Liste de v&eacute;rification pr&eacute;-d&eacute;part<br><em>VR nord-am&eacute;ricain &rarr; Europe</em>',
+    'h-sub': 'Tout ce que votre VR doit avoir avant l\'exp&eacute;dition. Filtrez par urgence, mod&egrave;le de VR et suivez votre progression.',
+    'lbl-critical': 'Critique uniquement', 'lbl-full': 'Liste compl&egrave;te', 'lbl-water': 'Eau uniquement',
+    'lbl-rv': 'Mon VR&nbsp;:', 'lbl-reset': '&#x21BA; R&eacute;initialiser',
+    'lbl-c': 'Bloque le d&eacute;part', 'lbl-m': 'Fortement recommand&eacute;', 'lbl-r': 'Recommand&eacute;', 'lbl-o': 'Optionnel / si install&eacute;',
+    'lbl-source': '<strong>Source&nbsp;:</strong> Guide 6 &mdash; Adapter votre VR nord-am&eacute;ricain pour l\'Europe (J.-&Eacute;. Vandenbroucke, 2026). Les exigences peuvent changer &mdash; v&eacute;rifier les r&eacute;glementations avant le d&eacute;part.'
   }
 };
 
-// ── RENDER ────────────────────────────────────────────────────────────────
-function render() {
-  const cats = CATEGORIES[lang];
-  const root = document.getElementById('checklist-root');
+// ── DATA — all French apostrophes use HTML entities in label/note, not JS \' ──
+// Strategy: store all text as HTML (use &rsquo; for apostrophes in FR strings)
+var CATS = [
+  { id:'elec', icon:'🔌',
+    en:'Electricity', fr:'&Eacute;lectricit&eacute;',
+    items:[
+      { id:'e1', tags:['critical'],
+        en_l:'Choose ONE shore power strategy (transformer OR Victron charger &mdash; not both)',
+        en_n:'Option 1: Step-down transformer 230V&rarr;120V (heavier, cheaper). Option 2: Victron IP43 charger + existing inverter (permanent, lighter). Choose before purchasing anything.',
+        fr_l:'Choisir UNE strat&eacute;gie d&rsquo;alimentation (transformateur OU chargeur Victron &mdash; pas les deux)',
+        fr_n:'Option 1&nbsp;: Transformateur abaisseur 230V&rarr;120V (plus lourd, moins cher). Option 2&nbsp;: Chargeur Victron IP43 + onduleur existant (permanent, plus l&eacute;ger). Choisir avant tout achat.',
+        links:[] },
+      { id:'e2', tags:['optional'], unity:false, wonder:false,
+        en_l:'[Option 1] Step-down transformer purchased &mdash; VEVOR 3000W or equivalent',
+        en_n:'Max continuous load = 80% rated capacity (2,400W). Not weatherproof &mdash; keep dry, ventilate during use.',
+        fr_l:'[Option 1] Transformateur abaisseur achet&eacute; &mdash; VEVOR 3000W ou &eacute;quivalent',
+        fr_n:'Charge continue max = 80% de la capacit&eacute; nominale (2&nbsp;400W). Pas &eacute;tanche &mdash; garder au sec, ventiler pendant l&rsquo;utilisation.',
+        links:[{t:'VEVOR 3000W',u:'https://www.vevor.ca/voltage-converter-transformer-c_12206/vevor-voltage-converter-transformer-3000w',c:'amazon'}] },
+      { id:'e3', tags:['optional'],
+        en_l:'[Option 2] Victron IP43 50A charger installed and configured in VictronConnect',
+        en_n:'Set input limit to 6A default (10A if pedestal allows). Does NOT supply 120V &mdash; your inverter must handle all 120V loads.',
+        fr_l:'[Option 2] Chargeur Victron IP43 50A install&eacute; et configur&eacute; dans VictronConnect',
+        fr_n:'Fixer la limite d&rsquo;entr&eacute;e &agrave; 6A par d&eacute;faut (10A si la borne le permet). Ne fournit PAS le 120V &mdash; votre onduleur doit g&eacute;rer toutes les charges 120V.',
+        links:[{t:'Victron IP43 50A',u:'https://a.co/d/082EkWvF',c:'amazon'}] },
+      { id:'e4', tags:['optional'],
+        en_l:'[Option 2] P17 (CEE) exterior inlet installed &mdash; street side if possible',
+        en_n:'Position on left (street) side to align with European pedestal cable direction.',
+        fr_l:'[Option 2] Prise P17 (CEE) ext&eacute;rieure install&eacute;e &mdash; c&ocirc;t&eacute; rue si possible',
+        fr_n:'Positionner du c&ocirc;t&eacute; gauche (c&ocirc;t&eacute; rue en Europe) pour s&rsquo;aligner avec la direction des c&acirc;bles des bornes.',
+        links:[{t:'P17 CEE inlet',u:'https://amzn.eu/d/09J7vggV',c:'amazon'}] },
+      { id:'e5', tags:['critical'],
+        en_l:'CEE 16A cable (25 m minimum) on board',
+        en_n:'The pedestal can sometimes be far from your pitch. 25 m is the practical minimum.',
+        fr_l:'C&acirc;ble CEE 16A (minimum 25&nbsp;m) &agrave; bord',
+        fr_n:'La borne peut parfois &ecirc;tre loin de votre emplacement. 25&nbsp;m est le minimum pratique.',
+        links:[{t:'CEE 16A 25m cable',u:'https://amzn.eu/d/08UpiWo7',c:'amazon'}] },
+      { id:'e6', tags:['optional'], unity:true,
+        en_l:'[Unity only] Victron Orion XS 1400 DC-DC installed (optional upgrade)',
+        en_n:'For Sprinter owners needing more charge capacity while driving. Connects to Sprinter busbar (Agile Offroad T-bar kit).',
+        fr_l:'[Unity seulement] Victron Orion XS 1400 DC-DC install&eacute; (mise &agrave; niveau optionnelle)',
+        fr_n:'Pour les propri&eacute;taires Sprinter ayant besoin de plus de capacit&eacute; de charge en route. Se connecte au busbar Sprinter.',
+        links:[{t:'Orion XS 1400',u:'https://a.co/d/0bEz2szx',c:'amazon'},{t:'Sprinter T-bar busbar',u:'https://agileoffroad.com/product/t-bar-extension-kit-for-sprinter-by-agile-offroad/',c:'site'}] },
+      { id:'e7', tags:['critical'],
+        en_l:'Chassis battery master switch &mdash; labelled and accessible for RoRo port staff',
+        en_n:'Port drivers must find it immediately. Put a sign on the steering wheel. Blue Sea solenoid as backup if battery dies during shipping.',
+        fr_l:'Interrupteur principal batterie ch&acirc;ssis &mdash; &eacute;tiquet&eacute; et accessible pour le personnel du port/RoRo',
+        fr_n:'Les conducteurs du port doivent le trouver imm&eacute;diatement. Mettre un signe visible sur le volant. Sol&eacute;no&iuml;de Blue Sea comme secours si la batterie se d&eacute;charge pendant l&rsquo;exp&eacute;dition.',
+        links:[{t:'Master switch',u:'https://a.co/d/0hn0QwqK',c:'amazon'},{t:'Blue Sea 7700 solenoid',u:'https://a.co/d/0ddqm41p',c:'amazon'}] },
+      { id:'e8', tags:['critical'],
+        en_l:'RV-rated GPS installed &mdash; Garmin RV 895 or 1095',
+        en_n:'Google/Apple Maps do NOT account for RV height, weight, or width. Essential in Europe.',
+        fr_l:'GPS adapt&eacute; aux VR install&eacute; &mdash; Garmin RV 895 ou 1095',
+        fr_n:'Google/Apple Maps ne tiennent PAS compte de la hauteur, du poids ou de la largeur du VR. Indispensable en Europe.',
+        links:[{t:'Garmin RV 895/1095',u:'https://a.co/d/01kUGHPT',c:'amazon'}] },
+    ]
+  },
+  { id:'propane', icon:'🔥',
+    en:'Propane', fr:'Propane / GPL',
+    items:[
+      { id:'p1', tags:['critical'],
+        en_l:'Full set of European LPG adapters on board (ACME&rarr;DISH, Euroconnector, Bayonet, Euronozzle)',
+        en_n:'Different countries use different fittings. The full set covers all of Western Europe including Spain/Portugal.',
+        fr_l:'Jeu complet d&rsquo;adaptateurs GPL europ&eacute;ens &agrave; bord (ACME&rarr;DISH, Euroconnecteur, Bayonet, Euronozzle)',
+        fr_n:'Chaque pays utilise des raccords diff&eacute;rents. Le jeu complet couvre toute l&rsquo;Europe occidentale incluant Espagne/Portugal.',
+        links:[{t:'Full adapter set',u:'https://amzn.eu/d/0c7XQ5dn',c:'amazon'},{t:'ACME&#8594;UK Bayonet',u:'https://lpggpl.com/products/acme-american-motorhome-to-uk-bayonet-autogas-lpg-filling-adapter',c:'site'}] },
+      { id:'p2', tags:['mandatory'],
+        en_l:'myLPG.eu app downloaded and tested before departure',
+        en_n:'48,000+ LPG stations across 70 countries. Filter for motorhomes, connector type, 24/7 availability.',
+        fr_l:'Application myLPG.eu t&eacute;l&eacute;charg&eacute;e et test&eacute;e avant le d&eacute;part',
+        fr_n:'48&nbsp;000+ stations GPL dans 70 pays. Filtrer par camping-car, type de connecteur, disponibilit&eacute; 24h/24.',
+        links:[{t:'myLPG.eu',u:'https://www.mylpg.eu',c:'site'}] },
+      { id:'p3', tags:['mandatory'],
+        en_l:'Tank full before shipping &mdash; filled up in North America',
+        en_n:'Finland: LPG essentially unavailable &mdash; fill up before entering. Rural areas: stations 50&ndash;100 km apart.',
+        fr_l:'R&eacute;servoir plein avant l&rsquo;exp&eacute;dition &mdash; fait le plein en Am&eacute;rique du Nord',
+        fr_n:'Finlande&nbsp;: GPL pratiquement indisponible &mdash; faire le plein avant d&rsquo;entrer. Zones rurales&nbsp;: stations &agrave; 50&ndash;100&nbsp;km.',
+        links:[] },
+      { id:'p4', tags:['mandatory'],
+        en_l:'Tank clearly marked "FIXED TANK" (not removable cylinder)',
+        en_n:'Some countries prohibit filling removable cylinders but allow fixed tanks. Clear marking avoids refusal at stations.',
+        fr_l:'R&eacute;servoir clairement marqu&eacute; &laquo;&nbsp;R&Eacute;SERVOIR FIXE&nbsp;&raquo; (pas bouteille amovible)',
+        fr_n:'Certains pays interdisent le remplissage des bouteilles amovibles mais autorisent les r&eacute;servoirs fixes.',
+        links:[] },
+    ]
+  },
+  { id:'water', icon:'💧',
+    en:'Water Treatment', fr:'Traitement de l&rsquo;eau',
+    items:[
+      { id:'w1', tags:['critical'],
+        en_l:'European water hose adapters (BSP 3/4" &rarr; NPT 3/4") on board',
+        en_n:'European threads are BSP 3/4". North American pipes use NPT 3/4". You need a BSP Female &rarr; NPT Male adapter.',
+        fr_l:'Adaptateurs eau europ&eacute;ens (BSP 3/4" &rarr; NPT 3/4") &agrave; bord',
+        fr_n:'Les filetages europ&eacute;ens sont BSP 3/4". La plomberie nord-am&eacute;ricaine utilise NPT 3/4". Adaptateur BSP Femelle &rarr; NPT M&acirc;le requis.',
+        links:[{t:'BSP&#8594;NPT adapter',u:'https://a.co/d/01oYqoqp',c:'amazon'},{t:'Universal tap set',u:'https://amzn.eu/d/0eMqEsvs',c:'amazon'}] },
+      { id:'w2', tags:['critical'],
+        en_l:'Protocol: flush campsite tap 30&ndash;60 sec before connecting',
+        en_n:'Campsite lines can sit stagnant for hours. The first flush clears the dead-leg and reduces bacterial load before it enters your hose.',
+        fr_l:'Protocole&nbsp;: laisser couler le robinet du camping 30&ndash;60&nbsp;sec avant de connecter',
+        fr_n:'Les lignes du camping peuvent stagner plusieurs heures. La premi&egrave;re purge nettoie le deadleg et r&eacute;duit la charge bact&eacute;rienne avant qu&rsquo;elle n&rsquo;entre dans votre tuyau.',
+        links:[] },
+      { id:'w3', tags:['critical'],
+        en_l:'Always drain tank completely before refilling from a new source',
+        en_n:'Never top up a stagnant tank. A full drain + fresh fill is the only reset. Topping up dilutes but does not eliminate biofilm or Legionella.',
+        fr_l:'Toujours vider compl&egrave;tement le r&eacute;servoir avant de le remplir depuis une nouvelle source',
+        fr_n:'Ne jamais faire le plein sur de l&rsquo;eau stagnante. Seul un vidage complet + remplissage frais constitue une remise &agrave; z&eacute;ro r&eacute;elle. Diluer ne suffit pas &mdash; le biofilm et la Legionella restent.',
+        links:[] },
+      { id:'w4', tags:['mandatory'],
+        en_l:'20% rule: travel with &le;20% fresh water while driving',
+        en_n:'Reduces sloshing (which resuspends biofilm) and saves weight. Fill to 100% only just before you need it.',
+        fr_l:'R&egrave;gle des 20%&nbsp;: voyager avec &le;20% d&rsquo;eau fra&icirc;che pendant le trajet',
+        fr_n:'R&eacute;duit le ballottement (qui remet le biofilm en suspension) et &eacute;conomise du poids. Remplir &agrave; 100% seulement juste avant d&rsquo;en avoir besoin.',
+        links:[] },
+      { id:'w5', tags:['mandatory'],
+        en_l:'OEM inline carbon filter cartridges &mdash; spares on board',
+        en_n:'Unity: Pentek/Flow-Pur carbon block (WCBCS-975-RV compatible). Wonder: NSF-certified inline filter. Replace every 3&ndash;6 months or when flow drops.',
+        fr_l:'Cartouches de filtre &agrave; charbon actif OEM &mdash; pi&egrave;ces de rechange &agrave; bord',
+        fr_n:'Unity&nbsp;: charbon en bloc Pentek/Flow-Pur (compatible WCBCS-975-RV). Wonder&nbsp;: filtre en ligne certifi&eacute; NSF. Remplacer tous les 3&ndash;6 mois ou lorsque le d&eacute;bit chute.',
+        links:[{t:'Unity carbon filter (4-pk)',u:'https://a.co/d/029D2H9f',c:'amazon'},{t:'Wonder inline filter',u:'https://a.co/d/03afTfOW',c:'amazon'}] },
+      { id:'w6', tags:['recommended'],
+        en_l:'[Option 2] BLUTEC AR3 inlet pre-filter installed or on board',
+        en_n:'5&micro;m + 0.2&micro;m + UVC-LED NSF-certified prefiltration at the campsite tap. Requires pressurized source &mdash; not for boondocking bucket fill.',
+        fr_l:'[Option 2] Pr&eacute;filtre BLUTEC AR3 install&eacute; ou &agrave; bord',
+        fr_n:'5&micro;m + 0,2&micro;m + UVC-LED certifi&eacute; NSF &agrave; l&rsquo;entr&eacute;e robinet du camping. N&eacute;cessite une source sous pression &mdash; pas pour le remplissage manuel/boondocking.',
+        links:[{t:'BLUTEC AR3',u:'https://goblutech.com/products/ar3-led-uvc-rv-water-filtration-purification-system',c:'site'},{t:'BLUTEC Offgrid+ recharge',u:'https://goblutech.com/products/offgrid-plus-filter-recharge-pack',c:'site'}] },
+      { id:'w7', tags:['recommended'],
+        en_l:'[Option 2] Aquatabs 334 mg on board &mdash; for fresh tank treatment',
+        en_n:'4&ndash;5 tablets per 97L tank. For tank disinfection when BLUTEC not usable (boondocking). Never combine with ozone in same cycle.',
+        fr_l:'[Option 2] Aquatabs 334&nbsp;mg &agrave; bord &mdash; pour traitement du r&eacute;servoir',
+        fr_n:'4&ndash;5 comprim&eacute;s par r&eacute;servoir de 97L. Pour la d&eacute;sinfection du r&eacute;servoir quand le BLUTEC n&rsquo;est pas utilisable (boondocking). Ne jamais combiner avec l&rsquo;ozone dans le m&ecirc;me cycle.',
+        links:[{t:'Aquatabs 334mg',u:'https://a.co/d/3ppxq14',c:'amazon'}] },
+      { id:'w8', tags:['optional'],
+        en_l:'[Option 3] NOVO CRO-800UX6 RO: filters checked, winterization procedure understood',
+        en_n:'RO membrane is sensitive to freezing. ⚠ CRITICAL: Air pressure alone = broken RO membrane. Remove before winterization.',
+        fr_l:'[Option 3] NOVO CRO-800UX6 OI&nbsp;: filtres v&eacute;rifi&eacute;s, proc&eacute;dure d&rsquo;hivernisation connue',
+        fr_n:'La membrane OI est sensible au gel. ⚠ CRITIQUE&nbsp;: La pression d&rsquo;air seule = membrane cass&eacute;e. Retirer avant l&rsquo;hivernisation.',
+        links:[{t:'NOVO CRO-800UX6',u:'https://novowater.com/tankless-ro-cro-800ux6/',c:'site'},{t:'Install diagram',u:'https://novowater.com/wp-content/uploads/2025/04/CRO-800UndersinkDiagram.jpg',c:'site'}] },
+      { id:'w9', tags:['optional'],
+        en_l:'[Option 3] ACUVA ArrowMax UV sterilizer: lamp OK, quartz clean, 12V supply verified',
+        en_n:'UV only effective on clear water (&lt;1 NTU). ⚠ CRITICAL: Air pressure alone = broken UV lamp. Remove before winterization.',
+        fr_l:'[Option 3] St&eacute;rilisateur UV ACUVA ArrowMax&nbsp;: lampe OK, quartz propre, alimentation 12V v&eacute;rifi&eacute;e',
+        fr_n:'UV efficace uniquement sur eau claire (&lt;1 NTU). ⚠ CRITIQUE&nbsp;: La pression d&rsquo;air seule = lampe UV bris&eacute;e. Retirer avant l&rsquo;hivernisation.',
+        links:[{t:'ACUVA ArrowMax Explore 2',u:'https://thecabindepot.ca/fr/products/watersprint-arrowmax-explore-2',c:'site'},{t:'ACUVA prefilter ACU600',u:'https://www.walmart.com/ip/Acuva-Technologies-ACU600-1379-Advanced-Prefilter-for-Water-Purification-Systems/1445225699',c:'site'}] },
+      { id:'w10', tags:['optional'],
+        en_l:'[Option 3] Remineralization filter replaced (every 6 months)',
+        en_n:'RO removes ~95&ndash;99% of minerals. Daily RO use without remineralization can reduce Ca/Mg intake long-term (WHO 2004). Replace every 6 months.',
+        fr_l:'[Option 3] Filtre reminéralisateur remplac&eacute; (tous les 6 mois)',
+        fr_n:'L&rsquo;OI &eacute;limine ~95&ndash;99% des min&eacute;raux. La consommation quotidienne d&rsquo;eau OI sans remin&eacute;ralisation peut r&eacute;duire les apports en Ca/Mg &agrave; long terme (WHO 2004). Remplacer tous les 6 mois.',
+        links:[{t:'Remineralisation + pH filter',u:'https://a.co/d/0xg5GXC',c:'amazon'}] },
+      { id:'w11', tags:['optional'],
+        en_l:'[Option 4] Ozone generator (Airthereal AH1000): diffuser clean, silicone tubing intact',
+        en_n:'Check diffuser stone (0.5 micron) for clogging. EPDM seal budget: max 800 min O&sup3;/year. Never run pump during ozone injection.',
+        fr_l:'[Option 4] G&eacute;n&eacute;rateur d&rsquo;ozone (Airthereal AH1000)&nbsp;: diffuseur propre, tuyau silicone intact',
+        fr_n:'V&eacute;rifier la pierre diffuseur (0,5 micron) pour les obstructions. Budget joints EPDM&nbsp;: max 800 min O&sup3;/an. Ne jamais activer la pompe pendant l&rsquo;injection d&rsquo;ozone.',
+        links:[{t:'Airthereal AH1000',u:'https://airthereal.com/products/ah1000-water-ozone-generator',c:'site'}] },
+      { id:'w12', tags:['optional'],
+        en_l:'[Option 4] Tank temperature monitor (DS18B20 + Tuya WiFi) operational',
+        en_n:'Temperature is the single most important variable for ozone protocol selection. Above 25&deg;C: Legionella critical growth zone in 3&ndash;7 days.',
+        fr_l:'[Option 4] Surveillance temp&eacute;rature r&eacute;servoir (DS18B20 + Tuya WiFi) op&eacute;rationnelle',
+        fr_n:'La temp&eacute;rature est la variable la plus importante pour le choix du protocole ozone. Au-dessus de 25&deg;C&nbsp;: Legionella en zone de croissance critique en 3&ndash;7 jours.',
+        links:[{t:'Tuya temp controller + DS18B20',u:'https://a.co/d/06hCYdLW',c:'amazon'}] },
+      { id:'w13', tags:['critical'],
+        en_l:'⚠ WINTERIZATION: ALL interior filtration systems removed before blowing lines',
+        en_n:'Air pressure WILL destroy the RO membrane, ACUVA UV lamp, and any in-line ceramic filter. Remove them first. Applies to BLUTEC if left in wet bay.',
+        fr_l:'⚠ HIVERNISATION&nbsp;: TOUS les syst&egrave;mes de filtration int&eacute;rieurs retir&eacute;s avant de souffler les lignes',
+        fr_n:'La pression d&rsquo;air D&Eacute;TRUIRA la membrane OI, la lampe UV ACUVA et tout filtre c&eacute;ramique en ligne. Les retirer en premier. S&rsquo;applique aussi au BLUTEC s&rsquo;il est laiss&eacute; dans le compartiment humide.',
+        links:[] },
+      { id:'w14', tags:['recommended'],
+        en_l:'Interactive Water Guide bookmarked for field use',
+        en_n:'jev-rv.github.io/water-guide &mdash; heatmaps for protocol selection by temperature, source, pH, stagnation duration.',
+        fr_l:'Guide interactif de l&rsquo;eau mis en favori pour utilisation terrain',
+        fr_n:'jev-rv.github.io/water-guide &mdash; heatmaps pour s&eacute;lection de protocole par temp&eacute;rature, source, pH, dur&eacute;e de stagnation.',
+        links:[{t:'Water Guide',u:'https://jev-rv.github.io/water-guide/',c:'site'}] },
+    ]
+  },
+  { id:'waste', icon:'🚽',
+    en:'Waste Water', fr:'Eaux us&eacute;es',
+    items:[
+      { id:'ww1', tags:['critical'],
+        en_l:'Macerator pump installed or portable macerator kit on board',
+        en_n:'Most European campsites use elevated pay stations &mdash; gravity drain alone is often insufficient.',
+        fr_l:'Pompe macerator install&eacute;e ou kit macerator portable &agrave; bord',
+        fr_n:'La plupart des campings europ&eacute;ens utilisent des stations sur&eacute;lev&eacute;es &mdash; la vidange par gravit&eacute; seule est souvent insuffisante.',
+        links:[{t:'Portable macerator kit',u:'https://a.co/d/0iqsEmNq',c:'amazon'},{t:'Shurflo 3200-200',u:'https://a.co/d/07kwirfy',c:'amazon'}] },
+      { id:'ww2', tags:['mandatory'],
+        en_l:'Grey/black tanks emptied before driving &mdash; keep 10% to avoid sloshing',
+        en_n:'Empty before driving to save weight. Keep ~10% to prevent odors. Fill to 0% on arrival at dump station.',
+        fr_l:'R&eacute;servoirs gris/noirs vid&eacute;s avant de rouler &mdash; garder 10% pour &eacute;viter le ballottement',
+        fr_n:'Vider avant de rouler pour &eacute;conomiser du poids. Garder ~10% pour &eacute;viter les odeurs. Vider &agrave; 0% &agrave; la station de vidange.',
+        links:[] },
+    ]
+  },
+  { id:'weight', icon:'⚖️',
+    en:'Weight &amp; OCCC', fr:'Poids &amp; OCCC',
+    items:[
+      { id:'wt1', tags:['critical'],
+        en_l:'RV weighed fully loaded before shipping &mdash; axle loads documented',
+        en_n:'Europe enforces axle-by-axle limits strictly. Austria: 0% tolerance. Front + rear axle &ne; GVWR.',
+        fr_l:'VR pes&eacute; pleinement charg&eacute; avant l&rsquo;exp&eacute;dition &mdash; charges par essieu document&eacute;es',
+        fr_n:'L&rsquo;Europe applique strictement les limites par essieu. Autriche&nbsp;: tol&eacute;rance 0%. Essieu avant + arri&egrave;re &ne; PNBV.',
+        links:[] },
+      { id:'wt2', tags:['critical'],
+        en_l:'Travel configuration: 30% fresh water, empty grey/black, weight distributed forward',
+        en_n:'North American RVs often run close to rear axle limit. 30% water = ~30 kg saved on 97L tank.',
+        fr_l:'Configuration de voyage&nbsp;: 30% d&rsquo;eau fra&icirc;che, r&eacute;servoirs gris/noirs vides, poids vers l&rsquo;avant',
+        fr_n:'Les VR nord-am&eacute;ricains frisent souvent la limite de l&rsquo;essieu arri&egrave;re. 30% d&rsquo;eau = ~30&nbsp;kg &eacute;conomis&eacute;s sur un r&eacute;servoir de 97L.',
+        links:[] },
+      { id:'wt3', tags:['mandatory'],
+        en_l:'Familiar with EU weight fine scale by country (Austria, Germany, France, Spain&hellip;)',
+        en_n:'Austria = 0% tolerance, fines from &euro;85. Germany = 5% tolerance for &le;7.5t. France = immobilization possible above +5%.',
+        fr_l:'Familiaris&eacute; avec le bar&egrave;me des amendes UE par pays (Autriche, Allemagne, France, Espagne&hellip;)',
+        fr_n:'Autriche = tol&eacute;rance 0%, amendes d&egrave;s 85&euro;. Allemagne = tol&eacute;rance 5% pour &le;7,5t. France = immobilisation possible au-del&agrave; de +5%.',
+        links:[] },
+    ]
+  },
+  { id:'mandatory', icon:'🚦',
+    en:'Mandatory Equipment', fr:'&Eacute;quipements obligatoires',
+    items:[
+      { id:'m1', tags:['critical'],
+        en_l:'Blind-spot stickers (Angles Morts) &mdash; 3 stickers, mandatory in France for GVWR &gt;3.5t',
+        en_n:'French regulation Jan 2021 &mdash; applies to all vehicles &gt;3.5t GVWR regardless of registration country.',
+        fr_l:'Autocollants angles morts &mdash; 3 autocollants, obligatoires en France pour PNBV &gt;3,5t',
+        fr_n:'R&egrave;glement fran&ccedil;ais jan. 2021 &mdash; s&rsquo;applique &agrave; tous les v&eacute;hicules &gt;3,5t PNBV quel que soit le pays d&rsquo;immatriculation.',
+        links:[{t:'Angles Morts set',u:'https://amzn.eu/d/08oiQ3Tb',c:'amazon'}] },
+      { id:'m2', tags:['critical'],
+        en_l:'Red/white warning board (50&times;50 cm, reflective) &mdash; mandatory Spain and Italy if rear load protrudes',
+        en_n:'Italy: aluminum mandatory, 5 red + 4 white stripes. Spain: aluminum or plastic, 3+3 stripes. Buy a reversible 2-in-1 board.',
+        fr_l:'Panneau avertisseur rouge/blanc (50&times;50&nbsp;cm, r&eacute;fl&eacute;chissant) &mdash; obligatoire Espagne et Italie si chargement d&eacute;passe',
+        fr_n:'Italie&nbsp;: aluminium obligatoire, 5 bandes rouges + 4 blanches. Espagne&nbsp;: aluminium ou plastique, 3+3 bandes. Acheter un panneau 2-en-1 r&eacute;versible.',
+        links:[{t:'2-in-1 Spain+Italy board',u:'https://amzn.eu/d/099qOlWQ',c:'amazon'}] },
+      { id:'m3', tags:['critical'],
+        en_l:'RoRo driver instruction sheet printed and placed on steering wheel',
+        en_n:'Port driver must see chassis battery master switch instruction immediately on opening door.',
+        fr_l:'Feuille d&rsquo;instructions conducteur RoRo imprim&eacute;e et plac&eacute;e sur le volant',
+        fr_n:'Le conducteur du port doit voir l&rsquo;instruction de l&rsquo;interrupteur de batterie ch&acirc;ssis imm&eacute;diatement en ouvrant la portibre.',
+        links:[{t:'RoRo instruction sheet',u:'https://jev-rv.github.io/images/roro-battery-master-switch.png',c:'site'}] },
+      { id:'m4', tags:['critical'],
+        en_l:'Dashcam removed or covered for Portugal and Austria (possession = fine up to &euro;25,000)',
+        en_n:'Portugal (Data Protection Act 58/2019) and Austria: illegal to own or use. Remove before entering the country.',
+        fr_l:'Dashcam retir&eacute;e ou cach&eacute;e pour Portugal et Autriche (possession = amende jusqu&rsquo;&agrave; 25&nbsp;000&euro;)',
+        fr_n:'Portugal (Loi protection des donn&eacute;es 58/2019) et Autriche&nbsp;: ill&eacute;gal de poss&eacute;der ou utiliser. Retirer avant d&rsquo;entrer dans le pays.',
+        links:[] },
+      { id:'m5', tags:['mandatory'],
+        en_l:'E-bike configured in EU mode (&le;250W, &le;25 km/h, pedalling required)',
+        en_n:'North American e-bikes (500&ndash;750W, 32 km/h) are reclassified as mopeds in Europe. Configure EU mode or face fines and liability.',
+        fr_l:'V&eacute;lo &eacute;lectrique configur&eacute; en mode UE (&le;250W, &le;25&nbsp;km/h, p&eacute;dalage obligatoire)',
+        fr_n:'Les v&eacute;los &eacute;lectriques nord-am&eacute;ricains (500&ndash;750W, 32&nbsp;km/h) sont reclassifi&eacute;s comme cyclomoteurs en Europe. Configurer le mode UE ou risquer des amendes.',
+        links:[] },
+      { id:'m6', tags:['recommended'],
+        en_l:'Heavy-duty snow chains or HD snow socks on board (Sprinter &gt;3.5t)',
+        en_n:'Standard car chains are rated to 3.5t &mdash; illegal for your LTV. Only TÜV/ÖNORM-certified HD equipment accepted in Alpine countries.',
+        fr_l:'Cha&icirc;nes neige lourdes ou chaussettes HD &agrave; bord (Sprinter &gt;3,5t)',
+        fr_n:'Les cha&icirc;nes standard pour voitures sont limit&eacute;es &agrave; 3,5t &mdash; ill&eacute;gales pour votre LTV. Seuls les &eacute;quipements HD certifi&eacute;s TÜV/ÖNORM accept&eacute;s dans les pays alpins.',
+        links:[{t:'AutoSock HP698 (HD)',u:'https://autosock.com/products/autosock-hp698',c:'site'},{t:'Pewag Austro Super HD',u:'https://shop.pewag.com/fr/pewag-austro-super-jumelee/4034241',c:'site'}] },
+      { id:'m7', tags:['mandatory'],
+        en_l:'Environmental zone (LEZ) stickers/apps checked for planned route',
+        en_n:'France Crit\'Air, German Umweltzone, Italian ZTL &mdash; North American RVs generally cannot obtain stickers. Avoid restricted areas.',
+        fr_l:'Vignettes / applications zones environnementales v&eacute;rifi&eacute;es pour l&rsquo;itin&eacute;raire pr&eacute;vu',
+        fr_n:'Crit\'Air France, Umweltzone allemande, ZTL italienne &mdash; les VR nord-am&eacute;ricains ne peuvent g&eacute;n&eacute;ralement pas obtenir les vignettes. &Eacute;viter les zones restreintes.',
+        links:[] },
+      { id:'m8', tags:['critical'],
+        en_l:'Speed camera / radar detector disabled or removed (illegal in France, Germany, Switzerland)',
+        en_n:'In most EU countries: active radar detectors illegal. Fixed camera location warnings (GPS-based) legal in most countries except FR/DE/CH.',
+        fr_l:'D&eacute;tecteur de radar d&eacute;sactiv&eacute; ou retir&eacute; (ill&eacute;gal en France, Allemagne, Suisse)',
+        fr_n:'Dans la plupart des pays UE&nbsp;: d&eacute;tecteurs radar actifs ill&eacute;gaux. Avertissements cam&eacute;ras fixes par GPS l&eacute;gaux dans la plupart des pays sauf FR/DE/CH.',
+        links:[] },
+    ]
+  },
+  { id:'docs', icon:'📄',
+    en:'Documents &amp; Admin', fr:'Documents &amp; Admin',
+    items:[
+      { id:'d1', tags:['critical'],
+        en_l:'Schengen 90/180 plan validated before departure',
+        en_n:'North American passport = max 90 days in any 180-day Schengen window. Use the Schengen simulator.',
+        fr_l:'Plan Schengen 90/180 valid&eacute; avant le d&eacute;part',
+        fr_n:'Passeport nord-am&eacute;ricain = max 90 jours dans toute fen&ecirc;tre Schengen de 180 jours. Utiliser le simulateur Schengen.',
+        links:[{t:'Schengen simulator',u:'https://jev-rv.github.io/schengen-rv-simulator/',c:'site'}] },
+      { id:'d2', tags:['critical'],
+        en_l:'ETIAS authorization obtained (when mandatory)',
+        en_n:'ETIAS requirement for non-EU nationals. Check current status &mdash; progressive rollout ongoing.',
+        fr_l:'Autorisation ETIAS obtenue (lorsque obligatoire)',
+        fr_n:'Exigence ETIAS pour les ressortissants non-UE. V&eacute;rifier le statut actuel &mdash; d&eacute;ploiement progressif en cours.',
+        links:[] },
+      { id:'d3', tags:['critical'],
+        en_l:'RV insurance valid for all countries on route &mdash; European Green Card obtained',
+        en_n:'Contact your insurer before departure. Some policies exclude specific countries. Green Card required.',
+        fr_l:'Assurance VR valide pour tous les pays de l&rsquo;itin&eacute;raire &mdash; Carte verte internationale obtenue',
+        fr_n:'Contacter votre assureur avant le d&eacute;part. Certaines polices excluent des pays sp&eacute;cifiques. La carte verte est requise.',
+        links:[] },
+      { id:'d4', tags:['critical'],
+        en_l:'Vignettes purchased for applicable countries (Austria, Switzerland, etc.)',
+        en_n:'Austria and Switzerland require vignettes (road tax stickers). Buy digitally before crossing.',
+        fr_l:'Vignettes achet&eacute;es pour les pays applicables (Autriche, Suisse, etc.)',
+        fr_n:'L&rsquo;Autriche et la Suisse exigent des vignettes. Acheter en ligne avant de traverser.',
+        links:[] },
+    ]
+  },
+];
+
+// ── STATE ────────────────────────────────────────────────────────────────
+var lang = 'en';
+var view = 'critical';
+var rvFilter = 'all';
+var states = {};
+
+var UNITY_ONLY = ['e6'];
+var WONDER_ONLY = [];
+
+function getLabel(item) { return lang === 'fr' ? item.fr_l : item.en_l; }
+function getNote(item)  { return lang === 'fr' ? item.fr_n : item.en_n; }
+function getCatTitle(cat) { return lang === 'fr' ? cat.fr : cat.en; }
+
+function isVisible(item) {
+  if (rvFilter === 'unity' && WONDER_ONLY.indexOf(item.id) >= 0) return false;
+  if (rvFilter === 'wonder' && UNITY_ONLY.indexOf(item.id) >= 0) return false;
+  if (view === 'water') return true;
+  if (view === 'critical') return item.tags[0] === 'critical' || item.tags[0] === 'mandatory';
+  return true;
+}
+
+function tagClass(tag) {
+  return {critical:'tc', mandatory:'tm', recommended:'tr', optional:'to'}[tag] || 'to';
+}
+function tagLetter(tag) {
+  return {critical:'!', mandatory:'M', recommended:'R', optional:'o'}[tag] || 'o';
+}
+
+function renderItem(item) {
+  var s = states[item.id] || null;
+  var links = item.links || [];
+  var linksHtml = links.length ? '<div class="item-links">' + links.map(function(l) {
+    var icon = l.c === 'amazon' ? '🛒 ' : '🔗 ';
+    return '<a href="' + l.u + '" target="_blank" class="ilink">' + icon + l.t + '</a>';
+  }).join('') + '</div>' : '';
+
+  return '<div class="item-row" id="row-' + item.id + '">' +
+    '<div class="state-btns">' +
+      '<button class="s-btn' + (s === 'done' ? ' s-done' : '') + '" onclick="toggle(\'' + item.id + '\',\'done\')">✓</button>' +
+      '<button class="s-btn' + (s === 'na' ? ' s-na' : '') + '" onclick="toggle(\'' + item.id + '\',\'na\')">—</button>' +
+    '</div>' +
+    '<span class="tag-pill ' + tagClass(item.tags[0]) + '">' + tagLetter(item.tags[0]) + '</span>' +
+    '<div class="item-content">' +
+      '<div class="item-label">' + getLabel(item) + '</div>' +
+      (getNote(item) ? '<div class="item-note">' + getNote(item) + '</div>' : '') +
+      linksHtml +
+    '</div>' +
+  '</div>';
+}
+
+function renderAll() {
+  var root = document.getElementById('root');
   root.innerHTML = '';
 
-  cats.forEach(cat => {
-    const visibleItems = getVisibleItems(cat.items);
-    if (visibleItems.length === 0) return;
+  var catsToShow = view === 'water'
+    ? CATS.filter(function(c) { return c.id === 'water'; })
+    : CATS;
 
-    const done = visibleItems.filter(i => itemStates[i.id] === 'done').length;
-    const na = visibleItems.filter(i => itemStates[i.id] === 'na').length;
-    const total = visibleItems.length;
-    const progress = total > 0 ? Math.round(((done + na) / total) * 100) : 0;
+  catsToShow.forEach(function(cat) {
+    var visible = cat.items.filter(isVisible);
+    if (!visible.length) return;
 
-    const block = document.createElement('div');
+    var done = visible.filter(function(i) { return states[i.id]; }).length;
+    var total = visible.length;
+    var isOpen = view !== 'full' || cat.id === 'water';
+
+    var block = document.createElement('div');
     block.className = 'cat-block';
     block.id = 'cat-' + cat.id;
-
-    // Determine if open by default
-    const isOpen = view === 'critical' || view === 'water' || cat.id === 'water';
-
-    block.innerHTML = `
-      <div class="cat-header ${isOpen ? 'open' : ''}" onclick="toggleCat('${cat.id}')">
-        <span class="cat-icon">${cat.icon}</span>
-        <span class="cat-title">${cat.title}</span>
-        <span class="cat-progress">${done+na}/${total} ${progress >= 100 ? '✓' : ''}</span>
-        <span class="cat-chevron" id="chev-${cat.id}" style="transform:${isOpen ? 'rotate(180deg)' : ''}"">▼</span>
-      </div>
-      <div class="cat-body ${isOpen ? 'open' : ''}" id="body-${cat.id}">
-        ${visibleItems.map(item => renderItem(item)).join('')}
-      </div>
-    `;
+    block.innerHTML =
+      '<div class="cat-header' + (isOpen ? ' open' : '') + '" onclick="toggleCat(\'' + cat.id + '\')">' +
+        '<span class="cat-icon">' + cat.icon + '</span>' +
+        '<span class="cat-title">' + getCatTitle(cat) + '</span>' +
+        '<span class="cat-prog" id="cp-' + cat.id + '">' + done + '/' + total + (done >= total ? ' ✓' : '') + '</span>' +
+        '<span class="cat-chev" id="cc-' + cat.id + '" style="transform:' + (isOpen ? 'rotate(180deg)' : '') + '">▼</span>' +
+      '</div>' +
+      '<div class="cat-body' + (isOpen ? ' open' : '') + '" id="cb-' + cat.id + '">' +
+        visible.map(renderItem).join('') +
+      '</div>';
     root.appendChild(block);
   });
 
   updateProgress();
-  updateViewCounts();
+  updateCounts();
 }
 
-function getVisibleItems(items) {
-  return items.filter(item => {
-    // RV filter
-    if (rvFilter === 'unity' && WONDER_ONLY.includes(item.id)) return false;
-    if (rvFilter === 'wonder' && UNITY_ONLY.includes(item.id)) return false;
-    // View filter
-    if (view === 'critical') return item.tags.includes('critical') || item.tags.includes('mandatory');
-    if (view === 'water') return true; // show all items in water category (already filtered by cat)
-    return true; // full view
-  });
-}
-
-function renderItem(item) {
-  const state = itemStates[item.id] || null;
-  const tagLabel = item.tags[0];
-  const L = LANG_STRINGS[lang];
-
-  const linksHtml = item.links && item.links.length > 0
-    ? `<div class="item-links">${item.links.map(l =>
-        `<a href="${l.u}" target="_blank" class="item-link link-${l.cl}">${l.t}</a>`
-      ).join('')}</div>`
-    : '';
-
-  return `
-    <div class="item-row" id="row-${item.id}">
-      <div class="state-btns">
-        <button class="state-btn done ${state==='done'?'done':''}" onclick="setState('${item.id}','done')" title="${L['done-label']}">✓</button>
-        <button class="state-btn na ${state==='na'?'na':''}" onclick="setState('${item.id}','na')" title="${L['na-label']}">—</button>
-      </div>
-      <span class="tag-pill tag-${tagLabel}">${tagLabel.charAt(0).toUpperCase()}</span>
-      <div class="item-content">
-        <div class="item-label">${item.label}</div>
-        ${item.note ? `<div class="item-note">${item.note}</div>` : ''}
-        ${linksHtml}
-      </div>
-    </div>
-  `;
-}
-
-// ── INTERACTIONS ──────────────────────────────────────────────────────────
-function setState(id, newState) {
-  const current = itemStates[id];
-  itemStates[id] = current === newState ? null : newState;
-  // Re-render just this item row
-  const item = findItem(id);
+function toggle(id, newState) {
+  states[id] = states[id] === newState ? null : newState;
+  // Re-render just the row
+  var item = findItem(id);
   if (!item) return;
-  const row = document.getElementById('row-' + id);
-  if (row) row.outerHTML = renderItem(item);
+  var row = document.getElementById('row-' + id);
+  if (row) {
+    var tmp = document.createElement('div');
+    tmp.innerHTML = renderItem(item);
+    row.parentNode.replaceChild(tmp.firstChild, row);
+  }
   updateProgress();
-  updateCatProgress();
-  saveState();
+  updateCatCounters();
+  save();
 }
 
 function findItem(id) {
-  for (const cat of CATEGORIES[lang]) {
-    const item = cat.items.find(i => i.id === id);
-    if (item) return item;
-  }
-  // Try other lang
-  const otherLang = lang === 'en' ? 'fr' : 'en';
-  for (const cat of CATEGORIES[otherLang]) {
-    const item = cat.items.find(i => i.id === id);
-    if (item) return item;
+  for (var ci = 0; ci < CATS.length; ci++) {
+    for (var ii = 0; ii < CATS[ci].items.length; ii++) {
+      if (CATS[ci].items[ii].id === id) return CATS[ci].items[ii];
+    }
   }
   return null;
 }
 
-function toggleCat(catId) {
-  const header = document.querySelector(`#cat-${catId} .cat-header`);
-  const body = document.getElementById('body-' + catId);
-  const chev = document.getElementById('chev-' + catId);
-  if (!header || !body) return;
-  const isOpen = body.classList.contains('open');
-  body.classList.toggle('open', !isOpen);
-  header.classList.toggle('open', !isOpen);
-  if (chev) chev.style.transform = isOpen ? '' : 'rotate(180deg)';
+function toggleCat(id) {
+  var header = document.querySelector('#cat-' + id + ' .cat-header');
+  var body = document.getElementById('cb-' + id);
+  var chev = document.getElementById('cc-' + id);
+  if (!body) return;
+  var open = body.classList.contains('open');
+  body.classList.toggle('open', !open);
+  if (header) header.classList.toggle('open', !open);
+  if (chev) chev.style.transform = open ? '' : 'rotate(180deg)';
 }
 
 function setView(v) {
   view = v;
-  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('vb-' + v).classList.add('active');
-  if (v === 'water') {
-    // Show only water category
-    renderWaterOnly();
-  } else {
-    render();
-  }
-}
-
-function renderWaterOnly() {
-  const cats = CATEGORIES[lang];
-  const root = document.getElementById('checklist-root');
-  root.innerHTML = '';
-  const waterCat = cats.find(c => c.id === 'water');
-  if (!waterCat) return;
-
-  const done = waterCat.items.filter(i => itemStates[i.id] === 'done').length;
-  const na = waterCat.items.filter(i => itemStates[i.id] === 'na').length;
-  const total = waterCat.items.length;
-
-  const block = document.createElement('div');
-  block.className = 'cat-block';
-  block.innerHTML = `
-    <div class="cat-header open" onclick="toggleCat('water')">
-      <span class="cat-icon">💧</span>
-      <span class="cat-title">${waterCat.title}</span>
-      <span class="cat-progress">${done+na}/${total}</span>
-      <span class="cat-chevron" id="chev-water" style="transform:rotate(180deg)">▼</span>
-    </div>
-    <div class="cat-body open" id="body-water">
-      ${waterCat.items.map(item => renderItem(item)).join('')}
-    </div>
-  `;
-  root.appendChild(block);
-  updateProgress();
+  ['critical','full','water'].forEach(function(x) {
+    document.getElementById('vb-' + x).classList.toggle('active', x === v);
+  });
+  renderAll();
 }
 
 function setRV(rv) {
   rvFilter = rv;
-  document.querySelectorAll('.rv-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('rv-' + rv).classList.add('active');
-  render();
+  ['all','unity','wonder'].forEach(function(x) {
+    document.getElementById('rv-' + x).classList.toggle('active', x === rv);
+  });
+  renderAll();
 }
 
 function setLang(l) {
   lang = l;
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === l.toUpperCase()));
-  const L = LANG_STRINGS[l];
-  for (const [id, val] of Object.entries(L)) {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = val;
-  }
-  if (view === 'water') renderWaterOnly();
-  else render();
+  document.querySelectorAll('.lang-btn').forEach(function(b) {
+    b.classList.toggle('active', b.textContent === l.toUpperCase());
+  });
+  var L = LANG[l];
+  Object.keys(L).forEach(function(k) {
+    var el = document.getElementById(k);
+    if (el) el.innerHTML = L[k];
+  });
+  renderAll();
 }
 
 function updateProgress() {
-  const cats = CATEGORIES[lang];
-  let total = 0, done = 0;
-  cats.forEach(cat => {
-    const items = view === 'water' ? cat.id === 'water' ? cat.items : []
-                : view === 'critical' ? cat.items.filter(i => i.tags.includes('critical') || i.tags.includes('mandatory'))
-                : cat.items;
-    items.forEach(item => {
-      if (rvFilter === 'unity' && WONDER_ONLY.includes(item.id)) return;
-      if (rvFilter === 'wonder' && UNITY_ONLY.includes(item.id)) return;
+  var total = 0, done = 0;
+  var catsToCount = view === 'water'
+    ? CATS.filter(function(c) { return c.id === 'water'; })
+    : CATS;
+  catsToCount.forEach(function(cat) {
+    cat.items.filter(isVisible).forEach(function(item) {
       total++;
-      if (itemStates[item.id] === 'done' || itemStates[item.id] === 'na') done++;
+      if (states[item.id]) done++;
     });
   });
-  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-  const fill = document.getElementById('prog-fill');
-  const txt = document.getElementById('prog-text');
-  const summ = document.getElementById('prog-summary');
-  if (fill) fill.style.width = pct + '%';
-  if (txt) txt.textContent = pct + '%';
-  if (summ) summ.textContent = `${done} / ${total}`;
+  var pct = total > 0 ? Math.round(done / total * 100) : 0;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-sum').textContent = done + ' / ' + total;
 }
 
-function updateCatProgress() {
-  CATEGORIES[lang].forEach(cat => {
-    const header = document.querySelector(`#cat-${cat.id} .cat-progress`);
-    if (!header) return;
-    const visItems = getVisibleItems(cat.items);
-    const done = visItems.filter(i => itemStates[i.id] === 'done').length;
-    const na = visItems.filter(i => itemStates[i.id] === 'na').length;
-    const total = visItems.length;
-    const prog = total > 0 ? Math.round(((done+na)/total)*100) : 0;
-    header.textContent = `${done+na}/${total} ${prog>=100 ? '✓' : ''}`;
+function updateCatCounters() {
+  CATS.forEach(function(cat) {
+    var cp = document.getElementById('cp-' + cat.id);
+    if (!cp) return;
+    var visible = cat.items.filter(isVisible);
+    var done = visible.filter(function(i) { return states[i.id]; }).length;
+    var total = visible.length;
+    cp.textContent = done + '/' + total + (done >= total && total > 0 ? ' ✓' : '');
   });
 }
 
-function updateViewCounts() {
-  const cats = CATEGORIES[lang];
-  let cCrit = 0, cFull = 0, cWater = 0;
-  cats.forEach(cat => {
-    cat.items.forEach(item => {
-      cFull++;
-      if (item.tags.includes('critical') || item.tags.includes('mandatory')) cCrit++;
-      if (cat.id === 'water') cWater++;
+function updateCounts() {
+  var crit = 0, full = 0, water = 0;
+  CATS.forEach(function(cat) {
+    cat.items.forEach(function(item) {
+      full++;
+      if (item.tags[0] === 'critical' || item.tags[0] === 'mandatory') crit++;
+      if (cat.id === 'water') water++;
     });
   });
-  const vc = document.getElementById('vc-critical');
-  const vf = document.getElementById('vc-full');
-  const vw = document.getElementById('vc-water');
-  if (vc) vc.textContent = cCrit;
-  if (vf) vf.textContent = cFull;
-  if (vw) vw.textContent = cWater;
+  document.getElementById('cnt-critical').textContent = crit;
+  document.getElementById('cnt-full').textContent = full;
+  document.getElementById('cnt-water').textContent = water;
 }
 
 function resetAll() {
-  if (!confirm('Reset all items?')) return;
-  itemStates = {};
-  saveState();
-  if (view === 'water') renderWaterOnly();
-  else render();
+  if (!confirm(lang === 'fr' ? 'R\u00e9initialiser tous les items\u00a0?' : 'Reset all items?')) return;
+  states = {};
+  save();
+  renderAll();
 }
 
-// ── PERSISTENCE ───────────────────────────────────────────────────────────
-function saveState() {
-  try { localStorage.setItem('checklist-v2', JSON.stringify(itemStates)); } catch(e) {}
+function save() {
+  try { localStorage.setItem('cl-v3', JSON.stringify(states)); } catch(e) {}
 }
-function loadState() {
-  try {
-    const s = localStorage.getItem('checklist-v2');
-    if (s) itemStates = JSON.parse(s);
-  } catch(e) {}
+function load() {
+  try { var s = localStorage.getItem('cl-v3'); if (s) states = JSON.parse(s); } catch(e) {}
 }
 
-// ── INIT ──────────────────────────────────────────────────────────────────
-loadState();
-render();
+load();
+renderAll();
 </script>
 </body>
 </html>
