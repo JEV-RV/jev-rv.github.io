@@ -717,13 +717,15 @@ function getNote(item)  { return lang==='fr' ? item.fr_n : item.en_n; }
 function getCatTitle(cat){ return lang==='fr' ? cat.fr : cat.en; }
 
 function isVisible(item) {
-  // RV filter
+  // RV filter (always applied)
   if (rvFilter==='unity'  && WONDER_ONLY.indexOf(item.id)>=0) return false;
   if (rvFilter==='wonder' && UNITY_ONLY.indexOf(item.id)>=0) return false;
-  // View filter
+  // Water view — show all water items regardless of profile
   if (view==='water') return true;
-  if (view==='critical') return item.tags[0]==='critical' || item.tags[0]==='mandatory';
-  // Profile filter (only when checklist is visible)
+  // Full list — show everything, bypass profile filter
+  if (view==='full') return true;
+  // Critical only — apply profile filter
+  if (item.tags[0]!=='critical' && item.tags[0]!=='mandatory') return false;
   if (transport==='roro' && duration && travelStyle) {
     var showFn = item.show || showAlways;
     if (!showFn(duration, travelStyle)) return false;
