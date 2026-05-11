@@ -670,6 +670,7 @@ function isProfileComplete() {
 }
 
 function maybeShowChecklist() {
+  if (view==='configure') { renderConfigure(); return; }
   var show = isProfileComplete();
   document.getElementById('checklist-wrap').classList.toggle('show', show);
   if (show) { renderAll(); updateCounts(); }
@@ -1450,7 +1451,7 @@ var CFG_CATS = [
     ]
   },
   { id:'cfg-water', icon:'💧',
-    en:'Water Treatment', fr:'Traitement de l'eau',
+    en:'Water Treatment', fr:'Traitement de l\'eau',
     systems:[
       { id:'cs-w1',
         en_name:'Option 1 — Adapters + OEM filter + Aquatabs',
@@ -1478,7 +1479,7 @@ var CFG_CATS = [
       },
       { id:'cs-w3',
         en_name:'Option 3 — NOVO RO + ACUVA UV point-of-use',
-        fr_name:'Option 3 — NOVO OI + ACUVA UV point d'usage',
+        fr_name:'Option 3 — NOVO OI + ACUVA UV point d\'usage',
         minimal:false, recommended:false, advanced:true,
         price_eur:720,
         chain:[
@@ -1623,57 +1624,51 @@ function renderConfigure() {
   var root = document.getElementById('cfg-root');
   if (!root) return;
   var conciergeLevel = getConciergeLevel();
-  var conciergeLabels = {minimal:{en:'Minimal',fr:'Minimal'},recommended:{en:'Recommended',fr:'Recommandé'},advanced:{en:'Advanced',fr:'Avancé'}};
-  var colHdr = {
-    en: ['System & components','Price','Concierge','Minimal','Recommended','Advanced'],
-    fr: ['Système & composants','Prix','Concierge','Minimal','Recommandé','Avancé']
-  };
+  var cLabel = {minimal:{en:'Minimal',fr:'Minimal'},recommended:{en:'Recommended',fr:'Recommandé'},advanced:{en:'Advanced',fr:'Avancé'}};
+  var h = lang==='fr'
+    ? ['Système & composants','Prix','Concierge','Minimal','Recommandé','Avancé']
+    : ['System & components','Price','Concierge','Minimal','Recommended','Advanced'];
 
-  root.innerHTML = CFG_CATS.map(function(cat) {
+  var html = CFG_CATS.map(function(cat) {
     var catName = lang==='fr' ? cat.fr : cat.en;
-    var concLabel = conciergeLabels[conciergeLevel][lang];
-    var h = colHdr[lang];
+    var concLabel = cLabel[conciergeLevel][lang];
 
     var rows = cat.systems.map(function(sys) {
       var sysName = lang==='fr' ? sys.fr_name : sys.en_name;
       var note = lang==='fr' ? (sys.fr_note||'') : (sys.en_note||'');
       var concierge = getConciergeForSystem(sys);
       var isChecked = !!cfgState[sys.id];
-      var pillCls = concierge ? 'cfg-pill '+concierge : '';
+      var pillCls = concierge ? 'cfg-pill ' + concierge : '';
       var pillTxt = getLevelLabel(concierge);
+      var priceStr = sys.price_eur ? '~\u20ac' + sys.price_eur : '\u2014';
 
       function cbCell(level) {
-        var isLevel = sys[level];
-        if (!isLevel) return '<td></td>';
+        if (!sys[level]) return '<td></td>';
         var isConcMatch = (concierge===level);
-        var cbCls = 'cfg-cb' + (isChecked?' checked':'') + (isConcMatch&&!isChecked?' concierge-match':'');
-        return '<td><div class="cfg-cb-wrap"><div class="'+cbCls+'" onclick="toggleCfgSystem(''+sys.id+'')">'+(isChecked?'✓':'')+'</div></div></td>';
+        var cls = 'cfg-cb' + (isChecked?' checked':'') + (isConcMatch&&!isChecked?' concierge-match':'');
+        return '<td><div class="cfg-cb-wrap"><div class="' + cls + '" data-cfgid="' + sys.id + '">' + (isChecked?'&#10003;':'') + '</div></div></td>';
       }
-
-      var priceStr = sys.price_eur ? '~€' + sys.price_eur : '—';
 
       return '<tr>' +
         '<td><span class="cfg-sys-name">' + sysName + '</span>' +
-          (note ? '<span style="font-size:10px;color:var(--text3);display:block;margin-top:1px">'+note+'</span>' : '') +
+          (note ? '<span style="font-size:10px;color:var(--text3);display:block;margin-top:1px">' + note + '</span>' : '') +
           '<div class="cfg-chain">' + renderChain(sys.chain) + '</div></td>' +
         '<td class="cfg-price">' + priceStr + '</td>' +
         '<td style="text-align:center"><span class="' + pillCls + '">' + pillTxt + '</span></td>' +
-        cbCell('minimal') +
-        cbCell('recommended') +
-        cbCell('advanced') +
+        cbCell('minimal') + cbCell('recommended') + cbCell('advanced') +
       '</tr>';
     }).join('');
 
     return '<div class="cfg-cat" id="' + cat.id + '">' +
-      '<div class="cfg-cat-header" onclick="toggleCfgCat('' + cat.id + '')">' +
+      '<div class="cfg-cat-header" data-catid="' + cat.id + '">' +
         '<span class="cfg-cat-icon">' + cat.icon + '</span>' +
         '<span class="cfg-cat-title">' + catName + '</span>' +
-        '<span class="cfg-cat-badge" id="badge-'+cat.id+'">' +
-          (lang==='fr'?'Concierge → ':'Concierge → ') + concLabel +
+        '<span class="cfg-cat-badge" id="badge-' + cat.id + '">' +
+          (lang==='fr'?'Concierge \u2192 ':'Concierge \u2192 ') + concLabel +
         '</span>' +
-        '<span class="cfg-cat-chev" id="cfgchev-'+cat.id+'" style="transform:rotate(180deg)">&or;</span>' +
+        '<span class="cfg-cat-chev" id="cfgchev-' + cat.id + '" style="transform:rotate(180deg)">&or;</span>' +
       '</div>' +
-      '<div class="cfg-cat-body open" id="cfgbody-'+cat.id+'">' +
+      '<div class="cfg-cat-body open" id="cfgbody-' + cat.id + '">' +
         '<table class="cfg-table">' +
           '<thead><tr>' +
             '<th style="width:38%">' + h[0] + '</th>' +
@@ -1688,6 +1683,16 @@ function renderConfigure() {
       '</div>' +
     '</div>';
   }).join('');
+
+  root.innerHTML = html;
+
+  // Delegated event listeners
+  root.onclick = function(e) {
+    var cb = e.target.closest('[data-cfgid]');
+    if (cb) { toggleCfgSystem(cb.getAttribute('data-cfgid')); return; }
+    var hdr = e.target.closest('[data-catid]');
+    if (hdr) { toggleCfgCat(hdr.getAttribute('data-catid')); }
+  };
 
   renderMRP();
 }
@@ -1717,7 +1722,7 @@ function renderMRP() {
 
   if (!selected.length) {
     body.innerHTML = '<div class="mrp-empty">' +
-      (lang==='fr' ? 'Aucun système sélectionné — cochez les cases ci-dessus pour construire votre liste d'achat.' :
+      (lang==='fr' ? 'Aucun système sélectionné — cochez les cases ci-dessus pour construire votre liste d\'achat.' :
        'No systems selected — check boxes above to build your purchase list.') + '</div>';
     return;
   }
@@ -1766,7 +1771,6 @@ function renderMRP() {
 cfgLoad();
 
 load();
-cfgLoad();
 loadSurvey();
 </script>
 </body>
