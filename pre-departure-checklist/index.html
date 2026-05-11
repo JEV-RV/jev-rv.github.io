@@ -27,21 +27,56 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
 .lang-btn.active{background:rgba(255,255,255,.2);color:#fff;font-weight:500}
 .main{max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem}
 
-/* ── PROFILE WIZARD ── */
-.wizard{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem}
-.wizard-title{font-family:'DM Serif Display',serif;font-size:1.05rem;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
-.wizard-title span{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text3);font-weight:400}
-.wizard-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:.75rem;align-items:center}
-.wizard-row:last-child{margin-bottom:0}
-.wizard-label{font-size:12px;font-weight:500;color:var(--text2);min-width:110px;flex-shrink:0}
-.wiz-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:7px 14px;font-family:inherit;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px}
-.wiz-btn:hover{border-color:var(--blue);color:var(--blue)}
-.wiz-btn.active-transport{background:var(--teal-bg);border-color:var(--teal);color:var(--teal)}
-.wiz-btn.active-duration{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
-.wiz-btn.active-style{background:var(--purple-bg);border-color:var(--purple);color:var(--purple)}
+/* ── SURVEY ── */
+.survey{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem}
+.survey-title{font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.25rem;display:flex;align-items:center;gap:8px}
+.survey-sub{font-size:12px;color:var(--text3);margin-bottom:1.25rem}
+.survey-section{margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.survey-section:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.survey-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:.75rem}
+.sq-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.6rem;align-items:flex-start}
+.sq-label{font-size:12px;font-weight:500;color:var(--text2);min-width:130px;flex-shrink:0;padding-top:8px}
+.sq-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:6px 13px;font-family:inherit;font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .15s}
+.sq-btn:hover{border-color:var(--blue);color:var(--blue)}
+.sq-btn.a-transport{background:var(--teal-bg);border-color:var(--teal);color:var(--teal)}
+.sq-btn.a-duration{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
+.sq-btn.a-style{background:var(--purple-bg);border-color:var(--purple);color:var(--purple)}
+.sq-btn.a-season{background:#fef3e2;border-color:#d97706;color:#92400e}
+.sq-btn.a-rvtype{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+.sq-btn.a-chassis{background:#f3e8ff;border-color:#7c3aed;color:#5b21b6}
+.sq-btn.a-battery{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
+.sq-btn.a-solar{background:var(--amber-bg);border-color:#d97706;color:var(--amber)}
+.sq-btn.a-dcdc{background:#fce7f3;border-color:#db2777;color:#9d174d}
+.sq-btn.a-gen{background:var(--surface2);border-color:#6b7280;color:#374151}
+.sq-btn.a-shore{background:var(--teal-bg);border-color:var(--teal);color:var(--teal)}
+.sq-btn.sq-warn{border-color:#f59e0b;color:#92400e;background:#fef3e2}
+.sq-btn.sq-block{border-color:var(--red);color:var(--red);background:var(--red-bg)}
+.sq-checks{display:flex;flex-wrap:wrap;gap:6px}
+.sq-check{display:flex;align-items:center;gap:5px;background:var(--surface);border:1.5px solid var(--border);border-radius:7px;padding:5px 10px;cursor:pointer;font-size:12px;color:var(--text2);transition:all .15s;user-select:none}
+.sq-check:hover{border-color:var(--blue);color:var(--blue)}
+.sq-check.checked{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+.sq-check input{display:none}
+.survey-sub-section{display:none;margin-top:.5rem}
+.survey-sub-section.show{display:block}
+.profile-badge{display:inline-flex;align-items:center;gap:6px;background:var(--amber-bg);border:1px solid #e8c870;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:500;color:var(--amber);margin-top:1rem;flex-wrap:wrap}
+.rv-warning{background:#fef9c3;border:1.5px solid #fbbf24;border-radius:var(--radius);padding:1.25rem;margin-top:.75rem;display:none}
+.rv-warning.show{display:block}
+.rv-warning h4{font-size:13px;font-weight:700;color:#92400e;margin-bottom:.5rem}
+.rv-table{width:100%;border-collapse:collapse;font-size:11px;margin:.75rem 0}
+.rv-table th{background:#fef3e2;color:#92400e;font-weight:700;padding:5px 8px;text-align:left;border:1px solid #fde68a}
+.rv-table td{padding:5px 8px;border:1px solid #fde68a;color:var(--text)}
+.rv-table tr.ok td{color:var(--green)}
+.rv-table tr.warn td{color:#d97706}
+.rv-table tr.danger td{color:var(--red);font-weight:600}
+.rv-block{background:var(--red-bg);border:1.5px solid var(--red);border-radius:var(--radius);padding:1.25rem;margin-top:.75rem;display:none}
+.rv-block.show{display:block}
+.rv-block h4{font-size:13px;font-weight:700;color:var(--red);margin-bottom:.5rem}
+.rv-block-table{width:100%;border-collapse:collapse;font-size:11px;margin:.75rem 0}
+.rv-block-table th{background:var(--red-bg);color:var(--red);font-weight:700;padding:5px 8px;text-align:left;border:1px solid #f5c6c6}
+.rv-block-table td{padding:5px 8px;border:1px solid #f5c6c6}
+.licence-note{background:var(--blue-bg);border:1px solid #93c5fd;border-radius:8px;padding:.75rem 1rem;font-size:12px;color:var(--text2);margin-top:.5rem;line-height:1.6}
 .wiz-sub{display:none;margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border)}
 .wiz-sub.show{display:block}
-.profile-badge{display:inline-flex;align-items:center;gap:6px;background:var(--amber-bg);border:1px solid #e8c870;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:500;color:var(--amber);margin-top:.75rem}
 
 /* ── RENTAL MESSAGE ── */
 .rental-msg{background:var(--teal-bg);border:1.5px solid var(--teal);border-radius:var(--radius);padding:1.5rem;text-align:center;margin-bottom:1.5rem;display:none}
@@ -133,34 +168,172 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
 
 <div class="main">
 
-  <!-- ── PROFILE WIZARD ── -->
-  <div class="wizard" id="wizard">
-    <div class="wizard-title" id="wiz-title">🧭 Tell us about your trip <span id="wiz-subtitle">— personalize your checklist in 3 clicks</span></div>
+  <!-- ── SURVEY Q1–Q8 ── -->
+  <div class="survey" id="survey">
+    <div class="survey-title">🧭 Tell us about your trip &amp; RV</div>
+    <div class="survey-sub">Takes ~2 minutes &mdash; saved automatically. We&rsquo;ll show only what applies to you.</div>
 
-    <!-- Q1 Transport -->
-    <div class="wizard-row">
-      <span class="wizard-label" id="wiz-q1">How are you getting to Europe?</span>
-      <button class="wiz-btn" id="wb-roro" onclick="setTransport('roro')">🚢 <span id="wl-roro">My own RV — RoRo shipping</span></button>
-      <button class="wiz-btn" id="wb-rental" onclick="setTransport('rental')">🔑 <span id="wl-rental">Renting locally in Europe</span></button>
+    <!-- SECTION 1 — TRIP -->
+    <div class="survey-section">
+      <div class="survey-section-title">🗺️ Trip</div>
+
+      <div class="sq-row">
+        <span class="sq-label">Getting to Europe:</span>
+        <button class="sq-btn" id="sq-roro"   onclick="setSQ('transport','roro')">🚢 My own RV — RoRo</button>
+        <button class="sq-btn" id="sq-rental" onclick="setSQ('transport','rental')">🔑 Renting locally</button>
+      </div>
+
+      <div class="survey-sub-section" id="ss-trip">
+        <div class="sq-row">
+          <span class="sq-label">Trip duration:</span>
+          <button class="sq-btn" id="sq-short"    onclick="setSQ('duration','short')">⏱ &lt; 60 days</button>
+          <button class="sq-btn" id="sq-standard" onclick="setSQ('duration','standard')">📅 60 – 90 days</button>
+          <button class="sq-btn" id="sq-extended" onclick="setSQ('duration','extended')">📆 90 days+ / two legs</button>
+        </div>
+        <div class="sq-row">
+          <span class="sq-label">Travel style:</span>
+          <button class="sq-btn" id="sq-campgrounds" onclick="setSQ('style','campgrounds')">🏕️ Campgrounds</button>
+          <button class="sq-btn" id="sq-mixed"       onclick="setSQ('style','mixed')">🧭 Mixed</button>
+          <button class="sq-btn" id="sq-offgrid"     onclick="setSQ('style','offgrid')">🌍 Off-grid / Boondocking</button>
+        </div>
+        <div class="sq-row">
+          <span class="sq-label">Travel season:</span>
+          <button class="sq-btn" id="sq-spring" onclick="setSQ('season','spring')">🌿 Spring / Fall (&lt;20°C)</button>
+          <button class="sq-btn" id="sq-summer" onclick="setSQ('season','summer')">☀️ Summer (&gt;20°C, hot regions)</button>
+          <button class="sq-btn" id="sq-winter" onclick="setSQ('season','winter')">❄️ Winter / Mountain</button>
+        </div>
+      </div>
     </div>
 
-    <!-- Q2+Q3 only shown if roro -->
-    <div class="wiz-sub" id="wiz-sub">
-      <div class="wizard-row">
-        <span class="wizard-label" id="wiz-q2">Trip length:</span>
-        <button class="wiz-btn" id="wb-short"    onclick="setDuration('short')">⏱ <span id="wl-short">&lt; 60 days</span></button>
-        <button class="wiz-btn" id="wb-standard" onclick="setDuration('standard')">📅 <span id="wl-standard">60 – 90 days</span></button>
-        <button class="wiz-btn" id="wb-extended" onclick="setDuration('extended')">📆 <span id="wl-extended">90 days+ / two legs</span></button>
+    <!-- SECTION 2 — RV & ENERGY -->
+    <div class="survey-sub-section" id="ss-rv">
+      <div class="survey-section">
+        <div class="survey-section-title">🚐 RV Type &amp; Platform</div>
+
+        <div class="sq-row">
+          <span class="sq-label">RV class:</span>
+          <button class="sq-btn" id="sq-classb"   onclick="setSQ('rvtype','classb')">🚐 Class B — Van (vanlifer, ≤5.5m)</button>
+          <button class="sq-btn" id="sq-classbp"  onclick="setSQ('rvtype','classbp')">🚌 Class B+ (LTV Unity/Wonder, ≤7m)</button>
+          <button class="sq-btn" id="sq-classc"   onclick="setSQ('rvtype','classc')">🚍 Class C — Cab-over (≤8.5m)</button>
+          <button class="sq-btn sq-warn" id="sq-classa"   onclick="setSQ('rvtype','classa')">⚠️ Class A ≤7.6m / 25ft</button>
+          <button class="sq-btn sq-block" id="sq-classa-large" onclick="setSQ('rvtype','classa_large')">⛔ Class A &gt;8m / 26ft</button>
+          <button class="sq-btn sq-block" id="sq-superc"  onclick="setSQ('rvtype','superc')">⛔ Super C / Large Class A</button>
+        </div>
+
+        <!-- Compatibility warning — Class A large -->
+        <div class="rv-warning" id="rv-warn-classa">
+          <h4>⚠️ Class A ≤ 7.6m — Plan carefully</h4>
+          <p style="font-size:12px;color:var(--text2);margin-bottom:.75rem">Your RV is within legal limits but will face real-world infrastructure restrictions. EU Directive 96/53/CE sets hard limits — but streets built centuries ago are the real constraint.</p>
+          <table class="rv-table">
+            <tr><th>Limit</th><th>EU Rule (96/53/CE)</th><th>Class A typical</th><th>Status</th></tr>
+            <tr class="warn"><td>Width</td><td>≤ 2.55 m</td><td>2.55–2.59 m</td><td>⚠️ At/over limit</td></tr>
+            <tr class="ok"><td>Length</td><td>≤ 12.00 m</td><td>7.0–7.6 m</td><td>✅ OK</td></tr>
+            <tr class="warn"><td>Village roads</td><td>—</td><td>often 1.8–2.5 m wide</td><td>⚠️ Tight</td></tr>
+            <tr class="warn"><td>Roundabouts</td><td>—</td><td>designed for ≤7.0m radius</td><td>⚠️ Challenging</td></tr>
+          </table>
+          <p style="font-size:11px;color:var(--text2)">✅ Accessible: coastal highways, major routes, larger campgrounds<br>⚠️ Restricted: most historic centers, mountain villages, smaller campgrounds<br><strong>Garmin RV GPS with your exact dimensions is mandatory.</strong></p>
+        </div>
+
+        <!-- Hard block — Class A large or Super C -->
+        <div class="rv-block" id="rv-block-large">
+          <h4>⛔ Not compatible with European infrastructure</h4>
+          <p style="font-size:12px;color:var(--text);margin-bottom:.75rem">This is not an opinion — it is physics and law. EU Directive 96/53/CE establishes hard limits. Infrastructure built centuries before your RV does the rest.</p>
+          <table class="rv-block-table">
+            <tr><th>Constraint</th><th>EU Legal Limit</th><th>Your RV (typical)</th></tr>
+            <tr><td>Width</td><td>≤ 2.55 m</td><td>2.59–2.74 m ✗</td></tr>
+            <tr><td>Length</td><td>≤ 12.00 m</td><td>Super C: up to 13.7 m ✗</td></tr>
+            <tr><td>Weight</td><td>3,500 kg (B licence)</td><td>14,000–20,000 kg ✗</td></tr>
+            <tr><td>Roundabouts</td><td>designed ≤7.0m radius</td><td>Super C: incompatible ✗</td></tr>
+            <tr><td>Rural bridges</td><td>many rated 3.5 t</td><td>far exceeded ✗</td></tr>
+            <tr><td>Campground pitches</td><td>typical 7–9 m deep</td><td>Super C: 10–14 m ✗</td></tr>
+          </table>
+          <p style="font-size:11px;color:var(--text2);margin-bottom:.75rem">We&rsquo;re not saying don&rsquo;t go. We&rsquo;re saying: go in knowing exactly what you&rsquo;re getting into — and with a route planned to avoid the vast majority of European roads.</p>
+          <button class="sq-btn" style="font-size:11px" onclick="dismissRvBlock()">I understand the constraints — continue anyway</button>
+        </div>
+
+        <div class="sq-row" style="margin-top:.75rem">
+          <span class="sq-label">Chassis:</span>
+          <button class="sq-btn" id="sq-sprinter"   onclick="setSQ('chassis','sprinter')">Mercedes Sprinter (OM654 diesel)</button>
+          <button class="sq-btn" id="sq-transit"    onclick="setSQ('chassis','transit')">Ford Transit</button>
+          <button class="sq-btn" id="sq-promaster"  onclick="setSQ('chassis','promaster')">RAM ProMaster</button>
+          <button class="sq-btn" id="sq-classa-ch"  onclick="setSQ('chassis','classa_chassis')">Class A chassis</button>
+          <button class="sq-btn" id="sq-other-ch"   onclick="setSQ('chassis','other')">Other / don&rsquo;t know</button>
+        </div>
+
+        <!-- C1/C2 licence note — always shown once RV section visible -->
+        <div class="licence-note">
+          ⚠️ <strong>Driving licence &amp; weight:</strong> Standard B licence officially covers vehicles up to 3,500 kg GVWR. Most EU countries apply tourist tolerance for privately-used motorhomes above this — but Germany and Austria may require <strong>C1</strong> (3,500–7,500 kg) or <strong>C</strong> (&gt;7,500 kg). Insurance may be voided in an accident if your licence category does not match your vehicle weight.
+          <br><a href="https://www.theaa.com/european-breakdown-cover/drive-in-europe/driving-licence-categories/" target="_blank">→ EU licence categories explained (AA)</a> &nbsp;·&nbsp;
+          <a href="https://www.canada.ca/en/transport-canada/news/2024/06/driving-in-europe.html" target="_blank">→ Transport Canada — driving abroad</a>
+        </div>
       </div>
-      <div class="wizard-row">
-        <span class="wizard-label" id="wiz-q3">Travel style:</span>
-        <button class="wiz-btn" id="wb-campgrounds" onclick="setStyle('campgrounds')">🏕️ <span id="wl-campgrounds">Campgrounds</span></button>
-        <button class="wiz-btn" id="wb-mixed"       onclick="setStyle('mixed')">🧭 <span id="wl-mixed">Mixed</span></button>
-        <button class="wiz-btn" id="wb-offgrid"     onclick="setStyle('offgrid')">🌍 <span id="wl-offgrid">Off-grid / Boondocking</span></button>
+
+      <!-- SECTION 3 — ENERGY -->
+      <div class="survey-section">
+        <div class="survey-section-title">⚡ Energy System</div>
+
+        <div class="sq-row">
+          <span class="sq-label">Battery bank:</span>
+          <button class="sq-btn" id="sq-bat-oem"      onclick="setSQ('battery','oem')">OEM / stock</button>
+          <button class="sq-btn" id="sq-bat-upgrade"  onclick="setSQ('battery','upgrade')">Upgraded LiFePO4 (200–400 Ah)</button>
+          <button class="sq-btn" id="sq-bat-large"    onclick="setSQ('battery','large')">Large bank (400 Ah+)</button>
+          <button class="sq-btn" id="sq-bat-unknown"  onclick="setSQ('battery','unknown')">Don&rsquo;t know</button>
+        </div>
+        <div class="sq-row">
+          <span class="sq-label">Solar capacity:</span>
+          <button class="sq-btn" id="sq-sol-none"     onclick="setSQ('solar','none')">None / &lt;200W</button>
+          <button class="sq-btn" id="sq-sol-moderate" onclick="setSQ('solar','moderate')">200–400W</button>
+          <button class="sq-btn" id="sq-sol-high"     onclick="setSQ('solar','high')">400W+</button>
+          <button class="sq-btn" id="sq-sol-unknown"  onclick="setSQ('solar','unknown')">Don&rsquo;t know</button>
+        </div>
+        <div class="sq-row">
+          <span class="sq-label">DC-DC charger:</span>
+          <button class="sq-btn" id="sq-dc-factory"   onclick="setSQ('dcdc','factory')">Factory only (~30–50A)</button>
+          <button class="sq-btn" id="sq-dc-upgraded"  onclick="setSQ('dcdc','upgraded')">Upgraded (50A added)</button>
+          <button class="sq-btn" id="sq-dc-high"      onclick="setSQ('dcdc','high')">High-output (100A+)</button>
+          <button class="sq-btn" id="sq-dc-unknown"   onclick="setSQ('dcdc','unknown')">Don&rsquo;t know</button>
+        </div>
+        <div class="sq-row">
+          <span class="sq-label">Generator:</span>
+          <button class="sq-btn" id="sq-gen-none"     onclick="setSQ('generator','none')">None</button>
+          <button class="sq-btn" id="sq-gen-portable" onclick="setSQ('generator','portable')">Portable (1–3 kW)</button>
+          <button class="sq-btn" id="sq-gen-builtin"  onclick="setSQ('generator','builtin')">Integrated / built-in</button>
+          <button class="sq-btn" id="sq-gen-unknown"  onclick="setSQ('generator','unknown')">Don&rsquo;t know</button>
+        </div>
+        <div class="sq-row">
+          <span class="sq-label">Shore power:</span>
+          <button class="sq-btn" id="sq-sh-none"      onclick="setSQ('shore','none')">No inverter / basic</button>
+          <button class="sq-btn" id="sq-sh-inverter"  onclick="setSQ('shore','inverter')">Inverter only</button>
+          <button class="sq-btn" id="sq-sh-240"       onclick="setSQ('shore','240v')">Inverter + 240V charger installed</button>
+          <button class="sq-btn" id="sq-sh-unknown"   onclick="setSQ('shore','unknown')">Don&rsquo;t know</button>
+        </div>
+        <!-- Generator Europe note -->
+        <div class="licence-note" id="gen-note" style="display:none">
+          ℹ️ <strong>Generator use in Europe:</strong> Most European campgrounds prohibit or strictly limit generator use (noise regulations). Plan your generator as <strong>emergency backup only</strong> — not a primary power strategy. Bonjour from the neighbours. 😄
+        </div>
       </div>
-      <div id="profile-badge-wrap"></div>
-    </div>
-  </div>
+
+      <!-- SECTION 4 — INSTALLED EQUIPMENT -->
+      <div class="survey-section">
+        <div class="survey-section-title">🔧 Already Installed on My RV <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(check all that apply)</span></div>
+        <div class="sq-checks">
+          <label class="sq-check" id="sqc-inlet-filter" onclick="toggleInstalled('inlet_filter')"><input type="checkbox"> 💧 Inlet UV/filtration system</label>
+          <label class="sq-check" id="sqc-ro" onclick="toggleInstalled('ro')"><input type="checkbox"> 💧 Reverse osmosis (point-of-use)</label>
+          <label class="sq-check" id="sqc-uv" onclick="toggleInstalled('uv')"><input type="checkbox"> 💧 UV sterilizer (point-of-use)</label>
+          <label class="sq-check" id="sqc-ozone" onclick="toggleInstalled('ozone')"><input type="checkbox"> 💧 Ozone generator (tank)</label>
+          <label class="sq-check" id="sqc-dcdc-extra" onclick="toggleInstalled('dcdc_extra')"><input type="checkbox"> ⚡ Added DC-DC charger</label>
+          <label class="sq-check" id="sqc-p17" onclick="toggleInstalled('p17')"><input type="checkbox"> ⚡ P17 CEE inlet + 240V charger</label>
+          <label class="sq-check" id="sqc-satellite" onclick="toggleInstalled('satellite')"><input type="checkbox"> 📡 Satellite internet</label>
+          <label class="sq-check" id="sqc-gps" onclick="toggleInstalled('gps')"><input type="checkbox"> 📡 RV-rated GPS</label>
+          <label class="sq-check" id="sqc-lte" onclick="toggleInstalled('lte')"><input type="checkbox"> 📡 LTE/5G dedicated router</label>
+          <label class="sq-check" id="sqc-booster" onclick="toggleInstalled('booster')"><input type="checkbox"> 📡 Cell signal booster</label>
+          <label class="sq-check" id="sqc-vpn" onclick="toggleInstalled('vpn')"><input type="checkbox"> 📡 VPN configured</label>
+        </div>
+      </div>
+    </div><!-- /ss-rv -->
+
+    <div id="profile-badge-wrap"></div>
+  </div><!-- /survey -->
 
   <!-- ── RENTAL MESSAGE ── -->
   <div class="rental-msg" id="rental-msg">
@@ -255,12 +428,161 @@ var LANG = {
   }
 };
 
-// ── PROFILE VISIBILITY RULES ─────────────────────────────────────────────────
-// Each item can define a 'show' function: fn(duration, style) -> bool
-// If no 'show' defined: always visible (for RoRo users)
-// duration: 'short' | 'standard' | 'extended'
-// style: 'campgrounds' | 'mixed' | 'offgrid'
+// ── SURVEY STATE ─────────────────────────────────────────────────────────────
+var SQ = {
+  transport: null,   // 'roro' | 'rental'
+  duration:  null,   // 'short' | 'standard' | 'extended'
+  style:     null,   // 'campgrounds' | 'mixed' | 'offgrid'
+  season:    null,   // 'spring' | 'summer' | 'winter'
+  rvtype:    null,   // 'classb' | 'classbp' | 'classc' | 'classa' | 'classa_large' | 'superc'
+  chassis:   null,   // 'sprinter' | 'transit' | 'promaster' | 'classa_chassis' | 'other'
+  battery:   null,   // 'oem' | 'upgrade' | 'large' | 'unknown'
+  solar:     null,   // 'none' | 'moderate' | 'high' | 'unknown'
+  dcdc:      null,   // 'factory' | 'upgraded' | 'high' | 'unknown'
+  generator: null,   // 'none' | 'portable' | 'builtin' | 'unknown'
+  shore:     null,   // 'none' | 'inverter' | '240v' | 'unknown'
+  installed: {}      // boolean map of installed equipment
+};
+var rvBlockDismissed = false;
 
+// Keep legacy vars for visibility functions
+var transport  = null;
+var duration   = null;
+var travelStyle = null;
+
+var SQ_FIELD_CLASS = {
+  transport:'a-transport', duration:'a-duration', style:'a-style',
+  season:'a-season', rvtype:'a-rvtype', chassis:'a-chassis',
+  battery:'a-battery', solar:'a-solar', dcdc:'a-dcdc',
+  generator:'a-gen', shore:'a-shore'
+};
+
+var SQ_BTN_MAP = {
+  transport: {roro:'sq-roro', rental:'sq-rental'},
+  duration:  {short:'sq-short', standard:'sq-standard', extended:'sq-extended'},
+  style:     {campgrounds:'sq-campgrounds', mixed:'sq-mixed', offgrid:'sq-offgrid'},
+  season:    {spring:'sq-spring', summer:'sq-summer', winter:'sq-winter'},
+  rvtype:    {classb:'sq-classb', classbp:'sq-classbp', classc:'sq-classc',
+              classa:'sq-classa', classa_large:'sq-classa-large', superc:'sq-superc'},
+  chassis:   {sprinter:'sq-sprinter', transit:'sq-transit', promaster:'sq-promaster',
+              classa_chassis:'sq-classa-ch', other:'sq-other-ch'},
+  battery:   {oem:'sq-bat-oem', upgrade:'sq-bat-upgrade', large:'sq-bat-large', unknown:'sq-bat-unknown'},
+  solar:     {none:'sq-sol-none', moderate:'sq-sol-moderate', high:'sq-sol-high', unknown:'sq-sol-unknown'},
+  dcdc:      {factory:'sq-dc-factory', upgraded:'sq-dc-upgraded', high:'sq-dc-high', unknown:'sq-dc-unknown'},
+  generator: {none:'sq-gen-none', portable:'sq-gen-portable', builtin:'sq-gen-builtin', unknown:'sq-gen-unknown'},
+  shore:     {none:'sq-sh-none', inverter:'sq-sh-inverter', '240v':'sq-sh-240', unknown:'sq-sh-unknown'}
+};
+
+function setSQ(field, value) {
+  SQ[field] = value;
+  // Sync legacy vars
+  if (field==='transport') transport = value;
+  if (field==='duration')  duration  = value;
+  if (field==='style')     travelStyle = value;
+
+  // Update button active states
+  var cls = SQ_FIELD_CLASS[field];
+  var map = SQ_BTN_MAP[field];
+  if (map) {
+    Object.keys(map).forEach(function(v) {
+      var el = document.getElementById(map[v]);
+      if (!el) return;
+      var isActive = v===value;
+      // Remove all active classes first
+      Object.values(SQ_FIELD_CLASS).forEach(function(c){ el.classList.remove(c); });
+      if (isActive) el.classList.add(cls);
+    });
+  }
+
+  // Show/hide sub-sections
+  if (field==='transport') {
+    document.getElementById('ss-trip').classList.toggle('show', value==='roro');
+    document.getElementById('ss-rv').classList.toggle('show', value==='roro');
+    document.getElementById('rental-msg').classList.toggle('show', value==='rental');
+  }
+
+  // RV type warnings
+  if (field==='rvtype') {
+    document.getElementById('rv-warn-classa').classList.toggle('show', value==='classa');
+    document.getElementById('rv-block-large').classList.toggle('show',
+      (value==='classa_large' || value==='superc') && !rvBlockDismissed);
+  }
+
+  // Generator note
+  if (field==='generator') {
+    var gn = document.getElementById('gen-note');
+    if (gn) gn.style.display = (value==='portable'||value==='builtin') ? 'block' : 'none';
+  }
+
+  updateBadge();
+  saveSurvey();
+  maybeShowChecklist();
+}
+
+function toggleInstalled(key) {
+  SQ.installed[key] = !SQ.installed[key];
+  var el = document.getElementById('sqc-'+key.replace('_','-'));
+  if (el) el.classList.toggle('checked', !!SQ.installed[key]);
+  saveSurvey();
+  if (transport==='roro' && duration && travelStyle) renderAll();
+}
+
+function dismissRvBlock() {
+  rvBlockDismissed = true;
+  document.getElementById('rv-block-large').classList.remove('show');
+}
+
+function isProfileComplete() {
+  return SQ.transport==='roro' && SQ.duration && SQ.style;
+}
+
+function maybeShowChecklist() {
+  var show = isProfileComplete();
+  document.getElementById('checklist-wrap').classList.toggle('show', show);
+  if (show) { renderAll(); updateCounts(); }
+}
+
+function updateBadge() {
+  var wrap = document.getElementById('profile-badge-wrap');
+  if (!wrap) return;
+  if (!isProfileComplete()) { wrap.innerHTML=''; return; }
+  var dL = {short:'&lt;60d', standard:'60–90d', extended:'90d+/2-legs'};
+  var sL = {campgrounds:'Campgrounds', mixed:'Mixed', offgrid:'Off-grid'};
+  var snL = {spring:'Spring/Fall', summer:'Summer', winter:'Winter'};
+  var rvL = {classb:'Class B', classbp:'Class B+', classc:'Class C',
+             classa:'Class A', classa_large:'Class A &gt;8m', superc:'Super C'};
+  var parts = ['✓ RoRo', dL[SQ.duration]||'', sL[SQ.style]||''];
+  if (SQ.season) parts.push(snL[SQ.season]);
+  if (SQ.rvtype) parts.push(rvL[SQ.rvtype]);
+  if (SQ.chassis==='sprinter') parts.push('Sprinter');
+  var installed = Object.keys(SQ.installed).filter(function(k){return SQ.installed[k];});
+  if (installed.length) parts.push(installed.length+' installed');
+  wrap.innerHTML = '<div class="profile-badge">'+parts.join(' &nbsp;·&nbsp; ')+'</div>'+
+    '<div style="font-size:11px;color:var(--text3);margin-top:6px">Profile saved — <a href="#survey" style="color:var(--text3)">edit</a></div>';
+}
+
+function saveSurvey() {
+  try { localStorage.setItem('cl-survey-v2', JSON.stringify(SQ)); } catch(e) {}
+}
+
+function loadSurvey() {
+  try {
+    var s = JSON.parse(localStorage.getItem('cl-survey-v2')||'null');
+    if (!s) return;
+    // Restore each field
+    var fields = ['transport','duration','style','season','rvtype','chassis',
+                  'battery','solar','dcdc','generator','shore'];
+    fields.forEach(function(f){ if (s[f]) setSQ(f, s[f]); });
+    // Restore installed
+    if (s.installed) {
+      Object.keys(s.installed).forEach(function(k){
+        if (s.installed[k]) toggleInstalled(k);
+      });
+    }
+  } catch(e) {}
+}
+
+// ── PROFILE VISIBILITY RULES ─────────────────────────────────────────────────
 function showAlways()   { return true; }
 function showIfNotShortCampgrounds(d,s) { return !(d==='short' && s==='campgrounds'); }
 function showIfExtended(d)  { return d==='extended'; }
@@ -271,8 +593,9 @@ function showIfNotCampgroundsOrNotShort(d,s) { return s!=='campgrounds' || d!=='
 function showIfOffgridOrStandardPlus(d,s)    { return s==='offgrid' || d==='standard' || d==='extended'; }
 function showIfOffgrid(d,s)  { return s==='offgrid'; }
 function showIfOffgridOrExtendedOrMixed(d,s) { return s==='offgrid' || s==='mixed' || d==='extended'; }
-
-// ── DATA ─────────────────────────────────────────────────────────────────────
+function showIfNotShortCampgroundsOrIsExtended(d,s) {
+  return !(d==='short' && s==='campgrounds') || d==='extended';
+}
 var CATS = [
   { id:'elec', icon:'🔌',
     en:'Electricity', fr:'&Eacute;lectricit&eacute;',
@@ -642,90 +965,27 @@ var travelStyle = null; // 'campgrounds' | 'mixed' | 'offgrid'
 var UNITY_ONLY  = ['e6'];
 var WONDER_ONLY = [];
 
-// ── WIZARD LOGIC ─────────────────────────────────────────────────────────────
-function setTransport(v) {
-  transport = v;
-  ['roro','rental'].forEach(function(x){
-    document.getElementById('wb-'+x).classList.toggle('active-transport', x===v);
-  });
-  document.getElementById('wiz-sub').classList.toggle('show', v==='roro');
-  document.getElementById('rental-msg').classList.toggle('show', v==='rental');
-  document.getElementById('checklist-wrap').classList.toggle('show', v==='roro' && duration && travelStyle);
-  updateBadge();
-  saveProfile();
-  if (v==='roro' && duration && travelStyle) { renderAll(); }
-}
-
-function setDuration(v) {
-  duration = v;
-  ['short','standard','extended'].forEach(function(x){
-    document.getElementById('wb-'+x).classList.toggle('active-duration', x===v);
-  });
-  maybeShowChecklist();
-}
-
-function setStyle(v) {
-  travelStyle = v;
-  ['campgrounds','mixed','offgrid'].forEach(function(x){
-    document.getElementById('wb-'+x).classList.toggle('active-style', x===v);
-  });
-  maybeShowChecklist();
-}
-
-function maybeShowChecklist() {
-  updateBadge();
-  saveProfile();
-  if (transport==='roro' && duration && travelStyle) {
-    document.getElementById('checklist-wrap').classList.add('show');
-    renderAll();
-    updateCounts();
-  }
-}
-
-function updateBadge() {
-  var wrap = document.getElementById('profile-badge-wrap');
-  if (!transport || !duration || !travelStyle) { wrap.innerHTML=''; return; }
-  var dLabels = {short:'< 60 days', standard:'60–90 days', extended:'90 days+ / two legs'};
-  var sLabels = {campgrounds:'Campgrounds', mixed:'Mixed', offgrid:'Off-grid'};
-  var dLabelsFr = {short:'< 60 jours', standard:'60–90 jours', extended:'90 jours+ / deux segments'};
-  var sLabelsFr = {campgrounds:'Campings', mixed:'Mixte', offgrid:'Autonomie'};
-  var dl = lang==='fr' ? dLabelsFr[duration] : dLabels[duration];
-  var sl = lang==='fr' ? sLabelsFr[travelStyle] : sLabels[travelStyle];
-  var txt = lang==='fr'
-    ? 'Profil actif&nbsp;: ' + dl + ' · ' + sl
-    : 'Active profile: ' + dl + ' · ' + sl;
-  wrap.innerHTML = '<div class="profile-badge">✓ ' + txt + '</div>';
-}
-
-function saveProfile() {
-  try { localStorage.setItem('cl-profile-v1', JSON.stringify({transport:transport,duration:duration,travelStyle:travelStyle})); } catch(e) {}
-}
-
-function loadProfile() {
-  try {
-    var p = JSON.parse(localStorage.getItem('cl-profile-v1')||'null');
-    if (!p) return;
-    if (p.transport) setTransport(p.transport);
-    if (p.duration)  setDuration(p.duration);
-    if (p.travelStyle) setStyle(p.travelStyle);
-  } catch(e) {}
-}
-
 // ── VISIBILITY ───────────────────────────────────────────────────────────────
 function getLabel(item) { return lang==='fr' ? item.fr_l : item.en_l; }
 function getNote(item)  { return lang==='fr' ? item.fr_n : item.en_n; }
 function getCatTitle(cat){ return lang==='fr' ? cat.fr : cat.en; }
 
+function isInstalledVisible(item) {
+  // If user has marked equipment as installed, always show its items in any view
+  if (!item.installedKey) return false;
+  return !!SQ.installed[item.installedKey];
+}
+
 function isVisible(item) {
-  // RV filter (always applied)
   if (rvFilter==='unity'  && WONDER_ONLY.indexOf(item.id)>=0) return false;
   if (rvFilter==='wonder' && UNITY_ONLY.indexOf(item.id)>=0) return false;
-  // Water view — show all water items regardless of profile
   if (view==='water') return true;
-  // Full list — show everything, bypass profile filter
   if (view==='full') return true;
-  // Critical only — apply profile filter
-  if (item.tags[0]!=='critical' && item.tags[0]!=='mandatory') return false;
+  // Critical only — profile filter + installed override
+  if (item.tags[0]!=='critical' && item.tags[0]!=='mandatory') {
+    if (isInstalledVisible(item)) return true;
+    return false;
+  }
   if (transport==='roro' && duration && travelStyle) {
     var showFn = item.show || showAlways;
     if (!showFn(duration, travelStyle)) return false;
@@ -889,7 +1149,7 @@ function save() { try { localStorage.setItem('cl-v3',JSON.stringify(states)); } 
 function load() { try { var s=localStorage.getItem('cl-v3'); if (s) states=JSON.parse(s); } catch(e) {} }
 
 load();
-loadProfile();
+loadSurvey();
 </script>
 </body>
 </html>
