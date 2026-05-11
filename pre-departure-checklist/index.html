@@ -266,6 +266,32 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
           <br><a href="https://www.theaa.com/european-breakdown-cover/drive-in-europe/driving-licence-categories/" target="_blank">→ EU licence categories explained (AA)</a> &nbsp;·&nbsp;
           <a href="https://www.canada.ca/en/transport-canada/news/2024/06/driving-in-europe.html" target="_blank">→ Transport Canada — driving abroad</a>
         </div>
+
+        <!-- Q5c — Vehicle weight (optional) -->
+        <div style="margin-top:.75rem;padding:.75rem 1rem;background:var(--surface2);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:.5rem">
+            ⚖️ Vehicle weight <span style="font-weight:400;color:var(--text3)">(optional — pre-filled from chassis, update with actual weighed values for personalized warnings)</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end">
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <label style="font-size:11px;color:var(--text3)">GVWR / PNBV (kg)</label>
+              <input type="number" id="wt-gvwr" placeholder="e.g. 5003" style="width:110px;padding:5px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;font-family:inherit" oninput="updateWeight()">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <label style="font-size:11px;color:var(--text3)">Front GAWR (kg)</label>
+              <input type="number" id="wt-gawr-f" placeholder="e.g. 2000" style="width:110px;padding:5px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;font-family:inherit" oninput="updateWeight()">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <label style="font-size:11px;color:var(--text3)">Rear GAWR (kg)</label>
+              <input type="number" id="wt-gawr-r" placeholder="e.g. 3502" style="width:110px;padding:5px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;font-family:inherit" oninput="updateWeight()">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <label style="font-size:11px;color:var(--text3)">Actual weighed (kg)</label>
+              <input type="number" id="wt-actual" placeholder="leave blank if unknown" style="width:145px;padding:5px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;font-family:inherit" oninput="updateWeight()">
+            </div>
+          </div>
+          <div id="wt-margin-msg" style="font-size:11px;margin-top:6px"></div>
+        </div>
       </div>
 
       <!-- SECTION 3 — ENERGY -->
@@ -514,6 +540,20 @@ function setSQ(field, value) {
     if (gn) gn.style.display = (value==='portable'||value==='builtin') ? 'block' : 'none';
   }
 
+  // Auto-fill weight fields from chassis selection
+  if (field==='chassis') {
+    var cw = CHASSIS_WEIGHTS[value];
+    if (cw && cw.gvwr) {
+      var gEl=document.getElementById('wt-gvwr');
+      var fEl=document.getElementById('wt-gawr-f');
+      var rEl=document.getElementById('wt-gawr-r');
+      if (gEl && !gEl.value) gEl.value = cw.gvwr;
+      if (fEl && !fEl.value) fEl.value = cw.gawr_f;
+      if (rEl && !rEl.value) rEl.value = cw.gawr_r;
+      updateWeight();
+    }
+  }
+
   updateBadge();
   saveSurvey();
   maybeShowChecklist();
@@ -562,22 +602,60 @@ function updateBadge() {
 }
 
 function saveSurvey() {
-  try { localStorage.setItem('cl-survey-v2', JSON.stringify(SQ)); } catch(e) {}
+  try {
+    var wt = {
+      gvwr: document.getElementById('wt-gvwr') ? document.getElementById('wt-gvwr').value : '',
+      gawr_f: document.getElementById('wt-gawr-f') ? document.getElementById('wt-gawr-f').value : '',
+      gawr_r: document.getElementById('wt-gawr-r') ? document.getElementById('wt-gawr-r').value : '',
+      actual: document.getElementById('wt-actual') ? document.getElementById('wt-actual').value : ''
+    };
+    localStorage.setItem('cl-survey-v2', JSON.stringify(SQ));
+    localStorage.setItem('cl-weight-v1', JSON.stringify(wt));
+  } catch(e) {}
+}
+
+function updateWeight() {
+  var gvwr   = parseFloat(document.getElementById('wt-gvwr')   ? document.getElementById('wt-gvwr').value   : 0) || 0;
+  var gawr_r = parseFloat(document.getElementById('wt-gawr-r') ? document.getElementById('wt-gawr-r').value : 0) || 0;
+  var actual = parseFloat(document.getElementById('wt-actual') ? document.getElementById('wt-actual').value : 0) || 0;
+  var msg    = document.getElementById('wt-margin-msg');
+  if (!msg) return;
+  if (!gvwr && !gawr_r) { msg.innerHTML=''; return; }
+  var parts = [];
+  if (gvwr > 3500) parts.push('⚠️ GVWR &gt;3,500 kg — verify C1/C licence requirement');
+  if (gvwr > 7500) parts[parts.length-1] = '⚠️ GVWR &gt;7,500 kg — C licence (not C1) may be required';
+  if (actual && gvwr) {
+    var margin = gvwr - actual;
+    var pct    = Math.round((margin/gvwr)*100);
+    if (margin < 0)   parts.push('<span style="color:var(--red);font-weight:600">⛔ OVERWEIGHT by '+ Math.abs(margin) +' kg ('+Math.abs(pct)+'% over GVWR)</span>');
+    else if (margin < 200) parts.push('<span style="color:#d97706;font-weight:600">⚠️ Only '+ margin +' kg margin to GVWR — load carefully</span>');
+    else              parts.push('<span style="color:var(--green)">✅ '+ margin +' kg margin to GVWR ('+ pct +'%)</span>');
+  }
+  msg.innerHTML = parts.join(' &nbsp;·&nbsp; ');
+  saveSurvey();
 }
 
 function loadSurvey() {
   try {
     var s = JSON.parse(localStorage.getItem('cl-survey-v2')||'null');
     if (!s) return;
-    // Restore each field
     var fields = ['transport','duration','style','season','rvtype','chassis',
                   'battery','solar','dcdc','generator','shore'];
     fields.forEach(function(f){ if (s[f]) setSQ(f, s[f]); });
-    // Restore installed
     if (s.installed) {
       Object.keys(s.installed).forEach(function(k){
         if (s.installed[k]) toggleInstalled(k);
       });
+    }
+  } catch(e) {}
+  try {
+    var wt = JSON.parse(localStorage.getItem('cl-weight-v1')||'null');
+    if (wt) {
+      ['gvwr','gawr-f','gawr-r','actual'].forEach(function(k){
+        var el = document.getElementById('wt-'+k);
+        if (el && wt[k.replace('-','_')]) el.value = wt[k.replace('-','_')];
+      });
+      updateWeight();
     }
   } catch(e) {}
 }
@@ -596,7 +674,127 @@ function showIfOffgridOrExtendedOrMixed(d,s) { return s==='offgrid' || s==='mixe
 function showIfNotShortCampgroundsOrIsExtended(d,s) {
   return !(d==='short' && s==='campgrounds') || d==='extended';
 }
+
+// ── CHASSIS WEIGHT DEFAULTS ───────────────────────────────────────────────────
+var CHASSIS_WEIGHTS = {
+  sprinter:       {gvwr:5003, gawr_f:2000, gawr_r:3502},
+  transit:        {gvwr:4173, gawr_f:2041, gawr_r:2950},
+  promaster:      {gvwr:4173, gawr_f:1814, gawr_r:2722},
+  classa_chassis: {gvwr:6804, gawr_f:2722, gawr_r:4763},
+  other:          {gvwr:null, gawr_f:null, gawr_r:null}
+};
+
+// ── DATA ─────────────────────────────────────────────────────────────────────
 var CATS = [
+  // ── 📋 ADMIN & LEGAL — always first, always visible ──────────────────────
+  { id:'admin', icon:'📋',
+    en:'Pre-Departure Admin &amp; Legal', fr:'Admin &amp; L&eacute;gal pr&eacute;-d&eacute;part',
+    items:[
+      { id:'a1', tags:['critical'], show:showAlways,
+        en_l:'🚢 Propane tank EMPTY before RoRo — written certificate from licensed dealer required',
+        en_n:'IVSS, SeaBridge and all major RoRo carriers require propane tanks to be empty or at minimum (maritime fire safety). Obtain a written certificate from a licensed propane dealer confirming the tank is empty/purged before port drop-off. Fill up in Europe after collection.',
+        fr_l:'🚢 R&eacute;servoir propane VIDE avant RoRo &mdash; certificat &eacute;crit d&rsquo;un technicien certifi&eacute; requis',
+        fr_n:'IVSS, SeaBridge et la plupart des transporteurs RoRo exigent des r&eacute;servoirs vides (s&eacute;curit&eacute; incendie maritime). Obtenir un certificat &eacute;crit d&rsquo;un technicien certifi&eacute; propane confirmant r&eacute;servoir vide/purg&eacute; avant le port. Faire le plein en Europe apr&egrave;s r&eacute;cup&eacute;ration.',
+        links:[] },
+      { id:'a2', tags:['critical'], show:showAlways,
+        en_l:'🚢 Chassis battery master switch — labelled, accessible, instruction sheet on steering wheel',
+        en_n:'Port driver must find the master switch immediately on opening the door. Print the RoRo instruction sheet and place on steering wheel AND driver seat side. Blue Sea solenoid = MacGyver backup if chassis battery dies during shipping.',
+        fr_l:'🚢 Interrupteur principal batterie ch&acirc;ssis &mdash; &eacute;tiquet&eacute;, accessible, feuille sur le volant',
+        fr_n:'Le conducteur du port doit trouver l&rsquo;interrupteur imm&eacute;diatement en ouvrant la porte. Imprimer la feuille RoRo et la placer sur le volant ET le c&ocirc;t&eacute; si&egrave;ge conducteur. Sol&eacute;no&iuml;de Blue Sea = secours MacGyver si batterie morte pendant l&rsquo;exp&eacute;dition.',
+        links:[{t:'RoRo instruction sheet',u:'https://jev-rv.github.io/images/roro-battery-master-switch.png',c:'site'},{t:'Master switch',u:'https://a.co/d/0hn0QwqK',c:'amazon'},{t:'Blue Sea 7700 solenoid',u:'https://a.co/d/0ddqm41p',c:'amazon'}] },
+      { id:'a3', tags:['critical'], show:showAlways,
+        en_l:'🚢 Vehicle documents ready for port &amp; customs (title, registration, insurance)',
+        en_n:'Required at port drop-off and EU customs entry: original title or notarized copy, current registration, proof of insurance. Keep originals accessible — not locked in RV storage during transit.',
+        fr_l:'🚢 Documents v&eacute;hicule pr&ecirc;ts pour le port et la douane (titre, immatriculation, assurance)',
+        fr_n:'Requis au d&eacute;p&ocirc;t au port et &agrave; l&rsquo;entr&eacute;e douani&egrave;re EU&nbsp;: titre original ou copie notari&eacute;e, immatriculation en cours, preuve d&rsquo;assurance. Garder les originaux accessibles &mdash; pas dans le rangement du VR pendant le transit.',
+        links:[] },
+      { id:'a4', tags:['critical'], show:showAlways,
+        en_l:'🚢 RV weighed fully loaded — axle loads documented and within EU limits',
+        en_n:'Europe enforces axle-by-axle limits strictly (Austria: 0% tolerance). Weigh at a certified truck scale before shipping. Front + rear GAWR ≠ GVWR. Document actual weighed values — important if stopped.',
+        fr_l:'🚢 VR pes&eacute; pleinement charg&eacute; &mdash; charges par essieu document&eacute;es et dans les limites EU',
+        fr_n:'L&rsquo;Europe applique strictement les limites par essieu (Autriche&nbsp;: 0% tol&eacute;rance). Peser sur une balance certifi&eacute;e avant l&rsquo;exp&eacute;dition. GAWR avant + arri&egrave;re &ne; PNBV. Documenter les valeurs pes&eacute;es &mdash; important si contr&ocirc;l&eacute;.',
+        links:[] },
+      { id:'a5', tags:['mandatory'], show:showAlways,
+        en_l:'🚢 Travel SOP: 30% fresh water max, grey/black tanks empty before driving',
+        en_n:'Reduces rear axle load. 30% fresh water ≈ 30 kg saved on 97L tank. Keep ~10% in grey/black to prevent dry-seal odors. Empty fully at dump stations. Avoid heavy rear-mounted accessories.',
+        fr_l:'🚢 SOP voyage&nbsp;: max 30% d&rsquo;eau fra&icirc;che, r&eacute;servoirs gris/noirs vides avant de rouler',
+        fr_n:'R&eacute;duit la charge essieu arri&egrave;re. 30% eau fra&icirc;che &asymp; 30&nbsp;kg &eacute;conomis&eacute;s sur r&eacute;servoir 97L. Garder ~10% dans gris/noirs pour &eacute;viter odeurs. Vider compl&egrave;tement aux stations. &Eacute;viter accessoires lourds &agrave; l&rsquo;arri&egrave;re.',
+        links:[] },
+      { id:'a6', tags:['critical'], show:showAlways,
+        en_l:'📄 Passport valid for at least 6 months beyond return date',
+        en_n:'Most EU countries require passport validity of at least 3–6 months beyond your planned departure date. Check each country on your route.',
+        fr_l:'📄 Passeport valide au moins 6 mois au-del&agrave; de la date de retour',
+        fr_n:'La plupart des pays EU exigent une validit&eacute; de passeport d&rsquo;au moins 3&ndash;6 mois au-del&agrave; de la date de d&eacute;part pr&eacute;vue. V&eacute;rifier pour chaque pays de l&rsquo;itin&eacute;raire.',
+        links:[] },
+      { id:'a7', tags:['critical'], show:showAlways,
+        en_l:'📄 Schengen 90/180 plan validated before departure',
+        en_n:'North American passport = max 90 days in any rolling 180-day Schengen window. UK and Ireland are NOT Schengen — separate entry rules apply.',
+        fr_l:'📄 Plan Schengen 90/180 valid&eacute; avant le d&eacute;part',
+        fr_n:'Passeport nord-am&eacute;ricain = max 90 jours dans toute fen&ecirc;tre Schengen glissante de 180 jours. Royaume-Uni et Irlande ne sont PAS Schengen &mdash; r&egrave;gles d&rsquo;entr&eacute;e distinctes.',
+        links:[{t:'Schengen simulator',u:'https://jev-rv.github.io/schengen-rv-simulator/',c:'site'}] },
+      { id:'a8', tags:['critical'], show:showAlways,
+        en_l:'📄 ETIAS travel authorization obtained (when mandatory)',
+        en_n:'Required for visa-exempt non-EU nationals entering the Schengen zone. Check current rollout status — implementation has been phased.',
+        fr_l:'📄 Autorisation de voyage ETIAS obtenue (lorsque obligatoire)',
+        fr_n:'Requise pour les ressortissants non-UE exempts de visa entrant dans l&rsquo;espace Schengen. V&eacute;rifier le statut de d&eacute;ploiement actuel &mdash; mise en &oelig;uvre progressive.',
+        links:[{t:'ETIAS official',u:'https://travel-europe.europa.eu/etias_en',c:'site'}] },
+      { id:'a9', tags:['mandatory'], show:showAlways,
+        en_l:'📄 Driving licence category verified for RV weight (C1/C if &gt;3,500 kg)',
+        en_n:'Standard B licence covers vehicles up to 3,500 kg GVWR. RVs >3,500 kg may require C1 (up to 7,500 kg) or C (>7,500 kg) in some EU countries — especially Germany and Austria. Tourist tolerance is common but not guaranteed. Insurance may be voided if licence does not match vehicle weight in an accident.',
+        fr_l:'📄 Cat&eacute;gorie permis v&eacute;rifi&eacute;e pour le poids du VR (C1/C si &gt;3&nbsp;500&nbsp;kg)',
+        fr_n:'Le permis B standard couvre jusqu&rsquo;&agrave; 3&nbsp;500&nbsp;kg PNBV. Les VR &gt;3&nbsp;500&nbsp;kg peuvent exiger le C1 (jusqu&rsquo;&agrave; 7&nbsp;500&nbsp;kg) ou C (&gt;7&nbsp;500&nbsp;kg) dans certains pays EU — surtout Allemagne et Autriche. La tol&eacute;rance touristique est courante mais non garantie. L&rsquo;assurance peut &ecirc;tre annul&eacute;e en cas d&rsquo;accident si le permis ne correspond pas au poids.',
+        links:[{t:'EU licence categories (AA)',u:'https://www.theaa.com/european-breakdown-cover/drive-in-europe/driving-licence-categories/',c:'site'},{t:'Transport Canada — driving abroad',u:'https://www.canada.ca/en/transport-canada/news/2024/06/driving-in-europe.html',c:'site'}] },
+      { id:'a10', tags:['critical'], show:showAlways,
+        en_l:'🛡️ RV insurance valid for all route countries — European Green Card obtained',
+        en_n:'Contact your insurer before departure. Some policies exclude specific countries. Green Card (international motor insurance certificate) is required at EU borders and police checks.',
+        fr_l:'🛡️ Assurance VR valide pour tous les pays de l&rsquo;itin&eacute;raire &mdash; Carte verte obtenue',
+        fr_n:'Contacter votre assureur avant le d&eacute;part. Certaines polices excluent des pays sp&eacute;cifiques. La carte verte (certificat international d&rsquo;assurance) est requise aux fronti&egrave;res EU et contr&ocirc;les policiers.',
+        links:[] },
+      { id:'a11', tags:['mandatory'], show:showAlways,
+        en_l:'🛡️ Medical / evacuation / repatriation insurance confirmed',
+        en_n:'Provincial health coverage is severely limited abroad. Verify your travel insurance includes emergency medical, RV/equipment repatriation, and breakdown assistance in all countries on your route.',
+        fr_l:'🛡️ Assurance m&eacute;dicale / &eacute;vacuation / rapatriement confirm&eacute;e',
+        fr_n:'La couverture provinciale est tr&egrave;s limit&eacute;e &agrave; l&rsquo;&eacute;tranger. V&eacute;rifier que votre assurance voyage inclut urgences m&eacute;dicales, rapatriement du VR/&eacute;quipement, et assistance panne dans tous les pays.',
+        links:[] },
+      { id:'a12', tags:['critical'], show:showAlways,
+        en_l:'🚦 Vignettes purchased for applicable countries (Austria, Switzerland)',
+        en_n:'Austria and Switzerland require motorway vignettes. Buy digitally before crossing — retroactive purchase not possible. Other countries use toll systems — see the Toll Calculator.',
+        fr_l:'🚦 Vignettes achet&eacute;es pour les pays applicables (Autriche, Suisse)',
+        fr_n:'Autriche et Suisse exigent des vignettes autoroute. Acheter num&eacute;riquement avant de traverser &mdash; l&rsquo;achat r&eacute;troactif est impossible. D&rsquo;autres pays utilisent des syst&egrave;mes de p&eacute;age &mdash; voir le calculateur.',
+        links:[{t:'Toll calculator',u:'https://jev-rv.github.io/toll-calculator/',c:'site'}] },
+      { id:'a13', tags:['critical'], show:showAlways,
+        en_l:'🚦 Radar detector disabled or removed — illegal in France, Germany, Switzerland',
+        en_n:'Active radar detectors illegal in most EU countries. GPS-based fixed camera warnings legal in most countries except FR/DE/CH — deactivate that function there.',
+        fr_l:'🚦 D&eacute;tecteur radar d&eacute;sactiv&eacute; ou retir&eacute; &mdash; ill&eacute;gal en France, Allemagne, Suisse',
+        fr_n:'D&eacute;tecteurs radar actifs ill&eacute;gaux dans la plupart des pays EU. Avertissements cam&eacute;ras fixes GPS l&eacute;gaux dans la plupart des pays sauf FR/DE/CH &mdash; d&eacute;sactiver cette fonction.',
+        links:[] },
+      { id:'a14', tags:['critical'], show:showAlways,
+        en_l:'🚦 Dashcam removed or covered before entering Portugal and Austria',
+        en_n:'Portugal (Data Protection Act 58/2019) and Austria: possession alone = fines up to €25,000. Remove or physically cover before the border — not just switched off. Belgium, France, Germany: legal for private use but footage cannot be published without anonymizing faces and plates.',
+        fr_l:'🚦 Dashcam retir&eacute;e ou couverte avant Portugal et Autriche',
+        fr_n:'Portugal (Loi 58/2019) et Autriche&nbsp;: la simple possession = amendes jusqu&rsquo;&agrave; 25&nbsp;000&euro;. Retirer ou couvrir physiquement avant la fronti&egrave;re &mdash; pas seulement &eacute;teinte. Belgique, France, Allemagne&nbsp;: l&eacute;gal en usage priv&eacute; mais les images ne peuvent &ecirc;tre publi&eacute;es sans anonymisation.',
+        links:[] },
+      { id:'a15', tags:['mandatory'], show:showAlways,
+        en_l:'🚦 Environmental zones (LEZ/ZFE) checked for planned route',
+        en_n:'France Crit\'Air, German Umweltzone, Italian ZTL — North American RVs generally cannot obtain required permits. Plan route to avoid these zones. Garmin RV GPS alerts for LEZ.',
+        fr_l:'🚦 Zones &agrave; faibles &eacute;missions (ZFE/LEZ) v&eacute;rifi&eacute;es pour l&rsquo;itin&eacute;raire',
+        fr_n:'Crit\'Air France, Umweltzone allemande, ZTL italienne &mdash; les VR nord-am&eacute;ricains ne peuvent g&eacute;n&eacute;ralement pas obtenir les permis requis. Planifier l&rsquo;itin&eacute;raire pour &eacute;viter ces zones. Le GPS Garmin RV alerte pour les ZFE.',
+        links:[] },
+      { id:'a16', tags:['mandatory'], show:showAlways,
+        en_l:'🚦 EU weight fine scale reviewed (Austria 0%, Germany 5%, France +5%, Spain +15%)',
+        en_n:'Austria = 0% tolerance, fines from €85. Germany ≤7.5t = 5% tolerance. France = immobilization from +5%. Spain = up to €4,000 above +15%. Italy = up to €1,738 above +20%. Always know the rules before entering Alpine countries.',
+        fr_l:'🚦 Bar&egrave;me amendes poids EU revu (Autriche 0%, Allemagne 5%, France +5%, Espagne +15%)',
+        fr_n:'Autriche = 0% tol&eacute;rance, amendes d&egrave;s 85&euro;. Allemagne &le;7,5t = 5% tol&eacute;rance. France = immobilisation d&egrave;s +5%. Espagne = jusqu&rsquo;&agrave; 4&nbsp;000&euro; au-del&agrave; de +15%. Italie = jusqu&rsquo;&agrave; 1&nbsp;738&euro; au-del&agrave; de +20%. Conna&icirc;tre les r&egrave;gles avant les pays alpins.',
+        links:[] },
+      { id:'a17', tags:['optional'],
+        show: function(d,s){ return d==='extended'; },
+        en_l:'⚙️ Starlink Standby Mode configured for storage period between trip legs',
+        en_n:'Free pause discontinued Aug 2025. Standby Mode ~$5 USD/month keeps account active with 500 kbps. Do NOT cancel and resubscribe — risk of plan unavailability.',
+        fr_l:'⚙️ Mode Veille Starlink configur&eacute; pour la p&eacute;riode de stockage entre les segments',
+        fr_n:'Pause gratuite supprim&eacute;e ao&ucirc;t 2025. Mode Veille ~5 USD/mois maintient compte actif avec 500 kbps. Ne PAS annuler et r&eacute;activer &mdash; risque d&rsquo;indisponibilit&eacute; du plan.',
+        links:[] },
+    ]
+  },
   { id:'elec', icon:'🔌',
     en:'Electricity', fr:'&Eacute;lectricit&eacute;',
     items:[
@@ -637,12 +835,6 @@ var CATS = [
         fr_l:'[Unity seulement] Victron Orion XS 1400 DC-DC &mdash; install&eacute; et op&eacute;rationnel',
         fr_n:'Composantes&nbsp;: <a href="https://a.co/d/0bEz2szx" target="_blank">Victron Orion XS 12/12-50A</a> · <a href="https://agileoffroad.com/product/t-bar-extension-kit-for-sprinter-by-agile-offroad/" target="_blank">busbar Sprinter A9075454100 (kit T-bar Agile Offroad)</a>. Double la capacit&eacute; de charge en route sans d&eacute;passer les limites de l&rsquo;alternateur Sprinter. Vid&eacute;os d&rsquo;installation&nbsp;: <a href="https://youtu.be/v_os9V_ABMY" target="_blank">vid&eacute;o 1</a> · <a href="https://youtu.be/KIk3Loz8cB4" target="_blank">vid&eacute;o 2</a>. &rarr; Guide 6 Section 1, Option 3.',
         links:[] },
-      { id:'e7', tags:['critical'], show:showAlways,
-        en_l:'Chassis battery master switch &mdash; labelled and accessible for RoRo port staff',
-        en_n:'Port drivers must find it immediately on opening the door. Put a printed sign on the steering wheel. Blue Sea solenoid as MacGyver backup if chassis battery dies during shipping.',
-        fr_l:'Interrupteur principal batterie ch&acirc;ssis &mdash; &eacute;tiquet&eacute; et accessible pour le personnel du port RoRo',
-        fr_n:'Les conducteurs du port doivent le trouver imm&eacute;diatement en ouvrant la porte. Mettre un panneau imprim&eacute; sur le volant. Sol&eacute;no&iuml;de Blue Sea comme secours MacGyver si la batterie se d&eacute;charge pendant l&rsquo;exp&eacute;dition.',
-        links:[{t:'Master switch',u:'https://a.co/d/0hn0QwqK',c:'amazon'},{t:'Blue Sea 7700 solenoid',u:'https://a.co/d/0ddqm41p',c:'amazon'}] },
     ]
   },
   { id:'propane', icon:'🔥',
@@ -660,12 +852,6 @@ var CATS = [
         fr_l:'Application myLPG.eu t&eacute;l&eacute;charg&eacute;e et test&eacute;e avant le d&eacute;part',
         fr_n:'48&nbsp;000+ stations GPL dans 70 pays. Filtrer par camping-car, type de connecteur, disponibilit&eacute; 24h/24. Finlande&nbsp;: GPL pratiquement indisponible &mdash; faire le plein avant d&rsquo;entrer.',
         links:[{t:'myLPG.eu',u:'https://www.mylpg.eu',c:'site'}] },
-      { id:'p3', tags:['critical'], show:showAlways,
-        en_l:'⚠ Propane tank EMPTY or near-empty before RoRo shipping &mdash; required by shipping companies',
-        en_n:'IVSS, SeaBridge and most RoRo carriers require propane tanks to be empty or at minimum level for fire safety on board. Verify the exact requirement with your carrier before drop-off. Fill up in Europe after collection.',
-        fr_l:'⚠ R&eacute;servoir propane VIDE ou presque vide avant l&rsquo;exp&eacute;dition RoRo &mdash; exig&eacute; par les compagnies maritimes',
-        fr_n:'IVSS, SeaBridge et la plupart des transporteurs RoRo exigent que les r&eacute;servoirs de propane soient vides ou au niveau minimum pour la s&eacute;curit&eacute; incendie &agrave; bord. V&eacute;rifier l&rsquo;exigence exacte aupr&egrave;s de votre transporteur avant le d&eacute;p&ocirc;t. Faire le plein en Europe apr&egrave;s la r&eacute;cup&eacute;ration.',
-        links:[] },
       { id:'p4', tags:['mandatory'], show:showAlways,
         en_l:'Tank clearly marked "FIXED TANK" (not removable cylinder)',
         en_n:'Some countries prohibit filling removable cylinders but allow fixed tanks. Clear marking avoids refusal at stations. Show adapter to attendant if needed.',
@@ -832,12 +1018,6 @@ var CATS = [
         fr_l:'Nokia FastMile 5G ou routeur LTE &eacute;quivalent &agrave; bord (architecture niveau 2)',
         fr_n:'Fournit un Wi-Fi VR stable depuis le LTE europ&eacute;en quand Starlink est limit&eacute;. ~250&ndash;450&euro; mat&eacute;riel. Utiliser eSIM ou SIM europ&eacute;enne physique. Confirmer que le routeur est d&eacute;verrouill&eacute; et supporte les bandes LTE europ&eacute;ennes.',
         links:[{t:'Nokia FastMile 5G',u:'https://www.nokia.com/fixed-networks/fastmile-5g-gateways/',c:'site'}] },
-      { id:'t9', tags:['critical'], show:showAlways,
-        en_l:'Dashcam removed or covered before entering Portugal and Austria',
-        en_n:'Portugal (Data Protection Act 58/2019) and Austria: possession alone can result in fines up to €25,000. Remove or physically cover before crossing the border — not just switched off.',
-        fr_l:'Dashcam retir&eacute;e ou couverte avant d&rsquo;entrer au Portugal et en Autriche',
-        fr_n:'Portugal (Loi protection des donn&eacute;es 58/2019) et Autriche&nbsp;: la simple possession peut entra&icirc;ner des amendes jusqu&rsquo;&agrave; 25&nbsp;000&euro;. Retirer ou couvrir physiquement avant de traverser la fronti&egrave;re &mdash; pas seulement &eacute;teinte.',
-        links:[] },
       { id:'t10', tags:['recommended'],
         show: showIfOffgridOrExtendedOrMixed,
         en_l:'VPN configured for public campsite Wi-Fi (ProtonVPN or equivalent)',
@@ -845,29 +1025,6 @@ var CATS = [
         fr_l:'VPN configur&eacute; pour le Wi-Fi public des campings (ProtonVPN ou &eacute;quivalent)',
         fr_n:'Les r&eacute;seaux Wi-Fi des campings, marinas et caf&eacute;s peuvent &ecirc;tre non s&eacute;curis&eacute;s. Le VPN prot&egrave;ge la banque, le courriel et l&rsquo;acc&egrave;s &agrave; distance. Tailscale recommand&eacute; pour les utilisateurs avanc&eacute;s.',
         links:[{t:'ProtonVPN',u:'https://protonvpn.com',c:'site'},{t:'Tailscale',u:'https://tailscale.com',c:'site'}] },
-    ]
-  },
-  { id:'weight', icon:'⚖️',
-    en:'Weight &amp; OCCC', fr:'Poids &amp; OCCC',
-    items:[
-      { id:'wt1', tags:['critical'], show:showAlways,
-        en_l:'RV weighed fully loaded before shipping &mdash; axle loads documented',
-        en_n:'Europe enforces axle-by-axle limits strictly. Austria: 0% tolerance. Front + rear axle GAWR ≠ GVWR — you can exceed GVWR while both axles are within their limits and vice versa.',
-        fr_l:'VR pes&eacute; pleinement charg&eacute; avant l&rsquo;exp&eacute;dition &mdash; charges par essieu document&eacute;es',
-        fr_n:'L&rsquo;Europe applique strictement les limites par essieu. Autriche&nbsp;: tol&eacute;rance 0%. PNBE avant + arri&egrave;re &ne; PNBV &mdash; on peut d&eacute;passer le PNBV avec les deux essieux dans les limites et inversement.',
-        links:[] },
-      { id:'wt2', tags:['critical'], show:showAlways,
-        en_l:'Travel configuration: 30% fresh water, empty grey/black, weight distributed forward',
-        en_n:'North American RVs often run close to rear axle limit. 30% water = ~30 kg saved on 97L tank. Avoid heavy rear-mounted accessories.',
-        fr_l:'Configuration de voyage&nbsp;: 30% d&rsquo;eau fra&icirc;che, r&eacute;servoirs gris/noirs vides, poids vers l&rsquo;avant',
-        fr_n:'Les VR nord-am&eacute;ricains frisent souvent la limite de l&rsquo;essieu arri&egrave;re. 30% d&rsquo;eau = ~30&nbsp;kg &eacute;conomis&eacute;s sur un r&eacute;servoir de 97L. &Eacute;viter les accessoires lourds en arri&egrave;re.',
-        links:[] },
-      { id:'wt3', tags:['mandatory'], show:showAlways,
-        en_l:'Familiar with EU weight fine scale by country (Austria, Germany, France, Spain&hellip;)',
-        en_n:'Austria = 0% tolerance, fines from €85. Germany = 5% tolerance for ≤7.5t. France = immobilization possible above +5%. Spain = fines up to €4,000 above +15%.',
-        fr_l:'Familiaris&eacute; avec le bar&egrave;me des amendes UE par pays (Autriche, Allemagne, France, Espagne&hellip;)',
-        fr_n:'Autriche = tol&eacute;rance 0%, amendes d&egrave;s 85&euro;. Allemagne = tol&eacute;rance 5% pour &le;7,5t. France = immobilisation possible au-del&agrave; de +5%. Espagne = amendes jusqu&rsquo;&agrave; 4&nbsp;000&euro; au-del&agrave; de +15%.',
-        links:[] },
     ]
   },
   { id:'mandatory', icon:'🚦',
@@ -885,12 +1042,6 @@ var CATS = [
         fr_l:'Panneau avertisseur rouge/blanc (50&times;50&nbsp;cm, r&eacute;fl&eacute;chissant) &mdash; obligatoire Espagne et Italie si chargement d&eacute;passe &agrave; l&rsquo;arri&egrave;re',
         fr_n:'Italie&nbsp;: aluminium obligatoire, 5 bandes rouges + 4 blanches. Espagne&nbsp;: aluminium ou plastique, 3+3 bandes. Acheter un panneau 2-en-1 r&eacute;versible. Jan 2025&nbsp;: Italie exempte les porte-v&eacute;los sur boule d&rsquo;attelage avec &eacute;clairage propre.',
         links:[{t:'2-in-1 Spain+Italy board',u:'https://amzn.eu/d/099qOlWQ',c:'amazon'}] },
-      { id:'m3', tags:['critical'], show:showAlways,
-        en_l:'RoRo driver instruction sheet printed and placed on steering wheel',
-        en_n:'Port driver must see chassis battery master switch instruction immediately on opening door. Also place on driver seat side.',
-        fr_l:'Feuille d&rsquo;instructions conducteur RoRo imprim&eacute;e et plac&eacute;e sur le volant',
-        fr_n:'Le conducteur du port doit voir l&rsquo;instruction de l&rsquo;interrupteur de batterie ch&acirc;ssis imm&eacute;diatement en ouvrant la porte. Placer aussi sur le c&ocirc;t&eacute; du si&egrave;ge conducteur.',
-        links:[{t:'RoRo instruction sheet',u:'https://jev-rv.github.io/images/roro-battery-master-switch.png',c:'site'}] },
       { id:'m4', tags:['mandatory'], show:showAlways,
         en_l:'E-bike configured in EU mode (&le;250W, &le;25 km/h, pedalling required)',
         en_n:'North American e-bikes (500–750W, 32 km/h) are reclassified as mopeds in Europe. Check if your bike has an EU mode (firmware). Some cannot be downgraded — check with manufacturer before departure.',
@@ -898,52 +1049,11 @@ var CATS = [
         fr_n:'Les v&eacute;los &eacute;lectriques nord-am&eacute;ricains (500&ndash;750W, 32&nbsp;km/h) sont reclassifi&eacute;s comme cyclomoteurs en Europe. V&eacute;rifier si votre v&eacute;lo dispose d&rsquo;un mode UE (firmware). Certains ne peuvent pas &ecirc;tre r&eacute;trogad&eacute;s &mdash; v&eacute;rifier aupr&egrave;s du fabricant avant le d&eacute;part.',
         links:[] },
       { id:'m5', tags:['recommended'], show:showAlways,
-        en_l:'Heavy-duty snow chains or HD snow socks on board (Sprinter &gt;3.5t)',
-        en_n:'Standard car chains are rated to 3.5t — illegal for your LTV. Only TÜV/ÖNORM-certified HD equipment accepted in Alpine countries. Applies regardless of travel style or duration — ice is ice.',
-        fr_l:'Cha&icirc;nes neige lourdes ou chaussettes HD &agrave; bord (Sprinter &gt;3,5t)',
-        fr_n:'Les cha&icirc;nes standard pour voitures sont limit&eacute;es &agrave; 3,5t &mdash; ill&eacute;gales pour votre LTV. Seuls les &eacute;quipements HD certifi&eacute;s TÜV/ÖNORM accept&eacute;s dans les pays alpins. S&rsquo;applique quel que soit le style ou la dur&eacute;e &mdash; la glace, c&rsquo;est la glace.',
+        en_l:'Heavy-duty snow chains or HD snow socks on board (&gt;3.5t)',
+        en_n:'Standard car chains rated to 3.5t — illegal for RVs >3.5t. Only TÜV/ÖNORM-certified HD equipment accepted in Alpine countries. Applies regardless of travel style or duration — ice is ice.',
+        fr_l:'Cha&icirc;nes neige lourdes ou chaussettes HD &agrave; bord (&gt;3,5t)',
+        fr_n:'Les cha&icirc;nes standard pour voitures sont limit&eacute;es &agrave; 3,5t &mdash; ill&eacute;gales pour les VR &gt;3,5t. Seuls les &eacute;quipements HD certifi&eacute;s TÜV/ÖNORM accept&eacute;s dans les pays alpins. S&rsquo;applique quel que soit le style ou la dur&eacute;e &mdash; la glace, c&rsquo;est la glace.',
         links:[{t:'AutoSock HP698 (HD)',u:'https://autosock.com/products/autosock-hp698',c:'site'},{t:'Pewag Austro Super HD',u:'https://shop.pewag.com/fr/pewag-austro-super-jumelee/4034241',c:'site'}] },
-      { id:'m6', tags:['mandatory'], show:showAlways,
-        en_l:'Environmental zone (LEZ) apps checked for planned route',
-        en_n:'France Crit\'Air, German Umweltzone, Italian ZTL — North American RVs generally cannot obtain stickers. Plan your route to avoid restricted areas.',
-        fr_l:'Applications zones &agrave; faibles &eacute;missions (ZFE) v&eacute;rifi&eacute;es pour l&rsquo;itin&eacute;raire pr&eacute;vu',
-        fr_n:'Crit\'Air France, Umweltzone allemande, ZTL italienne &mdash; les VR nord-am&eacute;ricains ne peuvent g&eacute;n&eacute;ralement pas obtenir les vignettes. Planifier l&rsquo;itin&eacute;raire pour &eacute;viter les zones restreintes.',
-        links:[] },
-      { id:'m7', tags:['critical'], show:showAlways,
-        en_l:'Speed camera / radar detector disabled or removed (illegal in France, Germany, Switzerland)',
-        en_n:'In most EU countries: active radar detectors illegal. Fixed camera location warnings (GPS-based) legal in most countries except FR/DE/CH where this function must be deactivated.',
-        fr_l:'D&eacute;tecteur de radar d&eacute;sactiv&eacute; ou retir&eacute; (ill&eacute;gal en France, Allemagne, Suisse)',
-        fr_n:'Dans la plupart des pays UE&nbsp;: d&eacute;tecteurs radar actifs ill&eacute;gaux. Avertissements cam&eacute;ras fixes par GPS l&eacute;gaux dans la plupart des pays sauf FR/DE/CH o&ugrave; cette fonction doit &ecirc;tre d&eacute;sactiv&eacute;e.',
-        links:[] },
-    ]
-  },
-  { id:'docs', icon:'📄',
-    en:'Documents &amp; Admin', fr:'Documents &amp; Admin',
-    items:[
-      { id:'d1', tags:['critical'], show:showAlways,
-        en_l:'Schengen 90/180 plan validated before departure',
-        en_n:'North American passport = max 90 days in any 180-day Schengen window. Non-Schengen countries (UK, Ireland, etc.) have separate rules. Use the Schengen simulator.',
-        fr_l:'Plan Schengen 90/180 valid&eacute; avant le d&eacute;part',
-        fr_n:'Passeport nord-am&eacute;ricain = max 90 jours dans toute fen&ecirc;tre Schengen de 180 jours. Les pays hors Schengen (Royaume-Uni, Irlande, etc.) ont leurs propres r&egrave;gles. Utiliser le simulateur Schengen.',
-        links:[{t:'Schengen simulator',u:'https://jev-rv.github.io/schengen-rv-simulator/',c:'site'}] },
-      { id:'d2', tags:['critical'], show:showAlways,
-        en_l:'ETIAS authorization obtained (when mandatory)',
-        en_n:'ETIAS requirement for non-EU nationals. Progressive rollout — check current status before departure.',
-        fr_l:'Autorisation ETIAS obtenue (lorsque obligatoire)',
-        fr_n:'Exigence ETIAS pour les ressortissants non-UE. D&eacute;ploiement progressif &mdash; v&eacute;rifier le statut actuel avant le d&eacute;part.',
-        links:[] },
-      { id:'d3', tags:['critical'], show:showAlways,
-        en_l:'RV insurance valid for all countries on route &mdash; European Green Card obtained',
-        en_n:'Contact your insurer before departure. Some policies exclude specific countries. Green Card (international insurance certificate) required at borders.',
-        fr_l:'Assurance VR valide pour tous les pays de l&rsquo;itin&eacute;raire &mdash; Carte verte internationale obtenue',
-        fr_n:'Contacter votre assureur avant le d&eacute;part. Certaines polices excluent des pays sp&eacute;cifiques. La carte verte (certificat international d&rsquo;assurance) est requise aux fronti&egrave;res.',
-        links:[] },
-      { id:'d4', tags:['critical'], show:showAlways,
-        en_l:'Vignettes purchased for applicable countries (Austria, Switzerland, etc.)',
-        en_n:'Austria and Switzerland require vignettes (road tax stickers/digital registration). Buy digitally before crossing. Other countries have toll systems &mdash; see the Toll Calculator.',
-        fr_l:'Vignettes achet&eacute;es pour les pays applicables (Autriche, Suisse, etc.)',
-        fr_n:'L&rsquo;Autriche et la Suisse exigent des vignettes (autocollants de taxe routi&egrave;re/enregistrement num&eacute;rique). Acheter en ligne avant de traverser. D&rsquo;autres pays ont des syst&egrave;mes de p&eacute;age &mdash; voir le calculateur de p&eacute;ages.',
-        links:[{t:'Toll calculator',u:'https://jev-rv.github.io/toll-calculator/',c:'site'}] },
     ]
   },
 ];
