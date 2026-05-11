@@ -445,7 +445,7 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
         💧 <span id="lbl-water">Water only</span> <span class="vb-count" id="cnt-water">—</span>
       </button>
       <button class="view-btn" id="vb-configure" onclick="setView('configure')">
-        ⚙️ <span id="lbl-configure">Configure</span>
+        ⚙️ <span id="lbl-configure">Configure</span> <span class="vb-count" id="cnt-configure">—</span>
       </button>
       <button class="view-btn" id="vb-sop" onclick="setView('sop')">
         🔧 <span id="lbl-sop">SOPs only</span> <span class="vb-count" id="cnt-sop">—</span>
@@ -1349,7 +1349,7 @@ function setLang(l) {
   var L=LANG[l];
   Object.keys(L).forEach(function(k){ var el=document.getElementById(k); if (el) el.innerHTML=L[k]; });
   updateBadge();
-  renderAll();
+  if (view==='configure') { renderConfigure(); } else { renderAll(); }
 }
 
 function updateProgress() {
@@ -1624,6 +1624,22 @@ function renderConfigure() {
   var root = document.getElementById('cfg-root');
   if (!root) return;
   var conciergeLevel = getConciergeLevel();
+
+  // Update intro badge showing concierge recommendation
+  var cfgSub = document.getElementById('cfg-sub');
+  if (cfgSub) {
+    var lvlLabel = getLevelLabel(conciergeLevel);
+    var profileReady = isProfileComplete();
+    if (lang==='fr') {
+      cfgSub.innerHTML = profileReady
+        ? 'Concierge recommande le profil <strong>' + lvlLabel + '</strong> selon votre sondage. Cochez librement pour ajuster — votre sélection construit la liste d\'achat ci-dessous.'
+        : 'Complétez le sondage en haut pour obtenir la recommandation Concierge personnalisée.';
+    } else {
+      cfgSub.innerHTML = profileReady
+        ? 'Concierge recommends the <strong>' + lvlLabel + '</strong> profile based on your survey. Check freely to override — your selection builds the purchase list below.'
+        : 'Complete the survey above to get a personalized Concierge recommendation.';
+    }
+  }
   var cLabel = {minimal:{en:'Minimal',fr:'Minimal'},recommended:{en:'Recommended',fr:'Recommandé'},advanced:{en:'Advanced',fr:'Avancé'}};
   var h = lang==='fr'
     ? ['Système & composants','Prix','Concierge','Minimal','Recommandé','Avancé']
@@ -1720,6 +1736,10 @@ function renderMRP() {
     });
   });
 
+  // Update configure button count
+  var cfgCountEl = document.getElementById('cnt-configure');
+  if (cfgCountEl) cfgCountEl.textContent = selected.length > 0 ? selected.length : '—';
+
   if (!selected.length) {
     body.innerHTML = '<div class="mrp-empty">' +
       (lang==='fr' ? 'Aucun système sélectionné — cochez les cases ci-dessus pour construire votre liste d\'achat.' :
@@ -1765,6 +1785,11 @@ function renderMRP() {
       '<div class="mrp-total-cell"><div class="mrp-total-label">Total EUR</div><div class="mrp-total-val">€' + totalEur + '</div></div>' +
       '<div class="mrp-total-cell"><div class="mrp-total-label">Total USD</div><div class="mrp-total-val">$' + totalUsd + '</div></div>' +
       '<div class="mrp-total-cell"><div class="mrp-total-label">Total CAD</div><div class="mrp-total-val">$' + totalCad + '</div></div>' +
+    '</div>' +
+    '<div style="font-size:10px;color:var(--text3);padding:.4rem .75rem;border-top:.5px solid var(--border)">' +
+      (lang==='fr'
+        ? '≈€1 = $' + EUR_TO_USD.toFixed(2) + ' USD / $' + EUR_TO_CAD.toFixed(2) + ' CAD — taux approximatifs, convertir au taux du jour'
+        : '≈€1 = $' + EUR_TO_USD.toFixed(2) + ' USD / $' + EUR_TO_CAD.toFixed(2) + ' CAD — approximate rates, convert at current rate') +
     '</div>';
 }
 
