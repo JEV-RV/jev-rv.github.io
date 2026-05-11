@@ -1422,7 +1422,7 @@ var CFG_CATS = [
   { id:'cfg-elec', icon:'🔌',
     en:'Electricity', fr:'\u00c9lectricit\u00e9',
     systems:[
-      { id:'cs-e1',
+      { id:'cs-e1', eu_only:true,
         en_name:'Option 1 \u2014 Step-down transformer 230V\u2192120V',
         fr_name:'Option 1 \u2014 Transformateur abaisseur 230V\u2192120V',
         minimal:true, recommended:false, advanced:false,
@@ -1432,7 +1432,7 @@ var CFG_CATS = [
           {en:'CEE 16A 25m cable',fr:'C\u00e2ble CEE 16A 25m',url:'https://amzn.eu/d/08UpiWo7'}
         ]
       },
-      { id:'cs-e2',
+      { id:'cs-e2', eu_only:false,
         en_name:'Option 2 \u2014 Victron IP43 permanent charger system',
         fr_name:'Option 2 \u2014 Victron IP43 syst\u00e8me chargeur permanent',
         minimal:false, recommended:true, advanced:true,
@@ -1449,7 +1449,7 @@ var CFG_CATS = [
           {en:'CEE\u2192NA adapter',fr:'Adapt. CEE\u2192NA',url:'https://a.co/d/089sUAGJ'}
         ]
       },
-      { id:'cs-e3',
+      { id:'cs-e3', eu_only:false,
         en_name:'Option 3 \u2014 Victron Orion XS 1400 DC-DC (Unity only)',
         fr_name:'Option 3 \u2014 Victron Orion XS 1400 DC-DC (Unity seulement)',
         minimal:false, recommended:false, advanced:true,
@@ -1464,7 +1464,7 @@ var CFG_CATS = [
   { id:'cfg-water', icon:'\ud83d\udca7',
     en:'Water Treatment', fr:'Traitement de l\u2019eau',
     systems:[
-      { id:'cs-w1',
+      { id:'cs-w1', eu_only:true,
         en_name:'Option 1 \u2014 Adapters + OEM filter + Aquatabs',
         fr_name:'Option 1 \u2014 Adaptateurs + filtre OEM + Aquatabs',
         minimal:true, recommended:true, advanced:true,
@@ -1476,7 +1476,7 @@ var CFG_CATS = [
           {en:'Aquatabs 334mg 100-pk',fr:'Aquatabs 334mg 100-pk',url:'https://a.co/d/3ppxq14'}
         ]
       },
-      { id:'cs-w2',
+      { id:'cs-w2', eu_only:false,
         en_name:'Option 2 \u2014 BLUTEC AR3 inlet pre-filter system',
         fr_name:'Option 2 \u2014 Syst\u00e8me BLUTEC AR3 pr\u00e9filtration',
         minimal:false, recommended:true, advanced:true,
@@ -1488,7 +1488,7 @@ var CFG_CATS = [
           {en:'USB-A/C socket wet bay',fr:'Prise USB-A/C compartiment humide',url:'https://a.co/d/05JqDkvg'}
         ]
       },
-      { id:'cs-w3',
+      { id:'cs-w3', eu_only:false,
         en_name:'Option 3 \u2014 NOVO RO + ACUVA UV point-of-use',
         fr_name:'Option 3 \u2014 NOVO OI + ACUVA UV point d\u2019usage',
         minimal:false, recommended:false, advanced:true,
@@ -1502,7 +1502,7 @@ var CFG_CATS = [
           {en:'Chlorine test strips',fr:'Bandelettes chlore',url:'https://a.co/d/05yLVva8'}
         ]
       },
-      { id:'cs-w4',
+      { id:'cs-w4', eu_only:false,
         en_name:'Option 4 \u2014 Ozone generator + temp monitor',
         fr_name:'Option 4 \u2014 G\u00e9n\u00e9rateur ozone + sonde temp.',
         minimal:false, recommended:false, advanced:true,
@@ -1519,7 +1519,7 @@ var CFG_CATS = [
   { id:'cfg-telecom', icon:'\ud83d\udce1',
     en:'Telecom & Connectivity', fr:'T\u00e9l\u00e9com & Connectivit\u00e9',
     systems:[
-      { id:'cs-t1',
+      { id:'cs-t1', eu_only:false,
         en_name:'Garmin RV GPS 895 or 1095 \u2014 essential all profiles',
         fr_name:'GPS VR Garmin 895 ou 1095 \u2014 essentiel tous profils',
         minimal:true, recommended:true, advanced:true,
@@ -1528,7 +1528,7 @@ var CFG_CATS = [
           {en:'Garmin RV 895/1095',fr:'Garmin RV 895/1095',url:'https://a.co/d/01kUGHPT'}
         ]
       },
-      { id:'cs-t2',
+      { id:'cs-t2', eu_only:true,
         en_name:'Level 1 \u2014 Dual-eSIM phones only',
         fr_name:'Niveau 1 \u2014 Dual-eSIM t\u00e9l\u00e9phones seulement',
         minimal:true, recommended:false, advanced:false,
@@ -1540,7 +1540,7 @@ var CFG_CATS = [
           {en:'Airalo eSIM',fr:'Airalo eSIM',url:'https://www.airalo.com'}
         ]
       },
-      { id:'cs-t3',
+      { id:'cs-t3', eu_only:false,
         en_name:'Level 2 \u2014 Starlink Mini + Nokia FastMile 5G',
         fr_name:'Niveau 2 \u2014 Starlink Mini + Nokia FastMile 5G',
         minimal:false, recommended:true, advanced:true,
@@ -1554,7 +1554,7 @@ var CFG_CATS = [
           {en:'Orange Holiday Europe',fr:'Orange Holiday Europe',url:'https://travel.orange.com'}
         ]
       },
-      { id:'cs-t4',
+      { id:'cs-t4', eu_only:false,
         en_name:'Level 3 \u2014 Starlink + Pepwave/Teltonika advanced',
         fr_name:'Niveau 3 \u2014 Starlink + Pepwave/Teltonika avanc\u00e9',
         minimal:false, recommended:false, advanced:true,
@@ -1575,7 +1575,7 @@ var CFG_CATS = [
 
 // Fixed items — always in MRP regardless of Configure selections
 var CFG_FIXED = [
-  { cat_en:'Propane / LPG', cat_fr:'Propane / GPL', price_cad:107,
+  { eu_only:true, cat_en:'Propane / LPG', cat_fr:'Propane / GPL', price_cad:107,
     en_name:'LPG adapter set (full kit)',
     fr_name:'Jeu complet adaptateurs GPL',
     chain:[
@@ -1583,14 +1583,14 @@ var CFG_FIXED = [
       {en:'ACME\u2192UK Bayonet',fr:'ACME\u2192Bayonet UK',url:'https://lpggpl.com/products/acme-american-motorhome-to-uk-bayonet-autogas-lpg-filling-adapter'}
     ]
   },
-  { cat_en:'Waste Water', cat_fr:'Eaux us\u00e9es', price_cad:160,
+  { eu_only:false, cat_en:'Waste Water', cat_fr:'Eaux us\u00e9es', price_cad:160,
     en_name:'Portable 12V macerator kit',
     fr_name:'Kit macerator portable 12V',
     chain:[
       {en:'Portable macerator kit',fr:'Kit macerator portable',url:'https://a.co/d/0iqsEmNq'}
     ]
   },
-  { cat_en:'Mandatory Equipment', cat_fr:'\u00c9quipements obligatoires', price_cad:50,
+  { eu_only:true, cat_en:'Mandatory Equipment', cat_fr:'\u00c9quipements obligatoires', price_cad:50,
     en_name:'Angles Morts stickers + Warning board',
     fr_name:'Autocollants angles morts + panneau avertisseur',
     chain:[
@@ -1598,7 +1598,7 @@ var CFG_FIXED = [
       {en:'Warning board Spain+Italy 2-in-1',fr:'Panneau avertisseur Espagne+Italie',url:'https://amzn.eu/d/099qOlWQ'}
     ]
   },
-  { cat_en:'Mandatory Equipment', cat_fr:'\u00c9quipements obligatoires', price_cad:680,
+  { eu_only:true, cat_en:'Mandatory Equipment', cat_fr:'\u00c9quipements obligatoires', price_cad:680,
     en_name:'Snow chains/socks HD — AutoSock HP698 or Pewag Austro Super HD',
     fr_name:'Chaînes/chaussettes neige HD — AutoSock HP698 ou Pewag Austro Super HD',
     chain:[
@@ -1606,7 +1606,7 @@ var CFG_FIXED = [
       {en:'Alt: Pewag Austro Super HD',fr:'Alt: Pewag Austro Super HD',url:'https://shop.pewag.com/fr/pewag-austro-super-jumelee/4034241'}
     ]
   },
-  { cat_en:'Safety Labels (CE/ISO 6.6)', cat_fr:'\u00c9tiquettes s\u00e9curit\u00e9 (CE/ISO 6.6)', price_cad:65,
+  { eu_only:true, cat_en:'Safety Labels (CE/ISO 6.6)', cat_fr:'\u00c9tiquettes s\u00e9curit\u00e9 (CE/ISO 6.6)', price_cad:65,
     en_name:'Safety label set (5 labels)',
     fr_name:'Jeu \u00e9tiquettes s\u00e9curit\u00e9 (5 \u00e9tiquettes)',
     chain:[
@@ -1787,101 +1787,187 @@ function renderMRP() {
   var CAD_TO_USD = 0.73;
   var CAD_TO_EUR = 0.66;
 
-  // Collect selected configurable systems
-  var selected = [];
+  // Labels
+  var L = {
+    sel:      lang==='fr' ? 'Syst\u00e8mes s\u00e9lectionn\u00e9s' : 'Selected systems',
+    perm:     lang==='fr' ? '\ud83c\udf10 Am\u00e9liorations permanentes' : '\ud83c\udf10 Permanent upgrades',
+    permSub:  lang==='fr' ? 'Utiles en Europe ET en Am\u00e9rique du Nord' : 'Useful in Europe AND in North America',
+    eu:       lang==='fr' ? '\ud83c\udf0d Europe seulement' : '\ud83c\udf0d Europe-only costs',
+    euSub:    lang==='fr' ? 'Coûts sp\u00e9cifiques au voyage EU — sans valeur r\u00e9siduelle en AN' : 'EU travel-specific — no residual value in North America',
+    fixed:    lang==='fr' ? '\u00c9quipements obligatoires (inclus pour tous)' : 'Mandatory equipment (included for all)',
+    subPerm:  lang==='fr' ? 'Sous-total am\u00e9liorations permanentes' : 'Subtotal permanent upgrades',
+    subEU:    lang==='fr' ? 'Sous-total Europe seulement' : 'Subtotal Europe-only',
+    subFixed: lang==='fr' ? 'Sous-total \u00e9quipements obligatoires' : 'Subtotal mandatory equipment',
+    noSel:    lang==='fr' ? 'Aucun syst\u00e8me s\u00e9lectionn\u00e9 — cochez les cases ci-dessus.' : 'No systems selected — check boxes above.',
+    hdCat:    lang==='fr' ? 'Cat\u00e9gorie' : 'Category',
+    hdSys:    lang==='fr' ? 'Syst\u00e8me / Composants cl\u00e9s' : 'System / Key components',
+    hdPrice:  'Price CAD',
+    rateNote: lang==='fr'
+      ? '\u2248 1 $CAD = ' + CAD_TO_USD.toFixed(2) + ' USD / ' + CAD_TO_EUR.toFixed(2) + ' EUR \u2014 taux approximatifs mai 2026. Starlink non inclus (mensuel variable).'
+      : '\u2248 1 CAD = ' + CAD_TO_USD.toFixed(2) + ' USD / ' + CAD_TO_EUR.toFixed(2) + ' EUR \u2014 approx. rates May 2026. Starlink not included (monthly variable).'
+  };
+
+  // Collect selected systems → split EU vs Permanent
+  var selPerm = [], selEU = [];
   CFG_CATS.forEach(function(cat) {
     cat.systems.forEach(function(sys) {
-      if (cfgState[sys.id]) selected.push({cat: lang==='fr'?cat.fr:cat.en, sys: sys});
+      if (!cfgState[sys.id]) return;
+      var bucket = sys.eu_only ? selEU : selPerm;
+      bucket.push({cat: lang==='fr' ? cat.fr : cat.en, sys: sys});
     });
   });
 
   // Update configure button count
+  var total_sel = selPerm.length + selEU.length;
   var cfgCountEl = document.getElementById('cnt-configure');
-  if (cfgCountEl) cfgCountEl.textContent = selected.length > 0 ? selected.length : '\u2014';
+  if (cfgCountEl) cfgCountEl.textContent = total_sel > 0 ? total_sel : '\u2014';
 
-  var hdrs = lang==='fr'
-    ? ['Cat\u00e9gorie','Syst\u00e8me / Composants cl\u00e9s','Prix CAD']
-    : ['Category','System / Key components','Price CAD'];
+  // Table header
+  var thRow = '<tr>' +
+    '<th style="width:18%">' + L.hdCat + '</th>' +
+    '<th style="width:64%">' + L.hdSys + '</th>' +
+    '<th class="tr" style="width:18%">' + L.hdPrice + '</th>' +
+  '</tr>';
 
-  var grandTotal = 0;
-  var html = '';
-
-  // ── Section 1: Configurable selections ──────────────────────────
-  if (selected.length) {
-    var cfgTotal = 0;
-    var rows = selected.map(function(item) {
-      var sys = item.sys;
-      var sysName = lang==='fr' ? sys.fr_name : sys.en_name;
-      var price = sys.price_cad || 0;
-      cfgTotal += price;
-      var chainShort = sys.chain.map(function(c){ return lang==='fr'?c.fr:c.en; }).join(' \u203a ');
-      var priceStr = price > 0 ? '$' + price.toLocaleString() : (lang==='fr'?'Aucun mat\u00e9riel':'No hardware');
-      return '<tr><td style="color:var(--text2)">' + item.cat + '</td>' +
-        '<td><span style="font-weight:500;display:block">' + sysName + '</span>' +
+  function makeRow(item) {
+    var sys = item.sys;
+    var name = lang==='fr' ? sys.fr_name : sys.en_name;
+    var price = sys.price_cad || 0;
+    var chainShort = (sys.chain||[]).map(function(c){ return lang==='fr'?c.fr:c.en; }).join(' \u203a ');
+    var priceStr = price > 0 ? '$' + price.toLocaleString() : (lang==='fr'?'Aucun mat\u00e9riel':'No hardware');
+    return '<tr>' +
+      '<td style="color:var(--text2)">' + item.cat + '</td>' +
+      '<td><span style="font-weight:500;display:block">' + name + '</span>' +
         '<span style="font-size:10px;color:var(--text3)">' + chainShort + '</span></td>' +
-        '<td class="tr">' + priceStr + '</td></tr>';
-    }).join('');
-    grandTotal += cfgTotal;
-    var subHdr = lang==='fr' ? 'Syst\u00e8mes s\u00e9lectionn\u00e9s' : 'Selected systems';
-    html += '<div class="mrp-section-hdr">' + subHdr + '</div>' +
-      '<table class="mrp-table"><thead><tr>' +
-        '<th style="width:18%">' + hdrs[0] + '</th>' +
-        '<th style="width:64%">' + hdrs[1] + '</th>' +
-        '<th class="tr" style="width:18%">' + hdrs[2] + '</th>' +
-      '</tr></thead><tbody>' + rows + '</tbody>' +
-      '<tfoot><tr class="mrp-subtotal"><td colspan="2">' +
-        (lang==='fr'?'Sous-total syst\u00e8mes configur\u00e9s':'Subtotal configured systems') +
-      '</td><td class="tr">$' + cfgTotal.toLocaleString() + '</td></tr></tfoot>' +
-      '</table>';
-  } else {
-    html += '<div class="mrp-empty">' +
-      (lang==='fr'
-        ? 'Aucun syst\u00e8me s\u00e9lectionn\u00e9 \u2014 cochez les cases ci-dessus pour construire votre liste d\'achat.'
-        : 'No systems selected \u2014 check boxes above to build your purchase list.') +
-    '</div>';
+      '<td class="tr">' + priceStr + '</td>' +
+    '</tr>';
   }
 
-  // ── Section 2: Fixed items (always included) ──────────────────────
-  var fixedTotal = 0;
-  var fixedRows = CFG_FIXED.map(function(item) {
-    var catName = lang==='fr' ? item.cat_fr : item.cat_en;
-    var sysName = lang==='fr' ? item.fr_name : item.en_name;
-    var chainShort = item.chain.map(function(c){ return lang==='fr'?c.fr:c.en; }).join(' \u203a ');
-    fixedTotal += item.price_cad;
-    return '<tr><td style="color:var(--text2)">' + catName + '</td>' +
-      '<td><span style="font-weight:500;display:block">' + sysName + '</span>' +
-      '<span style="font-size:10px;color:var(--text3)">' + chainShort + '</span></td>' +
-      '<td class="tr">$' + item.price_cad.toLocaleString() + '</td></tr>';
-  }).join('');
-  grandTotal += fixedTotal;
-  var fixedHdr = lang==='fr' ? '\u00c9quipements obligatoires (inclus pour tous)' : 'Mandatory equipment (included for all)';
-  html += '<div class="mrp-section-hdr mrp-section-fixed">' + fixedHdr + '</div>' +
-    '<table class="mrp-table"><thead><tr>' +
-      '<th style="width:18%">' + hdrs[0] + '</th>' +
-      '<th style="width:64%">' + hdrs[1] + '</th>' +
-      '<th class="tr" style="width:18%">' + hdrs[2] + '</th>' +
-    '</tr></thead><tbody>' + fixedRows + '</tbody>' +
-    '<tfoot><tr class="mrp-subtotal"><td colspan="2">' +
-      (lang==='fr'?'Sous-total \u00e9quipements obligatoires':'Subtotal mandatory equipment') +
-    '</td><td class="tr">$' + fixedTotal.toLocaleString() + '</td></tr></tfoot>' +
-    '</table>';
+  function makeSubtotal(label, amount) {
+    return '<tr class="mrp-subtotal"><td colspan="2">' + label + '</td>' +
+      '<td class="tr">$' + amount.toLocaleString() + '</td></tr>';
+  }
 
-  // ── Grand total ────────────────────────────────────────────────────
+  function sectionTotal(items) {
+    return items.reduce(function(s, item){ return s + (item.sys.price_cad || 0); }, 0);
+  }
+
+  var html = '';
+  var grandTotal = 0;
+
+  // ── Section 1: Selected systems ───────────────────────────────────────────
+  if (total_sel === 0) {
+    html += '<div class="mrp-empty">' + L.noSel + '</div>';
+  } else {
+    html += '<div class="mrp-section-hdr">' + L.sel + '</div>' +
+      '<table class="mrp-table"><thead>' + thRow + '</thead><tbody>';
+
+    // 1a. Permanent upgrades
+    if (selPerm.length) {
+      var permTotal = sectionTotal(selPerm);
+      grandTotal += permTotal;
+      html += '<tr><td colspan="3" style="padding:.3rem .75rem;font-size:11px;font-weight:600;' +
+        'color:var(--teal,#0f766e);background:var(--surface2);border-bottom:.5px solid var(--border)">' +
+        '\ud83c\udf10 ' + L.perm +
+        '<span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:.5rem">' + L.permSub + '</span>' +
+        '</td></tr>';
+      selPerm.forEach(function(item){ html += makeRow(item); });
+      html += makeSubtotal(L.subPerm, permTotal);
+    }
+
+    // 1b. EU-only
+    if (selEU.length) {
+      var euSelTotal = sectionTotal(selEU);
+      grandTotal += euSelTotal;
+      html += '<tr><td colspan="3" style="padding:.3rem .75rem;font-size:11px;font-weight:600;' +
+        'color:var(--amber,#b45309);background:var(--amber-bg,#fffbeb);border-bottom:.5px solid var(--border)">' +
+        '\ud83c\udf0d ' + L.eu +
+        '<span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:.5rem">' + L.euSub + '</span>' +
+        '</td></tr>';
+      selEU.forEach(function(item){ html += makeRow(item); });
+      html += makeSubtotal(L.subEU, euSelTotal);
+    }
+
+    html += '</tbody></table>';
+  }
+
+  // ── Section 2: Fixed mandatory items → split EU vs Permanent ─────────────
+  var fixedPerm = CFG_FIXED.filter(function(i){ return !i.eu_only; });
+  var fixedEU   = CFG_FIXED.filter(function(i){ return  i.eu_only; });
+
+  function makeFixedRow(item) {
+    var name = lang==='fr' ? item.fr_name : item.en_name;
+    var cat  = lang==='fr' ? item.cat_fr  : item.cat_en;
+    var chainShort = (item.chain||[]).map(function(c){ return lang==='fr'?c.fr:c.en; }).join(' \u203a ');
+    return '<tr>' +
+      '<td style="color:var(--text2)">' + cat + '</td>' +
+      '<td><span style="font-weight:500;display:block">' + name + '</span>' +
+        '<span style="font-size:10px;color:var(--text3)">' + chainShort + '</span></td>' +
+      '<td class="tr">$' + item.price_cad.toLocaleString() + '</td>' +
+    '</tr>';
+  }
+
+  var fixedPermTotal = fixedPerm.reduce(function(s,i){ return s+i.price_cad; }, 0);
+  var fixedEUTotal   = fixedEU.reduce(function(s,i){ return s+i.price_cad; }, 0);
+  grandTotal += fixedPermTotal + fixedEUTotal;
+
+  html += '<div class="mrp-section-hdr mrp-section-fixed">' + L.fixed + '</div>' +
+    '<table class="mrp-table"><thead>' + thRow + '</thead><tbody>';
+
+  if (fixedPerm.length) {
+    html += '<tr><td colspan="3" style="padding:.3rem .75rem;font-size:11px;font-weight:600;' +
+      'color:var(--teal,#0f766e);background:var(--surface2);border-bottom:.5px solid var(--border)">' +
+      '\ud83c\udf10 ' + L.perm + '</td></tr>';
+    fixedPerm.forEach(function(i){ html += makeFixedRow(i); });
+    html += makeSubtotal(L.subPerm, fixedPermTotal);
+  }
+  if (fixedEU.length) {
+    html += '<tr><td colspan="3" style="padding:.3rem .75rem;font-size:11px;font-weight:600;' +
+      'color:var(--amber,#b45309);background:var(--amber-bg,#fffbeb);border-bottom:.5px solid var(--border)">' +
+      '\ud83c\udf0d ' + L.eu + '</td></tr>';
+    fixedEU.forEach(function(i){ html += makeFixedRow(i); });
+    html += makeSubtotal(L.subEU, fixedEUTotal);
+  }
+
+  html += '</tbody></table>';
+
+  // ── Grand totals ──────────────────────────────────────────────────────────
   var totalUSD = Math.round(grandTotal * CAD_TO_USD);
   var totalEUR = Math.round(grandTotal * CAD_TO_EUR);
+
+  // EU-only grand sub
+  var euGrandTotal   = (selEU.length ? sectionTotal(selEU) : 0) + fixedEUTotal;
+  var permGrandTotal = (selPerm.length ? sectionTotal(selPerm) : 0) + fixedPermTotal;
+
   body.innerHTML = html +
     '<div class="mrp-totals">' +
-      '<div class="mrp-total-cell"><div class="mrp-total-label">Total CAD</div>' +
-        '<div class="mrp-total-val">$' + grandTotal.toLocaleString() + '</div></div>' +
-      '<div class="mrp-total-cell"><div class="mrp-total-label">Total USD</div>' +
-        '<div class="mrp-total-val">$' + totalUSD.toLocaleString() + '</div></div>' +
-      '<div class="mrp-total-cell"><div class="mrp-total-label">Total EUR</div>' +
-        '<div class="mrp-total-val">\u20ac' + totalEUR.toLocaleString() + '</div></div>' +
+      '<div class="mrp-total-cell">' +
+        '<div class="mrp-total-label">Total CAD</div>' +
+        '<div class="mrp-total-val">$' + grandTotal.toLocaleString() + '</div>' +
+      '</div>' +
+      '<div class="mrp-total-cell">' +
+        '<div class="mrp-total-label">Total USD</div>' +
+        '<div class="mrp-total-val">$' + totalUSD.toLocaleString() + '</div>' +
+      '</div>' +
+      '<div class="mrp-total-cell">' +
+        '<div class="mrp-total-label">Total EUR</div>' +
+        '<div class="mrp-total-val">\u20ac' + totalEUR.toLocaleString() + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div style="display:flex;gap:0;border-top:.5px solid var(--border)">' +
+      '<div style="flex:1;padding:.4rem .75rem;font-size:11px;border-right:.5px solid var(--border)">' +
+        '<span style="color:var(--teal,#0f766e);font-weight:600">\ud83c\udf10 ' +
+          'Permanent' + '</span>' +
+        ' $' + permGrandTotal.toLocaleString() + ' CAD' +
+      '</div>' +
+      '<div style="flex:1;padding:.4rem .75rem;font-size:11px">' +
+        '<span style="color:var(--amber,#b45309);font-weight:600">\ud83c\udf0d ' +
+          (lang==='fr'?'EU seulement':'EU-only') + '</span>' +
+        ' $' + euGrandTotal.toLocaleString() + ' CAD' +
+      '</div>' +
     '</div>' +
     '<div style="font-size:10px;color:var(--text3);padding:.4rem .75rem;border-top:.5px solid var(--border)">' +
-      (lang==='fr'
-        ? '≈ 1 $CAD = ' + CAD_TO_USD.toFixed(2) + ' USD / ' + CAD_TO_EUR.toFixed(2) + ' EUR — taux approximatifs mai 2026. Starlink non inclus (mensuel variable).'
-        : '≈ 1 CAD = ' + CAD_TO_USD.toFixed(2) + ' USD / ' + CAD_TO_EUR.toFixed(2) + ' EUR — approx. rates May 2026. Starlink not included (monthly variable).') +
+      L.rateNote +
     '</div>';
 }
 
