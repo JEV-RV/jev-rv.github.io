@@ -138,6 +138,16 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
 .checklist-wrap{display:none}.checklist-wrap.show{display:block}
 .footer{border-top:.5px solid var(--border);padding:1.5rem;max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--text3)}
 @media(max-width:600px){.view-bar{flex-direction:column;align-items:stretch}.rv-filter{margin-left:0}.wizard-label{min-width:80px}}
+
+/* ── OPTION SUB-ITEMS ── */
+.item-row.option-sub{border-left:3px solid var(--blue);margin-left:1.25rem}
+.item-row.option-sub .item-label{font-size:12.5px}
+
+/* ── SOP TAG ── */
+.tsop{background:#e0f4f7;color:#0d6e7a}
+
+/* ── ADMIN SAFETY LABELS DIVIDER ── */
+.admin-sub-header{display:flex;align-items:center;gap:8px;padding:.55rem 1.25rem .4rem;background:#fff3cd;border-top:2px solid #f59e0b;border-bottom:1px solid #fde68a;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#92400e;margin-top:2px}
 </style>
 </head>
 <body>
@@ -379,6 +389,9 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
       <button class="view-btn" id="vb-water" onclick="setView('water')">
         💧 <span id="lbl-water">Water only</span> <span class="vb-count" id="cnt-water">—</span>
       </button>
+      <button class="view-btn" id="vb-sop" onclick="setView('sop')">
+        🔧 <span id="lbl-sop">SOPs only</span> <span class="vb-count" id="cnt-sop">—</span>
+      </button>
       <div class="rv-filter">
         <span class="rv-label" id="lbl-rv">My RV:</span>
         <button class="rv-btn active" id="rv-all"    onclick="setRV('all')">All</button>
@@ -428,6 +441,7 @@ var LANG = {
     'wl-campgrounds':'Campgrounds','wl-mixed':'Mixed','wl-offgrid':'Off-grid / Boondocking',
     'rental-title':'🔑 Renting locally — this checklist doesn\'t apply to you',
     'rental-body':'This checklist is designed for owners shipping their own RV to Europe via RoRo. If you\'re renting locally, the rental company handles all equipment adaptations. See <strong>Guide 2</strong> for RoRo logistics and <strong>Guide 11</strong> for the local rental option comparison.',
+    'lbl-sop':'SOPs only',
     'lbl-critical':'Critical only','lbl-full':'Full list','lbl-water':'Water only',
     'lbl-rv':'My RV:','lbl-reset':'&#x21BA; Reset',
     'lbl-c':'Blocks departure','lbl-m':'Strongly recommended','lbl-r':'Recommended','lbl-o':'Optional / if installed',
@@ -447,6 +461,7 @@ var LANG = {
     'wl-campgrounds':'Campings','wl-mixed':'Mixte','wl-offgrid':'Autonomie / Boondocking',
     'rental-title':'🔑 Location sur place — cette liste ne vous concerne pas',
     'rental-body':'Cette liste est con&ccedil;ue pour les propri&eacute;taires qui exp&eacute;dient leur propre VR en Europe par RoRo. Si vous louez sur place, le loueur g&egrave;re toutes les adaptations. Voir le <strong>Guide 2</strong> pour la logistique RoRo et le <strong>Guide 11</strong> pour la comparaison location vs propri&eacute;t&eacute;.',
+    'lbl-sop':'Protocoles seulement',
     'lbl-critical':'Critique uniquement','lbl-full':'Liste compl&egrave;te','lbl-water':'Eau uniquement',
     'lbl-rv':'Mon VR&nbsp;:','lbl-reset':'&#x21BA; R&eacute;initialiser',
     'lbl-c':'Bloque le d&eacute;part','lbl-m':'Fortement recommand&eacute;','lbl-r':'Recommand&eacute;','lbl-o':'Optionnel / si install&eacute;',
@@ -714,7 +729,7 @@ var CATS = [
         fr_l:'🚢 VR pes&eacute; pleinement charg&eacute; &mdash; charges par essieu document&eacute;es et dans les limites EU',
         fr_n:'L&rsquo;Europe applique strictement les limites par essieu (Autriche&nbsp;: 0% tol&eacute;rance). Peser sur une balance certifi&eacute;e avant l&rsquo;exp&eacute;dition. GAWR avant + arri&egrave;re &ne; PNBV. Documenter les valeurs pes&eacute;es &mdash; important si contr&ocirc;l&eacute;.',
         links:[] },
-      { id:'a5', tags:['mandatory'], show:showAlways,
+      { id:'a5', sop:true, tags:['mandatory'], show:showAlways,
         en_l:'🚢 Travel SOP: 30% fresh water max, grey/black tanks empty before driving',
         en_n:'Reduces rear axle load. 30% fresh water ≈ 30 kg saved on 97L tank. Keep ~10% in grey/black to prevent dry-seal odors. Empty fully at dump stations. Avoid heavy rear-mounted accessories.',
         fr_l:'🚢 SOP voyage&nbsp;: max 30% d&rsquo;eau fra&icirc;che, r&eacute;servoirs gris/noirs vides avant de rouler',
@@ -793,6 +808,50 @@ var CATS = [
         fr_l:'⚙️ Mode Veille Starlink configur&eacute; pour la p&eacute;riode de stockage entre les segments',
         fr_n:'Pause gratuite supprim&eacute;e ao&ucirc;t 2025. Mode Veille ~5 USD/mois maintient compte actif avec 500 kbps. Ne PAS annuler et r&eacute;activer &mdash; risque d&rsquo;indisponibilit&eacute; du plan.',
         links:[] },
+      { id:'_labels_divider', divider:true, en:'🏷️ Safety Labels', fr:'🏷️ Étiquettes de sécurité' },
+      { id:'p4', tags:['mandatory'], show:showAlways,
+        en_l:'Tank clearly marked "FIXED TANK" (not removable cylinder)',
+        en_n:'Some countries prohibit filling removable cylinders but allow fixed tanks. Clear marking avoids refusal at stations. Show adapter to attendant if needed.',
+        fr_l:'R&eacute;servoir clairement marqu&eacute; &laquo;&nbsp;R&Eacute;SERVOIR FIXE&nbsp;&raquo; (pas bouteille amovible)',
+        fr_n:'Certains pays interdisent le remplissage des bouteilles amovibles mais autorisent les r&eacute;servoirs fixes. Marquage clair &eacute;vite le refus aux stations. Montrer l&rsquo;adaptateur &agrave; l&rsquo;employ&eacute; si n&eacute;cessaire.',
+        links:[] },
+      // ── Section 6.6 — CE / ISO Safety Labels ──
+      { id:'m8', tags:['mandatory'], show:showAlways,
+        en_l:'🏷️ "WARNING — Fixed Propane Tank" sticker affixed at fill point',
+        en_n:'Required to distinguish fixed tank from removable cylinder for LPG station staff and port personnel. ISO 3864 / ISO 7010 compliant. Prevents refusal at European LPG stations and satisfies RoRo carrier requirements.',
+        fr_l:'🏷️ Autocollant &laquo;&nbsp;AVERTISSEMENT &mdash; R&eacute;servoir propane fixe&nbsp;&raquo; appos&eacute; au point de remplissage',
+        fr_n:'Requis pour distinguer le r&eacute;servoir fixe des bouteilles amovibles pour le personnel des stations GPL et du port. Conforme ISO 3864 / ISO 7010. &Eacute;vite le refus aux stations GPL europ&eacute;ennes et satisfait les exigences des transporteurs RoRo.',
+        links:[{t:'Fixed Propane Tank sticker',u:'https://a.co/d/00DphKTT',c:'amazon'}] },
+      { id:'m9', tags:['recommended'], show:showAlways,
+        en_l:'🏷️ "High current — Lithium battery system" warning label on battery compartment',
+        en_n:'ISO 3864 / ISO 7011. Alerts emergency responders and service technicians to lithium battery hazard (thermal runaway, high current). Increasingly expected in EU for RVs with upgraded LiFePO4 systems.',
+        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Haute tension &mdash; Syst&egrave;me batterie lithium&nbsp;&raquo; sur le compartiment batterie',
+        fr_n:'ISO 3864 / ISO 7011. Alerte les secouristes et techniciens sur le danger des batteries lithium (emballement thermique, haute intensit&eacute;). De plus en plus attendu en EU pour les VR avec syst&egrave;mes LiFePO4 upgrades.',
+        links:[{t:'Lithium battery warning label',u:'https://a.co/d/09xg4QxM',c:'amazon'}] },
+      { id:'m10', tags:['recommended'], show:showAlways,
+        en_l:'🏷️ "No smoking — No open flame" label near propane compartment',
+        en_n:'ISO 3864 / ISO 7012. Standard safety signage expected on any vehicle carrying LPG in Europe. Required by some ferry/RoRo operators as part of dangerous goods declaration.',
+        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;D&eacute;fense de fumer &mdash; Pas de flamme&nbsp;&raquo; pr&egrave;s du compartiment propane',
+        fr_n:'ISO 3864 / ISO 7012. Signalisation de s&eacute;curit&eacute; standard attendue sur tout v&eacute;hicule transportant du GPL en Europe. Exig&eacute;e par certains op&eacute;rateurs ferry/RoRo dans le cadre de la d&eacute;claration de marchandises dangereuses.',
+        links:[{t:'No smoking / open flame label',u:'https://a.co/d/0eTSaGBf',c:'amazon'}] },
+      { id:'m11', tags:['recommended'], show:showAlways,
+        en_l:'🏷️ "Danger — Propane" hazmat label on tank compartment exterior',
+        en_n:'ISO 3864 / ISO 7013. Identifies LPG as hazardous material to emergency services. Required for RoRo shipping declaration and increasingly for campsite entry in some European countries.',
+        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Danger &mdash; Propane&nbsp;&raquo; sur l&rsquo;ext&eacute;rieur du compartiment r&eacute;servoir',
+        fr_n:'ISO 3864 / ISO 7013. Identifie le GPL comme mati&egrave;re dangereuse pour les services d&rsquo;urgence. Requis pour la d&eacute;claration d&rsquo;exp&eacute;dition RoRo et de plus en plus pour l&rsquo;entr&eacute;e dans certains campings europ&eacute;ens.',
+        links:[{t:'Danger Propane label',u:'https://a.co/d/0gGdEPyN',c:'amazon'}] },
+      { id:'m12', tags:['recommended'], show:showAlways,
+        en_l:'🏷️ "First Aid Kit — Location" label visible from RV entrance',
+        en_n:'ISO 3864 / ISO 7014. First aid kit location marking is required in many EU commercial vehicles and strongly recommended for all RVs. Emergency services expect to find it quickly.',
+        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Trousse de premiers soins &mdash; Emplacement&nbsp;&raquo; visible depuis l&rsquo;entr&eacute;e',
+        fr_n:'ISO 3864 / ISO 7014. Marquage de l&rsquo;emplacement de la trousse de premiers soins obligatoire dans de nombreux v&eacute;hicules commerciaux EU et fortement recommand&eacute; pour tous les VR. Les services d&rsquo;urgence s&rsquo;attendent &agrave; la trouver rapidement.',
+        links:[{t:'First Aid Kit location label',u:'https://a.co/d/03rY2Ckm',c:'amazon'}] },
+      { id:'m13', tags:['recommended'], show:showAlways,
+        en_l:'🏷️ "Fire Extinguisher — Location" label visible from RV entrance',
+        en_n:'ISO 3864 / ISO 7015. Fire extinguisher location marking required in EU commercial vehicles — strongly recommended for all RVs. Some European campgrounds and ferry operators verify this during check-in.',
+        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Extincteur &mdash; Emplacement&nbsp;&raquo; visible depuis l&rsquo;entr&eacute;e',
+        fr_n:'ISO 3864 / ISO 7015. Marquage de l&rsquo;emplacement de l&rsquo;extincteur obligatoire dans les v&eacute;hicules commerciaux EU &mdash; fortement recommand&eacute; pour tous les VR. Certains campings europ&eacute;ens et op&eacute;rateurs de ferry v&eacute;rifient cela &agrave; l&rsquo;entr&eacute;e.',
+        links:[{t:'Fire Extinguisher location label',u:'https://a.co/d/0bJFsA5F',c:'amazon'}] },
     ]
   },
   { id:'elec', icon:'🔌',
@@ -852,12 +911,6 @@ var CATS = [
         fr_l:'Application myLPG.eu t&eacute;l&eacute;charg&eacute;e et test&eacute;e avant le d&eacute;part',
         fr_n:'48&nbsp;000+ stations GPL dans 70 pays. Filtrer par camping-car, type de connecteur, disponibilit&eacute; 24h/24. Finlande&nbsp;: GPL pratiquement indisponible &mdash; faire le plein avant d&rsquo;entrer.',
         links:[{t:'myLPG.eu',u:'https://www.mylpg.eu',c:'site'}] },
-      { id:'p4', tags:['mandatory'], show:showAlways,
-        en_l:'Tank clearly marked "FIXED TANK" (not removable cylinder)',
-        en_n:'Some countries prohibit filling removable cylinders but allow fixed tanks. Clear marking avoids refusal at stations. Show adapter to attendant if needed.',
-        fr_l:'R&eacute;servoir clairement marqu&eacute; &laquo;&nbsp;R&Eacute;SERVOIR FIXE&nbsp;&raquo; (pas bouteille amovible)',
-        fr_n:'Certains pays interdisent le remplissage des bouteilles amovibles mais autorisent les r&eacute;servoirs fixes. Marquage clair &eacute;vite le refus aux stations. Montrer l&rsquo;adaptateur &agrave; l&rsquo;employ&eacute; si n&eacute;cessaire.',
-        links:[] },
       { id:'p5', tags:['mandatory'], show:showAlways,
         en_l:'Self-service LPG filling procedure understood before departure',
         en_n:'In Canada/US, propane must be filled by a certified technician. In Europe, motorhome owners fill their own tanks — no attendant needed. Hold the trigger continuously (flow stops when released). Tank auto-stops at 80% (built-in safety valve) — this is normal. Rural areas: stations 50–100 km apart.',
@@ -875,19 +928,19 @@ var CATS = [
         fr_l:'Adaptateurs eau europ&eacute;ens (BSP 3/4" &rarr; NPT 3/4") &agrave; bord',
         fr_n:'Les filetages europ&eacute;ens sont BSP 3/4". La plomberie nord-am&eacute;ricaine utilise NPT 3/4". Adaptateur BSP Femelle &rarr; NPT M&acirc;le requis. Kit Gardena aussi utile.',
         links:[{t:'BSP&#8594;NPT adapter',u:'https://a.co/d/01oYqoqp',c:'amazon'},{t:'Universal tap set',u:'https://amzn.eu/d/0eMqEsvs',c:'amazon'}] },
-      { id:'w2', tags:['critical'], show:showAlways,
+      { id:'w2', sop:true, tags:['critical'], show:showAlways,
         en_l:'Protocol: flush campsite tap 30&ndash;60 sec before connecting',
         en_n:'Campsite lines can sit stagnant for hours. The first flush clears the dead-leg and reduces bacterial load before it enters your hose.',
         fr_l:'Protocole&nbsp;: laisser couler le robinet du camping 30&ndash;60&nbsp;sec avant de connecter',
         fr_n:'Les lignes du camping peuvent stagner plusieurs heures. La premi&egrave;re purge nettoie le deadleg et r&eacute;duit la charge bact&eacute;rienne avant qu&rsquo;elle n&rsquo;entre dans votre tuyau.',
         links:[] },
-      { id:'w3', tags:['critical'], show:showAlways,
+      { id:'w3', sop:true, tags:['critical'], show:showAlways,
         en_l:'Always drain tank completely before refilling from a new source',
         en_n:'Never top up a stagnant tank. A full drain + fresh fill is the only reset. Topping up dilutes but does not eliminate biofilm or Legionella.',
         fr_l:'Toujours vider compl&egrave;tement le r&eacute;servoir avant de le remplir depuis une nouvelle source',
         fr_n:'Ne jamais faire le plein sur de l&rsquo;eau stagnante. Seul un vidage complet + remplissage frais constitue une remise &agrave; z&eacute;ro. Diluer ne suffit pas &mdash; le biofilm et la Legionella restent.',
         links:[] },
-      { id:'w4', tags:['mandatory'], show:showAlways,
+      { id:'w4', sop:true, tags:['mandatory'], show:showAlways,
         en_l:'20% rule: travel with &le;20% fresh water while driving',
         en_n:'Reduces sloshing (which resuspends biofilm) and saves weight. Fill to 100% only just before you need it at a confirmed stop.',
         fr_l:'R&egrave;gle des 20%&nbsp;: voyager avec &le;20% d&rsquo;eau fra&icirc;che pendant le trajet',
@@ -933,7 +986,7 @@ var CATS = [
         fr_l:'[Option 4] Surveillance temp&eacute;rature r&eacute;servoir (DS18B20 + Tuya WiFi) op&eacute;rationnelle',
         fr_n:'La temp&eacute;rature est la variable la plus importante pour le choix du protocole ozone. Au-dessus de 25&deg;C&nbsp;: zone de croissance critique Legionella en 3&ndash;7 jours.',
         links:[{t:'Tuya temp controller + DS18B20',u:'https://a.co/d/06hCYdLW',c:'amazon'}] },
-      { id:'w13', tags:['critical'], show:showAlways,
+      { id:'w13', sop:true, tags:['critical'], show:showAlways,
         en_l:'⚠ WINTERIZATION: ALL interior filtration systems removed before blowing lines',
         en_n:'Air pressure WILL destroy the RO membrane, ACUVA UV lamp, and any in-line ceramic filter. Remove them first. Applies to BLUTEC if left in wet bay.',
         fr_l:'⚠ HIVERNISATION&nbsp;: TOUS les syst&egrave;mes de filtration int&eacute;rieurs retir&eacute;s avant de souffler les lignes',
@@ -998,7 +1051,7 @@ var CATS = [
         fr_l:'SIM ou eSIM europ&eacute;enne LTE/5G de secours obtenue et test&eacute;e',
         fr_n:'Plan B essentiel pour tous les profils &mdash; politique Starlink en &eacute;volution rapide. Vodafone ou Orange Europe recommand&eacute;s pour la couverture multi-pays. Tester avant le d&eacute;part. V&eacute;rifier que le modem/t&eacute;l&eacute;phone est d&eacute;verrouill&eacute; pour les fr&eacute;quences europ&eacute;ennes.',
         links:[{t:'Vodafone Europe',u:'https://www.vodafone.com',c:'site'},{t:'Orange Holiday Europe',u:'https://travel.orange.com',c:'site'}] },
-      { id:'t6', tags:['critical'], show:showAlways,
+      { id:'t6', sop:true, tags:['critical'], show:showAlways,
         en_l:'Wi-Fi Calling activated and tested on all phones before departure',
         en_n:'With this architecture, your Canadian number works via the RV internet (Starlink or LTE). Roaming charges become minimal. Test a real call before leaving Canada.',
         fr_l:'Appels Wi-Fi activ&eacute;s et test&eacute;s sur tous les t&eacute;l&eacute;phones avant le d&eacute;part',
@@ -1054,43 +1107,6 @@ var CATS = [
         fr_l:'Cha&icirc;nes neige lourdes ou chaussettes HD &agrave; bord (&gt;3,5t)',
         fr_n:'Les cha&icirc;nes standard pour voitures sont limit&eacute;es &agrave; 3,5t &mdash; ill&eacute;gales pour les VR &gt;3,5t. Seuls les &eacute;quipements HD certifi&eacute;s TÜV/ÖNORM accept&eacute;s dans les pays alpins. S&rsquo;applique quel que soit le style ou la dur&eacute;e &mdash; la glace, c&rsquo;est la glace.',
         links:[{t:'AutoSock HP698 (HD)',u:'https://autosock.com/products/autosock-hp698',c:'site'},{t:'Pewag Austro Super HD',u:'https://shop.pewag.com/fr/pewag-austro-super-jumelee/4034241',c:'site'}] },
-      // ── Section 6.6 — CE / ISO Safety Labels ──
-      { id:'m8', tags:['mandatory'], show:showAlways,
-        en_l:'🏷️ "WARNING — Fixed Propane Tank" sticker affixed at fill point',
-        en_n:'Required to distinguish fixed tank from removable cylinder for LPG station staff and port personnel. ISO 3864 / ISO 7010 compliant. Prevents refusal at European LPG stations and satisfies RoRo carrier requirements.',
-        fr_l:'🏷️ Autocollant &laquo;&nbsp;AVERTISSEMENT &mdash; R&eacute;servoir propane fixe&nbsp;&raquo; appos&eacute; au point de remplissage',
-        fr_n:'Requis pour distinguer le r&eacute;servoir fixe des bouteilles amovibles pour le personnel des stations GPL et du port. Conforme ISO 3864 / ISO 7010. &Eacute;vite le refus aux stations GPL europ&eacute;ennes et satisfait les exigences des transporteurs RoRo.',
-        links:[{t:'Fixed Propane Tank sticker',u:'https://a.co/d/00DphKTT',c:'amazon'}] },
-      { id:'m9', tags:['recommended'], show:showAlways,
-        en_l:'🏷️ "High current — Lithium battery system" warning label on battery compartment',
-        en_n:'ISO 3864 / ISO 7011. Alerts emergency responders and service technicians to lithium battery hazard (thermal runaway, high current). Increasingly expected in EU for RVs with upgraded LiFePO4 systems.',
-        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Haute tension &mdash; Syst&egrave;me batterie lithium&nbsp;&raquo; sur le compartiment batterie',
-        fr_n:'ISO 3864 / ISO 7011. Alerte les secouristes et techniciens sur le danger des batteries lithium (emballement thermique, haute intensit&eacute;). De plus en plus attendu en EU pour les VR avec syst&egrave;mes LiFePO4 upgrades.',
-        links:[{t:'Lithium battery warning label',u:'https://a.co/d/09xg4QxM',c:'amazon'}] },
-      { id:'m10', tags:['recommended'], show:showAlways,
-        en_l:'🏷️ "No smoking — No open flame" label near propane compartment',
-        en_n:'ISO 3864 / ISO 7012. Standard safety signage expected on any vehicle carrying LPG in Europe. Required by some ferry/RoRo operators as part of dangerous goods declaration.',
-        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;D&eacute;fense de fumer &mdash; Pas de flamme&nbsp;&raquo; pr&egrave;s du compartiment propane',
-        fr_n:'ISO 3864 / ISO 7012. Signalisation de s&eacute;curit&eacute; standard attendue sur tout v&eacute;hicule transportant du GPL en Europe. Exig&eacute;e par certains op&eacute;rateurs ferry/RoRo dans le cadre de la d&eacute;claration de marchandises dangereuses.',
-        links:[{t:'No smoking / open flame label',u:'https://a.co/d/0eTSaGBf',c:'amazon'}] },
-      { id:'m11', tags:['recommended'], show:showAlways,
-        en_l:'🏷️ "Danger — Propane" hazmat label on tank compartment exterior',
-        en_n:'ISO 3864 / ISO 7013. Identifies LPG as hazardous material to emergency services. Required for RoRo shipping declaration and increasingly for campsite entry in some European countries.',
-        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Danger &mdash; Propane&nbsp;&raquo; sur l&rsquo;ext&eacute;rieur du compartiment r&eacute;servoir',
-        fr_n:'ISO 3864 / ISO 7013. Identifie le GPL comme mati&egrave;re dangereuse pour les services d&rsquo;urgence. Requis pour la d&eacute;claration d&rsquo;exp&eacute;dition RoRo et de plus en plus pour l&rsquo;entr&eacute;e dans certains campings europ&eacute;ens.',
-        links:[{t:'Danger Propane label',u:'https://a.co/d/0gGdEPyN',c:'amazon'}] },
-      { id:'m12', tags:['recommended'], show:showAlways,
-        en_l:'🏷️ "First Aid Kit — Location" label visible from RV entrance',
-        en_n:'ISO 3864 / ISO 7014. First aid kit location marking is required in many EU commercial vehicles and strongly recommended for all RVs. Emergency services expect to find it quickly.',
-        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Trousse de premiers soins &mdash; Emplacement&nbsp;&raquo; visible depuis l&rsquo;entr&eacute;e',
-        fr_n:'ISO 3864 / ISO 7014. Marquage de l&rsquo;emplacement de la trousse de premiers soins obligatoire dans de nombreux v&eacute;hicules commerciaux EU et fortement recommand&eacute; pour tous les VR. Les services d&rsquo;urgence s&rsquo;attendent &agrave; la trouver rapidement.',
-        links:[{t:'First Aid Kit location label',u:'https://a.co/d/03rY2Ckm',c:'amazon'}] },
-      { id:'m13', tags:['recommended'], show:showAlways,
-        en_l:'🏷️ "Fire Extinguisher — Location" label visible from RV entrance',
-        en_n:'ISO 3864 / ISO 7015. Fire extinguisher location marking required in EU commercial vehicles — strongly recommended for all RVs. Some European campgrounds and ferry operators verify this during check-in.',
-        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Extincteur &mdash; Emplacement&nbsp;&raquo; visible depuis l&rsquo;entr&eacute;e',
-        fr_n:'ISO 3864 / ISO 7015. Marquage de l&rsquo;emplacement de l&rsquo;extincteur obligatoire dans les v&eacute;hicules commerciaux EU &mdash; fortement recommand&eacute; pour tous les VR. Certains campings europ&eacute;ens et op&eacute;rateurs de ferry v&eacute;rifient cela &agrave; l&rsquo;entr&eacute;e.',
-        links:[{t:'Fire Extinguisher location label',u:'https://a.co/d/0bJFsA5F',c:'amazon'}] },
     ]
   },
 ];
@@ -1126,6 +1142,8 @@ function isInstalledVisible(item) {
 function isVisible(item) {
   if (rvFilter==='unity'  && WONDER_ONLY.indexOf(item.id)>=0) return false;
   if (rvFilter==='wonder' && UNITY_ONLY.indexOf(item.id)>=0) return false;
+  if (item.divider) return false; // dividers handled in render
+  if (view==='sop') return !!item.sop;
   if (view==='water') return true;
   if (view==='full') return true;
   // Critical only — profile filter + installed override
@@ -1145,18 +1163,21 @@ function tagClass(tag) { return {critical:'tc',mandatory:'tm',recommended:'tr',o
 function tagLetter(tag){ return {critical:'!',mandatory:'M',recommended:'R',optional:'o'}[tag]||'o'; }
 
 function renderItem(item) {
+  if (item.divider) return '';
   var s = states[item.id]||null;
   var links = item.links||[];
+  var isOptionSub = /^\[Option/.test(lang==='fr' ? item.fr_l : item.en_l);
+  var isSop = !!item.sop;
   var linksHtml = links.length ? '<div class="item-links">'+links.map(function(l){
     var icon = l.c==='amazon'?'🛒 ':'🔗 ';
     return '<a href="'+l.u+'" target="_blank" class="ilink">'+icon+l.t+'</a>';
   }).join('')+'</div>' : '';
-  return '<div class="item-row" id="row-'+item.id+'">'+
+  return '<div class="item-row'+(isOptionSub?' option-sub':'')+'" id="row-'+item.id+'">'+
     '<div class="state-btns">'+
       '<button class="s-btn'+(s==='done'?' s-done':'')+'" onclick="toggle(\''+item.id+'\',\'done\')">✓</button>'+
       '<button class="s-btn'+(s==='na'?' s-na':'')+'" onclick="toggle(\''+item.id+'\',\'na\')">—</button>'+
     '</div>'+
-    '<span class="tag-pill '+tagClass(item.tags[0])+'">'+tagLetter(item.tags[0])+'</span>'+
+    '<span class="tag-pill '+tagClass(item.tags[0])+'">'+tagLetter(item.tags[0])+'</span>'+(isSop?'<span class="tag-pill tsop">SOP</span>':'')+
     '<div class="item-content">'+
       '<div class="item-label">'+getLabel(item)+'</div>'+
       (getNote(item)?'<div class="item-note">'+getNote(item)+'</div>':'')+
@@ -1226,7 +1247,9 @@ function toggleCat(id) {
 
 function setView(v) {
   view=v;
-  ['critical','full','water'].forEach(function(x){ document.getElementById('vb-'+x).classList.toggle('active',x===v); });
+  ['critical','full','water','sop'].forEach(function(x){
+    var el=document.getElementById('vb-'+x); if(el) el.classList.toggle('active',x===v);
+  });
   renderAll();
 }
 
@@ -1280,9 +1303,11 @@ function updateCounts() {
       }
     });
   });
+  var sop=0; CATS.forEach(function(cat){ cat.items.forEach(function(item){ if(item.sop) sop++; }); });
   document.getElementById('cnt-critical').textContent=crit;
   document.getElementById('cnt-full').textContent=full;
   document.getElementById('cnt-water').textContent=water;
+  var sopEl=document.getElementById('cnt-sop'); if(sopEl) sopEl.textContent=sop;
 }
 
 function resetAll() {
