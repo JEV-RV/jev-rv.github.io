@@ -185,8 +185,15 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
 .cfg-cb.checked{background:var(--blue);border-color:var(--blue)}
 .cfg-cb.concierge-match{border-color:var(--green)}
 .cfg-section-note{font-size:11px;color:var(--text3);padding:.5rem .75rem;border-top:.5px solid var(--border);font-style:italic}
+.cfg-back-btn{background:none;border:1.5px solid var(--border);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:all .15s}
+.cfg-back-btn:hover{border-color:var(--blue);color:var(--blue)}
 /* MRP summary */
 .mrp-wrap{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);margin-top:1.5rem;overflow:hidden}
+.mrp-section-hdr{padding:.5rem .75rem;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);background:var(--blue-bg);border-top:1px solid #bbd0f0;border-bottom:.5px solid #bbd0f0}
+.mrp-section-fixed .mrp-section-hdr{color:var(--amber);background:var(--amber-bg)}
+.mrp-section-hdr.mrp-section-fixed{color:var(--amber);background:var(--amber-bg);border-color:#e8c870}
+.mrp-table tfoot tr.mrp-subtotal td{font-weight:700;font-size:12px;background:var(--surface2);border-top:1px solid var(--border)}
+.mrp-table tfoot tr.mrp-subtotal td.tr{text-align:right;color:var(--text)}
 .mrp-header{padding:.75rem 1.25rem;background:var(--text);color:#fff;display:flex;align-items:center;gap:10px}
 .mrp-title{font-family:'DM Serif Display',serif;font-size:1rem;font-weight:400;flex:1}
 .mrp-reset{background:rgba(255,255,255,.15);border:none;color:#fff;font-size:11px;padding:3px 10px;border-radius:5px;cursor:pointer;font-family:inherit}
@@ -482,6 +489,7 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
         <div class="cfg-intro-title" id="cfg-title">⚙️ Configure your RV for Europe</div>
         <div class="cfg-intro-sub" id="cfg-sub">Concierge recommends a profile based on your trip survey. Override any category freely — your selections build the purchase list below.</div>
       </div>
+      <button class="cfg-back-btn" onclick="setView('critical')" id="cfg-back-btn">← Checklist</button>
     </div>
     <div id="cfg-root"></div>
     <div class="mrp-wrap" id="mrp-wrap">
@@ -1350,6 +1358,8 @@ function setLang(l) {
   Object.keys(L).forEach(function(k){ var el=document.getElementById(k); if (el) el.innerHTML=L[k]; });
   updateBadge();
   if (view==='configure') { renderConfigure(); } else { renderAll(); }
+  var backBtn = document.getElementById('cfg-back-btn');
+  if (backBtn) backBtn.textContent = l==='fr' ? '← Liste' : '← Checklist';
 }
 
 function updateProgress() {
@@ -1410,145 +1420,147 @@ var EUR_TO_CAD = 1.50;
 
 var CFG_CATS = [
   { id:'cfg-elec', icon:'🔌',
-    en:'Electricity', fr:'Électricité',
+    en:'Electricity', fr:'\u00c9lectricit\u00e9',
     systems:[
       { id:'cs-e1',
-        en_name:'Step-down transformer 230V→120V',
-        fr_name:'Transformateur abaisseur 230V→120V',
+        en_name:'Option 1 \u2014 Step-down transformer 230V\u2192120V',
+        fr_name:'Option 1 \u2014 Transformateur abaisseur 230V\u2192120V',
         minimal:true, recommended:false, advanced:false,
-        price_eur:160,
+        price_cad:180,
         chain:[
           {en:'VEVOR 3000W',fr:'VEVOR 3000W',url:'https://www.vevor.ca/voltage-converter-transformer-c_12206/vevor-voltage-converter-transformer-3000w'},
-          {en:'CEE 16A 25m cable',fr:'Câble CEE 16A 25m',url:'https://amzn.eu/d/08UpiWo7'}
+          {en:'CEE 16A 25m cable',fr:'C\u00e2ble CEE 16A 25m',url:'https://amzn.eu/d/08UpiWo7'}
         ]
       },
       { id:'cs-e2',
-        en_name:'Victron IP43 — permanent charger system',
-        fr_name:'Victron IP43 — système chargeur permanent',
+        en_name:'Option 2 \u2014 Victron IP43 permanent charger system',
+        fr_name:'Option 2 \u2014 Victron IP43 syst\u00e8me chargeur permanent',
         minimal:false, recommended:true, advanced:true,
-        price_eur:520,
+        price_cad:1349,
         chain:[
           {en:'P17 CEE inlet',fr:'Prise P17 CEE',url:'https://amzn.eu/d/09J7vggV'},
-          {en:'Under-chassis cable',fr:'Câble sous-châssis',url:'https://a.co/d/0arkDRem'},
-          {en:'IP43 50A charger',fr:'Chargeur IP43 50A',url:'https://a.co/d/082EkWvF'},
+          {en:'Under-chassis cable',fr:'C\u00e2ble sous-ch\u00e2ssis',url:'https://a.co/d/0arkDRem'},
+          {en:'Victron IP43 50A charger',fr:'Chargeur Victron IP43 50A',url:'https://a.co/d/082EkWvF'},
           {en:'Bus bar',fr:'Bus bar',url:'https://a.co/d/07VbpEPy'},
-          {en:'50A breaker',fr:'Disj. 50A',url:'https://a.co/d/03t0rquT'},
-          {en:'Schwabe FI breaker',fr:'Disj. Schwabe FI',url:'https://amzn.eu/d/0eWNTHW9'},
-          {en:'CEE 16A 25m cable',fr:'Câble CEE 16A 25m',url:'https://amzn.eu/d/08UpiWo7'},
-          {en:'CEE→NA adapter',fr:'Adapt. CEE→NA',url:'https://a.co/d/089sUAGJ'}
+          {en:'50A inline breaker',fr:'Disj. 50A inline',url:'https://a.co/d/03t0rquT'},
+          {en:'Schwabe FI+LS breaker',fr:'Disj. Schwabe FI+LS',url:'https://amzn.eu/d/0eWNTHW9'},
+          {en:'Battery master switch',fr:'Interrupteur principal batterie',url:'https://a.co/d/0hn0QwqK'},
+          {en:'Blue Sea 7700 solenoid',fr:'Sol\u00e9no\u00efde Blue Sea 7700',url:'https://a.co/d/0ddqm41p'},
+          {en:'CEE\u2192NA adapter',fr:'Adapt. CEE\u2192NA',url:'https://a.co/d/089sUAGJ'}
         ]
       },
       { id:'cs-e3',
-        en_name:'Victron Orion XS 1400 DC-DC (Unity only)',
-        fr_name:'Victron Orion XS 1400 DC-DC (Unity seulement)',
+        en_name:'Option 3 \u2014 Victron Orion XS 1400 DC-DC (Unity only)',
+        fr_name:'Option 3 \u2014 Victron Orion XS 1400 DC-DC (Unity seulement)',
         minimal:false, recommended:false, advanced:true,
-        price_eur:380,
+        price_cad:469,
         chain:[
           {en:'Orion XS 12/12-50A',fr:'Orion XS 12/12-50A',url:'https://a.co/d/0bEz2szx'},
-          {en:'Sprinter busbar A9075454100',fr:'Busbar Sprinter A9075454100',url:'https://agileoffroad.com/product/t-bar-extension-kit-for-sprinter-by-agile-offroad/'}
+          {en:'Sprinter busbar T-bar kit',fr:'Busbar Sprinter T-bar',url:'https://agileoffroad.com/product/t-bar-extension-kit-for-sprinter-by-agile-offroad/'}
         ]
       }
     ]
   },
-  { id:'cfg-water', icon:'💧',
-    en:'Water Treatment', fr:'Traitement de l\'eau',
+  { id:'cfg-water', icon:'\ud83d\udca7',
+    en:'Water Treatment', fr:'Traitement de l\u2019eau',
     systems:[
       { id:'cs-w1',
-        en_name:'Option 1 — Adapters + OEM filter + Aquatabs',
-        fr_name:'Option 1 — Adaptateurs + filtre OEM + Aquatabs',
+        en_name:'Option 1 \u2014 Adapters + OEM filter + Aquatabs',
+        fr_name:'Option 1 \u2014 Adaptateurs + filtre OEM + Aquatabs',
         minimal:true, recommended:true, advanced:true,
-        price_eur:60,
+        price_cad:146,
         chain:[
-          {en:'BSP→NPT adapter',fr:'Adapt. BSP→NPT',url:'https://a.co/d/01oYqoqp'},
-          {en:'Universal tap set',fr:'Jeu adaptateurs tap',url:'https://amzn.eu/d/0eMqEsvs'},
-          {en:'OEM carbon filter (Unity)',fr:'Filtre carbone OEM (Unity)',url:'https://a.co/d/029D2H9f'},
-          {en:'Aquatabs 334mg',fr:'Aquatabs 334mg',url:'https://a.co/d/3ppxq14'}
+          {en:'BSP\u2192NPT adapter',fr:'Adapt. BSP\u2192NPT',url:'https://a.co/d/01oYqoqp'},
+          {en:'Universal tap connector set',fr:'Jeu adaptateurs tap',url:'https://amzn.eu/d/0eMqEsvs'},
+          {en:'Flow-Pur carbon filter 4-pk (Unity)',fr:'Filtre carbone 4-pk (Unity)',url:'https://a.co/d/029D2H9f'},
+          {en:'Aquatabs 334mg 100-pk',fr:'Aquatabs 334mg 100-pk',url:'https://a.co/d/3ppxq14'}
         ]
       },
       { id:'cs-w2',
-        en_name:'Option 2 — BLUTEC AR3 inlet pre-filter',
-        fr_name:'Option 2 — Préfiltre BLUTEC AR3',
+        en_name:'Option 2 \u2014 BLUTEC AR3 inlet pre-filter system',
+        fr_name:'Option 2 \u2014 Syst\u00e8me BLUTEC AR3 pr\u00e9filtration',
         minimal:false, recommended:true, advanced:true,
-        price_eur:280,
+        price_cad:2298,
         chain:[
-          {en:'BLUTEC AR3',fr:'BLUTEC AR3',url:'https://goblutech.com/products/ar3-led-uvc-rv-water-filtration-purification-system'},
+          {en:'BLUTEC AR3 LED UVC',fr:'BLUTEC AR3 LED UVC',url:'https://goblutech.com/products/ar3-led-uvc-rv-water-filtration-purification-system'},
           {en:'Offgrid+ recharge pack',fr:'Pack recharge Offgrid+',url:'https://goblutech.com/products/offgrid-plus-filter-recharge-pack'},
-          {en:'Pressure regulator',fr:'Régulateur pression',url:'https://a.co/d/09b2nwiy'},
+          {en:'Pressure regulator',fr:'R\u00e9gulateur pression',url:'https://a.co/d/09b2nwiy'},
           {en:'USB-A/C socket wet bay',fr:'Prise USB-A/C compartiment humide',url:'https://a.co/d/05JqDkvg'}
         ]
       },
       { id:'cs-w3',
-        en_name:'Option 3 — NOVO RO + ACUVA UV point-of-use',
-        fr_name:'Option 3 — NOVO OI + ACUVA UV point d\'usage',
+        en_name:'Option 3 \u2014 NOVO RO + ACUVA UV point-of-use',
+        fr_name:'Option 3 \u2014 NOVO OI + ACUVA UV point d\u2019usage',
         minimal:false, recommended:false, advanced:true,
-        price_eur:720,
+        price_cad:1792,
         chain:[
           {en:'NOVO CRO-800UX6 RO',fr:'NOVO CRO-800UX6 OI',url:'https://novowater.com/tankless-ro-cro-800ux6/'},
-          {en:'Woder carbon pre-filter',fr:'Préfiltre carbone Woder',url:'https://woder.com/products/wd-g4-210-jg/'},
-          {en:'ACUVA ArrowMax 1.2 UV',fr:'ACUVA ArrowMax 1.2 UV',url:'https://thecabindepot.ca/fr/products/watersprint-arrowmax-explore-2'},
-          {en:'ACUVA ACU600 prefilter',fr:'Préfiltre ACUVA ACU600',url:'https://www.walmart.com/ip/Acuva-Technologies-ACU600-1379-Advanced-Prefilter-for-Water-Purification-Systems/1445225699'},
-          {en:'Remineralization filter',fr:'Filtre reminéralisant',url:'https://a.co/d/0xg5GXC'}
+          {en:'Woder carbon pre-filter NSF-42',fr:'Pr\u00e9filtre carbone Woder NSF-42',url:'https://woder.com/products/wd-g4-210-jg/'},
+          {en:'ACUVA ArrowMax 1.2 UV-LED',fr:'ACUVA ArrowMax 1.2 UV-LED',url:'https://thecabindepot.ca/fr/products/watersprint-arrowmax-explore-2'},
+          {en:'ACUVA ACU600 prefilter',fr:'Pr\u00e9filtre ACUVA ACU600',url:'https://www.walmart.com/ip/Acuva-Technologies-ACU600-1379-Advanced-Prefilter-for-Water-Purification-Systems/1445225699'},
+          {en:'Remineralization + pH filter',fr:'Filtre remin\u00e9ralisant + pH',url:'https://a.co/d/0xg5GXC'},
+          {en:'Chlorine test strips',fr:'Bandelettes chlore',url:'https://a.co/d/05yLVva8'}
         ]
       },
       { id:'cs-w4',
-        en_name:'Option 4 — Ozone generator + temp monitor',
-        fr_name:'Option 4 — Générateur ozone + sonde temp.',
+        en_name:'Option 4 \u2014 Ozone generator + temp monitor',
+        fr_name:'Option 4 \u2014 G\u00e9n\u00e9rateur ozone + sonde temp.',
         minimal:false, recommended:false, advanced:true,
-        price_eur:180,
+        price_cad:159,
         chain:[
-          {en:'Airthereal AH1000',fr:'Airthereal AH1000',url:'https://airthereal.com/products/ah1000-water-ozone-generator'},
-          {en:'0.5µm diffusion wand',fr:'Wand diffusion 0.5µm',url:'https://www.brewhardware.com/product_p/oxygenstonewand.htm'},
+          {en:'Airthereal AH1000 ozone',fr:'Airthereal AH1000 ozone',url:'https://airthereal.com/products/ah1000-water-ozone-generator'},
+          {en:'0.5\u00b5m diffusion wand',fr:'Wand diffusion 0.5\u00b5m',url:'https://www.brewhardware.com/product_p/oxygenstonewand.htm'},
           {en:'Silicone tubing',fr:'Tuyau silicone',url:'https://a.co/d/0fCxkBED'},
-          {en:'Tuya temp controller + DS18B20',fr:'Contrôleur Tuya + DS18B20',url:'https://a.co/d/06hCYdLW'}
+          {en:'Tuya temp controller + DS18B20',fr:'Contr\u00f4leur Tuya + DS18B20',url:'https://a.co/d/06hCYdLW'}
         ]
       }
     ]
   },
-  { id:'cfg-telecom', icon:'📡',
-    en:'Telecom & Connectivity', fr:'Télécom & Connectivité',
+  { id:'cfg-telecom', icon:'\ud83d\udce1',
+    en:'Telecom & Connectivity', fr:'T\u00e9l\u00e9com & Connectivit\u00e9',
     systems:[
       { id:'cs-t1',
-        en_name:'Garmin RV GPS 895 or 1095',
-        fr_name:'GPS VR Garmin 895 ou 1095',
+        en_name:'Garmin RV GPS 895 or 1095 \u2014 essential all profiles',
+        fr_name:'GPS VR Garmin 895 ou 1095 \u2014 essentiel tous profils',
         minimal:true, recommended:true, advanced:true,
-        price_eur:420,
+        price_cad:1170,
         chain:[
           {en:'Garmin RV 895/1095',fr:'Garmin RV 895/1095',url:'https://a.co/d/01kUGHPT'}
         ]
       },
       { id:'cs-t2',
-        en_name:'Level 1 — Dual-eSIM phones only',
-        fr_name:'Niveau 1 — Dual-eSIM téléphones seulement',
+        en_name:'Level 1 \u2014 Dual-eSIM phones only',
+        fr_name:'Niveau 1 \u2014 Dual-eSIM t\u00e9l\u00e9phones seulement',
         minimal:true, recommended:false, advanced:false,
-        price_eur:30,
-        en_note:'~€30/month, no hardware cost',
-        fr_note:'~30€/mois, pas de coût matériel',
+        price_cad:0,
+        en_note:'~$40\u201380 CAD/month, no hardware cost',
+        fr_note:'~40\u201380 $CAD/mois, pas de co\u00fbt mat\u00e9riel',
         chain:[
           {en:'Roamless eSIM',fr:'Roamless eSIM',url:'https://roamless.com'},
           {en:'Airalo eSIM',fr:'Airalo eSIM',url:'https://www.airalo.com'}
         ]
       },
       { id:'cs-t3',
-        en_name:'Level 2 — Starlink Mini + Nokia FastMile 5G',
-        fr_name:'Niveau 2 — Starlink Mini + Nokia FastMile 5G',
+        en_name:'Level 2 \u2014 Starlink Mini + Nokia FastMile 5G',
+        fr_name:'Niveau 2 \u2014 Starlink Mini + Nokia FastMile 5G',
         minimal:false, recommended:true, advanced:true,
-        price_eur:770,
-        en_note:'Hardware: ~€770 · Monthly: ~€120–260',
-        fr_note:'Matériel: ~770€ · Mensuel: ~120–260€',
+        price_cad:930,
+        en_note:'Hardware ~$930 CAD \u00b7 Monthly ~$160\u2013350 CAD',
+        fr_note:'Mat\u00e9riel ~930 $CAD \u00b7 Mensuel ~160\u2013350 $CAD',
         chain:[
           {en:'Starlink Mini',fr:'Starlink Mini',url:'https://www.starlink.com/roam'},
           {en:'Nokia FastMile 5G',fr:'Nokia FastMile 5G',url:'https://www.nokia.com/fixed-networks/fastmile-5g-gateways/'},
-          {en:'Vodafone Europe eSIM',fr:'eSIM Vodafone Europe',url:'https://www.vodafone.com'},
+          {en:'Vodafone EU eSIM',fr:'eSIM Vodafone EU',url:'https://www.vodafone.com'},
           {en:'Orange Holiday Europe',fr:'Orange Holiday Europe',url:'https://travel.orange.com'}
         ]
       },
       { id:'cs-t4',
-        en_name:'Level 3 — Starlink + Pepwave/Teltonika advanced',
-        fr_name:'Niveau 3 — Starlink + Pepwave/Teltonika avancé',
+        en_name:'Level 3 \u2014 Starlink + Pepwave/Teltonika advanced',
+        fr_name:'Niveau 3 \u2014 Starlink + Pepwave/Teltonika avanc\u00e9',
         minimal:false, recommended:false, advanced:true,
-        price_eur:1500,
-        en_note:'Hardware: ~€1,500+ · Monthly: ~€180–400',
-        fr_note:'Matériel: ~1 500€+ · Mensuel: ~180–400€',
+        price_cad:2050,
+        en_note:'Hardware ~$2,050 CAD+ \u00b7 Monthly ~$245\u2013550 CAD',
+        fr_note:'Mat\u00e9riel ~2 050 $CAD+ \u00b7 Mensuel ~245\u2013550 $CAD',
         chain:[
           {en:'Starlink Mini',fr:'Starlink Mini',url:'https://www.starlink.com/roam'},
           {en:'Pepwave MAX BR1 Pro 5G',fr:'Pepwave MAX BR1 Pro 5G',url:'https://www.peplink.com/products/max-br1-pro-5g/'},
@@ -1557,6 +1569,52 @@ var CFG_CATS = [
           {en:'ProtonVPN',fr:'ProtonVPN',url:'https://protonvpn.com'}
         ]
       }
+    ]
+  }
+];
+
+// Fixed items — always in MRP regardless of Configure selections
+var CFG_FIXED = [
+  { cat_en:'Propane / LPG', cat_fr:'Propane / GPL', price_cad:107,
+    en_name:'LPG adapter set (full kit)',
+    fr_name:'Jeu complet adaptateurs GPL',
+    chain:[
+      {en:'Full LPG adapter set (DISH/Euroconn/Bayonet/Euronozzle)',fr:'Jeu complet adaptateurs GPL',url:'https://amzn.eu/d/0c7XQ5dn'},
+      {en:'ACME\u2192UK Bayonet',fr:'ACME\u2192Bayonet UK',url:'https://lpggpl.com/products/acme-american-motorhome-to-uk-bayonet-autogas-lpg-filling-adapter'}
+    ]
+  },
+  { cat_en:'Waste Water', cat_fr:'Eaux us\u00e9es', price_cad:160,
+    en_name:'Portable 12V macerator kit',
+    fr_name:'Kit macerator portable 12V',
+    chain:[
+      {en:'Portable macerator kit',fr:'Kit macerator portable',url:'https://a.co/d/0iqsEmNq'}
+    ]
+  },
+  { cat_en:'Mandatory Equipment', cat_fr:'\u00c9quipements obligatoires', price_cad:50,
+    en_name:'Angles Morts stickers + Warning board',
+    fr_name:'Autocollants angles morts + panneau avertisseur',
+    chain:[
+      {en:'Angles Morts stickers x3',fr:'Autocollants angles morts x3',url:'https://amzn.eu/d/08oiQ3Tb'},
+      {en:'Warning board Spain+Italy 2-in-1',fr:'Panneau avertisseur Espagne+Italie',url:'https://amzn.eu/d/099qOlWQ'}
+    ]
+  },
+  { cat_en:'Mandatory Equipment', cat_fr:'\u00c9quipements obligatoires', price_cad:680,
+    en_name:'Snow chains/socks HD — AutoSock HP698 or Pewag Austro Super HD',
+    fr_name:'Chaînes/chaussettes neige HD — AutoSock HP698 ou Pewag Austro Super HD',
+    chain:[
+      {en:'AutoSock HP698 HD (TÜV/ÖNORM)',fr:'AutoSock HP698 HD (TÜV/ÖNORM)',url:'https://autosock.com/products/autosock-hp698'},
+      {en:'Alt: Pewag Austro Super HD',fr:'Alt: Pewag Austro Super HD',url:'https://shop.pewag.com/fr/pewag-austro-super-jumelee/4034241'}
+    ]
+  },
+  { cat_en:'Safety Labels (CE/ISO 6.6)', cat_fr:'\u00c9tiquettes s\u00e9curit\u00e9 (CE/ISO 6.6)', price_cad:65,
+    en_name:'Safety label set (5 labels)',
+    fr_name:'Jeu \u00e9tiquettes s\u00e9curit\u00e9 (5 \u00e9tiquettes)',
+    chain:[
+      {en:'Fixed Propane Tank sticker',fr:'Autocollant R\u00e9servoir Fixe Propane',url:'https://a.co/d/00DphKTT'},
+      {en:'Lithium battery label',fr:'\u00c9tiquette batterie lithium',url:'https://a.co/d/09xg4QxM'},
+      {en:'No smoking / open flame',fr:'D\u00e9fense de fumer / flamme',url:'https://a.co/d/0eTSaGBf'},
+      {en:'Danger Propane label',fr:'\u00c9tiquette Danger Propane',url:'https://a.co/d/0gGdEPyN'},
+      {en:'First Aid Kit label',fr:'\u00c9tiquette Trousse premiers soins',url:'https://a.co/d/03rY2Ckm'}
     ]
   }
 ];
@@ -1642,8 +1700,8 @@ function renderConfigure() {
   }
   var cLabel = {minimal:{en:'Minimal',fr:'Minimal'},recommended:{en:'Recommended',fr:'Recommandé'},advanced:{en:'Advanced',fr:'Avancé'}};
   var h = lang==='fr'
-    ? ['Système & composants','Prix','Concierge','Minimal','Recommandé','Avancé']
-    : ['System & components','Price','Concierge','Minimal','Recommended','Advanced'];
+    ? ['Système & composants','Prix CAD','Concierge','Minimal','Recommandé','Avancé']
+    : ['System & components','Price CAD','Concierge','Minimal','Recommended','Advanced'];
 
   var html = CFG_CATS.map(function(cat) {
     var catName = lang==='fr' ? cat.fr : cat.en;
@@ -1656,7 +1714,7 @@ function renderConfigure() {
       var isChecked = !!cfgState[sys.id];
       var pillCls = concierge ? 'cfg-pill ' + concierge : '';
       var pillTxt = getLevelLabel(concierge);
-      var priceStr = sys.price_eur ? '~\u20ac' + sys.price_eur : '\u2014';
+      var priceStr = sys.price_cad > 0 ? '~$' + sys.price_cad.toLocaleString() + ' CAD' : '—';
 
       function cbCell(level) {
         if (!sys[level]) return '<td></td>';
@@ -1688,7 +1746,7 @@ function renderConfigure() {
         '<table class="cfg-table">' +
           '<thead><tr>' +
             '<th style="width:38%">' + h[0] + '</th>' +
-            '<th style="width:8%" class="tc">' + h[1] + '</th>' +
+            '<th style="width:10%" class="tc">' + h[1] + '</th>' +
             '<th style="width:12%" class="tc">' + h[2] + '</th>' +
             '<th style="width:14%" class="tc">' + h[3] + '</th>' +
             '<th style="width:14%" class="tc">' + h[4] + '</th>' +
@@ -1726,77 +1784,103 @@ function renderMRP() {
   var body = document.getElementById('mrp-body');
   if (!body) return;
 
-  // Collect selected systems
+  var CAD_TO_USD = 0.73;
+  var CAD_TO_EUR = 0.66;
+
+  // Collect selected configurable systems
   var selected = [];
   CFG_CATS.forEach(function(cat) {
     cat.systems.forEach(function(sys) {
-      if (cfgState[sys.id]) {
-        selected.push({cat: lang==='fr'?cat.fr:cat.en, sys: sys});
-      }
+      if (cfgState[sys.id]) selected.push({cat: lang==='fr'?cat.fr:cat.en, sys: sys});
     });
   });
 
   // Update configure button count
   var cfgCountEl = document.getElementById('cnt-configure');
-  if (cfgCountEl) cfgCountEl.textContent = selected.length > 0 ? selected.length : '—';
+  if (cfgCountEl) cfgCountEl.textContent = selected.length > 0 ? selected.length : '\u2014';
 
-  if (!selected.length) {
-    body.innerHTML = '<div class="mrp-empty">' +
-      (lang==='fr' ? 'Aucun système sélectionné — cochez les cases ci-dessus pour construire votre liste d\'achat.' :
-       'No systems selected — check boxes above to build your purchase list.') + '</div>';
-    return;
+  var hdrs = lang==='fr'
+    ? ['Cat\u00e9gorie','Syst\u00e8me / Composants cl\u00e9s','Prix CAD']
+    : ['Category','System / Key components','Price CAD'];
+
+  var grandTotal = 0;
+  var html = '';
+
+  // ── Section 1: Configurable selections ──────────────────────────
+  if (selected.length) {
+    var cfgTotal = 0;
+    var rows = selected.map(function(item) {
+      var sys = item.sys;
+      var sysName = lang==='fr' ? sys.fr_name : sys.en_name;
+      var price = sys.price_cad || 0;
+      cfgTotal += price;
+      var chainShort = sys.chain.map(function(c){ return lang==='fr'?c.fr:c.en; }).join(' \u203a ');
+      var priceStr = price > 0 ? '$' + price.toLocaleString() : (lang==='fr'?'Aucun mat\u00e9riel':'No hardware');
+      return '<tr><td style="color:var(--text2)">' + item.cat + '</td>' +
+        '<td><span style="font-weight:500;display:block">' + sysName + '</span>' +
+        '<span style="font-size:10px;color:var(--text3)">' + chainShort + '</span></td>' +
+        '<td class="tr">' + priceStr + '</td></tr>';
+    }).join('');
+    grandTotal += cfgTotal;
+    var subHdr = lang==='fr' ? 'Syst\u00e8mes s\u00e9lectionn\u00e9s' : 'Selected systems';
+    html += '<div class="mrp-section-hdr">' + subHdr + '</div>' +
+      '<table class="mrp-table"><thead><tr>' +
+        '<th style="width:18%">' + hdrs[0] + '</th>' +
+        '<th style="width:64%">' + hdrs[1] + '</th>' +
+        '<th class="tr" style="width:18%">' + hdrs[2] + '</th>' +
+      '</tr></thead><tbody>' + rows + '</tbody>' +
+      '<tfoot><tr class="mrp-subtotal"><td colspan="2">' +
+        (lang==='fr'?'Sous-total syst\u00e8mes configur\u00e9s':'Subtotal configured systems') +
+      '</td><td class="tr">$' + cfgTotal.toLocaleString() + '</td></tr></tfoot>' +
+      '</table>';
+  } else {
+    html += '<div class="mrp-empty">' +
+      (lang==='fr'
+        ? 'Aucun syst\u00e8me s\u00e9lectionn\u00e9 \u2014 cochez les cases ci-dessus pour construire votre liste d\'achat.'
+        : 'No systems selected \u2014 check boxes above to build your purchase list.') +
+    '</div>';
   }
 
-  var totalEur = 0;
-  var hdrs = lang==='fr'
-    ? ['Catégorie','Système','Composants clés','Prix €']
-    : ['Category','System','Key components','Price €'];
-
-  var rows = selected.map(function(item) {
-    var sys = item.sys;
-    var sysName = lang==='fr' ? sys.fr_name : sys.en_name;
-    var price = sys.price_eur || 0;
-    totalEur += price;
-    var chainShort = sys.chain.slice(0,3).map(function(c){
-      return lang==='fr'?c.fr:c.en;
-    }).join(' › ') + (sys.chain.length>3?' › …':'');
-    return '<tr>' +
-      '<td style="color:var(--text2)">' + item.cat + '</td>' +
-      '<td style="font-weight:500">' + sysName + '</td>' +
-      '<td style="color:var(--text2);font-size:11px">' + chainShort + '</td>' +
-      '<td class="tr">~€' + price + '</td>' +
-    '</tr>';
+  // ── Section 2: Fixed items (always included) ──────────────────────
+  var fixedTotal = 0;
+  var fixedRows = CFG_FIXED.map(function(item) {
+    var catName = lang==='fr' ? item.cat_fr : item.cat_en;
+    var sysName = lang==='fr' ? item.fr_name : item.en_name;
+    var chainShort = item.chain.map(function(c){ return lang==='fr'?c.fr:c.en; }).join(' \u203a ');
+    fixedTotal += item.price_cad;
+    return '<tr><td style="color:var(--text2)">' + catName + '</td>' +
+      '<td><span style="font-weight:500;display:block">' + sysName + '</span>' +
+      '<span style="font-size:10px;color:var(--text3)">' + chainShort + '</span></td>' +
+      '<td class="tr">$' + item.price_cad.toLocaleString() + '</td></tr>';
   }).join('');
+  grandTotal += fixedTotal;
+  var fixedHdr = lang==='fr' ? '\u00c9quipements obligatoires (inclus pour tous)' : 'Mandatory equipment (included for all)';
+  html += '<div class="mrp-section-hdr mrp-section-fixed">' + fixedHdr + '</div>' +
+    '<table class="mrp-table"><thead><tr>' +
+      '<th style="width:18%">' + hdrs[0] + '</th>' +
+      '<th style="width:64%">' + hdrs[1] + '</th>' +
+      '<th class="tr" style="width:18%">' + hdrs[2] + '</th>' +
+    '</tr></thead><tbody>' + fixedRows + '</tbody>' +
+    '<tfoot><tr class="mrp-subtotal"><td colspan="2">' +
+      (lang==='fr'?'Sous-total \u00e9quipements obligatoires':'Subtotal mandatory equipment') +
+    '</td><td class="tr">$' + fixedTotal.toLocaleString() + '</td></tr></tfoot>' +
+    '</table>';
 
-  var totalUsd = Math.round(totalEur * EUR_TO_USD);
-  var totalCad = Math.round(totalEur * EUR_TO_CAD);
-
-  body.innerHTML =
-    '<table class="mrp-table">' +
-      '<thead><tr>' +
-        '<th style="width:15%">' + hdrs[0] + '</th>' +
-        '<th style="width:30%">' + hdrs[1] + '</th>' +
-        '<th style="width:37%">' + hdrs[2] + '</th>' +
-        '<th class="tr" style="width:18%">' + hdrs[3] + '</th>' +
-      '</tr></thead>' +
-      '<tbody>' + rows + '</tbody>' +
-    '</table>' +
+  // ── Grand total ────────────────────────────────────────────────────
+  var totalUSD = Math.round(grandTotal * CAD_TO_USD);
+  var totalEUR = Math.round(grandTotal * CAD_TO_EUR);
+  body.innerHTML = html +
     '<div class="mrp-totals">' +
-      '<div class="mrp-total-cell"><div class="mrp-total-label">Total EUR</div><div class="mrp-total-val">€' + totalEur + '</div></div>' +
-      '<div class="mrp-total-cell"><div class="mrp-total-label">Total USD</div><div class="mrp-total-val">$' + totalUsd + '</div></div>' +
-      '<div class="mrp-total-cell"><div class="mrp-total-label">Total CAD</div><div class="mrp-total-val">$' + totalCad + '</div></div>' +
+      '<div class="mrp-total-cell"><div class="mrp-total-label">Total CAD</div>' +
+        '<div class="mrp-total-val">$' + grandTotal.toLocaleString() + '</div></div>' +
+      '<div class="mrp-total-cell"><div class="mrp-total-label">Total USD</div>' +
+        '<div class="mrp-total-val">$' + totalUSD.toLocaleString() + '</div></div>' +
+      '<div class="mrp-total-cell"><div class="mrp-total-label">Total EUR</div>' +
+        '<div class="mrp-total-val">\u20ac' + totalEUR.toLocaleString() + '</div></div>' +
     '</div>' +
     '<div style="font-size:10px;color:var(--text3);padding:.4rem .75rem;border-top:.5px solid var(--border)">' +
       (lang==='fr'
-        ? '≈€1 = $' + EUR_TO_USD.toFixed(2) + ' USD / $' + EUR_TO_CAD.toFixed(2) + ' CAD — taux approximatifs, convertir au taux du jour'
-        : '≈€1 = $' + EUR_TO_USD.toFixed(2) + ' USD / $' + EUR_TO_CAD.toFixed(2) + ' CAD — approximate rates, convert at current rate') +
+        ? '≈ 1 $CAD = ' + CAD_TO_USD.toFixed(2) + ' USD / ' + CAD_TO_EUR.toFixed(2) + ' EUR — taux approximatifs mai 2026. Starlink non inclus (mensuel variable).'
+        : '≈ 1 CAD = ' + CAD_TO_USD.toFixed(2) + ' USD / ' + CAD_TO_EUR.toFixed(2) + ' EUR — approx. rates May 2026. Starlink not included (monthly variable).') +
     '</div>';
 }
-
-cfgLoad();
-
-load();
-loadSurvey();
-</script>
-</body>
-</html>
