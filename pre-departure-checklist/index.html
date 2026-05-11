@@ -149,6 +149,60 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
 /* ── ADMIN SAFETY LABELS DIVIDER ── */
 .admin-sub-header{display:flex;align-items:center;gap:8px;padding:.55rem 1.25rem .4rem;background:#fff3cd;border-top:2px solid #f59e0b;border-bottom:1px solid #fde68a;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#92400e;margin-top:2px}
 .admin-sub-header.sop-header{background:#e0f4f7;border-top-color:var(--teal);border-bottom-color:#a8e0e8;color:var(--teal)}
+
+/* ── CONFIGURE MODE ── */
+.configure-wrap{display:none}.configure-wrap.show{display:block}
+.cfg-intro{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.cfg-intro-text{flex:1;min-width:200px}
+.cfg-intro-title{font-family:'DM Serif Display',serif;font-size:1rem;margin-bottom:.25rem}
+.cfg-intro-sub{font-size:12px;color:var(--text2);line-height:1.5}
+.cfg-cat{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden}
+.cfg-cat-header{display:flex;align-items:center;gap:10px;padding:.75rem 1.25rem;background:var(--surface2);border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+.cfg-cat-icon{font-size:18px;flex-shrink:0}
+.cfg-cat-title{font-family:'DM Serif Display',serif;font-size:1rem;font-weight:400;flex:1}
+.cfg-cat-badge{font-size:11px;font-weight:600;padding:2px 9px;border-radius:10px;background:var(--blue-bg);color:var(--blue);flex-shrink:0}
+.cfg-cat-chev{color:var(--text3);font-size:13px;transition:transform .2s;flex-shrink:0}
+.cfg-cat-body{display:none;overflow-x:auto}
+.cfg-cat-body.open{display:block}
+.cfg-table{width:100%;border-collapse:collapse;font-size:12px;min-width:560px}
+.cfg-table th{padding:.5rem .75rem;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap;background:var(--surface)}
+.cfg-table th.tc{text-align:center}
+.cfg-table td{padding:.55rem .75rem;border-bottom:.5px solid var(--border);vertical-align:middle}
+.cfg-table tr:last-child td{border-bottom:none}
+.cfg-table tr:hover td{background:var(--surface2)}
+.cfg-sys-name{font-weight:500;color:var(--text);font-size:12px;display:block;margin-bottom:3px}
+.cfg-chain{display:flex;flex-wrap:wrap;align-items:center;gap:3px;margin-top:2px}
+.cfg-chain a{color:var(--blue);text-decoration:none;font-size:11px;border-bottom:.5px solid #bbd0f0}
+.cfg-chain a:hover{opacity:.7}
+.cfg-chain .sep{color:var(--text3);font-size:10px;opacity:.6}
+.cfg-price{font-size:11px;color:var(--text2);white-space:nowrap;text-align:right}
+.cfg-pill{display:inline-block;padding:1px 8px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap}
+.cfg-pill.minimal{background:#f0ede6;color:#6b6860}
+.cfg-pill.recommended{background:var(--green-bg);color:var(--green)}
+.cfg-pill.advanced{background:var(--purple-bg);color:var(--purple)}
+.cfg-cb-wrap{display:flex;justify-content:center;align-items:center}
+.cfg-cb{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff}
+.cfg-cb.checked{background:var(--blue);border-color:var(--blue)}
+.cfg-cb.concierge-match{border-color:var(--green)}
+.cfg-section-note{font-size:11px;color:var(--text3);padding:.5rem .75rem;border-top:.5px solid var(--border);font-style:italic}
+/* MRP summary */
+.mrp-wrap{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);margin-top:1.5rem;overflow:hidden}
+.mrp-header{padding:.75rem 1.25rem;background:var(--text);color:#fff;display:flex;align-items:center;gap:10px}
+.mrp-title{font-family:'DM Serif Display',serif;font-size:1rem;font-weight:400;flex:1}
+.mrp-reset{background:rgba(255,255,255,.15);border:none;color:#fff;font-size:11px;padding:3px 10px;border-radius:5px;cursor:pointer;font-family:inherit}
+.mrp-reset:hover{background:rgba(255,255,255,.25)}
+.mrp-table{width:100%;border-collapse:collapse;font-size:12px}
+.mrp-table th{padding:.45rem .75rem;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);background:var(--surface2)}
+.mrp-table th.tr{text-align:right}
+.mrp-table td{padding:.5rem .75rem;border-bottom:.5px solid var(--border);font-size:12px}
+.mrp-table td.tr{text-align:right;color:var(--text2)}
+.mrp-table tr:last-child td{border-bottom:none}
+.mrp-totals{display:flex;gap:0;border-top:2px solid var(--border)}
+.mrp-total-cell{flex:1;padding:.75rem 1rem;text-align:center;border-right:.5px solid var(--border)}
+.mrp-total-cell:last-child{border-right:none}
+.mrp-total-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:3px}
+.mrp-total-val{font-size:1.1rem;font-weight:700;color:var(--text)}
+.mrp-empty{padding:1.5rem;text-align:center;color:var(--text3);font-size:13px}
 </style>
 </head>
 <body>
@@ -390,6 +444,9 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
       <button class="view-btn" id="vb-water" onclick="setView('water')">
         💧 <span id="lbl-water">Water only</span> <span class="vb-count" id="cnt-water">—</span>
       </button>
+      <button class="view-btn" id="vb-configure" onclick="setView('configure')">
+        ⚙️ <span id="lbl-configure">Configure</span>
+      </button>
       <button class="view-btn" id="vb-sop" onclick="setView('sop')">
         🔧 <span id="lbl-sop">SOPs only</span> <span class="vb-count" id="cnt-sop">—</span>
       </button>
@@ -418,6 +475,24 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
     </p>
   </div>
 
+  <!-- ── CONFIGURE MODE ── -->
+  <div class="configure-wrap" id="configure-wrap">
+    <div class="cfg-intro">
+      <div class="cfg-intro-text">
+        <div class="cfg-intro-title" id="cfg-title">⚙️ Configure your RV for Europe</div>
+        <div class="cfg-intro-sub" id="cfg-sub">Concierge recommends a profile based on your trip survey. Override any category freely — your selections build the purchase list below.</div>
+      </div>
+    </div>
+    <div id="cfg-root"></div>
+    <div class="mrp-wrap" id="mrp-wrap">
+      <div class="mrp-header">
+        <span class="mrp-title" id="mrp-title">📋 Purchase list (MRP)</span>
+        <button class="mrp-reset" onclick="resetCfg()" id="mrp-reset-btn">↺ Reset</button>
+      </div>
+      <div id="mrp-body"></div>
+    </div>
+  </div>
+
 </div><!-- /main -->
 
 <footer class="footer">
@@ -442,6 +517,7 @@ var LANG = {
     'wl-campgrounds':'Campgrounds','wl-mixed':'Mixed','wl-offgrid':'Off-grid / Boondocking',
     'rental-title':'🔑 Renting locally — this checklist doesn\'t apply to you',
     'rental-body':'This checklist is designed for owners shipping their own RV to Europe via RoRo. If you\'re renting locally, the rental company handles all equipment adaptations. See <strong>Guide 2</strong> for RoRo logistics and <strong>Guide 11</strong> for the local rental option comparison.',
+    'lbl-configure':'Configure',
     'lbl-sop':'SOPs only',
     'lbl-critical':'Critical only','lbl-full':'Full list','lbl-water':'Water only',
     'lbl-rv':'My RV:','lbl-reset':'&#x21BA; Reset',
@@ -462,6 +538,7 @@ var LANG = {
     'wl-campgrounds':'Campings','wl-mixed':'Mixte','wl-offgrid':'Autonomie / Boondocking',
     'rental-title':'🔑 Location sur place — cette liste ne vous concerne pas',
     'rental-body':'Cette liste est con&ccedil;ue pour les propri&eacute;taires qui exp&eacute;dient leur propre VR en Europe par RoRo. Si vous louez sur place, le loueur g&egrave;re toutes les adaptations. Voir le <strong>Guide 2</strong> pour la logistique RoRo et le <strong>Guide 11</strong> pour la comparaison location vs propri&eacute;t&eacute;.',
+    'lbl-configure':'Configurer',
     'lbl-sop':'Protocoles seulement',
     'lbl-critical':'Critique uniquement','lbl-full':'Liste compl&egrave;te','lbl-water':'Eau uniquement',
     'lbl-rv':'Mon VR&nbsp;:','lbl-reset':'&#x21BA; R&eacute;initialiser',
@@ -889,13 +966,13 @@ var CATS = [
         fr_l:'Choisir UNE strat&eacute;gie d&rsquo;alimentation (transformateur OU chargeur Victron &mdash; pas les deux)',
         fr_n:'S&eacute;lectionner votre option ci-dessous. &rarr; Guide 6 Section 1.',
         links:[] },
-      { id:'e2', tags:['optional'], show:showAlways,
+      { id:'e2', tags:['mandatory'], show:showAlways,
         en_l:'[Option 1] Step-down transformer purchased &mdash; VEVOR 3000W or equivalent',
         en_n:'Max continuous load = 80% rated capacity (2,400W). Not weatherproof &mdash; keep dry, ventilate during use. Requires a 25m CEE 16A cable.',
         fr_l:'[Option 1] Transformateur abaisseur achet&eacute; &mdash; VEVOR 3000W ou &eacute;quivalent',
         fr_n:'Charge continue max = 80% de la capacit&eacute; nominale (2&nbsp;400W). Pas &eacute;tanche &mdash; garder au sec, ventiler pendant l&rsquo;utilisation. Requiert un c&acirc;ble CEE 16A 25m.',
         links:[{t:'VEVOR 3000W',u:'https://www.vevor.ca/voltage-converter-transformer-c_12206/vevor-voltage-converter-transformer-3000w',c:'amazon'}] },
-      { id:'e3', tags:['optional'], show:showAlways,
+      { id:'e3', tags:['mandatory'], show:showAlways,
         en_l:'[Option 2] Victron IP43 permanent charging system &mdash; installed, tested, VictronConnect configured',
         en_n:'Full component list: <a href="https://amzn.eu/d/09J7vggV" target="_blank">P17 CEE inlet</a> · <a href="https://a.co/d/0arkDRem" target="_blank">under-chassis cable</a> · <a href="https://a.co/d/082EkWvF" target="_blank">IP43 50A charger</a> · <a href="https://a.co/d/07VbpEPy" target="_blank">bus bar</a> · <a href="https://a.co/d/03t0rquT" target="_blank">inline 50A breaker</a> · <a href="https://amzn.eu/d/0eWNTHW9" target="_blank">Schwabe FI breaker</a> · <a href="https://a.co/d/0hn0QwqK" target="_blank">master switch</a> · <a href="https://a.co/d/0ddqm41p" target="_blank">Blue Sea 7700 solenoid</a> · <a href="https://a.co/d/089sUAGJ" target="_blank">CEE&rarr;NA adapter (fallback 120V)</a>. Set VictronConnect input limit to 6A default. Charger does NOT supply 120V — existing inverter handles all 120V loads.',
         fr_l:'[Option 2] Syst&egrave;me de charge Victron IP43 permanent &mdash; install&eacute;, test&eacute;, VictronConnect configur&eacute;',
@@ -1243,10 +1320,20 @@ function toggleCat(id) {
 
 function setView(v) {
   view=v;
-  ['critical','full','water','sop'].forEach(function(x){
+  ['critical','full','water','sop','configure'].forEach(function(x){
     var el=document.getElementById('vb-'+x); if(el) el.classList.toggle('active',x===v);
   });
-  renderAll();
+  var isConfig = v==='configure';
+  var cw=document.getElementById('configure-wrap');
+  var cl=document.getElementById('checklist-wrap');
+  var pw=document.querySelector('.progress-wrap');
+  var lw=document.querySelector('.legend');
+  if(cw) cw.classList.toggle('show', isConfig);
+  if(cl) cl.classList.toggle('show', !isConfig && isProfileComplete());
+  if(pw) pw.style.display = isConfig ? 'none' : '';
+  if(lw) lw.style.display = isConfig ? 'none' : '';
+  if(isConfig) renderConfigure();
+  else renderAll();
 }
 
 function setRV(rv) {
@@ -1316,7 +1403,370 @@ function resetAll() {
 function save() { try { localStorage.setItem('cl-v3',JSON.stringify(states)); } catch(e) {} }
 function load() { try { var s=localStorage.getItem('cl-v3'); if (s) states=JSON.parse(s); } catch(e) {} }
 
+// ── CONFIGURE MODE DATA ──────────────────────────────────────────────────────
+var EUR_TO_USD = 1.09;
+var EUR_TO_CAD = 1.50;
+
+var CFG_CATS = [
+  { id:'cfg-elec', icon:'🔌',
+    en:'Electricity', fr:'Électricité',
+    systems:[
+      { id:'cs-e1',
+        en_name:'Step-down transformer 230V→120V',
+        fr_name:'Transformateur abaisseur 230V→120V',
+        minimal:true, recommended:false, advanced:false,
+        price_eur:160,
+        chain:[
+          {en:'VEVOR 3000W',fr:'VEVOR 3000W',url:'https://www.vevor.ca/voltage-converter-transformer-c_12206/vevor-voltage-converter-transformer-3000w'},
+          {en:'CEE 16A 25m cable',fr:'Câble CEE 16A 25m',url:'https://amzn.eu/d/08UpiWo7'}
+        ]
+      },
+      { id:'cs-e2',
+        en_name:'Victron IP43 — permanent charger system',
+        fr_name:'Victron IP43 — système chargeur permanent',
+        minimal:false, recommended:true, advanced:true,
+        price_eur:520,
+        chain:[
+          {en:'P17 CEE inlet',fr:'Prise P17 CEE',url:'https://amzn.eu/d/09J7vggV'},
+          {en:'Under-chassis cable',fr:'Câble sous-châssis',url:'https://a.co/d/0arkDRem'},
+          {en:'IP43 50A charger',fr:'Chargeur IP43 50A',url:'https://a.co/d/082EkWvF'},
+          {en:'Bus bar',fr:'Bus bar',url:'https://a.co/d/07VbpEPy'},
+          {en:'50A breaker',fr:'Disj. 50A',url:'https://a.co/d/03t0rquT'},
+          {en:'Schwabe FI breaker',fr:'Disj. Schwabe FI',url:'https://amzn.eu/d/0eWNTHW9'},
+          {en:'CEE 16A 25m cable',fr:'Câble CEE 16A 25m',url:'https://amzn.eu/d/08UpiWo7'},
+          {en:'CEE→NA adapter',fr:'Adapt. CEE→NA',url:'https://a.co/d/089sUAGJ'}
+        ]
+      },
+      { id:'cs-e3',
+        en_name:'Victron Orion XS 1400 DC-DC (Unity only)',
+        fr_name:'Victron Orion XS 1400 DC-DC (Unity seulement)',
+        minimal:false, recommended:false, advanced:true,
+        price_eur:380,
+        chain:[
+          {en:'Orion XS 12/12-50A',fr:'Orion XS 12/12-50A',url:'https://a.co/d/0bEz2szx'},
+          {en:'Sprinter busbar A9075454100',fr:'Busbar Sprinter A9075454100',url:'https://agileoffroad.com/product/t-bar-extension-kit-for-sprinter-by-agile-offroad/'}
+        ]
+      }
+    ]
+  },
+  { id:'cfg-water', icon:'💧',
+    en:'Water Treatment', fr:'Traitement de l'eau',
+    systems:[
+      { id:'cs-w1',
+        en_name:'Option 1 — Adapters + OEM filter + Aquatabs',
+        fr_name:'Option 1 — Adaptateurs + filtre OEM + Aquatabs',
+        minimal:true, recommended:true, advanced:true,
+        price_eur:60,
+        chain:[
+          {en:'BSP→NPT adapter',fr:'Adapt. BSP→NPT',url:'https://a.co/d/01oYqoqp'},
+          {en:'Universal tap set',fr:'Jeu adaptateurs tap',url:'https://amzn.eu/d/0eMqEsvs'},
+          {en:'OEM carbon filter (Unity)',fr:'Filtre carbone OEM (Unity)',url:'https://a.co/d/029D2H9f'},
+          {en:'Aquatabs 334mg',fr:'Aquatabs 334mg',url:'https://a.co/d/3ppxq14'}
+        ]
+      },
+      { id:'cs-w2',
+        en_name:'Option 2 — BLUTEC AR3 inlet pre-filter',
+        fr_name:'Option 2 — Préfiltre BLUTEC AR3',
+        minimal:false, recommended:true, advanced:true,
+        price_eur:280,
+        chain:[
+          {en:'BLUTEC AR3',fr:'BLUTEC AR3',url:'https://goblutech.com/products/ar3-led-uvc-rv-water-filtration-purification-system'},
+          {en:'Offgrid+ recharge pack',fr:'Pack recharge Offgrid+',url:'https://goblutech.com/products/offgrid-plus-filter-recharge-pack'},
+          {en:'Pressure regulator',fr:'Régulateur pression',url:'https://a.co/d/09b2nwiy'},
+          {en:'USB-A/C socket wet bay',fr:'Prise USB-A/C compartiment humide',url:'https://a.co/d/05JqDkvg'}
+        ]
+      },
+      { id:'cs-w3',
+        en_name:'Option 3 — NOVO RO + ACUVA UV point-of-use',
+        fr_name:'Option 3 — NOVO OI + ACUVA UV point d'usage',
+        minimal:false, recommended:false, advanced:true,
+        price_eur:720,
+        chain:[
+          {en:'NOVO CRO-800UX6 RO',fr:'NOVO CRO-800UX6 OI',url:'https://novowater.com/tankless-ro-cro-800ux6/'},
+          {en:'Woder carbon pre-filter',fr:'Préfiltre carbone Woder',url:'https://woder.com/products/wd-g4-210-jg/'},
+          {en:'ACUVA ArrowMax 1.2 UV',fr:'ACUVA ArrowMax 1.2 UV',url:'https://thecabindepot.ca/fr/products/watersprint-arrowmax-explore-2'},
+          {en:'ACUVA ACU600 prefilter',fr:'Préfiltre ACUVA ACU600',url:'https://www.walmart.com/ip/Acuva-Technologies-ACU600-1379-Advanced-Prefilter-for-Water-Purification-Systems/1445225699'},
+          {en:'Remineralization filter',fr:'Filtre reminéralisant',url:'https://a.co/d/0xg5GXC'}
+        ]
+      },
+      { id:'cs-w4',
+        en_name:'Option 4 — Ozone generator + temp monitor',
+        fr_name:'Option 4 — Générateur ozone + sonde temp.',
+        minimal:false, recommended:false, advanced:true,
+        price_eur:180,
+        chain:[
+          {en:'Airthereal AH1000',fr:'Airthereal AH1000',url:'https://airthereal.com/products/ah1000-water-ozone-generator'},
+          {en:'0.5µm diffusion wand',fr:'Wand diffusion 0.5µm',url:'https://www.brewhardware.com/product_p/oxygenstonewand.htm'},
+          {en:'Silicone tubing',fr:'Tuyau silicone',url:'https://a.co/d/0fCxkBED'},
+          {en:'Tuya temp controller + DS18B20',fr:'Contrôleur Tuya + DS18B20',url:'https://a.co/d/06hCYdLW'}
+        ]
+      }
+    ]
+  },
+  { id:'cfg-telecom', icon:'📡',
+    en:'Telecom & Connectivity', fr:'Télécom & Connectivité',
+    systems:[
+      { id:'cs-t1',
+        en_name:'Garmin RV GPS 895 or 1095',
+        fr_name:'GPS VR Garmin 895 ou 1095',
+        minimal:true, recommended:true, advanced:true,
+        price_eur:420,
+        chain:[
+          {en:'Garmin RV 895/1095',fr:'Garmin RV 895/1095',url:'https://a.co/d/01kUGHPT'}
+        ]
+      },
+      { id:'cs-t2',
+        en_name:'Level 1 — Dual-eSIM phones only',
+        fr_name:'Niveau 1 — Dual-eSIM téléphones seulement',
+        minimal:true, recommended:false, advanced:false,
+        price_eur:30,
+        en_note:'~€30/month, no hardware cost',
+        fr_note:'~30€/mois, pas de coût matériel',
+        chain:[
+          {en:'Roamless eSIM',fr:'Roamless eSIM',url:'https://roamless.com'},
+          {en:'Airalo eSIM',fr:'Airalo eSIM',url:'https://www.airalo.com'}
+        ]
+      },
+      { id:'cs-t3',
+        en_name:'Level 2 — Starlink Mini + Nokia FastMile 5G',
+        fr_name:'Niveau 2 — Starlink Mini + Nokia FastMile 5G',
+        minimal:false, recommended:true, advanced:true,
+        price_eur:770,
+        en_note:'Hardware: ~€770 · Monthly: ~€120–260',
+        fr_note:'Matériel: ~770€ · Mensuel: ~120–260€',
+        chain:[
+          {en:'Starlink Mini',fr:'Starlink Mini',url:'https://www.starlink.com/roam'},
+          {en:'Nokia FastMile 5G',fr:'Nokia FastMile 5G',url:'https://www.nokia.com/fixed-networks/fastmile-5g-gateways/'},
+          {en:'Vodafone Europe eSIM',fr:'eSIM Vodafone Europe',url:'https://www.vodafone.com'},
+          {en:'Orange Holiday Europe',fr:'Orange Holiday Europe',url:'https://travel.orange.com'}
+        ]
+      },
+      { id:'cs-t4',
+        en_name:'Level 3 — Starlink + Pepwave/Teltonika advanced',
+        fr_name:'Niveau 3 — Starlink + Pepwave/Teltonika avancé',
+        minimal:false, recommended:false, advanced:true,
+        price_eur:1500,
+        en_note:'Hardware: ~€1,500+ · Monthly: ~€180–400',
+        fr_note:'Matériel: ~1 500€+ · Mensuel: ~180–400€',
+        chain:[
+          {en:'Starlink Mini',fr:'Starlink Mini',url:'https://www.starlink.com/roam'},
+          {en:'Pepwave MAX BR1 Pro 5G',fr:'Pepwave MAX BR1 Pro 5G',url:'https://www.peplink.com/products/max-br1-pro-5g/'},
+          {en:'Teltonika RUTX50',fr:'Teltonika RUTX50',url:'https://teltonika-networks.com/products/routers/rutx50'},
+          {en:'Poynting MIMO antenna',fr:'Antenne Poynting MIMO',url:'https://poynting.tech'},
+          {en:'ProtonVPN',fr:'ProtonVPN',url:'https://protonvpn.com'}
+        ]
+      }
+    ]
+  }
+];
+
+// ── CONFIGURE STATE ───────────────────────────────────────────────────────────
+var cfgState = {};  // { systemId: true/false }
+
+function cfgLoad() {
+  try { var s=localStorage.getItem('cfg-v1'); if(s) cfgState=JSON.parse(s); } catch(e) {}
+}
+function cfgSave() {
+  try { localStorage.setItem('cfg-v1', JSON.stringify(cfgState)); } catch(e) {}
+}
+
+function getConciergeLevel() {
+  // Returns 'minimal' | 'recommended' | 'advanced' based on survey
+  var adv = (SQ.style==='offgrid') || (SQ.duration==='extended') ||
+            (SQ.battery==='large') || (SQ.solar==='high') || (SQ.dcdc==='high');
+  var rec = (SQ.style==='mixed') || (SQ.duration==='standard') ||
+            (SQ.battery==='upgrade') || (SQ.solar==='moderate');
+  if (adv) return 'advanced';
+  if (rec) return 'recommended';
+  return 'minimal';
+}
+
+function getConciergeForSystem(sys) {
+  var lvl = getConciergeLevel();
+  if (lvl==='advanced' && sys.advanced) return 'advanced';
+  if ((lvl==='advanced'||lvl==='recommended') && sys.recommended) return 'recommended';
+  if (sys.minimal) return 'minimal';
+  return null;
+}
+
+function getLevelLabel(lvl) {
+  if (!lvl) return '';
+  var labels = {
+    minimal:      {en:'Minimal',    fr:'Minimal'},
+    recommended:  {en:'Recommended',fr:'Recommandé'},
+    advanced:     {en:'Advanced',   fr:'Avancé'}
+  };
+  return labels[lvl] ? labels[lvl][lang] : lvl;
+}
+
+function toggleCfgSystem(id) {
+  cfgState[id] = !cfgState[id];
+  cfgSave();
+  renderConfigure();
+}
+
+function resetCfg() {
+  cfgState = {};
+  cfgSave();
+  renderConfigure();
+}
+
+function renderChain(chain) {
+  return chain.map(function(item, i) {
+    var name = lang==='fr' ? item.fr : item.en;
+    return (i>0 ? '<span class="sep"> › </span>' : '') +
+      '<a href="' + item.url + '" target="_blank">' + name + '</a>';
+  }).join('');
+}
+
+function renderConfigure() {
+  var root = document.getElementById('cfg-root');
+  if (!root) return;
+  var conciergeLevel = getConciergeLevel();
+  var conciergeLabels = {minimal:{en:'Minimal',fr:'Minimal'},recommended:{en:'Recommended',fr:'Recommandé'},advanced:{en:'Advanced',fr:'Avancé'}};
+  var colHdr = {
+    en: ['System & components','Price','Concierge','Minimal','Recommended','Advanced'],
+    fr: ['Système & composants','Prix','Concierge','Minimal','Recommandé','Avancé']
+  };
+
+  root.innerHTML = CFG_CATS.map(function(cat) {
+    var catName = lang==='fr' ? cat.fr : cat.en;
+    var concLabel = conciergeLabels[conciergeLevel][lang];
+    var h = colHdr[lang];
+
+    var rows = cat.systems.map(function(sys) {
+      var sysName = lang==='fr' ? sys.fr_name : sys.en_name;
+      var note = lang==='fr' ? (sys.fr_note||'') : (sys.en_note||'');
+      var concierge = getConciergeForSystem(sys);
+      var isChecked = !!cfgState[sys.id];
+      var pillCls = concierge ? 'cfg-pill '+concierge : '';
+      var pillTxt = getLevelLabel(concierge);
+
+      function cbCell(level) {
+        var isLevel = sys[level];
+        if (!isLevel) return '<td></td>';
+        var isConcMatch = (concierge===level);
+        var cbCls = 'cfg-cb' + (isChecked?' checked':'') + (isConcMatch&&!isChecked?' concierge-match':'');
+        return '<td><div class="cfg-cb-wrap"><div class="'+cbCls+'" onclick="toggleCfgSystem(''+sys.id+'')">'+(isChecked?'✓':'')+'</div></div></td>';
+      }
+
+      var priceStr = sys.price_eur ? '~€' + sys.price_eur : '—';
+
+      return '<tr>' +
+        '<td><span class="cfg-sys-name">' + sysName + '</span>' +
+          (note ? '<span style="font-size:10px;color:var(--text3);display:block;margin-top:1px">'+note+'</span>' : '') +
+          '<div class="cfg-chain">' + renderChain(sys.chain) + '</div></td>' +
+        '<td class="cfg-price">' + priceStr + '</td>' +
+        '<td style="text-align:center"><span class="' + pillCls + '">' + pillTxt + '</span></td>' +
+        cbCell('minimal') +
+        cbCell('recommended') +
+        cbCell('advanced') +
+      '</tr>';
+    }).join('');
+
+    return '<div class="cfg-cat" id="' + cat.id + '">' +
+      '<div class="cfg-cat-header" onclick="toggleCfgCat('' + cat.id + '')">' +
+        '<span class="cfg-cat-icon">' + cat.icon + '</span>' +
+        '<span class="cfg-cat-title">' + catName + '</span>' +
+        '<span class="cfg-cat-badge" id="badge-'+cat.id+'">' +
+          (lang==='fr'?'Concierge → ':'Concierge → ') + concLabel +
+        '</span>' +
+        '<span class="cfg-cat-chev" id="cfgchev-'+cat.id+'" style="transform:rotate(180deg)">&or;</span>' +
+      '</div>' +
+      '<div class="cfg-cat-body open" id="cfgbody-'+cat.id+'">' +
+        '<table class="cfg-table">' +
+          '<thead><tr>' +
+            '<th style="width:38%">' + h[0] + '</th>' +
+            '<th style="width:8%" class="tc">' + h[1] + '</th>' +
+            '<th style="width:12%" class="tc">' + h[2] + '</th>' +
+            '<th style="width:14%" class="tc">' + h[3] + '</th>' +
+            '<th style="width:14%" class="tc">' + h[4] + '</th>' +
+            '<th style="width:14%" class="tc">' + h[5] + '</th>' +
+          '</tr></thead>' +
+          '<tbody>' + rows + '</tbody>' +
+        '</table>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  renderMRP();
+}
+
+function toggleCfgCat(id) {
+  var body = document.getElementById('cfgbody-'+id);
+  var chev = document.getElementById('cfgchev-'+id);
+  if (!body) return;
+  var open = body.classList.contains('open');
+  body.classList.toggle('open', !open);
+  if (chev) chev.style.transform = open ? '' : 'rotate(180deg)';
+}
+
+function renderMRP() {
+  var body = document.getElementById('mrp-body');
+  if (!body) return;
+
+  // Collect selected systems
+  var selected = [];
+  CFG_CATS.forEach(function(cat) {
+    cat.systems.forEach(function(sys) {
+      if (cfgState[sys.id]) {
+        selected.push({cat: lang==='fr'?cat.fr:cat.en, sys: sys});
+      }
+    });
+  });
+
+  if (!selected.length) {
+    body.innerHTML = '<div class="mrp-empty">' +
+      (lang==='fr' ? 'Aucun système sélectionné — cochez les cases ci-dessus pour construire votre liste d'achat.' :
+       'No systems selected — check boxes above to build your purchase list.') + '</div>';
+    return;
+  }
+
+  var totalEur = 0;
+  var hdrs = lang==='fr'
+    ? ['Catégorie','Système','Composants clés','Prix €']
+    : ['Category','System','Key components','Price €'];
+
+  var rows = selected.map(function(item) {
+    var sys = item.sys;
+    var sysName = lang==='fr' ? sys.fr_name : sys.en_name;
+    var price = sys.price_eur || 0;
+    totalEur += price;
+    var chainShort = sys.chain.slice(0,3).map(function(c){
+      return lang==='fr'?c.fr:c.en;
+    }).join(' › ') + (sys.chain.length>3?' › …':'');
+    return '<tr>' +
+      '<td style="color:var(--text2)">' + item.cat + '</td>' +
+      '<td style="font-weight:500">' + sysName + '</td>' +
+      '<td style="color:var(--text2);font-size:11px">' + chainShort + '</td>' +
+      '<td class="tr">~€' + price + '</td>' +
+    '</tr>';
+  }).join('');
+
+  var totalUsd = Math.round(totalEur * EUR_TO_USD);
+  var totalCad = Math.round(totalEur * EUR_TO_CAD);
+
+  body.innerHTML =
+    '<table class="mrp-table">' +
+      '<thead><tr>' +
+        '<th style="width:15%">' + hdrs[0] + '</th>' +
+        '<th style="width:30%">' + hdrs[1] + '</th>' +
+        '<th style="width:37%">' + hdrs[2] + '</th>' +
+        '<th class="tr" style="width:18%">' + hdrs[3] + '</th>' +
+      '</tr></thead>' +
+      '<tbody>' + rows + '</tbody>' +
+    '</table>' +
+    '<div class="mrp-totals">' +
+      '<div class="mrp-total-cell"><div class="mrp-total-label">Total EUR</div><div class="mrp-total-val">€' + totalEur + '</div></div>' +
+      '<div class="mrp-total-cell"><div class="mrp-total-label">Total USD</div><div class="mrp-total-val">$' + totalUsd + '</div></div>' +
+      '<div class="mrp-total-cell"><div class="mrp-total-label">Total CAD</div><div class="mrp-total-val">$' + totalCad + '</div></div>' +
+    '</div>';
+}
+
+cfgLoad();
+
 load();
+cfgLoad();
 loadSurvey();
 </script>
 </body>
