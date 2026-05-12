@@ -187,6 +187,8 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
 .cfg-section-note{font-size:11px;color:var(--text3);padding:.5rem .75rem;border-top:.5px solid var(--border);font-style:italic}
 .cfg-back-btn{background:none;border:1.5px solid var(--border);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:all .15s}
 .cfg-back-btn:hover{border-color:var(--blue);color:var(--blue)}
+.reset-btn{background:none;border:1.5px solid #f5c0c0;border-radius:8px;padding:5px 11px;font-size:11px;font-weight:500;color:#c0392b;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:all .15s;margin-left:auto}
+.reset-btn:hover{background:#fff0f0;border-color:#c0392b}
 /* MRP summary */
 .mrp-wrap{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);margin-top:1.5rem;overflow:hidden}
 .mrp-section-hdr{padding:.5rem .75rem;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);background:var(--blue-bg);border-top:1px solid #bbd0f0;border-bottom:.5px solid #bbd0f0}
@@ -431,6 +433,9 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
     </div><!-- /ss-rv -->
 
     <div id="profile-badge-wrap"></div>
+    <div style="text-align:right;margin-top:.5rem">
+      <button class="reset-btn" onclick="resetSurvey()" id="btn-reset-survey">🔄 <span id="lbl-reset-survey">Reset survey</span></button>
+    </div>
   </div><!-- /survey -->
 
   <!-- ── RENTAL MESSAGE ── -->
@@ -457,6 +462,7 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
       <button class="view-btn" id="vb-sop" onclick="setView('sop')">
         🔧 <span id="lbl-sop">SOPs only</span> <span class="vb-count" id="cnt-sop">—</span>
       </button>
+      <button class="reset-btn" onclick="resetChecklist()" id="btn-reset-checklist">🔄 <span id="lbl-reset-checklist">Reset checklist</span></button>
       <div class="rv-filter">
         <span class="rv-label" id="lbl-rv">My RV:</span>
         <button class="rv-btn active" id="rv-all"    onclick="setRV('all')">All</button>
@@ -490,6 +496,7 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
         <div class="cfg-intro-sub" id="cfg-sub">Concierge recommends a profile based on your trip survey. Override any category freely — your selections build the purchase list below.</div>
       </div>
       <button class="cfg-back-btn" onclick="setView('critical')" id="cfg-back-btn">← Checklist</button>
+      <button class="reset-btn" onclick="resetConfigure()" id="btn-reset-configure" style="margin-left:.5rem">🔄 <span id="lbl-reset-configure">Reset config</span></button>
     </div>
     <div id="cfg-root"></div>
     <div class="mrp-wrap" id="mrp-wrap">
@@ -526,6 +533,12 @@ var LANG = {
     'rental-title':'🔑 Renting locally — this checklist doesn\'t apply to you',
     'rental-body':'This checklist is designed for owners shipping their own RV to Europe via RoRo. If you\'re renting locally, the rental company handles all equipment adaptations. See <strong>Guide 2</strong> for RoRo logistics and <strong>Guide 11</strong> for the local rental option comparison.',
     'lbl-configure':'Configure',
+    'lbl-reset-survey':'Reset survey',
+    'lbl-reset-checklist':'Reset checklist',
+    'lbl-reset-configure':'Reset config',
+    'confirm-reset-survey':'Reset the trip survey? Your profile and weight data will be cleared.',
+    'confirm-reset-checklist':'Reset the checklist? All checked items will be cleared.',
+    'confirm-reset-configure':'Reset the configuration? All selected systems will be cleared.',
     'lbl-sop':'SOPs only',
     'lbl-critical':'Critical only','lbl-full':'Full list','lbl-water':'Water only',
     'lbl-rv':'My RV:','lbl-reset':'&#x21BA; Reset',
@@ -547,6 +560,12 @@ var LANG = {
     'rental-title':'🔑 Location sur place — cette liste ne vous concerne pas',
     'rental-body':'Cette liste est con&ccedil;ue pour les propri&eacute;taires qui exp&eacute;dient leur propre VR en Europe par RoRo. Si vous louez sur place, le loueur g&egrave;re toutes les adaptations. Voir le <strong>Guide 2</strong> pour la logistique RoRo et le <strong>Guide 11</strong> pour la comparaison location vs propri&eacute;t&eacute;.',
     'lbl-configure':'Configurer',
+    'lbl-reset-survey':'Réinitialiser sondage',
+    'lbl-reset-checklist':'Réinitialiser liste',
+    'lbl-reset-configure':'Réinitialiser config',
+    'confirm-reset-survey':'Réinitialiser le sondage ? Votre profil et les données de poids seront effacés.',
+    'confirm-reset-checklist':'Réinitialiser la liste ? Tous les items cochés seront effacés.',
+    'confirm-reset-configure':'Réinitialiser la configuration ? Tous les systèmes sélectionnés seront effacés.',
     'lbl-sop':'Protocoles seulement',
     'lbl-critical':'Critique uniquement','lbl-full':'Liste compl&egrave;te','lbl-water':'Eau uniquement',
     'lbl-rv':'Mon VR&nbsp;:','lbl-reset':'&#x21BA; R&eacute;initialiser',
@@ -1413,6 +1432,35 @@ function resetAll() {
 
 function save() { try { localStorage.setItem('cl-v3',JSON.stringify(states)); } catch(e) {} }
 function load() { try { var s=localStorage.getItem('cl-v3'); if (s) states=JSON.parse(s); } catch(e) {} }
+
+function resetSurvey() {
+  if (!confirm(LANG[lang]['confirm-reset-survey'])) return;
+  try {
+    localStorage.removeItem('cl-survey-v2');
+    localStorage.removeItem('cl-weight-v1');
+  } catch(e) {}
+  SQ = {transport:null,duration:null,style:null,season:null,rv:null,chassis:null,slides:null,experience:null};
+  wt = {};
+  document.querySelectorAll('.sq-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.wt-input').forEach(function(i){ i.value=''; });
+  maybeShowChecklist();
+  updateBadge();
+}
+
+function resetChecklist() {
+  if (!confirm(LANG[lang]['confirm-reset-checklist'])) return;
+  try { localStorage.removeItem('cl-v3'); } catch(e) {}
+  states = {};
+  renderAll();
+  updateCounts();
+}
+
+function resetConfigure() {
+  if (!confirm(LANG[lang]['confirm-reset-configure'])) return;
+  try { localStorage.removeItem('cfg-v1'); } catch(e) {}
+  cfgState = {};
+  renderConfigure();
+}
 
 // ── CONFIGURE MODE DATA ──────────────────────────────────────────────────────
 var EUR_TO_USD = 1.09;
