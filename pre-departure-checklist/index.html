@@ -2027,7 +2027,19 @@ loadSurvey();
   var validViews = {'water':'water','telecom':'telecom','elec':'elec','energy':'elec',
     'propane':'propane','waste':'waste','sop':'sop','full':'full','critical':'critical'};
   var p = new URLSearchParams(window.location.search).get('view');
-  if (p && validViews[p]) { setView(validViews[p]); }
+  if (p && validViews[p]) {
+    view = validViews[p];
+    // Force checklist visible regardless of profile completion
+    var cw = document.getElementById('checklist-wrap');
+    if (cw) cw.classList.add('show');
+    renderAll();
+    updateCounts();
+    // Highlight active view button
+    ['critical','full','water','sop','configure'].forEach(function(x){
+      var el = document.getElementById('vb-'+x);
+      if (el) el.classList.toggle('active', x === view);
+    });
+  }
 })();
 </script>
 </body>
