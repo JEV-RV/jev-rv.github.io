@@ -607,7 +607,7 @@ function initBev(){
   bevCanvas=document.getElementById('bevCanvas');
   bevCtx=bevCanvas.getContext('2d');
 }
-function drawBev(params,curSch){
+function drawBev(params,curSch,adaptCost){
   const dpr=window.devicePixelRatio||1;
   const W=bevCanvas.parentElement.clientWidth||500;
   const H=Math.round(W*0.52);
@@ -710,7 +710,7 @@ function drawBev(params,curSch){
   });
   // Current-config dots — no text labels (tooltip handles values)
   const cs=Math.min(Math.max(curSch,BEV_MIN),BEV_MAX);
-  const cr=calcOpts(cs,cs,params);
+  const cr=calcOpts(cs,cs,params,adaptCost);
   const dotMap=[
     {oi:0,val:cr.t1},{oi:1,val:cr.t2},
     {oi:2,val:cs<=49?cr.t3:cr.t3x},
@@ -842,7 +842,7 @@ function compute(){
   <tr><td>${Lc.rows[Lc.rows.length-1]}</td>
     ${opts.map((o,i)=>o.unavail?`<td class="na-cell" style="color:${COLORS[i]}">N/A</td>`:`<td class="num" style="color:${COLORS[i]}">${fmt(totals[i])}</td>`).join('')}
   </tr></tbody>`;
-  drawBev(params,schNights);
+  drawBev(params,schNights,adaptCost);
   renderIntangibles(minIdx, minT, totals, opts);
 }
 const INTANG_SCORES = {
