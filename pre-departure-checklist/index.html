@@ -1245,8 +1245,9 @@ function isVisible(item) {
   if (rvFilter==='unity'  && WONDER_ONLY.indexOf(item.id)>=0) return false;
   if (rvFilter==='wonder' && UNITY_ONLY.indexOf(item.id)>=0) return false;
   if (item.divider) return false; // dividers handled in render
+  var catViews = ['water','telecom','elec','propane','waste','admin','mandatory'];
   if (view==='sop') return !!item.sop;
-  if (view==='water') return true;
+  if (catViews.indexOf(view) >= 0) return true;
   if (view==='full') return true;
   // Critical only — profile filter + installed override
   if (item.tags[0]!=='critical' && item.tags[0]!=='mandatory') {
@@ -1292,7 +1293,10 @@ function renderAll() {
   var root = document.getElementById('root');
   if (!root) return;
   root.innerHTML = '';
-  var catsToShow = view==='water' ? CATS.filter(function(c){return c.id==='water';}) : CATS;
+  var catViews = ['water','telecom','elec','propane','waste','admin','mandatory'];
+  var catsToShow = (catViews.indexOf(view) >= 0)
+    ? CATS.filter(function(c){ return c.id === view; })
+    : CATS;
   catsToShow.forEach(function(cat) {
     var visible = cat.items.filter(isVisible);
     if (!visible.length) return;
