@@ -2022,6 +2022,13 @@ function renderMRP() {
 load();
 cfgLoad();
 loadSurvey();
+// URL param: ?view=water|telecom|elec|energy|propane|waste|sop|full|critical
+(function() {
+  var validViews = {'water':'water','telecom':'telecom','elec':'elec','energy':'elec',
+    'propane':'propane','waste':'waste','sop':'sop','full':'full','critical':'critical'};
+  var p = new URLSearchParams(window.location.search).get('view');
+  if (p && validViews[p]) { setView(validViews[p]); }
+})();
 </script>
 </body>
 </html>
