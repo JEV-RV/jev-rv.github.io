@@ -220,7 +220,7 @@ a{color:var(--blue);text-decoration:none}
 <header class="page-header">
  <a class="back-link" href="https://jev-rv.github.io/">← Back to all tools</a>
  <h1 id="h-title">Trip Budget Simulator</h1>
- <p class="sub" id="h-sub">Realistic cost breakdown for all 6 travel options — validated against the Guide 11 Excel model (v11).</p>
+ <p class="sub" id="h-sub">Realistic cost breakdown for all 6 travel options — validated against the Guide 11 Excel model (v12).</p>
  <div class="lang-toggle">
  <button class="lang-btn active" onclick="setLang('en')">EN</button>
  <button class="lang-btn" onclick="setLang('fr')">FR</button>
@@ -294,6 +294,12 @@ a{color:var(--blue);text-decoration:none}
  <label id="lbl-surcharge">🌐 RoRo surcharge (Opt 1 only)</label>
  <div class="range-row"><input type="range" min="0" max="35" step="1" id="surcharge" value="20"><span class="range-val" id="v-surcharge">+20%</span></div>
  <div class="surcharge-banner" id="surcharge-banner">USTR Recovery Fee (Nov 2025). Community-validated: ~+23% on a recent IVSS return shipment (May 2026). Set to 0% for pre-surcharge baseline. Always get a current quote from IVSS / SeaBridge.</div>
+ </div>
+ <!-- EU Adaptation cost slider -->
+ <div class="param-group" style="border-top:0.5px solid var(--border);padding-top:.85rem;margin-top:.85rem">
+ <label id="lbl-adapt">⚙️ <span id="lbl-adapt-txt">EU adaptation costs (Ship RV only)</span></label>
+ <div class="range-row"><input type="range" min="0" max="6950" step="50" id="adapt" value="1555"><span class="range-val" id="v-adapt">€1,555</span></div>
+ <div class="surcharge-banner" id="adapt-banner">Default = EU-only sunk costs (~€1,555): CEE connectors, propane adapters, mandatory equipment, snow chains, EU water fittings. Permanent upgrades (Victron, water treatment, Garmin GPS) excluded — they improve your RV on every trip. Max €6,950 = full Guide 6 adaptation cost.</div>
  </div>
  <!-- P2P inspection cost slider -->
  <div class="param-group" style="border-top:0.5px solid var(--border);padding-top:.85rem;margin-top:.85rem">
@@ -428,7 +434,7 @@ a{color:var(--blue);text-decoration:none}
 </div>
 <div class="disclaimer" id="disclaimer">
  <strong>Disclaimer:</strong> Informational and planning purposes only. No responsibility for errors or post-publication regulatory changes. Not financial or legal advice. Always verify costs with service providers.<br>
- <strong>Sources:</strong> Guide 11 Excel model v11 · McRent/Indie Campers 2025–2026 · Yescapa/Goboony P2P · IVSS/SeaBridge RoRo quotations · camping-quart.fr · USTR Recovery Fee (Nov 2025) — community-validated ~+23% on Halifax↔EU route (LTV group, May 2026).<br>
+ <strong>Sources:</strong> Guide 11 Excel model v12 · McRent/Indie Campers 2025–2026 · Yescapa/Goboony P2P · IVSS/SeaBridge RoRo quotations · camping-quart.fr · USTR Recovery Fee (Nov 2025) — community-validated ~+23% on Halifax↔EU route (LTV group, May 2026).<br>
  <strong>v6.0</strong> — Interactive intangibles sliders (bed/logistics/admin) with adjusted ranking · Buy &amp; Sell friction panel · Two-column layout · RoRo surcharge slider · Real-time break-even chart · P2P Option 6 · Time-Sharing 7-week cap · Corrected Buy &amp; Sell / Option 1 insurance · Seasonal pricing · PL toll rates.<br><br>
  © 2026 Jack-Éric Vandenbroucke · <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
 </div>
@@ -457,7 +463,7 @@ let bevHidden=[false,false,false,false,false,false];
 const L={
   en:{
     'h-title':'Trip Budget Simulator',
-    'h-sub':'Realistic cost breakdown for all 6 travel options — validated against the Guide 11 Excel model (v11).',
+    'h-sub':'Realistic cost breakdown for all 6 travel options — validated against the Guide 11 Excel model (v12).',
     'params-title':'Trip parameters',
     'lbl-season':'Travel season',
     's-lbl-low':'Winter','s-tag-low':'Oct–Apr',
@@ -474,12 +480,14 @@ const L={
     'lbl-activ':'Activities €/day',
     'lbl-roroval':'Shipped RV value (€)',
     'lbl-surcharge':'🌐 RoRo surcharge (Opt 1 only)',
+    'lbl-adapt-txt':'EU adaptation costs (Ship RV only)',
+    'adapt-banner':'Default = EU-only sunk costs (~€1,555): CEE connectors, propane adapters, mandatory equipment, snow chains, EU water fittings. Permanent upgrades (Victron, water treatment, Garmin GPS) excluded — they benefit every future trip. Set to €6,950 for full Guide 6 cost.',
     'results-title':'Cost comparison',
     'results-title-bar':'Current trip totals',
     'bev-title':'Break-even — cost by trip duration',
     'breakdown-title':'Cost breakdown by category',
     opts:['Ship RV (RoRo)','RV Rental (Pro)','Time-Sharing','Buy & Sell','Car + Hotels','P2P Rental'],
-    rows:['Transport / shipping','RV acquisition / rental','B&S resale return trip','P2P inspection / delay','Insurance','Accommodation','Fuel, tolls & vehicle','Daily living','Flights & transfers','GRAND TOTAL'],
+    rows:['Transport / shipping','RV acquisition / rental','🌍 EU-only adaptation (sunk cost)','B&S resale return trip','P2P inspection / delay','Insurance','Accommodation','Fuel, tolls & vehicle','Daily living','Flights & transfers','GRAND TOTAL'],
     'pct-ok':'✅ Accommodation mix: 100%',
     'pct-warn':p=>`⚠️ Mix ${p}% — must total 100%`,
     'winner':'Best value',
@@ -492,13 +500,13 @@ const L={
     'p2p-warn':'⚠️ P2P: Most owners decline >60 days. Confirm long-duration availability and non-EU insurance.',
     'season-high-note':'☀️ Peak surcharges applied to rental, P2P, campsite, hotel and car rates.',
     'season-low-note':'❄️ Winter/shoulder discounts applied to rental, P2P, campsite, hotel and car rates.',
-    'long-trip-note':'💡 At 2×90 days, shipping is competitive from the 2nd trip onward — RoRo cost is fixed and amortized.',
+    'long-trip-note':'💡 At 2×90 days, Ship RV Trip 2 (adaptation amortized) is cheaper than Buy &amp; Sell from week 1 of the 2nd trip. EU-only sunk costs (~€1,555) apply once — permanent upgrades (Victron, water treatment, GPS) benefit every future trip.',
     'surcharge-active':p=>`⚠️ RoRo surcharge +${p}% on shipping (Opt 1). Community-validated ~+23% Halifax↔EU (May 2026).`,
-    'bev-note':'Sliders update curves in real time. Solid dot = your current config. Dashed = Time-Sharing beyond 7-wk cap. Click legend to show/hide.',
+    'bev-note':'Sliders update curves in real time. Solid dot = your config. Dashed = Time-Sharing beyond 7-wk cap. Ship RV includes EU-only adaptation sunk costs (~€1,555). Click legend to show/hide.',
   },
   fr:{
     'h-title':'Simulateur de budget voyage',
-    'h-sub':'Budget réaliste pour les 6 options — validé sur le modèle Excel Guide 11 (v11).',
+    'h-sub':'Budget réaliste pour les 6 options — validé sur le modèle Excel Guide 11 (v12).',
     'params-title':'Paramètres du voyage',
     'lbl-season':'Saison de voyage',
     's-lbl-low':'Hiver','s-tag-low':'Oct–Avr',
@@ -515,12 +523,14 @@ const L={
     'lbl-activ':'Activités €/jour',
     'lbl-roroval':'Valeur VR expédié (€)',
     'lbl-surcharge':'🌐 Surcharge RoRo (Opt 1 seul.)',
+    'lbl-adapt-txt':'Coûts adaptation EU (Expédition VR seul.)',
+    'adapt-banner':'Défaut = coûts perdus EU (~1 555 €) : connecteurs CEE, adaptateurs propane, équipements obligatoires, chaînes neige, raccords eau EU. Améliorations permanentes (Victron, traitement eau, GPS Garmin) exclues — elles bénéficient à tous les voyages. Mettre 6 950 € pour le coût total Guide 6.',
     'results-title':'Comparaison des coûts',
     'results-title-bar':'Totaux du voyage actuel',
     'bev-title':'Seuil de rentabilité — coût selon la durée',
     'breakdown-title':'Détail des coûts par catégorie',
     opts:['Expédition VR (RoRo)','Location VR (Pro)','Temps partagé','Achat & Vente','Voiture + Hôtels','Location P2P'],
-    rows:['Transport / expédition','Acquisition / location VR','Retour revente A&V','Inspection / délai P2P','Assurance','Hébergement','Carburant, péages & véhicule','Vie quotidienne','Vols & transferts','TOTAL GÉNÉRAL'],
+    rows:['Transport / expédition','Acquisition / location VR','🌍 Adaptation EU seulement (coût perdu)','Retour revente A&V','Inspection / délai P2P','Assurance','Hébergement','Carburant, péages & véhicule','Vie quotidienne','Vols & transferts','TOTAL GÉNÉRAL'],
     'pct-ok':'✅ Mix hébergement : 100%',
     'pct-warn':p=>`⚠️ Mix ${p}% — doit totaliser 100%`,
     'winner':'Meilleur prix',
@@ -533,9 +543,9 @@ const L={
     'p2p-warn':'⚠️ P2P : La plupart refusent >60 jours. Confirmez dispo longue durée et assurance non-résidents UE.',
     'season-high-note':'☀️ Surcharges haute saison appliquées : location, P2P, campings, hôtels, voiture.',
     'season-low-note':'❄️ Remises hiver/épaule appliquées : location, P2P, campings, hôtels, voiture.',
-    'long-trip-note':'💡 À 2×90 jours, expédier devient compétitif dès le 2e voyage — coût RoRo fixe et amorti.',
+    'long-trip-note':'💡 À 2×90 jours, Expédier VR Voyage 2 (adaptation amortie) est moins cher qu\'Achat-Vente dès la semaine 1. Coûts EU seulement (~1 555 €) payés une fois — les améliorations permanentes (Victron, traitement eau, GPS) bénéficient à tous les voyages futurs.',
     'surcharge-active':p=>`⚠️ Surcharge RoRo +${p}% sur l'expédition (Opt 1). Validé ~+23% Halifax↔EU (mai 2026).`,
-    'bev-note':'Les sliders mettent les courbes à jour en temps réel. Point = votre config. Pointillé = Temps partagé hors cap. Cliquez la légende pour masquer/afficher.',
+    'bev-note':'Les curseurs mettent à jour les courbes en temps réel. Point plein = votre config. Tirets = Temps partagé au-delà de 7 semaines. Expédier VR inclut les coûts EU d\'adaptation (~1 555 € coûts perdus). Cliquer sur la légende pour masquer/afficher.',
   }
 };
 function v(id){return +document.getElementById(id).value;}
@@ -560,7 +570,10 @@ function setLang(l){
   document.getElementById('season-info-box').textContent=SEASON_INFO[l][season];
   compute();
 }
-function calcOpts(schNights,totalNights,p){
+// EU-only sunk costs (Guide 6): CEE connectors · propane adapters · mandatory equipment · snow chains · EU water fittings.
+// Permanent upgrades (Victron/water treatment/Garmin GPS) excluded — amortized over all future travel including North America.
+const EU_ADAPT=1555;
+function calcOpts(schNights,totalNights,p,adaptCost){
   const {diesel,paire,pcamp,grocery,resto,activ,sm,roroSurcharge,p2pInspect}=p;
   const km=36,conso=12.5,fpd=(km/100)*conso*diesel;
   const avgN=paire*14+Math.max(0,pcamp)*35*sm.camp;
@@ -574,7 +587,7 @@ function calcOpts(schNights,totalNights,p){
   const TS_MAX=49,tsU=schNights>TS_MAX;
   const roro=Math.round(10650*(1+roroSurcharge/100));
   const ins1=Math.round(6250*(totalNights/180)+1050+1100);
-  const t1=roro+ins1+Math.round(accommAll)+Math.round(totalNights*fpd+totalNights*tollRV)+Math.round(dl)+fl_s;
+  const t1=roro+ins1+Math.round(adaptCost||EU_ADAPT)+Math.round(accommAll)+Math.round(totalNights*fpd+totalNights*tollRV)+Math.round(dl)+fl_s;
   const t2=Math.round(schNights*200*sm.rental+700)+1100+Math.round(accommSch*0.92)+Math.round(schNights*fpd*0.85+schNights*tollRV)+Math.round(dl)+fl_o;
   const tsKm=Math.round((schNights/TS_MAX)*1960);
   const t3base=Math.round(5800+tsKm+600)+1100+Math.round(accommSch*0.45)+Math.round(schNights*fpd*0.72)+Math.round(dl*(schNights/Math.max(totalNights,1)))+fl_o;
@@ -607,7 +620,7 @@ function drawBev(params,curSch){
   const pw=W-PAD.left-PAD.right, ph=H-PAD.top-PAD.bottom;
   const days=[];
   for(let d=BEV_MIN;d<=BEV_MAX;d++) days.push(d);
-  const series=days.map(d=>{const r=calcOpts(d,d,params);return [r.t1,r.t2,r.t3,r.t3x,r.t4,r.t5,r.t6];});
+  const series=days.map(d=>{const r=calcOpts(d,d,params,adaptCost);return [r.t1,r.t2,r.t3,r.t3x,r.t4,r.t5,r.t6];});
   const allV=series.flatMap(s=>s.filter(x=>x!=null&&x>0));
   const yMax=Math.ceil(Math.max(...allV)/5000)*5000;
   const xPx=d=>PAD.left+((d-BEV_MIN)/(BEV_MAX-BEV_MIN))*pw;
@@ -732,7 +745,7 @@ function compute(){
   const n1=v('nights1'),n2=v('nights2'),ns=v('nonsch');
   const diesel=v('diesel'),paire=v('paire')/100,pcamp=v('pcamp')/100;
   const grocery=v('grocery'),resto=v('resto'),activ=v('activ');
-  const rvVal=v('roroval'),roroSurcharge=v('surcharge');
+  const rvVal=v('roroval'),roroSurcharge=v('surcharge'),adaptCost=v('adapt');
   const sm=SEASON_MULT[season];
   const totalNights=n1+n2+ns, schNights=n1+n2;
   document.getElementById('v-nights1').textContent=n1;
@@ -746,6 +759,7 @@ function compute(){
   document.getElementById('v-activ').textContent='€'+activ;
   document.getElementById('v-roroval').textContent='€'+Math.round(rvVal/1000)+'k';
   document.getElementById('v-surcharge').textContent=roroSurcharge>0?'+'+roroSurcharge+'%':'0%';
+  document.getElementById('v-adapt').textContent='€'+Math.round(adaptCost).toLocaleString();
   const p2pInspect=v('p2p-inspect');
   const p2pLabels=['€0','€500','€900'];
   document.getElementById('v-p2p-inspect').textContent=p2pLabels[p2pInspect]||'€0';
@@ -755,7 +769,7 @@ function compute(){
   pEl.className=wPct<0?'pct-warning':'pct-ok';
   pEl.textContent=wPct<0?Lc['pct-warn'](Math.round(v('paire')+v('pcamp'))):Lc['pct-ok']+(wPct>0?` (wild/free: ${Math.round(wPct)}%)`:'');
   const params={diesel,paire,pcamp,grocery,resto,activ,rvVal,sm,roroSurcharge,p2pInspect};
-  const res=calcOpts(schNights,totalNights,params);
+  const res=calcOpts(schNights,totalNights,params,adaptCost);
   const TS_MAX=49,tsU=res.tsU,tsW=Math.ceil(schNights/7);
   const tsKm=Math.round((schNights/TS_MAX)*1960);
   const km=36,conso=12.5,fpd=(km/100)*conso*diesel;
@@ -767,14 +781,14 @@ function compute(){
   const roro=Math.round(10650*(1+roroSurcharge/100));
   const ins1=Math.round(6250*(totalNights/180)+1050+1100);
   const opts=[
-    {transport:roro,rv:0,insurance:ins1,accomm:Math.round(accommAll),fuel:Math.round(totalNights*fpd+totalNights*tollRV),living:Math.round(dl),flights:3700,unavail:false,note:roroSurcharge>0?Lc['surcharge-active'](roroSurcharge):null},
+    {transport:roro,rv:0,eu_adapt:Math.round(adaptCost),insurance:ins1,accomm:Math.round(accommAll),fuel:Math.round(totalNights*fpd+totalNights*tollRV),living:Math.round(dl),flights:3700,unavail:false,note:roroSurcharge>0?Lc['surcharge-active'](roroSurcharge):null},
     {transport:0,rv:Math.round(schNights*200*sm.rental+700),insurance:1100,accomm:Math.round(accommSch*0.92),fuel:Math.round(schNights*fpd*0.85+schNights*tollRV),living:Math.round(dl),flights:2450,unavail:false,note:null},
     {transport:0,rv:tsU?null:Math.round(5800+tsKm+600),insurance:tsU?null:1100,accomm:tsU?null:Math.round(accommSch*0.45),fuel:tsU?null:Math.round(schNights*fpd*0.72),living:tsU?null:Math.round(dl*(schNights/Math.max(totalNights,1))),flights:tsU?null:2450,unavail:tsU,note:tsU?Lc['ts-unavail'](tsW):(schNights>28?Lc['ts-warn'](tsKm):Lc['ts-ok'])},
     {transport:0,rv:13000,resale:2500,insurance:1800,accomm:Math.round(accommSch*0.85),fuel:Math.round(schNights*fpd+schNights*tollCar),living:Math.round(dl),flights:2450,unavail:false,note:Lc['bs-resale-note']},
     {transport:0,rv:Math.round(schNights*40*sm.car+1800),insurance:1100,accomm:Math.round(totalNights*105*sm.hotel),fuel:Math.round(schNights*35*(9/100)*diesel*0.55+schNights*tollCar),living:Math.round(totalNights*(resto*1.75+activ+misc+laundry)),flights:2450,unavail:false,note:null},
     {transport:0,rv:Math.round(schNights*130*sm.p2p+Math.round((schNights/90)*800)),inspect:p2pInspect>0?[0,500,900][p2pInspect]:0,insurance:1100,accomm:Math.round(accommSch*0.92),fuel:Math.round(schNights*fpd*0.85+schNights*tollCar),living:Math.round(dl),flights:2450,unavail:false,note:schNights>60?Lc['p2p-warn']:null},
   ];
-  function tot(o){if(o.unavail)return Infinity;return(o.transport||0)+(o.rv||0)+(o.resale||0)+(o.inspect||0)+(o.insurance||0)+(o.accomm||0)+(o.fuel||0)+(o.living||0)+(o.flights||0);}
+  function tot(o){if(o.unavail)return Infinity;return(o.transport||0)+(o.rv||0)+(o.eu_adapt||0)+(o.resale||0)+(o.inspect||0)+(o.insurance||0)+(o.accomm||0)+(o.fuel||0)+(o.living||0)+(o.flights||0);}
   const totals=opts.map(tot);
   const avail=totals.filter(t=>t!==Infinity);
   const minT=Math.min(...avail),minIdx=totals.indexOf(minT);
@@ -812,7 +826,7 @@ function compute(){
   const ib=document.getElementById('interpBox');
   ib.style.display=lines.length?'block':'none';
   ib.innerHTML=lines.map(l=>`<div style="margin-bottom:3px">${l}</div>`).join('');
-  const rk=['transport','rv','resale','inspect','insurance','accomm','fuel','living','flights'];
+  const rk=['transport','rv','eu_adapt','resale','inspect','insurance','accomm','fuel','living','flights'];
   document.getElementById('breakdownTable').innerHTML=`<thead><tr>
     <th>Category</th>
     ${optNames.map((n,i)=>`<th class="num" style="color:${COLORS[i]}">${n.split(' ').slice(0,2).join('<br>')}</th>`).join('')}
@@ -1024,7 +1038,7 @@ function renderIntangibles(minCostIdx, minCostTotal, totals, opts) {
   document.getElementById('intang-title').textContent      = lang==='en'?'Intangibles — quality of travel':'Intangibles — qualité du voyage';
   document.getElementById('intang-q-title').textContent    = lang==='en'?'5 questions to discuss before deciding':'5 questions à se poser avant de décider';
 }
-['nights1','nights2','nonsch','diesel','paire','pcamp','grocery','resto','activ','roroval','surcharge'].forEach(id=>{
+['nights1','nights2','nonsch','diesel','paire','pcamp','grocery','resto','activ','roroval','surcharge','adapt'].forEach(id=>{
   document.getElementById(id).addEventListener('input',compute);
 });
 ['ibed','ilogistic','iadmin','p2p-inspect'].forEach(id=>{
