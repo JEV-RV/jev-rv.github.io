@@ -699,8 +699,8 @@ function isProfileComplete() {
 function maybeShowChecklist() {
   if (view==='configure') { renderConfigure(); return; }
   var show = isProfileComplete();
-  document.getElementById('checklist-wrap').classList.toggle('show', show);
-  if (show) { renderAll(); updateCounts(); }
+  document.getElementById('checklist-wrap').classList.toggle('show', show || !!forceView);
+  if (show || forceView) { renderAll(); updateCounts(); }
 }
 
 function updateBadge() {
@@ -1220,6 +1220,7 @@ function showIfNotShortCampgroundsOrIsExtended(d,s) {
 // ── STATE ────────────────────────────────────────────────────────────────────
 var lang = 'en';
 var view = 'critical';
+var forceView = null; // set by ?view= URL param
 var rvFilter = 'all';
 var states = {};
 var transport = null;   // 'roro' | 'rental'
@@ -1357,7 +1358,7 @@ function setView(v) {
   var pw=document.querySelector('.progress-wrap');
   var lw=document.querySelector('.legend');
   if(cw) cw.classList.toggle('show', isConfig);
-  if(cl) cl.classList.toggle('show', !isConfig && isProfileComplete());
+  if(cl) cl.classList.toggle('show', !isConfig && (forceView || isProfileComplete()));
   if(pw) pw.style.display = isConfig ? 'none' : '';
   if(lw) lw.style.display = isConfig ? 'none' : '';
   if(isConfig) renderConfigure();
@@ -2028,17 +2029,8 @@ loadSurvey();
     'propane':'propane','waste':'waste','sop':'sop','full':'full','critical':'critical'};
   var p = new URLSearchParams(window.location.search).get('view');
   if (p && validViews[p]) {
-    view = validViews[p];
-    // Force checklist visible regardless of profile completion
-    var cw = document.getElementById('checklist-wrap');
-    if (cw) cw.classList.add('show');
-    renderAll();
-    updateCounts();
-    // Highlight active view button
-    ['critical','full','water','sop','configure'].forEach(function(x){
-      var el = document.getElementById('vb-'+x);
-      if (el) el.classList.toggle('active', x === view);
-    });
+    forceView = validViews[p];
+    setView(validViews[p]);
   }
 })();
 </script>
