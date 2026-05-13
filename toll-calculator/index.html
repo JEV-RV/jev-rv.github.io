@@ -53,6 +53,8 @@ a:hover{text-decoration:underline}
 .result-link:hover{background:#c5daf5;text-decoration:none}
 .result-warning{background:var(--red-bg);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--red);margin-top:6px;line-height:1.4}
 .result-tip{background:var(--green-bg);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--green);margin-top:6px;line-height:1.4}
+.result-budget{background:var(--surface2);border-radius:6px;padding:7px 12px;font-size:12px;color:var(--text2);margin-top:6px;line-height:1.4;display:flex;align-items:center;gap:8px}
+.result-budget strong{color:var(--text);font-weight:600}
 .summary-card{background:var(--surface2);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1.5rem;border:0.5px solid var(--border)}
 .summary-title{font-size:14px;font-weight:500;margin-bottom:8px}
 .summary-pills{display:flex;gap:8px;flex-wrap:wrap}
@@ -101,7 +103,7 @@ a:hover{text-decoration:underline}
 <main class="main">
 <div class="info-banner">
   <span style="font-size:18px;flex-shrink:0">&#9888;&#65039;</span>
-  <span id="info-text">If your RV exceeds 3.5t GVWR, it is classified as a heavy vehicle in most European countries. Standard car vignettes do NOT apply &mdash; you need the truck/heavy vehicle system. Select your weight class below.</span>
+  <span id="info-text">If your RV exceeds 3.5t GVWR, it is classified as a heavy vehicle in most European countries. Standard car vignettes do NOT apply &mdash; you need the truck/heavy vehicle system.</span>
 </div>
 <div class="card">
   <div class="card-header"><span>&#128506;&#65039;</span><h2 id="sel-title">Select your countries</h2></div>
@@ -122,10 +124,17 @@ a:hover{text-decoration:underline}
     <div id="resultsList"></div>
   </div>
   <div class="card" style="margin-top:1.5rem">
-    <div class="card-header"><span>&#128683;</span><h2 id="lez-title">Emissions zones &mdash; no sticker possible</h2></div>
+    <div class="card-header"><span>&#128203;</span><h2 id="lez-title">Emissions zones &mdash; no sticker possible</h2></div>
     <div class="card-body">
       <p id="lez-text" style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:1rem"></p>
       <div style="overflow-x:auto"><table class="lez-table" id="lezTable"></table></div>
+    </div>
+  </div>
+  <div class="card" id="freeflowCard" style="margin-top:1.5rem;display:none">
+    <div class="card-header"><span>&#9889;</span><h2 id="ff-title">Free-flow / electronic tolls &mdash; no barrier, no warning</h2></div>
+    <div class="card-body">
+      <p id="ff-text" style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:1rem"></p>
+      <div style="overflow-x:auto"><table class="lez-table" id="ffTable"></table></div>
     </div>
   </div>
 </div>
@@ -164,12 +173,12 @@ const COUNTRIES=[
 ];
 
 const REQ={
-  fr:{st:'ok',lb:'Pay at barriers / Peage aux barrieres',
-    en:'France uses classic barrier tolls. Nothing to buy in advance. Over 3.5t pays 2-3x more than a car.',
-    fr:'France utilise des peages aux barrieres classiques. Rien a acheter a l\'avance. Plus de 3,5t paie 2 a 3x plus.',
-    wen:'LEZ (Crit\'Air) zones in Paris, Lyon, Marseille. No Crit\'Air sticker possible for NA RVs. Park outside.',
-    wfr:'Zones LEZ (Crit\'Air) a Paris, Lyon, Marseille. Aucune vignette Crit\'Air possible. Garez-vous a l\'exterieur.',
-    links:[{t:'Autoroutes.fr',u:'https://autoroutes.fr'}]},
+  fr:{st:'warn',lb:'Barriers + free-flow sections / Barrieres + sections flux libre',
+    en:'France uses classic barrier tolls — nothing to buy in advance. Over 3.5t pays 2–3x more than a car. WARNING: France is rapidly expanding barrier-free "Flux Libre" sections (gantries + plate recognition). No cash option, no barrier warning. NA plates ARE detected and invoiced by mail.',
+    fr:'France utilise des peages aux barrieres classiques — rien a acheter a l\'avance. Plus de 3,5t paie 2 a 3x plus. ATTENTION: la France etend rapidement les sections "Flux Libre" sans barrieres (portiques + lecture de plaques). Pas de paiement sur place, aucune barriere d\'avertissement. Les plaques NA SONT detectees et facturees par courrier.',
+    wen:'Free-flow sections expanding. Create a SANEF account and register your plate at sanef.com before departure. Multi-country badge option: Fulli, Ulys or Bip&Go cover FR/ES/PT/IT in one device.',
+    wfr:'Sections flux libre en expansion. Creer un compte SANEF et enregistrer sa plaque sur sanef.com avant le depart. Badge multi-pays: Fulli, Ulys ou Bip&Go couvrent FR/ES/PT/IT en un seul equipement.',
+    links:[{t:'SANEF (free-flow FR)',u:'https://www.sanef.com'},{t:'Fulli (FR/ES/PT/IT)',u:'https://www.fulli.com'},{t:'Ulys',u:'https://ulys.com'},{t:'autoroutes.fr',u:'https://autoroutes.fr'}]},
   es:{st:'ok',lb:'Pay at barriers / Peage aux barrieres',
     en:'Spain uses barrier tolls on some motorways (AP roads). Many are toll-free. No vignette. Over 3.5t pays higher rate.',
     fr:'Espagne: peages aux barrieres sur certaines autoroutes. Beaucoup sont gratuites. Pas de vignette.',
@@ -268,10 +277,12 @@ const REQ={
     wen:'ULEZ covers most of Greater London. Use TfL ULEZ checker before entering.',
     wfr:'L\'ULEZ couvre la majeure partie du Grand Londres. Utilisez le verificateur ULEZ de TfL.',
     links:[{t:'TfL ULEZ checker',u:'https://tfl.gov.uk/modes/driving/ulez-expansion'}]},
-  ie:{st:'ok',lb:'Pay at barriers / Peage aux barrieres',
-    en:'Ireland has a few tolled roads and bridges (M50 Dublin). No vignette. Left-hand traffic.',
-    fr:'Irlande: quelques routes et ponts a peage (M50 Dublin). Conduite a gauche.',
-    links:[{t:'eFlow M50',u:'https://www.eflow.ie'}]},
+  ie:{st:'warn',lb:'Free-flow tolls — register before / Peages flux libre — inscrire avant',
+    en:'Ireland has several tolled roads and bridges. The M50 Dublin is fully barrier-free (eFlow system — plate recognition only, no cash). Left-hand traffic.',
+    fr:'Irlande: plusieurs routes et ponts a peage. La M50 Dublin est entierement sans barrieres (systeme eFlow — lecture de plaques uniquement, pas de paiement sur place). Conduite a gauche.',
+    wen:'M50 Dublin is free-flow only — no barrier, no warning. Pay online at eflow.ie within 8 days of travel or register your plate in advance. NA plates are invoiced.',
+    wfr:'La M50 Dublin est en flux libre uniquement — aucune barriere, aucun avertissement. Payer en ligne sur eflow.ie dans les 8 jours ou enregistrer la plaque a l\'avance. Les plaques NA sont facturees.',
+    links:[{t:'eFlow (M50 Dublin)',u:'https://www.eflow.ie'},{t:'TII (Irish toll roads)',u:'https://www.tii.ie/roads-tolling/tolling-information/'}]},
   rs:{st:'ok',lb:'Pay at barriers / Peage aux barrieres',
     en:'Serbia uses barrier tolls on main motorways. Over 3.5t charged at higher rate.',
     fr:'Serbie: peages aux barrieres sur autoroutes principales. Plus de 3,5t tarif plus eleve.',
@@ -292,10 +303,42 @@ const REQ={
     en:'Denmark has no general motorway toll. Oresund Bridge and Storebalt Bridge have tolls.',
     fr:'Danemark: pas de peage autoroutier. Ponts de l\'Oresund et Storebalt a peage.',
     links:[{t:'Oresund Bridge',u:'https://www.oresundsbron.com'}]},
-  no:{st:'ok',lb:'AutoPASS toll roads / Routes a peage',
-    en:'Norway has many toll roads and urban toll rings. AutoPASS electronic system. Over 3.5t pays higher rate. You can drive and receive an invoice.',
-    fr:'Norvege: nombreuses routes a peage. Systeme electronique AutoPASS. Plus de 3,5t tarif superieur.',
-    links:[{t:'AutoPASS',u:'https://www.autopass.no/en/'}]},
+  no:{st:'warn',lb:'AutoPASS free-flow — invoice by mail / Facture par courrier',
+    en:'Norway has extensive toll roads and urban toll rings — all fully electronic (AutoPASS, gantries + plate recognition). No cash barriers anywhere. Over 3.5t pays higher rate. You can drive and receive an invoice — but registering in advance avoids surcharges.',
+    fr:'Norvege: nombreuses routes a peage et anneaux urbains — entierement electroniques (AutoPASS, portiques + lecture de plaques). Aucune barriere, aucun paiement sur place. Plus de 3,5t tarif superieur. On peut rouler et recevoir une facture — mais s\'enregistrer a l\'avance evite les majorations.',
+    wen:'No barrier = no warning anywhere in Norway. NA plates are automatically invoiced. Register at autopass.no/en for visitors or pay invoices online. BroBizz covers Norway + Scandinavia bridges.',
+    wfr:'Aucune barriere = aucun avertissement en Norvege. Les plaques NA sont automatiquement facturees. S\'inscrire sur autopass.no/en pour visiteurs ou payer les factures en ligne. BroBizz couvre Norvege + ponts scandinaves.',
+    links:[{t:'AutoPASS (visitors)',u:'https://www.autopass.no/en/'},{t:'BroBizz (Scandinavia)',u:'https://www.brobizz.com'}]},
+};
+
+// Budget estimates for >3.5t RV — typical itinerary ranges in EUR
+// Format: [low, high, basis_en, basis_fr]
+const BUDGET={
+  fr:[60,130,'Typical N-S transit ~700 km, PL rate (2–3× car)','Transit typique N-S ~700 km, tarif PL (2–3× voiture)'],
+  es:[15,40,'Toll sections AP roads ~300 km, higher rate >3.5t','Sections AP a peage ~300 km, tarif superieur >3,5t'],
+  pt:[20,45,'A1/A2/A22 ~400 km, electronic tolls','A1/A2/A22 ~400 km, peages electroniques'],
+  it:[70,140,'Typical N-S transit ~800 km, class 3–4 rate','Transit typique N-S ~800 km, tarif classe 3–4'],
+  ch:[35,90,'LSVA ~300 km transit, weight + emission class','LSVA ~300 km transit, poids + classe emission'],
+  at:[25,60,'GO-Box ~400 km, distance-based rate','GO-Box ~400 km, tarif au km'],
+  si:[10,25,'DarsGo ~150 km, OBU distance-based','DarsGo ~150 km, OBU au km'],
+  hr:[15,35,'A1 motorway ~300 km, higher rate >3.5t','Autoroute A1 ~300 km, tarif superieur >3,5t'],
+  hu:[15,30,'HU-GO ~250 km, electronic distance toll','HU-GO ~250 km, peage electronique au km'],
+  sk:[10,20,'Myto ~200 km, distance-based','Myto ~200 km, au km'],
+  cz:[15,30,'Myto CZ ~300 km, distance-based','Myto CZ ~300 km, au km'],
+  pl:[20,45,'e-TOLL ~400 km, 2026 rates +40%','e-TOLL ~400 km, tarifs 2026 +40%'],
+  ro:[10,20,'Rovinieta 1-week vignette','Rovinieta vignette 1 semaine'],
+  bg:[8,15,'E-vignette 1-week','E-vignette 1 semaine'],
+  no:[20,60,'AutoPASS — urban rings + toll roads','AutoPASS — anneaux urbains + routes'],
+  gr:[20,40,'Main motorways ~400 km, higher rate','Autoroutes principales ~400 km, tarif superieur'],
+  ie:[5,15,'M50 + tolled bridges, free-flow','M50 + ponts a peage, flux libre'],
+  gb:[0,13,'ULEZ only if entering Greater London (GBP 12.50/day)','ULEZ uniquement si entree Grand Londres (GBP 12,50/jour)'],
+  de:[0,0,'Exempt — private motorhomes not subject to HGV Maut','Exempt — camping-cars prives non soumis a la Maut HGV'],
+  be:[0,0,'Exempt — Viapass applies to commercial freight only','Exempt — Viapass s\'applique au fret commercial uniquement'],
+  nl:[0,0,'Free — a few tunnel tolls only (~€5 max)','Gratuit — quelques tunnels seulement (~5€ max)'],
+  dk:[0,0,'Free — Oresund + Storebalt bridge tolls only if used','Gratuit — ponts Oresund/Storebalt uniquement si traverses'],
+  rs:[8,20,'Barrier tolls ~300 km, higher rate >3.5t','Peages barrieres ~300 km, tarif superieur >3,5t'],
+  me:[3,8,'Sozina Tunnel one-way','Tunnel Sozina aller simple'],
+  al:[0,0,'No significant tolls','Pas de peage significatif'],
 };
 
 const LEZ_EN=[
@@ -317,6 +360,19 @@ const LEZ_FR=[
   ['Espagne','ZBE','Madrid, Barcelone','Pas d\'autocollant DGT possible.'],
 ];
 
+const FREEFLOW_EN=[
+  ['France','Flux Libre / SANEF','All motorways','Expanding fast. Create account + register plate at sanef.com before departure. Invoice by mail if unregistered. Multi-country: Fulli, Ulys, Bip&Go.','https://www.sanef.com'],
+  ['Portugal','Portugal Tolls','Several motorways (A22, A25...)','No cash barriers. Pay at portugaltolls.com within 5 days OR pre-register plate. One of the most confusing systems for tourists.','https://www.portugaltolls.com'],
+  ['Ireland','eFlow / M50','M50 Dublin ring road','Fully free-flow. No cash. Pay online at eflow.ie within 8 days or register plate in advance.','https://www.eflow.ie'],
+  ['Norway','AutoPASS','All toll roads + urban rings','Entire network is electronic. You can drive and receive an invoice — registering avoids surcharges. BroBizz covers Scandinavia.','https://www.autopass.no/en/'],
+];
+const FREEFLOW_FR=[
+  ['France','Flux Libre / SANEF','Toutes autoroutes','En expansion rapide. Creer compte + enregistrer plaque sur sanef.com avant depart. Facture par courrier si non inscrit. Multi-pays: Fulli, Ulys, Bip&Go.','https://www.sanef.com'],
+  ['Portugal','Portugal Tolls','Plusieurs autoroutes (A22, A25...)','Aucune barriere. Payer sur portugaltolls.com dans les 5 jours OU pre-enregistrer la plaque. Un des systemes les plus deroutants pour les touristes.','https://www.portugaltolls.com'],
+  ['Irlande','eFlow / M50','Boulevard perifrique M50 Dublin','Entierement flux libre. Pas de paiement sur place. Payer sur eflow.ie dans les 8 jours ou enregistrer plaque a l\'avance.','https://www.eflow.ie'],
+  ['Norvege','AutoPASS','Toutes routes a peage + anneaux urbains','Reseau entierement electronique. On peut rouler et recevoir une facture — s\'enregistrer evite les majorations. BroBizz couvre la Scandinavie.','https://www.autopass.no/en/'],
+];
+
 let lang='en', selected=new Set();
 
 function setLang(l){
@@ -333,6 +389,8 @@ function setLang(l){
   document.getElementById('res-title').textContent=l==='fr'?'Exigences pays par pays':'Country-by-country requirements';
   document.getElementById('lez-title').textContent=l==='fr'?'Zones de basses emissions - aucun autocollant possible':'Emissions zones - no sticker possible';
   document.getElementById('lez-text').textContent=l==='fr'?'Les VR nord-americains ne peuvent pas obtenir d\'autocollants d\'emissions europeens. L\'acces aux zones LEZ, ZTL, Umweltzone et ULEZ est interdit. Garez-vous a l\'exterieur.':'North American RVs cannot obtain European emissions stickers. Access to LEZ, ZTL, Umweltzone, and ULEZ zones is forbidden. Park outside and use public transit or walk in.';
+  document.getElementById('ff-title').textContent=l==='fr'?'Peages flux libre / electroniques \u2014 aucune barriere, aucun avertissement':'Free-flow / electronic tolls \u2014 no barrier, no warning';
+  document.getElementById('ff-text').textContent=l==='fr'?'Ces pays utilisent des portiques + lecture automatique de plaques. Aucune barriere n\'arrete le vehicule. Les factures arrivent par courrier ou en ligne apres le trajet. Les plaques nord-americaines SONT detectees et facturees.':'These countries use gantries + automatic plate recognition. No barrier stops your vehicle. Invoices arrive by mail or online after travel. North American plates ARE detected and invoiced.';
   renderCountries();
   if(document.getElementById('resultsSection').classList.contains('visible')) showResults();
 }
@@ -360,21 +418,50 @@ function showResults(){
   const danger=reqs.filter(x=>x.r.st==='danger').length;
   const warn=reqs.filter(x=>x.r.st==='warn').length;
   const hasMulti=sel.some(id=>['at','ch','si','hu','sk','cz','ro','bg','pl'].includes(id));
+  const hasFreeFlow=sel.some(id=>['fr','pt','ie','no'].includes(id));
   const stColors={danger:'var(--red-bg)',warn:'var(--amber-bg)',ok:'var(--green-bg)'};
   const stText={danger:'var(--red)',warn:'var(--amber)',ok:'var(--green)'};
   const pillCls={danger:'pill-danger',warn:'pill-warn',ok:'pill-ok'};
 
   const sumEl=document.getElementById('summaryCard');
   const isFr=lang==='fr';
-  sumEl.innerHTML=`<div class="summary-title">${sel.length} ${isFr?'pays selectionnes':'countries selected'} &middot; ${danger} ${isFr?'action requise':'requiring advance action'} &middot; ${warn} ${isFr?'pre-enregistrement':'pre-registration'}</div>
-  <div class="summary-pills">${reqs.map(x=>`<span class="spill" style="background:${stColors[x.r.st]};color:${stText[x.r.st]}">${x.id.toUpperCase()}</span>`).join('')}</div>
-  ${hasMulti?`<div style="margin-top:10px;font-size:12px;background:var(--blue-bg);color:var(--blue);padding:8px 12px;border-radius:6px">${isFr?'Autopay Mobility (autopay.eu) couvre AT, CH, CZ, SK, SI, HU, RO, BG - un seul enregistrement.':'Autopay Mobility (autopay.eu) covers AT, CH, CZ, SK, SI, HU, RO, BG - one registration for multiple countries.'} <a href="https://autopay.eu" target="_blank">autopay.eu</a></div>`:''}`;
+  let totalLow=0,totalHigh=0;
+  sel.forEach(id=>{const b=BUDGET[id];if(b){totalLow+=b[0];totalHigh+=b[1];}});
+  const budgetSummary=totalHigh>0
+    ?'<div style="margin-top:10px;font-size:12px;background:var(--surface2);color:var(--text);padding:8px 12px;border-radius:6px">'
+     +'<span style="font-size:15px">&#128182;</span> '
+     +(isFr?'Budget p&eacute;ages estim&eacute; (&gt;3,5t, itin&eacute;raire type)':'Estimated toll budget (&gt;3.5t, typical itinerary)')
+     +' : <strong>&euro;'+totalLow+'&ndash;'+totalHigh+'</strong>'
+     +' <span style="font-size:11px;color:var(--text3)">&mdash; '
+     +(isFr?'fourchette indicative, varie selon km r&eacute;els':'indicative range, varies with actual km')
+     +'</span></div>'
+    :'';
+  const multiTip=hasMulti
+    ?'<div style="margin-top:10px;font-size:12px;background:var(--blue-bg);color:var(--blue);padding:8px 12px;border-radius:6px">'
+     +(isFr?'Autopay Mobility (autopay.eu) couvre AT, CH, CZ, SK, SI, HU, RO, BG - un seul enregistrement.'
+           :'Autopay Mobility (autopay.eu) covers AT, CH, CZ, SK, SI, HU, RO, BG - one registration for multiple countries.')
+     +' <a href="https://autopay.eu" target="_blank">autopay.eu</a></div>'
+    :'';
+  const ffTip=hasFreeFlow
+    ?'<div style="margin-top:10px;font-size:12px;background:var(--amber-bg);color:var(--amber);padding:8px 12px;border-radius:6px">&#9888;&#65039; '
+     +(isFr?'P&eacute;ages flux libre d&eacute;tect&eacute;s (FR/PT/IE/NO)&nbsp;: pas de barri&egrave;res, pas d\'avertissement sur place. Plaques nord-am&eacute;ricaines FACTUR&Eacute;ES. Enregistrez votre plaque &mdash; voir section ci-dessous.'
+           :'Free-flow tolls detected (FR/PT/IE/NO): no barriers, no on-site warning. NA plates ARE invoiced. Register your plate before departure &mdash; see section below.')
+     +'</div>'
+    :'';
+  sumEl.innerHTML=
+    '<div class="summary-title">'+sel.length+' '+(isFr?'pays selectionnes':'countries selected')
+    +' &middot; '+danger+' '+(isFr?'action requise':'requiring advance action')
+    +' &middot; '+warn+' '+(isFr?'pre-enregistrement':'pre-registration')+'</div>'
+    +'<div class="summary-pills">'+reqs.map(x=>'<span class="spill" style="background:'+stColors[x.r.st]+';color:'+stText[x.r.st]+'">'+x.id.toUpperCase()+'</span>').join('')+'</div>'
+    +multiTip+ffTip+budgetSummary;
 
   const list=document.getElementById('resultsList');
   list.innerHTML=reqs.sort((a,b)=>{const o={danger:0,warn:1,ok:2};return o[a.r.st]-o[b.r.st];}).map(({id,r})=>{
     const body=lang==='fr'?r.fr:r.en;
     const warn=(lang==='fr'?r.wfr:r.wen)||'';
     const tip=(lang==='fr'?r.tfr:r.ten)||'';
+    const b=BUDGET[id];
+    const budgetHtml=b?`<div class="result-budget">💶 <strong>${b[0]===0&&b[1]===0?(isFr?'Gratuit / Exempt':'Free / Exempt'):`€${b[0]}–${b[1]}`}</strong><span style="color:var(--text3)">— ${isFr?b[3]:b[2]}</span></div>`:'';
     return `<div class="result-item">
       <div class="result-header">
         <span class="result-flag" style="font-weight:700;font-size:13px;background:var(--surface2);padding:3px 6px;border-radius:4px">${id.toUpperCase()}</span>
@@ -382,15 +469,27 @@ function showResults(){
         <span class="status-pill ${pillCls[r.st]}">${r.lb}</span>
       </div>
       <div class="result-body">${body}</div>
+      ${budgetHtml}
       ${warn?`<div class="result-warning">&#9888;&#65039; ${warn}</div>`:''}
       ${tip?`<div class="result-tip">&#128161; ${tip}</div>`:''}
       ${r.links&&r.links.length?`<div class="result-links">${r.links.map(l=>`<a class="result-link" href="${l.u}" target="_blank">\u2192 ${l.t}</a>`).join('')}</div>`:''}
     </div>`;
   }).join('');
-
   const lezData=lang==='fr'?LEZ_FR:LEZ_EN;
   const th=lang==='fr'?['Pays','Zone','Villes','Regle pour VR nord-americains']:['Country','Zone type','Main cities','Rule for NA RVs'];
   document.getElementById('lezTable').innerHTML=`<thead><tr>${th.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${lezData.map(r=>`<tr>${r.map((c,i)=>`<td style="padding:8px 10px;border-bottom:0.5px solid var(--border);font-size:13px;${i===3?'color:var(--red)':''}">${c}</td>`).join('')}</tr>`).join('')}</tbody>`;
+
+  const ffCard=document.getElementById('freeflowCard');
+  const ffCountries=['fr','pt','ie','no'];
+  const hasFF=sel.some(id=>ffCountries.includes(id));
+  ffCard.style.display=hasFF?'':'none';
+  if(hasFF){
+    const ffData=lang==='fr'?FREEFLOW_FR:FREEFLOW_EN;
+    const ffSelected=ffCountries.filter(id=>sel.includes(id));
+    const ffRows=ffData.filter((_,i)=>sel.includes(ffCountries[i]));
+    const ffTh=lang==='fr'?['Pays','Systeme','Zone','Action recommandee','Lien']:['Country','System','Zone','Recommended action','Link'];
+    document.getElementById('ffTable').innerHTML=`<thead><tr>${ffTh.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${ffRows.map(r=>`<tr>${r.slice(0,4).map((c,i)=>`<td style="padding:8px 10px;border-bottom:0.5px solid var(--border);font-size:13px;${i===3?'color:var(--amber)':''}">${c}</td>`).join('')}<td style="padding:8px 10px;border-bottom:0.5px solid var(--border);font-size:13px"><a href="${r[4]}" target="_blank" style="color:var(--blue)">\u2192 ${lang==='fr'?'Lien officiel':'Official link'}</a></td></tr>`).join('')}</tbody>`;
+  }
   rs.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
