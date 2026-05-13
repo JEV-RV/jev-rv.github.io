@@ -307,6 +307,12 @@ a{color:var(--blue);text-decoration:none}
  <div class="range-row"><input type="range" min="0" max="2" step="1" id="p2p-inspect" value="1"><span class="range-val" id="v-p2p-inspect">€500</span></div>
  <div class="surcharge-banner">P2P only — you cannot inspect the RV before arrival. Level 0: trust blindly (€0, risky). Level 1: remote mechanic inspection + 2-day arrival buffer (€500). Level 2: worst case — poor condition on arrival, replacement delay (€900).</div>
  </div>
+ <!-- Toll budget slider -->
+ <div class="param-group" style="border-top:0.5px solid var(--border);padding-top:.85rem;margin-top:.85rem">
+ <label id="lbl-toll">🛣️ <span id="lbl-toll-txt">Toll budget — trip total (>3.5t rate)</span></label>
+ <div class="range-row"><input type="range" min="0" max="1500" step="25" id="toll-budget" value="800"><span class="range-val" id="v-toll-budget">€800</span></div>
+ <div class="surcharge-banner" id="toll-banner">Applies to all RV options (Ship RV, Rental, P2P). Car &amp; Hotels uses ~40% of this amount. Default €800 = typical FR/ES/PT/IT route (~90 days, >3.5t PL rates). Use the <a href="https://jev-rv.github.io/toll-calculator/" target="_blank" style="color:inherit;text-decoration:underline">Toll Calculator</a> to estimate your specific route, then set this value.</div>
+ </div>
  </div>
  <div id="pct-status" class="pct-ok" style="margin-top:8px"></div>
  </div>
@@ -492,6 +498,8 @@ const L={
     'pct-warn':p=>`⚠️ Mix ${p}% — must total 100%`,
     'winner':'Best value',
     'lbl-p2p-inspect':'🔍 P2P inspection level',
+    'lbl-toll-txt':'Toll budget — trip total (>3.5t rate)',
+    'toll-banner':'Applies to all RV options (Ship RV, Rental, P2P). Car &amp; Hotels uses ~40% of this amount. Default €800 = typical FR/ES/PT/IT route (~90 days, >3.5t PL rates). Use the <a href="https://jev-rv.github.io/toll-calculator/" target="_blank" style="color:inherit;text-decoration:underline">Toll Calculator</a> to estimate your specific route, then set this value.',
     'bs-resale-note':'Includes estimated return trip to EU for resale (~€2,500: flight + 10d accomm + per diem). Cost if sale delayed beyond Schengen exit.',
     'note':(n,d,min,name)=>`Trip: ${n} nights · Average: €${d}/night · Best: ${name} at €${min.toLocaleString()}`,
     'ts-unavail':w=>`❌ Time-Sharing unavailable: ${w} weeks needed, cap is 7 wk/yr. Needs ${Math.ceil(w/7)} subscriptions.`,
@@ -535,6 +543,8 @@ const L={
     'pct-warn':p=>`⚠️ Mix ${p}% — doit totaliser 100%`,
     'winner':'Meilleur prix',
     'lbl-p2p-inspect':"🔍 Niveau d'inspection P2P",
+    'lbl-toll-txt':'Budget péages — total voyage (tarif >3,5t)',
+    'toll-banner':'Appliqué à toutes les options VR (Expédition, Location, P2P). Voiture &amp; Hôtels utilise ~40% de ce montant. Défaut €800 = itinéraire type FR/ES/PT/IT (~90 jours, tarifs PL >3,5t). Utilisez le <a href="https://jev-rv.github.io/toll-calculator/" target="_blank" style="color:inherit;text-decoration:underline">Calculateur de péages</a> pour estimer votre itinéraire, puis ajustez.',
     'bs-resale-note':'Inclut le voyage retour estimé en Europe pour la revente (~2 500 € : vol + 10j hébergement + per diem). Coût si la vente est retardée au-delà du départ Schengen.',
     'note':(n,d,min,name)=>`Voyage : ${n} nuits · Moyenne : €${d}/nuit · Meilleure : ${name} à €${min.toLocaleString()}`,
     'ts-unavail':w=>`❌ Temps partagé non dispo : ${w} sem. requises, max 7 sem/an. Nécessite ${Math.ceil(w/7)} souscriptions.`,
@@ -568,19 +578,22 @@ function setLang(l){
     const lb=document.getElementById('s-lbl-'+s);if(lb)lb.textContent=Lc['s-lbl-'+s];
   });
   document.getElementById('season-info-box').textContent=SEASON_INFO[l][season];
+  // HTML banners (contain links — must use innerHTML)
+  const tb=document.getElementById('toll-banner');
+  if(tb)tb.innerHTML=Lc['toll-banner'];
   compute();
 }
 // EU-only sunk costs (Guide 6): CEE connectors · propane adapters · mandatory equipment · snow chains · EU water fittings.
 // Permanent upgrades (Victron/water treatment/Garmin GPS) excluded — amortized over all future travel including North America.
 const EU_ADAPT=1555;
 function calcOpts(schNights,totalNights,p,adaptCost){
-  const {diesel,paire,pcamp,grocery,resto,activ,sm,roroSurcharge,p2pInspect}=p;
+  const {diesel,paire,pcamp,grocery,resto,activ,sm,roroSurcharge,p2pInspect,tollBudget}=p;
   const km=36,conso=12.5,fpd=(km/100)*conso*diesel;
   const avgN=paire*14+Math.max(0,pcamp)*35*sm.camp;
   const ttax=3.0;
   const accommAll=totalNights*(avgN+ttax);
   const accommSch=schNights*(avgN+ttax);
-  const tollRV=1250/180,tollCar=500/180;
+  const tollRV=(tollBudget||800)/Math.max(schNights,1),tollCar=(tollBudget||800)*0.4/Math.max(schNights,1);
   const misc=10,laundry=8/7,propane=25/30;
   const dl=totalNights*(grocery+resto+activ+misc+laundry+propane);
   const fl_s=3700,fl_o=2450;
@@ -763,19 +776,21 @@ function compute(){
   const p2pInspect=v('p2p-inspect');
   const p2pLabels=['€0','€500','€900'];
   document.getElementById('v-p2p-inspect').textContent=p2pLabels[p2pInspect]||'€0';
+  const tollBudget=v('toll-budget');
+  document.getElementById('v-toll-budget').textContent='€'+Math.round(tollBudget).toLocaleString();
   const wPct=100-v('paire')-v('pcamp');
   const pEl=document.getElementById('pct-status');
   const Lc=L[lang];
   pEl.className=wPct<0?'pct-warning':'pct-ok';
   pEl.textContent=wPct<0?Lc['pct-warn'](Math.round(v('paire')+v('pcamp'))):Lc['pct-ok']+(wPct>0?` (wild/free: ${Math.round(wPct)}%)`:'');
-  const params={diesel,paire,pcamp,grocery,resto,activ,rvVal,sm,roroSurcharge,p2pInspect};
+  const params={diesel,paire,pcamp,grocery,resto,activ,rvVal,sm,roroSurcharge,p2pInspect,tollBudget};
   const res=calcOpts(schNights,totalNights,params,adaptCost);
   const TS_MAX=49,tsU=res.tsU,tsW=Math.ceil(schNights/7);
   const tsKm=Math.round((schNights/TS_MAX)*1960);
   const km=36,conso=12.5,fpd=(km/100)*conso*diesel;
   const avgN=paire*14+Math.max(0,pcamp)*35*sm.camp, ttax=3.0;
   const accommAll=totalNights*(avgN+ttax), accommSch=schNights*(avgN+ttax);
-  const tollRV=1250/180,tollCar=500/180;
+  const tollRV=tollBudget/Math.max(schNights,1),tollCar=tollBudget*0.4/Math.max(schNights,1);
   const misc=10,laundry=8/7,propane=25/30;
   const dl=totalNights*(grocery+resto+activ+misc+laundry+propane);
   const roro=Math.round(10650*(1+roroSurcharge/100));
