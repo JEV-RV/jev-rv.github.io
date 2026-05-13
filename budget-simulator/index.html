@@ -1053,7 +1053,7 @@ function renderIntangibles(minCostIdx, minCostTotal, totals, opts) {
   document.getElementById('intang-title').textContent      = lang==='en'?'Intangibles — quality of travel':'Intangibles — qualité du voyage';
   document.getElementById('intang-q-title').textContent    = lang==='en'?'5 questions to discuss before deciding':'5 questions à se poser avant de décider';
 }
-['nights1','nights2','nonsch','diesel','paire','pcamp','grocery','resto','activ','roroval','surcharge','adapt'].forEach(id=>{
+['nights1','nights2','nonsch','diesel','paire','pcamp','grocery','resto','activ','roroval','surcharge','adapt','toll-budget'].forEach(id=>{
   document.getElementById(id).addEventListener('input',compute);
 });
 ['ibed','ilogistic','iadmin','p2p-inspect'].forEach(id=>{
