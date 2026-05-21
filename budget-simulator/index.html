@@ -299,7 +299,7 @@ a{color:var(--blue);text-decoration:none}
  <div class="param-group" style="border-top:0.5px solid var(--border);padding-top:.85rem;margin-top:.85rem">
  <label id="lbl-adapt">⚙️ <span id="lbl-adapt-txt">EU adaptation costs (Ship RV only)</span></label>
  <div class="range-row"><input type="range" min="0" max="6950" step="50" id="adapt" value="1555"><span class="range-val" id="v-adapt">€1,555</span></div>
- <div class="surcharge-banner" id="adapt-banner">Default = EU-only sunk costs (~€1,555): CEE connectors, propane adapters, mandatory equipment, snow chains, EU water fittings. Permanent upgrades (Victron, water treatment, Garmin GPS) excluded — they improve your RV on every trip. Max €6,950 = full Guide 6 adaptation cost.</div>
+ <div class="surcharge-banner" id="adapt-banner">Default = EU-only sunk costs (~€1,555): CEE connectors, propane adapters, EU water fittings, snow chains HD, safety signage (V16, triangle, vest, Angles Morts, warning board, ISO labels), RoRo security (StealthShade, Loc-R-Bar). Permanent upgrades (Victron, water treatment, Garmin GPS) excluded — they benefit every future trip. Max €6,950 = full Guide 6 adaptation cost.</div>
  </div>
  <!-- P2P inspection cost slider -->
  <div class="param-group" style="border-top:0.5px solid var(--border);padding-top:.85rem;margin-top:.85rem">
@@ -487,7 +487,7 @@ const L={
     'lbl-roroval':'Shipped RV value (€)',
     'lbl-surcharge':'🌐 RoRo surcharge (Opt 1 only)',
     'lbl-adapt-txt':'EU adaptation costs (Ship RV only)',
-    'adapt-banner':'Default = EU-only sunk costs (~€1,555): CEE connectors, propane adapters, mandatory equipment, snow chains, EU water fittings. Permanent upgrades (Victron, water treatment, Garmin GPS) excluded — they benefit every future trip. Set to €6,950 for full Guide 6 cost.',
+    'adapt-banner':'Default = EU-only sunk costs (~€1,555): CEE connectors, propane adapters, EU water fittings, snow chains HD, safety signage (V16, triangle, vest, Angles Morts, warning board, ISO labels), RoRo security (StealthShade, Loc-R-Bar). Permanent upgrades (Victron, water treatment, Garmin GPS) excluded — they benefit every future trip. Set to €6,950 for full Guide 6 cost.',
     'results-title':'Cost comparison',
     'results-title-bar':'Current trip totals',
     'bev-title':'Break-even — cost by trip duration',
@@ -532,7 +532,7 @@ const L={
     'lbl-roroval':'Valeur VR expédié (€)',
     'lbl-surcharge':'🌐 Surcharge RoRo (Opt 1 seul.)',
     'lbl-adapt-txt':'Coûts adaptation EU (Expédition VR seul.)',
-    'adapt-banner':'Défaut = coûts perdus EU (~1 555 €) : connecteurs CEE, adaptateurs propane, équipements obligatoires, chaînes neige, raccords eau EU. Améliorations permanentes (Victron, traitement eau, GPS Garmin) exclues — elles bénéficient à tous les voyages. Mettre 6 950 € pour le coût total Guide 6.',
+    'adapt-banner':'Défaut = coûts perdus EU (~1 555 €) : connecteurs CEE, adaptateurs propane, raccords eau EU, chaînes neige HD, signalisation sécurité (V16, triangle, gilet, Angles Morts, panneau avertisseur, étiquettes ISO), sécurité RoRo (StealthShade, Loc-R-Bar). Améliorations permanentes (Victron, traitement eau, GPS Garmin) exclues — elles bénéficient à tous les voyages. Mettre 6 950 € pour le coût total Guide 6.',
     'results-title':'Comparaison des coûts',
     'results-title-bar':'Totaux du voyage actuel',
     'bev-title':'Seuil de rentabilité — coût selon la durée',
@@ -583,7 +583,7 @@ function setLang(l){
   if(tb)tb.innerHTML=Lc['toll-banner'];
   compute();
 }
-// EU-only sunk costs (Guide 6): CEE connectors · propane adapters · mandatory equipment · snow chains · EU water fittings.
+// EU-only sunk costs (Guide 6): CEE connectors · propane adapters · EU water fittings · snow chains HD · safety signage · RoRo security.
 // Permanent upgrades (Victron/water treatment/Garmin GPS) excluded — amortized over all future travel including North America.
 const EU_ADAPT=1555;
 function calcOpts(schNights,totalNights,p,adaptCost){
