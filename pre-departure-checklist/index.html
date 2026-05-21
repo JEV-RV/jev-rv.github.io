@@ -447,20 +447,29 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
   <!-- ── CHECKLIST ── -->
   <div class="checklist-wrap" id="checklist-wrap">
     <div class="view-bar">
-      <button class="view-btn active" id="vb-critical" onclick="setView('critical')">
-        🔴 <span id="lbl-critical">Critical only</span> <span class="vb-count" id="cnt-critical">—</span>
+      <button class=\"view-btn active\" id=\"vb-critical\" onclick=\"setView('critical')\">
+        🔴 <span id=\"lbl-critical\">Critical only</span> <span class=\"vb-count\" id=\"cnt-critical\">—</span>
       </button>
-      <button class="view-btn" id="vb-full" onclick="setView('full')">
-        ☑️ <span id="lbl-full">Full list</span> <span class="vb-count" id="cnt-full">—</span>
+      <button class=\"view-btn\" id=\"vb-full\" onclick=\"setView('full')\">
+        ☑️ <span id=\"lbl-full\">Full list</span> <span class=\"vb-count\" id=\"cnt-full\">—</span>
       </button>
-      <button class="view-btn" id="vb-water" onclick="setView('water')">
-        💧 <span id="lbl-water">Water only</span> <span class="vb-count" id="cnt-water">—</span>
+      <button class=\"view-btn\" id=\"vb-water\" onclick=\"setView('water')\">
+        💧 <span id=\"lbl-water\">Water only</span> <span class=\"vb-count\" id=\"cnt-water\">—</span>
       </button>
-      <button class="view-btn" id="vb-configure" onclick="setView('configure')">
-        ⚙️ <span id="lbl-configure">Configure</span> <span class="vb-count" id="cnt-configure">—</span>
+      <button class=\"view-btn\" id=\"vb-security\" onclick=\"setView('security')\">
+        🔒 <span id=\"lbl-security\">Security</span> <span class=\"vb-count\" id=\"cnt-security\">—</span>
       </button>
-      <button class="view-btn" id="vb-sop" onclick="setView('sop')">
-        🔧 <span id="lbl-sop">SOPs only</span> <span class="vb-count" id="cnt-sop">—</span>
+      <button class=\"view-btn\" id=\"vb-signage\" onclick=\"setView('signage')\">
+        🪧 <span id=\"lbl-signage\">Signage</span> <span class=\"vb-count\" id=\"cnt-signage\">—</span>
+      </button>
+      <button class=\"view-btn\" id=\"vb-road_compliance\" onclick=\"setView('road_compliance')\">
+        🚦 <span id=\"lbl-road_compliance\">Road Compliance</span> <span class=\"vb-count\" id=\"cnt-road_compliance\">—</span>
+      </button>
+      <button class=\"view-btn\" id=\"vb-configure\" onclick=\"setView('configure')\">
+        ⚙️ <span id=\"lbl-configure\">Configure</span> <span class=\"vb-count\" id=\"cnt-configure\">—</span>
+      </button>
+      <button class=\"view-btn\" id=\"vb-sop\" onclick=\"setView('sop')\">
+        🔧 <span id=\"lbl-sop\">SOPs only</span> <span class=\"vb-count\" id=\"cnt-sop\">—</span>
       </button>
       <button class="reset-btn" onclick="resetChecklist()" id="btn-reset-checklist">🔄 <span id="lbl-reset-checklist">Reset checklist</span></button>
       <div class="rv-filter">
@@ -957,44 +966,6 @@ var CATS = [
         fr_l:'📄 Passeport&nbsp;: copies num&eacute;riques s&eacute;curis&eacute;es + photocopies papier s&eacute;par&eacute;es pr&eacute;par&eacute;es',
         fr_n:'Certains campings, marinas et petits &eacute;tablissements EU demandent le passeport &agrave; l&rsquo;enregistrement pour l&rsquo;inscription obligatoire des voyageurs &eacute;trangers. Certains peuvent demander &agrave; conserver temporairement l&rsquo;original jusqu&rsquo;au d&eacute;part ou au paiement final &mdash; pratique variable selon le pays. En pratique&nbsp;: proposer une copie ou un scan en premier; utiliser la carte de cr&eacute;dit comme caution si n&eacute;cessaire; &eacute;viter de laisser l&rsquo;original. Conserver copies num&eacute;riques sur t&eacute;l&eacute;phone et photocopies papier s&eacute;par&eacute;es des originaux. Voir Guide 9 &mdash; Section 7.',
         links:[] },
-      { id:'_labels_divider', divider:true, en:'🏷️ Safety Labels', fr:'🏷️ Étiquettes de sécurité' },
-      // ── Section 6.6 — CE / ISO Safety Labels ──
-      { id:'m8', tags:['mandatory'], show:showAlways,
-        en_l:'🏷️ "WARNING — Fixed Propane Tank" sticker affixed at fill point',
-        en_n:'Required to distinguish fixed tank from removable cylinder for LPG station staff and port personnel. ISO 3864 / ISO 7010 compliant. Prevents refusal at European LPG stations and satisfies RoRo carrier requirements.',
-        fr_l:'🏷️ Autocollant &laquo;&nbsp;AVERTISSEMENT &mdash; R&eacute;servoir propane fixe&nbsp;&raquo; appos&eacute; au point de remplissage',
-        fr_n:'Requis pour distinguer le r&eacute;servoir fixe des bouteilles amovibles pour le personnel des stations GPL et du port. Conforme ISO 3864 / ISO 7010. &Eacute;vite le refus aux stations GPL europ&eacute;ennes et satisfait les exigences des transporteurs RoRo.',
-        links:[{t:'Fixed Propane Tank sticker',u:'https://a.co/d/00DphKTT',c:'amazon'}] },
-      { id:'m9', tags:['recommended'], show:showAlways,
-        en_l:'🏷️ "High current — Lithium battery system" warning label on battery compartment',
-        en_n:'ISO 3864 / ISO 7011. Alerts emergency responders and service technicians to lithium battery hazard (thermal runaway, high current). Increasingly expected in EU for RVs with upgraded LiFePO4 systems.',
-        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Haute tension &mdash; Syst&egrave;me batterie lithium&nbsp;&raquo; sur le compartiment batterie',
-        fr_n:'ISO 3864 / ISO 7011. Alerte les secouristes et techniciens sur le danger des batteries lithium (emballement thermique, haute intensit&eacute;). De plus en plus attendu en EU pour les VR avec syst&egrave;mes LiFePO4 upgrades.',
-        links:[{t:'Lithium battery warning label',u:'https://a.co/d/09xg4QxM',c:'amazon'}] },
-      { id:'m10', tags:['recommended'], show:showAlways,
-        en_l:'🏷️ "No smoking — No open flame" label near propane compartment',
-        en_n:'ISO 3864 / ISO 7012. Standard safety signage expected on any vehicle carrying LPG in Europe. Required by some ferry/RoRo operators as part of dangerous goods declaration.',
-        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;D&eacute;fense de fumer &mdash; Pas de flamme&nbsp;&raquo; pr&egrave;s du compartiment propane',
-        fr_n:'ISO 3864 / ISO 7012. Signalisation de s&eacute;curit&eacute; standard attendue sur tout v&eacute;hicule transportant du GPL en Europe. Exig&eacute;e par certains op&eacute;rateurs ferry/RoRo dans le cadre de la d&eacute;claration de marchandises dangereuses.',
-        links:[{t:'No smoking / open flame label',u:'https://a.co/d/0eTSaGBf',c:'amazon'}] },
-      { id:'m11', tags:['recommended'], show:showAlways,
-        en_l:'🏷️ "Danger — Propane" hazmat label on tank compartment exterior',
-        en_n:'ISO 3864 / ISO 7013. Identifies LPG as hazardous material to emergency services. Required for RoRo shipping declaration and increasingly for campsite entry in some European countries.',
-        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Danger &mdash; Propane&nbsp;&raquo; sur l&rsquo;ext&eacute;rieur du compartiment r&eacute;servoir',
-        fr_n:'ISO 3864 / ISO 7013. Identifie le GPL comme mati&egrave;re dangereuse pour les services d&rsquo;urgence. Requis pour la d&eacute;claration d&rsquo;exp&eacute;dition RoRo et de plus en plus pour l&rsquo;entr&eacute;e dans certains campings europ&eacute;ens.',
-        links:[{t:'Danger Propane label',u:'https://a.co/d/0gGdEPyN',c:'amazon'}] },
-      { id:'m12', tags:['recommended'], show:showAlways,
-        en_l:'🏷️ "First Aid Kit — Location" label visible from RV entrance',
-        en_n:'ISO 3864 / ISO 7014. First aid kit location marking is required in many EU commercial vehicles and strongly recommended for all RVs. Emergency services expect to find it quickly.',
-        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Trousse de premiers soins &mdash; Emplacement&nbsp;&raquo; visible depuis l&rsquo;entr&eacute;e',
-        fr_n:'ISO 3864 / ISO 7014. Marquage de l&rsquo;emplacement de la trousse de premiers soins obligatoire dans de nombreux v&eacute;hicules commerciaux EU et fortement recommand&eacute; pour tous les VR. Les services d&rsquo;urgence s&rsquo;attendent &agrave; la trouver rapidement.',
-        links:[{t:'First Aid Kit location label',u:'https://a.co/d/03rY2Ckm',c:'amazon'}] },
-      { id:'m13', tags:['recommended'], show:showAlways,
-        en_l:'🏷️ "Fire Extinguisher — Location" label visible from RV entrance',
-        en_n:'ISO 3864 / ISO 7015. Fire extinguisher location marking required in EU commercial vehicles — strongly recommended for all RVs. Some European campgrounds and ferry operators verify this during check-in.',
-        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Extincteur &mdash; Emplacement&nbsp;&raquo; visible depuis l&rsquo;entr&eacute;e',
-        fr_n:'ISO 3864 / ISO 7015. Marquage de l&rsquo;emplacement de l&rsquo;extincteur obligatoire dans les v&eacute;hicules commerciaux EU &mdash; fortement recommand&eacute; pour tous les VR. Certains campings europ&eacute;ens et op&eacute;rateurs de ferry v&eacute;rifient cela &agrave; l&rsquo;entr&eacute;e.',
-        links:[{t:'Fire Extinguisher location label',u:'https://a.co/d/0bJFsA5F',c:'amazon'}] },
     ]
   },
   { id:'elec', icon:'🔌',
@@ -1134,6 +1105,18 @@ var CATS = [
         fr_l:'R&eacute;servoirs gris/noirs vid&eacute;s avant de rouler &mdash; garder 10% pour &eacute;viter le ballottement',
         fr_n:'Vider avant de rouler pour &eacute;conomiser du poids et la charge sur les essieux. Garder ~10% pour &eacute;viter les odeurs. Vider &agrave; 0% &agrave; la station de vidange.',
         links:[] },
+      { id:'ww3', tags:['recommended'], show:showAlways,
+        en_l:'Septic-safe black tank treatment on board (bacteria &amp; enzyme based)',
+        en_n:'Many European campgrounds use small private septic systems — aggressive biocides (formaldehyde, quats) can destroy bacterial colonies and create costly repairs. Use enzyme/probiotic products instead: Unique RV Digest-It or Clean Camper ProClean X. Also reduces sensor fouling and sludge. &rarr; Guide 6 Section 3.2.',
+        fr_l:'Traitement de r&eacute;servoir noir compatible septique &agrave; bord (bact&eacute;ries &amp; enzymes)',
+        fr_n:'De nombreux campings europ&eacute;ens utilisent de petites fosses septiques priv&eacute;es &mdash; les biocides agressifs (formald&eacute;hyde, quats) peuvent d&eacute;truire les colonies bact&eacute;riennes. Utiliser des produits &agrave; enzymes/probiotiques. R&eacute;duit aussi l&rsquo;encrassement des capteurs. &rarr; Guide 6 Section 3.2.',
+        links:[{t:'Unique RV Digest-It',u:'https://a.co/d/0iRlSEM5',c:'amazon'},{t:'Clean Camper ProClean X',u:'https://a.co/d/02TLYMti',c:'amazon'}] },
+      { id:'ww4', tags:['optional'], show:showAlways,
+        en_l:'Solbio Organic Toilet Fluid &mdash; European biological treatment (widely available EU)',
+        en_n:'Widely sold at European camping shops and online. Uses biological fermentation (no aggressive biocides) — accepted at environmentally sensitive campgrounds. Good to know as a local purchase option when travelling. Also available: Solbio Water Tank Cleaner for toilet bowl. &rarr; Guide 6 Section 3.2.',
+        fr_l:'Solbio Fluide Organique pour Toilette &mdash; traitement biologique europ&eacute;en (disponible partout en EU)',
+        fr_n:'Vendu dans les magasins de camping europ&eacute;ens et en ligne. Utilise la fermentation biologique (sans biocides agressifs) &mdash; accept&eacute; dans les campings sensibles &agrave; l&rsquo;environnement. Bon &agrave; conna&icirc;tre comme option d&rsquo;achat local en voyage. &rarr; Guide 6 Section 3.2.',
+        links:[{t:'Solbio Organic Toilet Fluid',u:'https://amzn.eu/d/0dAzJdFA',c:'amazon'},{t:'Solbio Water Tank Cleaner',u:'https://www.solbio.co.uk/product-page/solbio-water-tank-cleaner',c:'site'}] },
     ]
   },
   { id:'telecom', icon:'📡',
@@ -1193,33 +1176,133 @@ var CATS = [
         links:[{t:'ProtonVPN',u:'https://protonvpn.com',c:'site'},{t:'Tailscale',u:'https://tailscale.com',c:'site'}] },
     ]
   },
-  { id:'mandatory', icon:'🚦',
-    en:'Mandatory Equipment', fr:'&Eacute;quipements obligatoires',
+  { id:'security', icon:'🔒',
+    en:'RV Security', fr:'S&eacute;curit&eacute; VR',
     items:[
+      { id:'sec1', tags:['mandatory'], show:showAlways,
+        en_l:'🚗 Dashcam: remove or physically cover before entering Portugal, Austria, Luxembourg or Switzerland',
+        en_n:'Portugal (Data Protection Act No. 58/2019) and Austria: possession alone = fines up to €25,000. Luxembourg: recording in public spaces from a vehicle is illegal. Switzerland: practically impossible to comply (consent of all persons required). Simply turning off is NOT sufficient — remove or physically cover. Belgium, France, Germany, Norway: legal for private use but footage cannot be published without anonymization. Common LTV route: if wintering in the Algarve, cover dashcam before the Portuguese border. &rarr; Guide 6 Section 8.',
+        fr_l:'🚗 Dashcam&nbsp;: retirer ou couvrir physiquement avant d&rsquo;entrer au Portugal, Autriche, Luxembourg ou Suisse',
+        fr_n:'Portugal (Loi 58/2019) et Autriche&nbsp;: la simple possession = amendes jusqu&rsquo;&agrave; 25&nbsp;000&euro;. Luxembourg&nbsp;: enregistrement dans les espaces publics depuis un v&eacute;hicule interdit. Suisse&nbsp;: pratiquement impossible de respecter la loi (consentement de toutes les personnes requis). &Eacute;teindre ne suffit PAS &mdash; retirer ou couvrir physiquement. Belgique, France, Allemagne, Norv&egrave;ge&nbsp;: l&eacute;gal en usage priv&eacute; mais images non publiables sans anonymisation. Route courante&nbsp;: hiverner en Algarve = couvrir avant la fronti&egrave;re portugaise. &rarr; Guide 6 Section 8.',
+        links:[] },
+      { id:'sec2', tags:['recommended'], show:showAlways,
+        en_l:'🚢 RoRo cabin separation: privacy curtain or blackout barrier installed behind front seats',
+        en_n:'Port drivers only need access to the cab. A physical/visual barrier signals that rear coach access is not required — more effective than alarms alone. StealthShade is purpose-built for Sprinter. &rarr; Guide 6 Section 7.3.',
+        fr_l:'🚢 S&eacute;paration cabine/habitacle RoRo&nbsp;: rideau occultant ou barri&egrave;re install&eacute;e derri&egrave;re les si&egrave;ges avant',
+        fr_n:'Les conducteurs portuaires n&rsquo;ont besoin que de l&rsquo;acc&egrave;s &agrave; la cabine. Une barri&egrave;re physique/visuelle signale que l&rsquo;acc&egrave;s &agrave; l&rsquo;habitacle n&rsquo;est pas requis &mdash; plus efficace que les alarmes seules. StealthShade est con&ccedil;u sp&eacute;cifiquement pour le Sprinter. &rarr; Guide 6 Section 7.3.',
+        links:[{t:'StealthShade Privacy Curtain (Sprinter)',u:'https://shop.thewanderful.co/products/stealthshade-privacy-curtain',c:'site'}] },
+      { id:'sec3', tags:['recommended'], show:showAlways,
+        en_l:'🚢 Loc-R-Bar mechanical alarm bar &mdash; installed vertically between cabin seats',
+        en_n:'Adjustable stainless steel bar with alarm padlock. Installed vertically ~8" apart between cabin seats to physically block access to coach area. Works even with batteries disconnected during shipping. &rarr; Guide 6 Section 7.3.',
+        fr_l:'🚢 Barre de s&eacute;curit&eacute; Loc-R-Bar avec alarme &mdash; install&eacute;e verticalement entre les si&egrave;ges de cabine',
+        fr_n:'Barre en acier inoxydable r&eacute;glable avec cadenas alarme. Installer verticalement ~20 cm d&rsquo;&eacute;cart entre les si&egrave;ges de cabine. Fonctionne m&ecirc;me avec les batteries d&eacute;branch&eacute;es. &rarr; Guide 6 Section 7.3.',
+        links:[{t:'Loc-R-Bar alarm security bar',u:'https://a.co/d/04vxxGKr',c:'amazon'}] },
+      { id:'sec4', tags:['recommended'], show:showAlways,
+        en_l:'🚢 "Restricted Area" sign + surveillance camera stickers visible in cabin',
+        en_n:'Psychological deterrence: a clearly marked restricted area reduces opportunistic access. Visible surveillance stickers add deterrence even when cameras are inactive during shipping. &rarr; Guide 6 Section 7.3.',
+        fr_l:'🚢 Panneau &laquo;&nbsp;Zone restreinte&nbsp;&raquo; + autocollants cam&eacute;ra de surveillance visibles en cabine',
+        fr_n:'Dissuasion psychologique&nbsp;: une zone clairement interdite r&eacute;duit les acc&egrave;s opportunistes. Les autocollants de surveillance ajoutent de la dissuasion m&ecirc;me quand les cam&eacute;ras sont inactives. &rarr; Guide 6 Section 7.3.',
+        links:[{t:'Restricted Area sign',u:'https://a.co/d/008YxxBD',c:'amazon'},{t:'Surveillance camera stickers',u:'https://a.co/d/08QZXava',c:'amazon'}] },
+      { id:'sec5', tags:['optional'], show:showAlways,
+        en_l:'🔒 Cabinet cam locks &amp; drawer locks installed on high-value storage',
+        en_n:'Goal is not a high-security safe but increasing time/effort required for opportunistic access. Use reinforcement backing plates to prevent tearing thin cabinet materials. Uniform locking across cabinets creates stronger visual deterrence. &rarr; Guide 6 Section 7.5.',
+        fr_l:'🔒 Verrous de cabinet et tiroirs install&eacute;s sur les rangements &agrave; haute valeur',
+        fr_n:'L&rsquo;objectif n&rsquo;est pas un coffre-fort mais d&rsquo;augmenter le temps et l&rsquo;effort n&eacute;cessaires. Utiliser des plaques de renfort pour &eacute;viter d&rsquo;arracher les mat&eacute;riaux minces. &rarr; Guide 6 Section 7.5.',
+        links:[{t:'RV cabinet cam locks 5/8"',u:'https://a.co/d/0e321PKw',c:'amazon'},{t:'RV drawer locks 1-1/8"',u:'https://a.co/d/0e96YtGk',c:'amazon'}] },
+      { id:'sec6', tags:['optional'], show:showAlways,
+        en_l:'📷 Autonomous battery camera on board (SD card local recording)',
+        en_n:'Internet-connected systems go offline when batteries are disconnected during RoRo. Standalone battery cameras with local SD recording continue to work. Use primarily for post-theft documentation and insurance claims — not real-time intervention. &rarr; Guide 6 Section 7.6.',
+        fr_l:'📷 Cam&eacute;ra autonome &agrave; batterie &agrave; bord (enregistrement local carte SD)',
+        fr_n:'Les syst&egrave;mes connect&eacute;s &agrave; Internet tombent hors ligne quand les batteries sont d&eacute;branch&eacute;es. Les cam&eacute;ras autonomes avec enregistrement local SD continuent de fonctionner. Utile principalement pour la documentation post-vol et les assurances. &rarr; Guide 6 Section 7.6.',
+        links:[{t:'Blink Outdoor 4 camera',u:'https://a.co/d/01JJwX6a',c:'amazon'},{t:'256GB SD + Blink Sync Module XR',u:'https://a.co/d/03DyVl4m',c:'amazon'}] },
+    ]
+  },
+  { id:'signage', icon:'🪧',
+    en:'Safety Signage', fr:'Signalisation de s&eacute;curit&eacute;',
+    items:[
+      { id:'sg1', tags:['critical'], show:showAlways,
+        en_l:'🚨 V16 2026 approved emergency warning lamp + CE road safety triangle',
+        en_n:'V16 autonomous flashing warning lamp (IDIADA approval PC21020060) is progressively replacing the triangle in several EU countries. Carry both — triangle still required in most countries. All must have CE approval. &rarr; Guide 6 Section 6.7.',
+        fr_l:'🚨 Lampe de signalisation d&rsquo;urgence V16 2026 approuv&eacute;e + triangle de s&eacute;curit&eacute; CE',
+        fr_n:'La lampe V16 autonome (approbation IDIADA PC21020060) remplace progressivement le triangle dans plusieurs pays EU. Emporter les deux &mdash; le triangle est toujours requis dans la plupart des pays. Tous doivent avoir l&rsquo;approbation CE. &rarr; Guide 6 Section 6.7.',
+        links:[{t:'V16 warning lamp (IDIADA approved)',u:'https://amzn.eu/d/0arAka2k',c:'amazon'},{t:'CE road safety triangle',u:'https://amzn.eu/d/08XG5oHT',c:'amazon'}] },
+      { id:'sg2', tags:['mandatory'], show:showAlways,
+        en_l:'🦺 Reflective safety vest(s) &mdash; one per passenger, accessible from cabin',
+        en_n:'Mandatory in France, Spain, Italy, Portugal, Austria and most EU countries — must be worn immediately upon exiting the vehicle on the road. Must be accessible from inside the vehicle (not locked in a rear compartment). &rarr; Guide 6 Section 6.7.',
+        fr_l:'🦺 Gilet(s) r&eacute;fl&eacute;chissant(s) &mdash; un par passager, accessible depuis la cabine',
+        fr_n:'Obligatoire en France, Espagne, Italie, Portugal, Autriche et la plupart des pays EU &mdash; doit &ecirc;tre enfilé imm&eacute;diatement en sortant du v&eacute;hicule sur la route. Doit &ecirc;tre accessible depuis l&rsquo;int&eacute;rieur (pas dans un compartiment arri&egrave;re verrouill&eacute;). &rarr; Guide 6 Section 6.7.',
+        links:[{t:'Reflective safety vest (CE)',u:'https://amzn.eu/d/0haPp9dC',c:'amazon'}] },
       { id:'m1', tags:['critical'], show:showAlways,
-        en_l:'Blind-spot stickers (Angles Morts) &mdash; 3 stickers, mandatory in France for GVWR &gt;3.5t',
+        en_l:'🇫🇷 Blind-spot stickers (Angles Morts) &mdash; 3 stickers, mandatory in France for GVWR &gt;3.5t',
         en_n:'French regulation Jan 2021 (art. R.313-32-1) &mdash; applies to all vehicles >3.5t GVWR regardless of registration country. No exceptions for tourists.',
-        fr_l:'Autocollants angles morts &mdash; 3 autocollants, obligatoires en France pour PNBV &gt;3,5t',
+        fr_l:'🇫🇷 Autocollants angles morts &mdash; 3 autocollants, obligatoires en France pour PNBV &gt;3,5t',
         fr_n:'R&egrave;glement fran&ccedil;ais jan. 2021 (art. R.313-32-1) &mdash; s&rsquo;applique &agrave; tous les v&eacute;hicules &gt;3,5t PNBV quel que soit le pays d&rsquo;immatriculation. Aucune exception pour les touristes.',
         links:[{t:'Angles Morts set',u:'https://amzn.eu/d/08oiQ3Tb',c:'amazon'}] },
       { id:'m2', tags:['critical'], show:showAlways,
-        en_l:'Red/white warning board (50&times;50 cm, reflective) &mdash; mandatory Spain and Italy if rear load protrudes',
+        en_l:'🇪🇸🇮🇹 Red/white warning board (50&times;50 cm, reflective) &mdash; mandatory Spain &amp; Italy if rear load protrudes',
         en_n:'Italy: aluminum mandatory, 5 red + 4 white stripes. Spain: aluminum or plastic, 3+3 stripes. Buy a reversible 2-in-1 board. Jan 2025: Italy exempts racks on towbar with own lighting.',
-        fr_l:'Panneau avertisseur rouge/blanc (50&times;50&nbsp;cm, r&eacute;fl&eacute;chissant) &mdash; obligatoire Espagne et Italie si chargement d&eacute;passe &agrave; l&rsquo;arri&egrave;re',
+        fr_l:'🇪🇸🇮🇹 Panneau avertisseur rouge/blanc (50&times;50&nbsp;cm, r&eacute;fl&eacute;chissant) &mdash; obligatoire Espagne &amp; Italie si chargement d&eacute;passe &agrave; l&rsquo;arri&egrave;re',
         fr_n:'Italie&nbsp;: aluminium obligatoire, 5 bandes rouges + 4 blanches. Espagne&nbsp;: aluminium ou plastique, 3+3 bandes. Acheter un panneau 2-en-1 r&eacute;versible. Jan 2025&nbsp;: Italie exempte les porte-v&eacute;los sur boule d&rsquo;attelage avec &eacute;clairage propre.',
         links:[{t:'2-in-1 Spain+Italy board',u:'https://amzn.eu/d/099qOlWQ',c:'amazon'}] },
+      { id:'m8', tags:['mandatory'], show:showAlways,
+        en_l:'🏷️ &ldquo;WARNING &mdash; Fixed Propane Tank&rdquo; sticker affixed at fill point',
+        en_n:'Required to distinguish fixed tank from removable cylinder for LPG station staff and port personnel. ISO 3864 / ISO 7010 compliant. Prevents refusal at European LPG stations and satisfies RoRo carrier requirements.',
+        fr_l:'🏷️ Autocollant &laquo;&nbsp;AVERTISSEMENT &mdash; R&eacute;servoir propane fixe&nbsp;&raquo; appos&eacute; au point de remplissage',
+        fr_n:'Requis pour distinguer le r&eacute;servoir fixe des bouteilles amovibles pour le personnel des stations GPL et du port. Conforme ISO 3864 / ISO 7010. &Eacute;vite le refus aux stations GPL europ&eacute;ennes et satisfait les exigences des transporteurs RoRo.',
+        links:[{t:'Fixed Propane Tank sticker',u:'https://a.co/d/00DphKTT',c:'amazon'}] },
+      { id:'m9', tags:['recommended'], show:showAlways,
+        en_l:'🏷️ &ldquo;High current &mdash; Lithium battery system&rdquo; warning label on battery compartment',
+        en_n:'ISO 3864 / ISO 7011. Alerts emergency responders and service technicians to lithium battery hazard (thermal runaway, high current). Increasingly expected in EU for RVs with upgraded LiFePO4 systems.',
+        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Haute tension &mdash; Syst&egrave;me batterie lithium&nbsp;&raquo; sur le compartiment batterie',
+        fr_n:'ISO 3864 / ISO 7011. Alerte les secouristes et techniciens sur le danger des batteries lithium (emballement thermique, haute intensit&eacute;). De plus en plus attendu en EU pour les VR avec syst&egrave;mes LiFePO4 upgrades.',
+        links:[{t:'Lithium battery warning label',u:'https://a.co/d/09xg4QxM',c:'amazon'}] },
+      { id:'m10', tags:['recommended'], show:showAlways,
+        en_l:'🏷️ &ldquo;No smoking &mdash; No open flame&rdquo; label near propane compartment',
+        en_n:'ISO 3864 / ISO 7012. Standard safety signage expected on any vehicle carrying LPG in Europe. Required by some ferry/RoRo operators as part of dangerous goods declaration.',
+        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;D&eacute;fense de fumer &mdash; Pas de flamme&nbsp;&raquo; pr&egrave;s du compartiment propane',
+        fr_n:'ISO 3864 / ISO 7012. Signalisation de s&eacute;curit&eacute; standard attendue sur tout v&eacute;hicule transportant du GPL en Europe. Exig&eacute;e par certains op&eacute;rateurs ferry/RoRo dans le cadre de la d&eacute;claration de marchandises dangereuses.',
+        links:[{t:'No smoking / open flame label',u:'https://a.co/d/0eTSaGBf',c:'amazon'}] },
+      { id:'m11', tags:['recommended'], show:showAlways,
+        en_l:'🏷️ &ldquo;Danger &mdash; Propane&rdquo; hazmat label on tank compartment exterior',
+        en_n:'ISO 3864 / ISO 7013. Identifies LPG as hazardous material to emergency services. Required for RoRo shipping declaration and increasingly for campsite entry in some European countries.',
+        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Danger &mdash; Propane&nbsp;&raquo; sur l&rsquo;ext&eacute;rieur du compartiment r&eacute;servoir',
+        fr_n:'ISO 3864 / ISO 7013. Identifie le GPL comme mati&egrave;re dangereuse pour les services d&rsquo;urgence. Requis pour la d&eacute;claration d&rsquo;exp&eacute;dition RoRo et de plus en plus pour l&rsquo;entr&eacute;e dans certains campings europ&eacute;ens.',
+        links:[{t:'Danger Propane label',u:'https://a.co/d/0gGdEPyN',c:'amazon'}] },
+      { id:'m12', tags:['recommended'], show:showAlways,
+        en_l:'🏷️ &ldquo;First Aid Kit &mdash; Location&rdquo; label visible from RV entrance',
+        en_n:'ISO 3864 / ISO 7014. First aid kit location marking is required in many EU commercial vehicles and strongly recommended for all RVs. Emergency services expect to find it quickly.',
+        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Trousse de premiers soins &mdash; Emplacement&nbsp;&raquo; visible depuis l&rsquo;entr&eacute;e',
+        fr_n:'ISO 3864 / ISO 7014. Marquage de l&rsquo;emplacement de la trousse de premiers soins obligatoire dans de nombreux v&eacute;hicules commerciaux EU et fortement recommand&eacute; pour tous les VR. Les services d&rsquo;urgence s&rsquo;attendent &agrave; la trouver rapidement.',
+        links:[{t:'First Aid Kit location label',u:'https://a.co/d/03rY2Ckm',c:'amazon'}] },
+      { id:'m13', tags:['recommended'], show:showAlways,
+        en_l:'🏷️ &ldquo;Fire Extinguisher &mdash; Location&rdquo; label visible from RV entrance',
+        en_n:'ISO 3864 / ISO 7015. Fire extinguisher location marking required in EU commercial vehicles — strongly recommended for all RVs. Some European campgrounds and ferry operators verify this during check-in.',
+        fr_l:'🏷️ &Eacute;tiquette &laquo;&nbsp;Extincteur &mdash; Emplacement&nbsp;&raquo; visible depuis l&rsquo;entr&eacute;e',
+        fr_n:'ISO 3864 / ISO 7015. Marquage de l&rsquo;emplacement de l&rsquo;extincteur obligatoire dans les v&eacute;hicules commerciaux EU &mdash; fortement recommand&eacute; pour tous les VR. Certains campings europ&eacute;ens et op&eacute;rateurs de ferry v&eacute;rifient cela &agrave; l&rsquo;entr&eacute;e.',
+        links:[{t:'Fire Extinguisher location label',u:'https://a.co/d/0bJFsA5F',c:'amazon'}] },
+    ]
+  },
+  { id:'road_compliance', icon:'🚦',
+    en:'Road Compliance', fr:'Conformit&eacute; routi&egrave;re',
+    items:[
       { id:'m4', tags:['mandatory'], show:showAlways,
         en_l:'E-bike configured in EU mode (&le;250W, &le;25 km/h, pedalling required)',
-        en_n:'North American e-bikes (500–750W, 32 km/h) are reclassified as mopeds in Europe. Check if your bike has an EU mode (firmware). Some cannot be downgraded — check with manufacturer before departure.',
+        en_n:'North American e-bikes (500–750W, 32 km/h) are reclassified as mopeds in Europe. Check if your bike has an EU mode (firmware). Some cannot be downgraded — check with manufacturer before departure. Required accessories: StVZO-approved lighting (🇩🇪 mandatory), wheel &amp; pedal reflectors, bell or horn. &rarr; Guide 6 Section 6.4.',
         fr_l:'V&eacute;lo &eacute;lectrique configur&eacute; en mode UE (&le;250W, &le;25&nbsp;km/h, p&eacute;dalage obligatoire)',
-        fr_n:'Les v&eacute;los &eacute;lectriques nord-am&eacute;ricains (500&ndash;750W, 32&nbsp;km/h) sont reclassifi&eacute;s comme cyclomoteurs en Europe. V&eacute;rifier si votre v&eacute;lo dispose d&rsquo;un mode UE (firmware). Certains ne peuvent pas &ecirc;tre r&eacute;trogad&eacute;s &mdash; v&eacute;rifier aupr&egrave;s du fabricant avant le d&eacute;part.',
-        links:[] },
+        fr_n:'Les v&eacute;los &eacute;lectriques nord-am&eacute;ricains (500&ndash;750W, 32&nbsp;km/h) sont reclassifi&eacute;s comme cyclomoteurs en Europe. V&eacute;rifier si votre v&eacute;lo dispose d&rsquo;un mode UE (firmware). Certains ne peuvent pas &ecirc;tre r&eacute;trogad&eacute;s. Accessoires requis&nbsp;: &eacute;clairage approuv&eacute; StVZO (🇩🇪 obligatoire), r&eacute;flecteurs roues &amp; p&eacute;dales, cloche ou klaxon. &rarr; Guide 6 Section 6.4.',
+        links:[{t:'Lezyne Hecto StVZO light set',u:'https://www.tradeinn.com/bikeinn/en/lezyne-hecto-stvzo-230--ktv-stvzo-light-set/142248578/p',c:'site'},{t:'Wheel spoke reflectors',u:'https://a.co/d/0aImfzwl',c:'amazon'},{t:'Pedal reflectors',u:'https://a.co/d/01WFpPrW',c:'amazon'},{t:'Electric bike horn 120dB',u:'https://a.co/d/0cpDx48i',c:'amazon'}] },
       { id:'m5', tags:['recommended'], show:showAlways,
         en_l:'Heavy-duty snow chains or HD snow socks on board (&gt;3.5t)',
         en_n:'Standard car chains rated to 3.5t — illegal for RVs >3.5t. Only TÜV/ÖNORM-certified HD equipment accepted in Alpine countries. Applies regardless of travel style or duration — ice is ice.',
         fr_l:'Cha&icirc;nes neige lourdes ou chaussettes HD &agrave; bord (&gt;3,5t)',
         fr_n:'Les cha&icirc;nes standard pour voitures sont limit&eacute;es &agrave; 3,5t &mdash; ill&eacute;gales pour les VR &gt;3,5t. Seuls les &eacute;quipements HD certifi&eacute;s TÜV/ÖNORM accept&eacute;s dans les pays alpins. S&rsquo;applique quel que soit le style ou la dur&eacute;e &mdash; la glace, c&rsquo;est la glace.',
         links:[{t:'AutoSock HP698 (HD)',u:'https://autosock.com/products/autosock-hp698',c:'site'},{t:'Pewag Austro Super HD',u:'https://shop.pewag.com/fr/pewag-austro-super-jumelee/4034241',c:'site'}] },
+      { id:'m7', tags:['optional'], show:showAlways,
+        en_l:'ℹ️ DIY / home-converted campers: EU type-approval required &mdash; does NOT apply to LTV owners',
+        en_n:'All LTV models (Unity, Wonder, Serenity, Revel, etc.) are factory-manufactured motorhomes with WVTA certification — no re-inspection required for EU tourist use. This item is for community awareness: self-built campers (skoolies, van conversions) face serious EU legal problems including possible refusal at border, impoundment, and RoRo shipping refusal. If you know someone planning to ship a DIY camper to Europe, share Guide 6 Section 10 with them. &rarr; Guide 6 Section 10.',
+        fr_l:'ℹ️ Campeurs DIY / convertis maison&nbsp;: homologation EU requise &mdash; NE s&rsquo;applique PAS aux propri&eacute;taires LTV',
+        fr_n:'Tous les mod&egrave;les LTV (Unity, Wonder, Serenity, Revel, etc.) sont des camping-cars fabriqu&eacute;s en usine avec certification WVTA &mdash; aucune r&eacute;inspection requise pour l&rsquo;usage touristique EU. Cet &eacute;l&eacute;ment est pour la sensibilisation communautaire&nbsp;: les campeurs artisanaux (skoolies, conversions de fourgons) font face &agrave; de s&eacute;rieux probl&egrave;mes l&eacute;gaux en EU incluant le possible refus &agrave; la fronti&egrave;re et le refus d&rsquo;exp&eacute;dition RoRo. &rarr; Guide 6 Section 10.',
+        links:[] },
     ]
   },
 ];
@@ -1257,7 +1340,7 @@ function isVisible(item) {
   if (rvFilter==='unity'  && WONDER_ONLY.indexOf(item.id)>=0) return false;
   if (rvFilter==='wonder' && UNITY_ONLY.indexOf(item.id)>=0) return false;
   if (item.divider) return false; // dividers handled in render
-  var catViews = ['water','telecom','elec','propane','waste','admin','mandatory'];
+  var catViews = ['water','telecom','elec','propane','waste','admin','mandatory','security','signage','road_compliance'];
   if (view==='sop') return !!item.sop;
   if (catViews.indexOf(view) >= 0) return true;
   if (view==='full') return true;
@@ -1305,7 +1388,7 @@ function renderAll() {
   var root = document.getElementById('root');
   if (!root) return;
   root.innerHTML = '';
-  var catViews = ['water','telecom','elec','propane','waste','admin','mandatory'];
+  var catViews = ['water','telecom','elec','propane','waste','admin','mandatory','security','signage','road_compliance'];
   var catsToShow = (catViews.indexOf(view) >= 0)
     ? CATS.filter(function(c){ return c.id === view; })
     : CATS;
@@ -1365,7 +1448,7 @@ function toggleCat(id) {
 
 function setView(v) {
   view=v;
-  ['critical','full','water','sop','configure'].forEach(function(x){
+  ['critical','full','water','sop','configure','security','signage','road_compliance'].forEach(function(x){
     var el=document.getElementById('vb-'+x); if(el) el.classList.toggle('active',x===v);
   });
   var isConfig = v==='configure';
@@ -1421,7 +1504,7 @@ function updateCatCounters() {
 }
 
 function updateCounts() {
-  var crit=0, full=0, water=0;
+  var crit=0, full=0, water=0, sec=0, sig=0, road=0;
   CATS.forEach(function(cat){
     cat.items.forEach(function(item){
       var showFn=item.show||showAlways;
@@ -1430,6 +1513,9 @@ function updateCounts() {
         full++;
         if (item.tags[0]==='critical'||item.tags[0]==='mandatory') crit++;
         if (cat.id==='water') water++;
+        if (cat.id==='security') sec++;
+        if (cat.id==='signage') sig++;
+        if (cat.id==='road_compliance') road++;
       }
     });
   });
@@ -1438,6 +1524,9 @@ function updateCounts() {
   document.getElementById('cnt-full').textContent=full;
   document.getElementById('cnt-water').textContent=water;
   var sopEl=document.getElementById('cnt-sop'); if(sopEl) sopEl.textContent=sop;
+  var secEl=document.getElementById('cnt-security'); if(secEl) secEl.textContent=sec;
+  var sigEl=document.getElementById('cnt-signage'); if(sigEl) sigEl.textContent=sig;
+  var roadEl=document.getElementById('cnt-road_compliance'); if(roadEl) roadEl.textContent=road;
 }
 
 function resetAll() {
@@ -1655,7 +1744,7 @@ var CFG_FIXED = [
       {en:'Portable macerator kit',fr:'Kit macerator portable',url:'https://a.co/d/0iqsEmNq'}
     ]
   },
-  { eu_only:true, cat_en:'Mandatory Equipment', cat_fr:'\u00c9quipements obligatoires', price_cad:50,
+  { eu_only:true, cat_en:'Road Compliance', cat_fr:'Conformit\u00e9 routi\u00e8re', price_cad:50,
     en_name:'Angles Morts stickers + Warning board',
     fr_name:'Autocollants angles morts + panneau avertisseur',
     chain:[
@@ -1663,12 +1752,21 @@ var CFG_FIXED = [
       {en:'Warning board Spain+Italy 2-in-1',fr:'Panneau avertisseur Espagne+Italie',url:'https://amzn.eu/d/099qOlWQ'}
     ]
   },
-  { eu_only:true, cat_en:'Mandatory Equipment', cat_fr:'\u00c9quipements obligatoires', price_cad:680,
+  { eu_only:true, cat_en:'Road Compliance', cat_fr:'Conformit\u00e9 routi\u00e8re', price_cad:680,
     en_name:'Snow chains/socks HD — AutoSock HP698 or Pewag Austro Super HD',
     fr_name:'Chaînes/chaussettes neige HD — AutoSock HP698 ou Pewag Austro Super HD',
     chain:[
       {en:'AutoSock HP698 HD (TÜV/ÖNORM)',fr:'AutoSock HP698 HD (TÜV/ÖNORM)',url:'https://autosock.com/products/autosock-hp698'},
       {en:'Alt: Pewag Austro Super HD',fr:'Alt: Pewag Austro Super HD',url:'https://shop.pewag.com/fr/pewag-austro-super-jumelee/4034241'}
+    ]
+  },
+  { eu_only:true, cat_en:'Safety Signage', cat_fr:'Signalisation de s\u00e9curit\u00e9', price_cad:45,
+    en_name:'V16 warning lamp + CE road triangle + reflective vest',
+    fr_name:'Lampe V16 + triangle CE + gilet r\u00e9fl\u00e9chissant',
+    chain:[
+      {en:'V16 warning lamp (IDIADA approved)',fr:'Lampe V16 approuv\u00e9e IDIADA',url:'https://amzn.eu/d/0arAka2k'},
+      {en:'CE road safety triangle',fr:'Triangle s\u00e9curit\u00e9 CE',url:'https://amzn.eu/d/08XG5oHT'},
+      {en:'Reflective safety vest',fr:'Gilet r\u00e9fl\u00e9chissant CE',url:'https://amzn.eu/d/0haPp9dC'}
     ]
   },
   { eu_only:true, cat_en:'Safety Labels (CE/ISO 6.6)', cat_fr:'\u00c9tiquettes s\u00e9curit\u00e9 (CE/ISO 6.6)', price_cad:65,
@@ -2039,10 +2137,11 @@ function renderMRP() {
 load();
 cfgLoad();
 loadSurvey();
-// URL param: ?view=water|telecom|elec|energy|propane|waste|sop|full|critical
+// URL param: ?view=water|telecom|elec|energy|propane|waste|sop|full|critical|security|signage|road_compliance
 (function() {
   var validViews = {'water':'water','telecom':'telecom','elec':'elec','energy':'elec',
-    'propane':'propane','waste':'waste','sop':'sop','full':'full','critical':'critical'};
+    'propane':'propane','waste':'waste','sop':'sop','full':'full','critical':'critical',
+    'security':'security','signage':'signage','road_compliance':'road_compliance'};
   var p = new URLSearchParams(window.location.search).get('view');
   if (p && validViews[p]) {
     forceView = validViews[p];
